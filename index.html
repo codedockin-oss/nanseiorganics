@@ -1001,9 +1001,8 @@ video.slide-bg { transform:none!important; transition:none!important; }
 <!-- Mobile search row -->
 <div class="mob-search-row">
   <div class="wrap">
-    <input id="mobSearchInput" type="text" onkeydown="if(event.key==='Enter')doSearch()"/>
-    <span id="mobSearchPlaceholder" class="absolute left-4 top-1/2 -translate-y-1/2 text-[0.82rem] text-black pointer-events-none font-['Inter'] transition-opacity duration-200"></span>
-    <button class="sb" onclick="doSearch()">
+    <input id="mobSearchInput" type="search" placeholder="Search products…" autocomplete="off" enterkeyhint="search" oninput="document.getElementById('searchInput').value=this.value" onkeydown="if(event.key==='Enter'){document.getElementById('searchInput').value=this.value;doSearch()}" style="-webkit-appearance:none;font-size:16px;"/>
+    <button class="sb" onclick="document.getElementById('searchInput').value=document.getElementById('mobSearchInput').value;doSearch()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     </button>
   </div>
