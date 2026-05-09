@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -1039,8 +1039,8 @@ a .nansai-icon,
           <span id="accountLabel" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;"></span>
         </a>
         <div id="accountDropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid rgba(26,58,42,.12);border-radius:12px;box-shadow:0 8px 28px rgba(10,30,15,.14);min-width:160px;overflow:hidden;z-index:500;">
-          <a href="account.html" style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-bottom:1px solid rgba(26,58,42,.07);transition:background .15s;" onmouseover="this.style.background='#f0faf2'" onmouseout="this.style.background=''">?? My Account</a>
-          <button onclick="localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');window.location.href='login.html'" style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:#dc2626;background:none;border:none;width:100%;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background=''">?? Sign Out</button>
+          <a href="account.html" style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-bottom:1px solid rgba(26,58,42,.07);transition:background .15s;" onmouseover="this.style.background='#f0faf2'" onmouseout="this.style.background=''">My Account</a>
+          <button onclick="localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');window.location.href='login.html'" style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:#dc2626;background:none;border:none;width:100%;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background=''">Sign Out</button>
         </div>
       </div>
       <a href="wishlist.html" class="relative flex items-center justify-content transition"
@@ -1139,8 +1139,8 @@ a .nansai-icon,
       <!-- Category + Title -->
       <div class="info-1">
         <span id="pCategory" class="text-[10px] font-black uppercase tracking-widest" style="color:var(--forest-leaf)"></span>
-        <h1 id="pTitle" class="text-2xl sm:text-3xl font-bold leading-tight mt-1" style="color:var(--forest-deep);font-family:'Inter',sans-serif;font-weight:700;"></h1>
-        <p id="pTagline" class="text-sm leading-relaxed mt-1.5" style="color:var(--forest-sage)"></p>
+        <h1 id="pTitle" class="text-2xl sm:text-3xl leading-tight mt-1" style="color:var(--forest-deep);font-family:'Inter',sans-serif;font-weight:700;"></h1>
+        <p id="pTagline" class="text-sm leading-relaxed mt-1.5" style="color:var(--forest-sage);font-family:'Inter',sans-serif;font-weight:400;"></p>
       </div>
 
       <!-- Rating Row -->
@@ -1157,8 +1157,8 @@ a .nansai-icon,
       <!-- Price -->
       <div class="info-3">
         <div class="flex items-baseline gap-2.5 flex-wrap">
-          <span id="pPriceEl" class="text-3xl" style="color:var(--forest-deep);font-family:'Inter',sans-serif;font-weight:900;"></span>
-          <span id="pOldPriceEl" class="text-gray-400 text-base line-through"></span>
+          <span id="pPriceEl" class="text-3xl" style="color:var(--forest-deep);font-family:'Inter',sans-serif;font-weight:900;letter-spacing:-.02em;"></span>
+          <span id="pOldPriceEl" class="text-gray-400 text-base line-through" style="font-family:'Inter',sans-serif;font-weight:400;"></span>
           <span id="pDiscEl" class="text-xs font-black px-2 py-0.5 rounded-full border"
                 style="background:#fef9e8;border-color:#e8c97a;color:var(--gold-dk)"></span>
         </div>
@@ -1181,14 +1181,14 @@ a .nansai-icon,
 
       <!-- ATC + Buy Now -->
       <div class="info-4 flex gap-2">
-        <button id="atcBtn" onclick="addToCartFn()" class="btn-atc atc-btn flex-1">
+        <button id="atcBtn" onclick="addToCartFn()" class="btn-atc atc-btn flex-1" style="font-family:'Roboto',sans-serif;font-weight:700;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
             <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
           </svg>
           Add to Cart
         </button>
-        <button onclick="buyNow()" class="btn-buynow flex-1" style="width:auto">
+        <button onclick="buyNow()" class="btn-buynow flex-1" style="width:auto;font-family:'Roboto',sans-serif;font-weight:700;">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold-dk)">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
           </svg>
@@ -1574,7 +1574,7 @@ function millResetP(card) {
       </ul>
     </div>
   </div>
-  <div style="border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.75rem;text-align:center;font-size:.72rem;color:#6b7280;">&copy; 2026 NANSEI. All Rights Reserved. Made with ?? for organic farmers.</div>
+  <div style="border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.75rem;text-align:center;font-size:.72rem;color:#6b7280;">&copy; 2026 NANSEI. All Rights Reserved. Made with for organic farmers.</div>
 </footer>
 
 <!-- ---- STICKY MOBILE BAR ---- -->
@@ -1591,8 +1591,8 @@ function millResetP(card) {
 
   <!-- Add to Cart -->
   <button onclick="addToCartFn()"
-          class="flex-1 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition"
-          style="background:var(--forest-deep);height:44px;box-shadow:0 4px 14px rgba(15,34,24,.28);letter-spacing:.02em;"
+          class="flex-1 text-white text-sm rounded-xl flex items-center justify-center gap-2 transition"
+          style="background:var(--forest-deep);height:44px;box-shadow:0 4px 14px rgba(15,34,24,.28);letter-spacing:.02em;font-family:'Roboto',sans-serif;font-weight:700;"
           onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest-deep)'">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
@@ -1603,8 +1603,8 @@ function millResetP(card) {
 
   <!-- Buy Now -->
   <button onclick="buyNow()"
-          class="flex-1 border-2 font-bold text-sm rounded-xl flex items-center justify-center gap-1.5 transition"
-          style="border-color:var(--gold-dk);color:var(--forest-deep);height:44px;background:linear-gradient(135deg,#fef9e8,#fdf3c8);"
+          class="flex-1 border-2 text-sm rounded-xl flex items-center justify-center gap-1.5 transition"
+          style="border-color:var(--gold-dk);color:var(--forest-deep);height:44px;background:linear-gradient(135deg,#fef9e8,#fdf3c8);font-family:'Roboto',sans-serif;font-weight:700;"
           onmouseover="this.style.background='#fbe89a'" onmouseout="this.style.background='linear-gradient(135deg,#fef9e8,#fdf3c8)'">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold-dk)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
     Buy Now
@@ -1861,7 +1861,20 @@ function loadProduct() {
 
   const id = urlId || '1';
 
-  // Try API first, fall back to static array
+  // If it's a plain numeric ID, use static data directly — no API call needed
+  const staticProduct = products.find(p => String(p.id) === String(id));
+  if (staticProduct) {
+    currentProduct = staticProduct;
+    document.title = currentProduct.name + ' | NANSAI';
+    try { render(); } catch(e) { console.error('render error', e); }
+    try { renderRelated(); } catch(e) {}
+    try { renderBlog(); } catch(e) {}
+    try { updateCounters(); } catch(e) {}
+    setTimeout(() => { if (typeof observeBlogCards === 'function') observeBlogCards(); }, 150);
+    return;
+  }
+
+  // Only hit the API for MongoDB _id strings (not found in static array)
   const base = window.API_BASE || 'http://localhost:5000/api';
   fetch(base + '/products/' + id)
     .then(r => r.json())
@@ -1888,8 +1901,7 @@ function loadProduct() {
           reviewData: [],
         };
       } else {
-        // Fall back to static
-        currentProduct = products.find(p => String(p.id) === String(id)) || products[0];
+        currentProduct = products[0];
       }
       document.title = currentProduct.name + ' | NANSAI';
       try { render(); } catch(e) { console.error('render error', e); }
@@ -1899,8 +1911,7 @@ function loadProduct() {
       setTimeout(() => { if (typeof observeBlogCards === 'function') observeBlogCards(); }, 150);
     })
     .catch(() => {
-      // API unreachable — use static
-      currentProduct = products.find(p => String(p.id) === String(id)) || products[0];
+      currentProduct = products[0];
       document.title = currentProduct.name + ' | NANSAI';
       try { render(); } catch(e) {}
       try { renderRelated(); } catch(e) {}
@@ -2357,7 +2368,7 @@ function addToCartFn() {
   localStorage.setItem('cart', JSON.stringify(existing));
   Cart.add(cartItem, 0).catch(() => {});
   updateCounters();
-  showToast('[[icon:shopping-cart]] ' + p.name + ' (' + label + ') added!');
+  showToast('&#128722; ' + p.name + ' (' + label + ') added!');
   // Bounce animation on ATC button
   const btn = document.getElementById('atcBtn');
   btn.classList.add('added', 'btn-bounce');
@@ -2414,7 +2425,7 @@ function toggleWishlistFn() {
       btn.querySelector('svg').setAttribute('fill','#ef4444');
       btn.querySelector('svg').setAttribute('stroke','#ef4444');
       btn.style.background = '#fff5f5';
-      showToast('[[icon:heart]] Added to wishlist!');
+      showToast('Added to wishlist!');
     } else {
       btn.classList.remove('liked');
       btn.querySelector('svg').setAttribute('fill','none');
@@ -2433,7 +2444,7 @@ function shareProduct() {
   if (navigator.share) {
     navigator.share({ title: p.name + ' | NANSAI', text: p.tagline, url });
   } else {
-    navigator.clipboard.writeText(url).then(() => showToast('?? Link copied to clipboard!'));
+    navigator.clipboard.writeText(url).then(() => showToast('&#128279; Link copied!'));
   }
 }
 
@@ -2590,7 +2601,7 @@ function relShare(id) {
   if (navigator.share) {
     navigator.share({ title: p.name + '  NANSAI', text: p.tagline, url });
   } else {
-    navigator.clipboard.writeText(url).then(() => showToast(' Link copied!'));
+    navigator.clipboard.writeText(url).then(() => showToast('&#128279; Link copied!'));
   }
 }
 
@@ -2600,7 +2611,7 @@ function relToggleWish(id, btn) {
     if (added) {
       btn.classList.add('liked');
       svg.setAttribute('fill','#ef4444'); svg.setAttribute('stroke','#ef4444');
-      showToast('[[icon:heart]] Added to wishlist!');
+      showToast('Added to wishlist!');
     } else {
       btn.classList.remove('liked');
       svg.setAttribute('fill','none'); svg.setAttribute('stroke','#9ca3af');
@@ -2669,7 +2680,7 @@ function confirmRelCart(id){
   if(ex) ex.qty+=1; else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
   localStorage.setItem('cart',JSON.stringify(cart));
   updateCounters();
-  showToast('[[icon:shopping-cart]] '+p.name+' · '+label+' added!');
+  showToast('&#128722; '+p.name+' · '+label+' added!');
   const confirmBtn=document.getElementById('relconfirm-'+id);
   if(confirmBtn){
     confirmBtn.classList.add('done','btn-bounce');
@@ -2694,7 +2705,7 @@ function relAddToCart(id) {
   if (!p) return;
   Cart.add(p, 1).then(() => {
     updateCounters();
-    showToast('?? ' + p.name + ' added!');
+    showToast(p.name + ' added!');
     const btn = document.getElementById('relbtn-' + id);
     if (btn) {
       btn.classList.add('added'); btn.textContent = ' Added!';
@@ -2740,7 +2751,7 @@ async function updateCounters() {
 /* --- TOAST --- */
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  t.innerHTML = msg;
   t.style.opacity   = '1';
   t.style.transform = 'translateX(-50%) translateY(0)';
   clearTimeout(t._t);
@@ -2784,7 +2795,7 @@ let selectedStar = 0;
 function initReviewForm() {
   const user = (function(){ try { return JSON.parse(localStorage.getItem('nansai_user')||'null'); } catch { return null; } })();
   const token = localStorage.getItem('nansai_token');
-  if (!user || !token) return;
+  if (!user || !token) return; // not logged in — skip entirely
   const key = 'rev_' + currentProduct.id + '_' + (user._id || user.email || 'u');
   if (localStorage.getItem(key)) {
     document.getElementById('revForm').style.display = 'block';
@@ -2847,7 +2858,7 @@ function submitReview() {
   requestAnimationFrame(() => requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }));
   // Hide form, show thank you
   document.getElementById('revForm').innerHTML = '<p style="font-size:.85rem;font-weight:700;color:var(--forest-leaf);padding:.5rem 0;">&#127881; Thank you for your review!</p>';
-  showToast('[[icon:star]] Review submitted!');
+  showToast('&#11088; Review submitted!');
 }
 
 /* --- EXPAND REVIEWS --- */

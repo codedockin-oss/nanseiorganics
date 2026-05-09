@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Product  NANSAI</title>
-<script src="../js/config.js"></script>
+<script src="js/config.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <script>
@@ -12,8 +12,8 @@
 window.CartAPI = window.CartAPI || { get:()=>Promise.reject('no api'), add:()=>Promise.reject('no api'), remove:()=>Promise.reject('no api'), clear:()=>Promise.reject('no api') };
 window.WishlistAPI = window.WishlistAPI || { get:()=>Promise.reject('no api'), add:()=>Promise.reject('no api'), remove:()=>Promise.reject('no api') };
 </script>
-<script src="../frontend/js/api.js" onerror="console.warn('api.js not loaded')"></script>
-<script src="../frontend/js/cart.js" onerror="console.warn('cart.js not loaded')"></script>
+<script src="frontend/js/api.js" onerror="console.warn('api.js not loaded')"></script>
+<script src="frontend/js/cart.js" onerror="console.warn('cart.js not loaded')"></script>
 <script>
 /* Safety stubs in case cart.js also failed */
 if(typeof Cart==='undefined'){window.Cart={add:()=>Promise.resolve(),getItems:()=>Promise.resolve([]),count:()=>Promise.resolve(0),remove:()=>Promise.resolve()};}

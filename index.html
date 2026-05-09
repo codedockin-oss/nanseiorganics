@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nansai — Experience the Root of Nature</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
-<script src="../js/config.js"></script>
-<script src="../frontend/js/api.js"></script>
-<script src="../frontend/js/cart.js"></script>
+<script src="js/config.js"></script>
+<script src="frontend/js/api.js"></script>
+<script src="frontend/js/cart.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
@@ -107,7 +107,7 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
   font-size:.5rem; letter-spacing:.16em; text-transform:uppercase;
   color:var(--forest-sage); margin-top:3px; display:block; font-weight:500;
 }
-.nav-search { position:relative; flex:1; max-width:340px; }
+.nav-search { position:relative; flex:1 1 260px; max-width:340px; min-width:220px; z-index:1002; }
 .nav-search input {
   width:100%; padding:.5rem 2.6rem .5rem 1rem;
   background:#f0faf2;
@@ -124,6 +124,26 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
 }
 .nav-search-btn:hover { background:var(--gold-lt); }
 .nav-search-btn svg { width:13px; height:13px; }
+.search-suggestions {
+  display:none; position:absolute; top:calc(100% + 8px); left:0; right:0;
+  background:#fff; border:1px solid rgba(26,58,42,.14); border-radius:12px;
+  box-shadow:0 14px 34px rgba(10,30,15,.16); overflow:hidden; z-index:1200;
+}
+.search-suggestions.show { display:block; }
+.suggestion-item {
+  display:flex; align-items:center; gap:10px; width:100%; padding:9px 10px;
+  border:none; border-bottom:1px solid rgba(26,58,42,.07); background:#fff;
+  cursor:pointer; text-align:left; font-family:'Inter',sans-serif;
+}
+.suggestion-item:last-child { border-bottom:none; }
+.suggestion-item:hover, .suggestion-item:focus { background:#f0faf2; outline:none; }
+.suggestion-item img {
+  width:38px; height:38px; object-fit:cover; border-radius:8px; background:#f0fdf4;
+  flex-shrink:0;
+}
+.suggestion-name { display:block; font-size:.78rem; font-weight:800; color:var(--forest-deep); line-height:1.2; }
+.suggestion-meta { display:block; margin-top:2px; font-size:.64rem; font-weight:700; color:#6b8f72; text-transform:uppercase; letter-spacing:.05em; }
+.suggestion-price { margin-left:auto; font-size:.78rem; font-weight:900; color:#166534; flex-shrink:0; }
 .nav-links {
   display:flex; align-items:stretch; height:100%; list-style:none; gap:0;
 }
@@ -187,11 +207,11 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
   border-bottom:1px solid rgba(26,58,42,.08);
   padding:.48rem .85rem .6rem;
 }
-.mob-search-row .wrap { position:relative; }
+.mob-search-row .wrap { position:relative; touch-action:manipulation; }
 .mob-search-row input {
   width:100%; padding:.55rem 2.6rem .55rem 1rem;
   background:#fff; border:1px solid rgba(26,58,42,.15);
-  border-radius:8px; font-size:.82rem; color:var(--forest-deep);
+  border-radius:8px; font-size:16px; color:var(--forest-deep);
   font-family:'Inter',sans-serif; outline:none;
 }
 .mob-search-row .sb {
@@ -200,6 +220,7 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
   display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--forest-deep);
 }
 .mob-search-row .sb svg { width:13px; height:13px; }
+.mob-search-row .search-suggestions { top:calc(100% + 6px); left:0; right:0; }
 
 /* ═══════════════════════════════════════
    OFFER BAR
@@ -425,6 +446,12 @@ video.slide-bg { transform:none!important; transition:none!important; }
   #mob-offer-bar  { display:none!important; }
   #mob-sticky-bar { display:none!important; }
 }
+@media(min-width:769px) and (max-width:1180px){
+  .nav-inner { padding:0 1rem; gap:.75rem; }
+  .nav-links { display:none!important; }
+  .nav-search { max-width:none; min-width:260px; }
+  .nav-actions { gap:.45rem; }
+}
 
 /* ═══════════════════════════════════════
    MOBILE UX — COMPLETE OVERHAUL
@@ -441,7 +468,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
   /* ── MOBILE SEARCH ROW ── */
   .mob-search-row { padding: .5rem .85rem .6rem; }
-  .mob-search-row input { font-size: .85rem; padding: .6rem 2.8rem .6rem 1rem; border-radius: 10px; }
+  .mob-search-row input { font-size: 16px; padding: .6rem 2.8rem .6rem 1rem; border-radius: 10px; }
 
   /* ── HERO SLIDER ── */
   #sliderShell { height: clamp(260px, 58vw, 380px) !important; }
@@ -1025,11 +1052,11 @@ a .nansai-icon,
       <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;"/>
     </a>
     <div class="nav-search">
-      <input id="searchInput" type="text" onkeydown="if(event.key==='Enter')doSearch()"/>
-      <span id="searchPlaceholder" class="absolute left-4 top-1/2 -translate-y-1/2 text-[0.79rem] text-black pointer-events-none font-['Inter'] transition-opacity duration-200"></span>
+      <input id="searchInput" type="text" placeholder="Search products..." autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()" oninput="handleSearchInput(this)"/>
       <button class="nav-search-btn" onclick="doSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       </button>
+      <div id="searchSuggestions" class="search-suggestions"></div>
     </div>
     <ul class="nav-links">
       <li><a class="nav-link" href="#products">Shop</a></li>
@@ -1086,11 +1113,12 @@ a .nansai-icon,
 
 <!-- Mobile search row -->
 <div class="mob-search-row">
-  <div class="wrap">
-    <input id="mobSearchInput" type="search" placeholder="Search products…" autocomplete="off" enterkeyhint="search" oninput="document.getElementById('searchInput').value=this.value" onkeydown="if(event.key==='Enter'){document.getElementById('searchInput').value=this.value;doSearch()}" style="-webkit-appearance:none;font-size:16px;"/>
+  <div class="wrap" onclick="focusMobileSearch(event)" onpointerdown="focusMobileSearch(event)" ontouchend="focusMobileSearch(event)">
+    <input id="mobSearchInput" type="search" placeholder="Search products..." autocomplete="off" enterkeyhint="search" oninput="handleSearchInput(this)" onkeydown="if(event.key==='Enter')doSearch()" style="-webkit-appearance:none;font-size:16px;"/>
     <button class="sb" onclick="document.getElementById('searchInput').value=document.getElementById('mobSearchInput').value;doSearch()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     </button>
+    <div id="mobSearchSuggestions" class="search-suggestions"></div>
   </div>
 </div>
 
@@ -1131,7 +1159,7 @@ a .nansai-icon,
           <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
         </div>
       </div>
-      <div class="slide" id="slide-1">
+      <div class="slide" id="slide-video-1">
         <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
         <div class="slide-overlay"></div><div class="slide-accent"></div>
         <div class="slide-content">
@@ -1860,12 +1888,86 @@ function filterProds(cat){
   else list=products.filter(p=>p.category===cat);
   renderFlat(list,cat);
 }
-function doSearch(){
-  const q=(document.getElementById('searchInput')?.value||document.getElementById('mobSearchInput')?.value||'').trim().toLowerCase();
-  if(!q){renderSections();return;}
-  const list=products.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)||(p.description||p.desc||'').toLowerCase().includes(q)||(p.tagline||'').toLowerCase().includes(q));
-  renderFlat(list,null);
+function searchMatches(q){
+  const term=String(q||'').trim().toLowerCase();
+  if(!term) return [];
+  return products.filter(p=>p.name.toLowerCase().includes(term)||p.category.toLowerCase().includes(term)||(p.description||p.desc||'').toLowerCase().includes(term)||(p.tagline||'').toLowerCase().includes(term));
 }
+function hideSearchSuggestions(){
+  document.querySelectorAll('.search-suggestions').forEach(el=>{
+    el.classList.remove('show');
+    el.innerHTML='';
+  });
+}
+function renderSearchSuggestions(input,matches){
+  const box=input?.id==='mobSearchInput'?document.getElementById('mobSearchSuggestions'):document.getElementById('searchSuggestions');
+  if(!box) return;
+  if(!matches.length){ box.classList.remove('show'); box.innerHTML=''; return; }
+  box.innerHTML=matches.slice(0,6).map(p=>`
+    <button type="button" class="suggestion-item" onclick="selectSearchSuggestion(${p.id})">
+      <img src="${p.image}" alt="${p.name}" loading="lazy">
+      <span style="min-width:0;">
+        <span class="suggestion-name">${p.name}</span>
+        <span class="suggestion-meta">${p.category}</span>
+      </span>
+      <span class="suggestion-price">₹${p.price}</span>
+    </button>
+  `).join('');
+  box.classList.add('show');
+}
+function handleSearchInput(input){
+  const q=input.value.trim();
+  const deskInp=document.getElementById('searchInput');
+  const mobInp=document.getElementById('mobSearchInput');
+  if(deskInp && input!==deskInp) deskInp.value=q;
+  if(mobInp && input!==mobInp) mobInp.value=q;
+  if(!q){ hideSearchSuggestions(); renderSections(); return; }
+  const matches=searchMatches(q);
+  renderSearchSuggestions(input,matches);
+  renderFlat(matches,null);
+}
+function selectSearchSuggestion(id){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const deskInp=document.getElementById('searchInput');
+  const mobInp=document.getElementById('mobSearchInput');
+  if(deskInp) deskInp.value=p.name;
+  if(mobInp) mobInp.value=p.name;
+  hideSearchSuggestions();
+  renderFlat([p],null);
+  document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function focusMobileSearch(event){
+  if(event?.target?.closest('button,.suggestion-item')) return;
+  const input=document.getElementById('mobSearchInput');
+  if(!input) return;
+  try {
+    input.focus({preventScroll:true});
+  } catch (_) {
+    input.focus();
+  }
+  const end=input.value.length;
+  try { input.setSelectionRange(end,end); } catch (_) {}
+  if(input.value.trim()) renderSearchSuggestions(input,searchMatches(input.value));
+}
+function doSearch(shouldScroll = true){
+  const deskInp = document.getElementById('searchInput');
+  const mobInp = document.getElementById('mobSearchInput');
+  const active = document.activeElement === mobInp ? mobInp : deskInp;
+  const q = (active?.value || deskInp?.value || mobInp?.value || '').trim().toLowerCase();
+  hideSearchSuggestions();
+  if(!q){ renderSections(); return; }
+  if(deskInp) deskInp.value = q;
+  if(mobInp) mobInp.value = q;
+  const list=searchMatches(q);
+  renderFlat(list,null);
+  if(shouldScroll) document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.nav-search')&&!e.target.closest('.mob-search-row')) hideSearchSuggestions();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') hideSearchSuggestions();
+});
 
 /* ════ HERO SLIDER — 3D CAROUSEL ════ */
 (function(){

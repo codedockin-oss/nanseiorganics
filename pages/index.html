@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nansei — Experience the Root of Nature</title>
+<title>Nansai — Experience the Root of Nature</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="../js/config.js"></script>
 <script src="../frontend/js/api.js"></script>
@@ -107,7 +108,7 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
   font-size:.5rem; letter-spacing:.16em; text-transform:uppercase;
   color:var(--forest-sage); margin-top:3px; display:block; font-weight:500;
 }
-.nav-search { position:relative; flex:1; max-width:340px; }
+.nav-search { position:relative; flex:1 1 260px; max-width:340px; min-width:220px; z-index:1002; }
 .nav-search input {
   width:100%; padding:.5rem 2.6rem .5rem 1rem;
   background:#f0faf2;
@@ -124,27 +125,44 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
 }
 .nav-search-btn:hover { background:var(--gold-lt); }
 .nav-search-btn svg { width:13px; height:13px; }
-.nav-links {
-  display:flex; align-items:center; list-style:none; gap:0; flex-shrink:0;
+.search-suggestions {
+  display:none; position:absolute; top:calc(100% + 8px); left:0; right:0;
+  background:#fff; border:1px solid rgba(26,58,42,.14); border-radius:12px;
+  box-shadow:0 14px 34px rgba(10,30,15,.16); overflow:hidden; z-index:1200;
 }
-.nav-links > li { display:flex; align-items:center; }
+.search-suggestions.show { display:block; }
+.suggestion-item {
+  display:flex; align-items:center; gap:10px; width:100%; padding:9px 10px;
+  border:none; border-bottom:1px solid rgba(26,58,42,.07); background:#fff;
+  cursor:pointer; text-align:left; font-family:'Inter',sans-serif;
+}
+.suggestion-item:last-child { border-bottom:none; }
+.suggestion-item:hover, .suggestion-item:focus { background:#f0faf2; outline:none; }
+.suggestion-item img {
+  width:38px; height:38px; object-fit:cover; border-radius:8px; background:#f0fdf4;
+  flex-shrink:0;
+}
+.suggestion-name { display:block; font-size:.78rem; font-weight:800; color:var(--forest-deep); line-height:1.2; }
+.suggestion-meta { display:block; margin-top:2px; font-size:.64rem; font-weight:700; color:#6b8f72; text-transform:uppercase; letter-spacing:.05em; }
+.suggestion-price { margin-left:auto; font-size:.78rem; font-weight:900; color:#166534; flex-shrink:0; }
+.nav-links {
+  display:flex; align-items:stretch; height:100%; list-style:none; gap:0;
+}
+.nav-links > li { position:relative; height:100%; display:flex; align-items:center; }
 .nav-link, .nav-trigger {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:8px 14px;
+  display:flex; align-items:center; gap:4px; height:100%; padding:0 .85rem;
   font-size:.79rem; font-weight:600; letter-spacing:.02em;
   color:var(--forest-deep); text-decoration:none; cursor:pointer;
   background:none; border:none; font-family:'Inter',sans-serif;
   white-space:nowrap; transition:color .2s; position:relative;
-  border-radius:6px;
 }
-.nav-link:hover, .nav-trigger:hover { color:var(--forest-leaf); background:rgba(74,140,92,.06); }
+.nav-link:hover, .nav-trigger:hover { color:var(--forest-leaf); }
 .nav-link::after, .nav-trigger::after {
-  content:''; position:absolute; bottom:2px; left:14px; right:14px;
-  height:2px; background:var(--gold-dk); transform:scaleX(0);
-  transition:transform .24s ease;
-  pointer-events:none;
+  content:''; position:absolute; bottom:0; left:50%; right:50%;
+  height:2px; background:var(--gold-dk);
+  transition:left .24s ease, right .24s ease;
 }
-.nav-link:hover::after, .nav-trigger:hover::after { transform:scaleX(1); }
+.nav-link:hover::after, .nav-trigger:hover::after { left:.7rem; right:.7rem; }
 .nav-chev { width:11px; height:11px; color:var(--gold-dk); flex-shrink:0; transition:transform .3s; }
 .nav-trigger.active .nav-chev { transform:rotate(180deg); }
 .nav-actions { display:flex; align-items:center; gap:.7rem; margin-left:auto; flex-shrink:0; }
@@ -186,16 +204,15 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
    MOBILE SEARCH ROW
 ═══════════════════════════════════════ */
 .mob-search-row {
-  display:none; background:#fff;
+  display:none; background:#FEFCE9;
   border-bottom:1px solid rgba(26,58,42,.08);
   padding:.48rem .85rem .6rem;
-  margin-top:-1px;
 }
-.mob-search-row .wrap { position:relative; }
+.mob-search-row .wrap { position:relative; touch-action:manipulation; }
 .mob-search-row input {
   width:100%; padding:.55rem 2.6rem .55rem 1rem;
   background:#fff; border:1px solid rgba(26,58,42,.15);
-  border-radius:8px; font-size:.82rem; color:var(--forest-deep);
+  border-radius:8px; font-size:16px; color:var(--forest-deep);
   font-family:'Inter',sans-serif; outline:none;
 }
 .mob-search-row .sb {
@@ -204,6 +221,7 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
   display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--forest-deep);
 }
 .mob-search-row .sb svg { width:13px; height:13px; }
+.mob-search-row .search-suggestions { top:calc(100% + 6px); left:0; right:0; }
 
 /* ═══════════════════════════════════════
    OFFER BAR
@@ -239,11 +257,11 @@ video.slide-bg { transform:none!important; transition:none!important; }
 }
 .slide-accent { position:absolute; left:clamp(1rem,3.5vw,2.2rem); top:0; bottom:0; width:2px; z-index:2; background:linear-gradient(to bottom,transparent 0%,#c9a84c 30%,#c9a84c 70%,transparent 100%); opacity:0; transition:opacity .5s .4s; }
 .slide.active .slide-accent { opacity:1; }
-.slide-content { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:clamp(1.2rem,4vw,2.8rem); }
+.slide-content { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; justify-content:center; padding:clamp(1.2rem,4vw,2.8rem); padding-left:calc(clamp(1.2rem,4vw,2.8rem) + 16px); }
 .eyebrow { display:flex; align-items:center; gap:.45rem; font-size:.58rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:#e8c97a; margin-bottom:.5rem; opacity:0; transform:translateY(12px); transition:opacity .5s .55s,transform .5s .55s; }
 .eyebrow span { display:block; width:1.4rem; height:1.5px; background:#c9a84c; flex-shrink:0; }
 .slide.active .eyebrow { opacity:1; transform:none; }
-.slide-title { font-family:'Cormorant Garamond',serif; font-weight:700; line-height:1.1; color:#fff; font-size:clamp(2rem,4.5vw,3.8rem); margin-bottom:0; opacity:0; transform:translateY(16px); transition:opacity .55s .55s,transform .55s .55s; word-wrap:break-word; letter-spacing:-.01em; }
+.slide-title { font-family:'Cormorant Garamond',serif; font-weight:700; line-height:1.06; color:#fff; font-size:clamp(1.35rem,3vw,2.4rem); margin-bottom:.6rem; opacity:0; transform:translateY(16px); transition:opacity .55s .68s,transform .55s .68s; word-wrap:break-word; }
 .slide.active .slide-title { opacity:1; transform:none; }
 .slide-title em { font-style:italic; color:#86c98a; }
 .slide-desc { font-size:clamp(.65rem,.85vw,.8rem); font-weight:300; line-height:1.65; color:rgba(255,255,255,.58); max-width:280px; margin-bottom:1.1rem; opacity:0; transform:translateY(12px); transition:opacity .5s .8s,transform .5s .8s; }
@@ -429,6 +447,12 @@ video.slide-bg { transform:none!important; transition:none!important; }
   #mob-offer-bar  { display:none!important; }
   #mob-sticky-bar { display:none!important; }
 }
+@media(min-width:769px) and (max-width:1180px){
+  .nav-inner { padding:0 1rem; gap:.75rem; }
+  .nav-links { display:none!important; }
+  .nav-search { max-width:none; min-width:260px; }
+  .nav-actions { gap:.45rem; }
+}
 
 /* ═══════════════════════════════════════
    MOBILE UX — COMPLETE OVERHAUL
@@ -445,10 +469,18 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
   /* ── MOBILE SEARCH ROW ── */
   .mob-search-row { padding: .5rem .85rem .6rem; }
-  .mob-search-row input { font-size: .85rem; padding: .6rem 2.8rem .6rem 1rem; border-radius: 10px; }
+  .mob-search-row input { font-size: 16px; padding: .6rem 2.8rem .6rem 1rem; border-radius: 10px; }
 
   /* ── HERO SLIDER ── */
   #sliderShell { height: clamp(260px, 58vw, 380px) !important; }
+  .slide-content { padding: 1rem 1rem 1rem 1.4rem !important; justify-content: flex-end !important; padding-bottom: 3.5rem !important; }
+  .slide-title { font-size: clamp(1.25rem, 5.5vw, 1.7rem) !important; margin-bottom: .4rem; }
+  .slide-desc { font-size: .72rem !important; max-width: 100% !important; margin-bottom: .75rem; line-height: 1.55; }
+  .slide-cta { font-size: .62rem !important; padding: .42rem 1rem !important; }
+  .eyebrow { font-size: .52rem !important; }
+  .arrow-btn { width: 1.8rem !important; height: 1.8rem !important; font-size: .7rem !important; }
+  .ghost-num { display: none; }
+  .hero-leaf { display: none; }
 
   /* ── PRODUCTS SECTION ── */
   #products { padding: 2rem 0 2.5rem !important; }
@@ -641,10 +673,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
   border-radius: 20px; display: flex; align-items: center; justify-content: center;
   border: 1.5px solid #fff; line-height: 1;
 }
-.wish-btn { position:absolute; top:8px; right:8px; width:44px; height:44px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.15); border:none; cursor:pointer; z-index:10; transition:transform .2s cubic-bezier(.34,1.56,.64,1); -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-.wish-btn:hover { transform:scale(1.15) !important; }
-@keyframes heartPop { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(.9)} 100%{transform:scale(1)} }
-.wish-btn.popping { animation:heartPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
+.prod-hscroll::-webkit-scrollbar { display:none; }
 .hscroll-wrap { display:flex; align-items:center; gap:10px; }
 .prod-hscroll { perspective:1200px; overflow-x:auto !important; overflow-y:visible !important; }
 .prod-hscroll .prod-card {
@@ -700,19 +729,12 @@ video.slide-bg { transform:none!important; transition:none!important; }
   transition:transform .4s cubic-bezier(.4,0,.2,1);
   cursor:grab;
   user-select:none;
-  -webkit-tap-highlight-color: transparent;
-  will-change: auto;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 #reel-widget:active { cursor:grabbing; }
 .reel-track { border-radius:14px; overflow:hidden; }
-@media(max-width:768px){ #reel-widget{ width:175px; bottom:80px; right:14px; position:fixed !important; left:auto !important; top:auto !important; transform:none !important; will-change:auto !important; cursor:default !important; } }
+@media(max-width:768px){ #reel-widget{ width:175px; bottom:20px; right:14px; } }
 @media(max-width:480px){ #reel-widget{ width:155px; bottom:16px; right:12px; } }
-#reel-widget.hidden-offscreen{ transform:translateX(calc(100% + 20px)) !important; opacity:0 !important; pointer-events:none !important; }
-#reel-widget.minimized{ transform:translateX(calc(100% + 20px)) !important; }
+#reel-widget.minimized{ transform:translateX(calc(100% + 20px)); }
 .reel-track{ position:relative; width:100%; aspect-ratio:9/16; overflow:hidden; }
 .reel-slide{
   position:absolute; inset:0;
@@ -977,27 +999,15 @@ a .nansai-icon,
       <div id="offerTrack" class="flex items-center gap-8 whitespace-nowrap text-[13px] text-[#4a3510] font-medium animate-marquee hover:[animation-play-state:paused]" style="width:max-content;">
         <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">[[icon:gift]] First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
         <span class="text-amber-400">◆</span>
-        <span>[[icon:wheat]] <b>Karunguruvai Rice</b> — ₹180/kg · Heritage variety, low GI</span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:heart]] <b>Karuppu Kavuni Rice</b> — ₹220/kg · Rich in antioxidants</span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:flower-2]] <b>Paneer Rose</b> — ₹150 · <b class="text-rose-600">Only 32 Left!</b></span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:flower-2]] <b>Hibiscus Flower</b> — ₹120 · Sun-dried, farm fresh</span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:bug]] <b>Butterfly Pea Flower</b> — ₹180 · Natural blue tea</span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:glass-water]] <b>Organic Rose Milk</b> — ₹140 · Pure &amp; natural</span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:package]] <b>Idiyappam Flour</b> — ₹160/kg · Stone ground</span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:dumbbell]] <b>Health Mix Powder</b> — ₹175/kg · 12 grains blend</span>
-        <span class="text-amber-400">◆</span>
         <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
         <span class="text-amber-400">◆</span>
-        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span>[[icon:wheat]] Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹221</mark></span>
         <span class="text-amber-400">◆</span>
-        <span>[[icon:tractor]] Farm Direct · Lab Tested · 9 Certifications</span>
+        <span>[[icon:flower]] Paneer Rose <b class="text-rose-600">Only 32 Left</b></span>
+        <span class="text-amber-400">◆</span>
+        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Supplements Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="text-amber-400">◆</span>
+        <span>[[icon:tractor]] Farm Direct · Lab Tested · Organic Certified</span>
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
@@ -1038,10 +1048,17 @@ a .nansai-icon,
      NAVBAR
 ═══════════════════════════════════════ -->
 <header class="site-nav">
-  <div class="nav-inner">
+  <div class="nav-inner bg-white">
     <a class="nav-logo" href="index.html" style="display:flex;align-items:center;">
       <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;"/>
     </a>
+    <div class="nav-search">
+      <input id="searchInput" type="text" placeholder="Search products..." autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()" oninput="handleSearchInput(this)"/>
+      <button class="nav-search-btn" onclick="doSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
     <ul class="nav-links">
       <li><a class="nav-link" href="#products">Shop</a></li>
       <li><a class="nav-link" href="#why-section">Our Promise</a></li>
@@ -1049,13 +1066,6 @@ a .nansai-icon,
       <li><a class="nav-link" href="news.html">News</a></li>
       <li><a class="nav-link" href="#site-footer">About</a></li>
     </ul>
-    <div class="nav-search">
-      <input id="searchInput" type="text" onkeydown="if(event.key==='Enter')doSearch()"/>
-      <span id="searchPlaceholder" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:0.79rem;color:#9ca3af;pointer-events:none;font-family:'Inter',sans-serif;transition:opacity .2s;"></span>
-      <button class="nav-search-btn" onclick="doSearch()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-    </div>
     <div class="nav-actions">
       <a href="checkoutmyorderpage.html" class="nav-orders-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -1089,7 +1099,7 @@ a .nansai-icon,
 <!-- Mobile Drawer -->
 <div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
   <nav style="display:flex;flex-direction:column;gap:.25rem;">
-    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;"> Shop</a>
+    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
     <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
     <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
     <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
@@ -1104,12 +1114,12 @@ a .nansai-icon,
 
 <!-- Mobile search row -->
 <div class="mob-search-row">
-  <div class="wrap">
-    <input id="mobSearchInput" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')doSearch()" style="width:100%;padding:.6rem 2.8rem .6rem 1rem;border:1px solid rgba(26,58,42,.15);border-radius:10px;font-size:.85rem;color:var(--forest-deep);font-family:'Inter',sans-serif;outline:none;background:#fff;position:relative;z-index:2;"/>
-    <span id="mobSearchPlaceholder" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:.82rem;color:#9ca3af;pointer-events:none;font-family:'Inter',sans-serif;transition:opacity .2s;z-index:1;"></span>
-    <button class="sb" onclick="doSearch()">
+  <div class="wrap" onclick="focusMobileSearch(event)" onpointerdown="focusMobileSearch(event)" ontouchend="focusMobileSearch(event)">
+    <input id="mobSearchInput" type="search" placeholder="Search products..." autocomplete="off" enterkeyhint="search" oninput="handleSearchInput(this)" onkeydown="if(event.key==='Enter')doSearch()" style="-webkit-appearance:none;font-size:16px;"/>
+    <button class="sb" onclick="document.getElementById('searchInput').value=document.getElementById('mobSearchInput').value;doSearch()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     </button>
+    <div id="mobSearchSuggestions" class="search-suggestions"></div>
   </div>
 </div>
 
@@ -1141,26 +1151,27 @@ a .nansai-icon,
 
     <div id="track">
       <div class="slide active" id="slide-0">
-        <video class="slide-bg" id="slide0-video" autoplay playsinline src="https://ik.imagekit.io/bq9dscs4g/slide%20video.mp4?updatedAt=1772621168744"></video>
+        <video class="slide-bg" id="slide0-video" autoplay muted playsinline src="https://ik.imagekit.io/bq9dscs4g/slide%20video.mp4?updatedAt=1772621168744" style="width:100%;height:100%;object-fit:cover;"></video>
         <div class="slide-overlay"></div><div class="slide-accent"></div>
         <div class="slide-content">
-          <p class="eyebrow"><span></span>With Nansei</p>
+          <p class="eyebrow"><span></span>With Nansai</p>
           <h2 class="slide-title">Experience the Root of <em>Nature</em></h2>
           <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
           <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
         </div>
-        <!-- Sound toggle -->
         <button id="slide0-sound-btn" onclick="toggleSlide0Sound()" style="position:absolute;bottom:4.5rem;left:1rem;z-index:20;width:2rem;height:2rem;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(5,12,6,.55);backdrop-filter:blur(6px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;" title="Toggle sound">
+          <!-- muted icon (default) -->
           <svg id="slide0-sound-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
         </button>
       </div>
-      <div class="slide" id="slide-1">
-        <video class="slide-bg" id="slide1-video" autoplay muted playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
+      <div class="slide" id="slide-video-1">
+        <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
         <div class="slide-overlay"></div><div class="slide-accent"></div>
         <div class="slide-content">
           <p class="eyebrow"><span></span>With Nansai</p>
           <h2 class="slide-title">25 Acres of naturally grown<br/><em>goodness</em></h2>
           <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
         </div>
       </div>
       <div class="slide" id="slide-1">
@@ -1170,6 +1181,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>Organic Products</p>
           <h2 class="slide-title">22 years of<br/><em>organic farming</em></h2>
           <p class="slide-desc">Heritage rice varieties, dried flowers, and natural beverages. Certified. Lab-tested. Direct from the farm.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
         </div>
         <span class="ghost-num">02</span>
       </div>
@@ -1180,6 +1192,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>With Nansai</p>
           <h2 class="slide-title">Cultivated in Living Soil,<br/>Harvested for <em>Healthy Lives.</em></h2>
           <p class="slide-desc">Zero chemicals. Zero compromise. 9 internationally recognised certifications.</p>
+          <button class="slide-cta" onclick="document.getElementById('why-section').scrollIntoView({behavior:'smooth'})">Our Promise →</button>
         </div>
         <span class="ghost-num">03</span>
       </div>
@@ -1190,6 +1203,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>Our Harvest</p>
           <h2 class="slide-title">Paddy · Banana · Fig · Herbs</h2>
           <p class="slide-desc">25 acres of certified organic land — seven crop varieties, 200+ farming families.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">View Products →</button>
         </div>
         <span class="ghost-num">04</span>
       </div>
@@ -1225,139 +1239,6 @@ a .nansai-icon,
   50%     { opacity:.25; transform:translateY(6px); }
 }
 </style>
-
-<!-- HAND MILL BANNER -->
-<section id="mill-section" style="background:#f7f3ec;padding:1.5rem 1.5rem;overflow:hidden;">
-  <div style="max-width:1400px;margin:0 auto;">
-    <div id="mill-card" style="display:grid;grid-template-columns:minmax(280px,420px) 1fr;border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 20px 60px rgba(15,34,24,.1),0 4px 16px rgba(15,34,24,.06);transform:perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1);will-change:transform;" onmousemove="millTilt(event,this)" onmouseleave="millReset(this)">
-
-      <!-- LEFT: IMAGE -->
-      <div style="position:relative;overflow:hidden;height:420px;">
-        <img
-          src="https://ik.imagekit.io/bq9dscs4g/agro%20store/thirukai/1776950241632.png"
-          alt="Traditional Hand Mill"
-          style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s cubic-bezier(.22,1,.36,1);"
-          id="mill-img"
-        />
-        <!-- bottom fade -->
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.18) 0%,transparent 50%);pointer-events:none;"></div>
-        <!-- shine overlay -->
-        <div id="mill-shine" style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.12) 0%,transparent 65%);opacity:0;transition:opacity .3s;pointer-events:none;"></div>
-      </div>
-
-      <!-- RIGHT: CONTENT -->
-      <div style="display:flex;flex-direction:column;justify-content:center;padding:1.25rem 1.75rem;border-left:1px solid rgba(26,58,42,.06);">
-
-        <!-- eyebrow -->
-        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem;">
-          <div style="width:1rem;height:1.5px;background:var(--forest-leaf);"></div>
-          <span style="font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--forest-leaf);">Traditional Process</span>
-        </div>
-
-        <!-- headline -->
-        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,2.4vw,2.4rem);font-weight:700;color:var(--forest-deep);line-height:1.15;margin-bottom:.5rem;">
-          Freshly Ground Grains from
-          <em style="font-style:italic;color:var(--forest-leaf);">Traditional Hand Mill</em>
-        </h2>
-
-        <!-- gold divider -->
-        <div style="width:2.5rem;height:2px;background:linear-gradient(to right,var(--gold-dk),transparent);margin-bottom:.75rem;"></div>
-
-        <!-- sub -->
-        <p style="font-size:.95rem;color:#1a2416;line-height:1.7;margin-bottom:1.1rem;max-width:400px;">
-          Authentic, natural, and handmade process — preserving every nutrient, every flavour, every tradition.
-        </p>
-
-        <!-- 3 features -->
-        <div id="mill-features" style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:.85rem;">
-          <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:wheat]]</div>
-            <div>
-              <p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);">Stone Ground</p>
-              <p style="font-size:.72rem;color:var(--text-lt);">No heat damage</p>
-            </div>
-          </div>
-          <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
-          <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:hand]]</div>
-            <div>
-              <p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);">Hand Operated</p>
-              <p style="font-size:.72rem;color:var(--text-lt);">Zero electricity</p>
-            </div>
-          </div>
-          <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
-          <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:leaf]]</div>
-            <div>
-              <p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);">Farm Direct</p>
-              <p style="font-size:.72rem;color:var(--text-lt);">25-acre organic farm</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- CTA -->
-        <div id="mill-cta" style="display:flex;align-items:center;gap:.5rem;">
-          <a href="index.html#products" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--forest-deep);color:#fff;font-size:.85rem;font-weight:700;letter-spacing:.04em;padding:.55rem 1.3rem;border-radius:7px;text-decoration:none;transition:all .25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 3px 10px rgba(15,34,24,.18);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 18px rgba(15,34,24,.25)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 3px 10px rgba(15,34,24,.18)'">
-            Shop Now
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<style>
-@keyframes badgeFloat {
-  0%,100% { transform:translateY(0px); }
-  50%     { transform:translateY(-5px); }
-}
-@media(max-width:768px){
-  #mill-section { padding:1rem .85rem !important; }
-  #mill-card { grid-template-columns:140px 1fr !important; border-radius:14px !important; transform:none !important; box-shadow:0 6px 20px rgba(15,34,24,.08) !important; }
-  #mill-card > div:first-child { min-height:unset !important; max-height:unset !important; height:100% !important; overflow:hidden !important; }
-  #mill-card > div:first-child img { object-fit:cover !important; object-position:center !important; width:100% !important; height:100% !important; }
-  #mill-card > div:last-child { border-left:1px solid rgba(26,58,42,.06) !important; border-top:none !important; padding:.75rem 1rem !important; }
-  #mill-card h2 { font-size:.95rem !important; margin-bottom:.25rem !important; }
-  #mill-card p { font-size:.68rem !important; margin-bottom:.5rem !important; }
-  #mill-features { display:none !important; }
-  #mill-cta { display:none !important; }
-}
-</style>
-
-<script>
-function millTilt(e, card) {
-  if(window.innerWidth < 768) return;
-  const rect = card.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const cx = rect.width / 2;
-  const cy = rect.height / 2;
-  const rotY = ((x - cx) / cx) * 6;
-  const rotX = -((y - cy) / cy) * 4;
-  card.style.transform = `perspective(1200px) rotateY(${rotY}deg) rotateX(${rotX}deg) translateZ(12px) scale(1.01)`;
-  card.style.boxShadow = `${-rotY*2}px ${rotX*2}px 60px rgba(15,34,24,.18), 0 8px 32px rgba(15,34,24,.1)`;
-  const shine = document.getElementById('mill-shine');
-  if(shine){
-    const px = (x/rect.width)*100;
-    const py = (y/rect.height)*100;
-    shine.style.background = `radial-gradient(circle at ${px}% ${py}%,rgba(255,255,255,.14) 0%,transparent 60%)`;
-    shine.style.opacity = '1';
-  }
-  const img = document.getElementById('mill-img');
-  if(img) img.style.transform = `scale(1.04) translate(${rotY*0.5}px,${-rotX*0.5}px)`;
-}
-function millReset(card) {
-  if(window.innerWidth < 768) return;
-  card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0) scale(1)';
-  card.style.boxShadow = '0 20px 60px rgba(15,34,24,.1),0 4px 16px rgba(15,34,24,.06)';
-  const shine = document.getElementById('mill-shine');
-  if(shine) shine.style.opacity = '0';
-  const img = document.getElementById('mill-img');
-  if(img) img.style.transform = 'scale(1) translate(0,0)';
-}
-</script>
 
 
 
@@ -1617,7 +1498,8 @@ function millReset(card) {
 <footer id="site-footer" class="bg-gray-900 text-gray-300">
   <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
     <div>
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;color:#fff;margin-bottom:2px;">Nan<span style="color:var(--gold-dk);">sai</span></div>
+      <p style="font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:#6b7280;margin-bottom:.85rem;">Experience the Root of Nature</p>
       <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural products. Trusted by farmers everywhere.</p>
       <div class="flex gap-3">
         <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">𝕏</a>
@@ -1645,6 +1527,14 @@ function millReset(card) {
         <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Certifications</a></li>
       </ul>
     </div>
+    <div>
+      <h3 class="font-bold text-white text-base mb-5">Newsletter</h3>
+      <p class="text-gray-400 text-sm mb-4">Subscribe for the latest offers and farming updates.</p>
+      <form onsubmit="subNewsletter(event)" class="flex gap-2">
+        <input type="email" placeholder="Your email" class="flex-1 min-w-0 px-3 py-2.5 rounded-xl text-sm bg-gray-800 border border-gray-700 text-white placeholder-gray-500 outline-none focus:border-green-500 transition"/>
+        <button class="bg-green-600 hover:bg-green-500 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition shrink-0">Join</button>
+      </form>
+    </div>
   </div>
   <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
 </footer>
@@ -1663,15 +1553,14 @@ if(cs) cs.innerHTML+=cs.innerHTML;
 (function(){
   const mobTrack=document.getElementById('mobMarqueeTrack');
   if(!mobTrack)return;
-  const items=['[[icon:wheat]] Karunguruvai Rice — ₹180/kg','◆','[[icon:heart]] Karuppu Kavuni Rice — ₹220/kg','◆','[[icon:flower-2]] Paneer Rose — ₹150 · Only 32 Left!','◆','[[icon:flower-2]] Hibiscus Flower — ₹120','◆','[[icon:bug]] Butterfly Pea Flower — ₹180','◆','[[icon:glass-water]] Organic Rose Milk — ₹140','◆','[[icon:package]] Idiyappam Flour — ₹160/kg','◆','[[icon:dumbbell]] Health Mix Powder — ₹175/kg','◆','[[icon:truck]] Free Delivery above ₹999','◆','[[icon:gift]] First Order 10% OFF — NANSAI10'];
+  const items=['[[icon:gift]] First Order 10% OFF — NANSAI10','◆','[[icon:truck]] Free Delivery above ₹999','◆','[[icon:wheat]] Heritage Rice Varieties — Farm Direct','◆','[[icon:flower]] Paneer Rose — Only 32 Left','◆','[[icon:heart]] Buy 2 Flowers Get 1 FREE — HEALTH3','◆','[[icon:leaf]] Organic · Lab Tested · 9 Certifications'];
   const html=items.map(t=>t==='◆'?`<span style="color:#9a7520;">◆</span>`:`<span>${t}</span>`).join('');
   mobTrack.innerHTML=html+html;
-  window.nansaiApplyIcons?.(mobTrack);
 })();
 
 /* ════ COPY COUPON ════ */
 document.querySelectorAll('[data-code]').forEach(el=>{
-  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('Copied: ' + el.dataset.code); };
+  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('[[icon:circle-check]] Code '+el.dataset.code+' copied!'); };
 });
 
 /* ════ COUNTDOWN ════ */
@@ -1688,14 +1577,14 @@ setInterval(updateTimer,1000); updateTimer();
 /* ════ TOAST ════ */
 function showToast(msg){
   const t=document.getElementById('toast');
-  t.innerHTML=msg; t.classList.add('show');
+  t.textContent=msg; t.classList.add('show');
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
 /* ════ NEWSLETTER ════ */
 function subNewsletter(e){
   e.preventDefault();
-  showToast('Subscribed! Welcome to the farm family.');
+  showToast('[[icon:leaf]] Subscribed! Welcome to the farm family.');
   e.target.reset();
 }
 
@@ -1719,42 +1608,8 @@ const products=[
   {id:16,name:"Country Fig Powder",                category:"other",    price:200,oldPrice:250,rating:4.7,reviews:61, badge:"new", section:"new",       image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
 ];
 
-function readStoredArray(key){
-  try {
-    const value = JSON.parse(localStorage.getItem(key) || '[]');
-    return Array.isArray(value) ? value : [];
-  } catch {
-    localStorage.removeItem(key);
-    return [];
-  }
-}
-function sameId(a,b){ return String(a) === String(b); }
-function jsArg(value){ return "'" + String(value).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/[\r\n]/g,' ') + "'"; }
-function firstImage(images){
-  const first = Array.isArray(images) ? images[0] : null;
-  if (typeof first === 'string') return first;
-  return first?.url || '';
-}
-function normalizeCategory(raw){
-  const value = (typeof raw === 'string' ? raw : (raw?.slug || raw?.name || '')).toLowerCase();
-  if (['rice','flowers','beverages','flour','other'].includes(value)) return value;
-  if (value.includes('rice')) return 'rice';
-  if (value.includes('flower') || value.includes('rose') || value.includes('hibiscus')) return 'flowers';
-  if (value.includes('beverage') || value.includes('drink') || value.includes('milk') || value.includes('sherbet')) return 'beverages';
-  if (value.includes('flour') || value.includes('powder') || value.includes('mix')) return 'flour';
-  return 'other';
-}
-function normalizeSection(raw,badge){
-  const section = String(raw || '').toLowerCase();
-  if (section === 'new' || section === 'bestseller') return section;
-  const badgeValue = String(badge || '').toLowerCase();
-  if (badgeValue === 'new') return 'new';
-  if (badgeValue === 'bestseller' || badgeValue === 'hot') return 'bestseller';
-  return 'category';
-}
-
-let wishlist=readStoredArray('wishlist').map(x=>String(x));
-let cart=readStoredArray('cart');
+let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]');
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
 
 function stars(r){return[1,2,3,4,5].map(i=>i<=Math.floor(r)?'★':i-r<1?'★':'☆').join('');}
 function disc(p){return Math.round((1-p.price/p.oldPrice)*100);}
@@ -1779,18 +1634,17 @@ function syncCounters(){
 const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4','prod-float-5','prod-float-6'];
 function prodCardHTML(p,i){
   const d=disc(p);
-  const isW=wishlist.includes(String(p.id));
-  const pid=jsArg(p.id);
+  const isW=wishlist.includes(p.id);
   const badgeEl=p.badge==='hot'
     ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:flame]] HOT</span>`
     :p.badge==='new'
     ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:sparkles]] NEW</span>`
     :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
   const fc=floatClasses[i%floatClasses.length];
-  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented&&!event.target.closest('button'))window.location.href='product.html?id=${encodeURIComponent(p.id)}'">
+  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
     <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
       ${badgeEl}
-      <button class="wish-btn" onclick="toggleWish(${pid},this);event.preventDefault();event.stopPropagation()">${isW?'<svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>'}</button>
+      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);border:none;cursor:pointer;z-index:10;font-size:.85rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${isW?'[[icon:heart]]':'[[icon:heart]]'}</button>
       <img src="${p.image}" alt="${p.name}" loading="lazy" class="prod-img"/>
     </div>
     <div class="prod-info" style="overflow:visible;">
@@ -1803,7 +1657,7 @@ function prodCardHTML(p,i){
         <span data-card-disc style="background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px;font-family:'Inter',sans-serif;">${d}% off</span>
       </div>
       <div id="cardbtn-area-${p.id}" class="prod-btn-area" style="margin-top:auto;">
-        <button id="cartbtn-${p.id}" onclick="startQtySelect(${pid},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
+        <button id="cartbtn-${p.id}" onclick="startQtySelect(${p.id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
           Add to Cart
         </button>
@@ -1865,8 +1719,7 @@ function renderSections(){
     const list=key==='new'?products.filter(p=>p.section==='new'):key==='bestseller'?products.filter(p=>p.section==='bestseller'):products.filter(p=>p.category===key);
     return list.length?sectionHTML(key,list):'';
   }).join('');
-  window.nansaiApplyIcons?.(wrap);
-  wrap.querySelectorAll('.sr').forEach(el=>{ el.classList.add('is-visible'); srObserver.observe(el); });
+  wrap.querySelectorAll('.sr').forEach(el=>srObserver.observe(el));
   attachCarousel3D();
   setTimeout(initScrollBtns, 100);
 }
@@ -1890,7 +1743,6 @@ function renderFlat(list,cat){
   grid.style.overflow='visible';
   grid.style.padding='12px 4px';
   grid.innerHTML=heading+list.map((p,i)=>prodCardHTML(p,i)).join('');
-  window.nansaiApplyIcons?.(grid);
   grid.querySelectorAll('.sr').forEach(el=>el.classList.add('is-visible'));
   attachCarousel3D();
 }
@@ -1913,7 +1765,7 @@ function fmtQty(v,unit){
 const cardState={};
 
 function startQtySelect(id,triggerBtn){
-  const p=products.find(x=>sameId(x.id,id)); if(!p)return;
+  const p=products.find(x=>x.id===id); if(!p)return;
   const cfg=getQtyCfg(p.category);
   cardState[id]={qty:cfg.options[0],unit:cfg.unit};
   const area=triggerBtn?triggerBtn.closest('.prod-btn-area'):document.getElementById('cardbtn-area-'+id);
@@ -1923,16 +1775,15 @@ function startQtySelect(id,triggerBtn){
     card.style.zIndex='10';
   }
   const pills=cfg.options.map((v,i)=>
-    `<button class="qty-pill${i===0?' selected':''}" onclick="selectPill(${jsArg(id)},${v},this);event.preventDefault();event.stopPropagation()">${fmtQty(v,cfg.unit)}</button>`
+    `<button class="qty-pill${i===0?' selected':''}" onclick="selectPill(${id},${v},this);event.preventDefault();event.stopPropagation()">${fmtQty(v,cfg.unit)}</button>`
   ).join('');
   area.innerHTML=`<div class="qty-selector-area" onclick="event.preventDefault();event.stopPropagation()">
     <div class="qty-grid">${pills}</div>
-    <button id="confirm-btn-${id}" class="qty-cart-btn" onclick="confirmAddToCart(${jsArg(id)},this);event.preventDefault();event.stopPropagation()">
+    <button id="confirm-btn-${id}" class="qty-cart-btn" onclick="confirmAddToCart(${id},this);event.preventDefault();event.stopPropagation()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
     </button>
   </div>
   <a href="product.html?id=${p.id}" onclick="event.stopPropagation()" style="display:block;width:100%;text-align:center;font-size:.68rem;font-weight:600;color:var(--forest-leaf);padding:5px 0 2px;text-decoration:none;letter-spacing:.03em;border-top:1px solid rgba(26,58,42,.07);margin-top:5px;transition:color .2s;" onmouseover="this.style.color='var(--forest-deep)'" onmouseout="this.style.color='var(--forest-leaf)'">View Product →</a>`;
-  window.nansaiApplyIcons?.(area);
 }
 
 function selectPill(id,val,btn){
@@ -1941,7 +1792,7 @@ function selectPill(id,val,btn){
   btn.closest('.qty-selector-area').querySelectorAll('.qty-pill').forEach(p=>p.classList.remove('selected'));
   btn.classList.add('selected');
   // update price on card dynamically
-  const p=products.find(x=>sameId(x.id,id)); if(!p)return;
+  const p=products.find(x=>x.id===id); if(!p)return;
   const {unit}=cardState[id];
   const totalPrice=unit==='ml'?Math.round(p.price*(val/1000)):Math.round(p.price*val);
   const oldTotal=unit==='ml'?Math.round(p.oldPrice*(val/1000)):Math.round(p.oldPrice*val);
@@ -1956,14 +1807,14 @@ function selectPill(id,val,btn){
 }
 
 function confirmAddToCart(id,triggerBtn){
-  const p=products.find(x=>sameId(x.id,id)); if(!p)return;
+  const p=products.find(x=>x.id===id); if(!p)return;
   const {qty,unit}=cardState[id]||{qty:1,unit:'pcs'};
   const totalPrice=unit==='ml'?Math.round(p.price*(qty/1000)):Math.round(p.price*qty);
   const label=fmtQty(qty,unit);
-  const ex=cart.find(i=>sameId(i.id,id)&&i.qtyLabel===label);
+  const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
   if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
   saveCart();
-  showToast(p.name + ' - ' + fmtQty(qty,unit) + ' added to cart!');
+  showToast(`[[icon:shopping-cart]] ${p.name} · ${fmtQty(qty,unit)} added!`);
   const confirmBtn=triggerBtn||null;
   if(confirmBtn){
     confirmBtn.classList.add('done');
@@ -1982,16 +1833,15 @@ function confirmAddToCart(id,triggerBtn){
       card.style.zIndex='1';
       if(card._floatClass) card.classList.add(card._floatClass);
     }
-    area.innerHTML=`<button id="cartbtn-${id}" onclick="startQtySelect(${jsArg(id)},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
+    area.innerHTML=`<button id="cartbtn-${id}" onclick="startQtySelect(${id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
       Add to Cart
     </button>`;
-    window.nansaiApplyIcons?.(area);
   },1600);
 }
 
 function addDirectToCart(id, btn) {
-  var p = products.find(function(x){ return sameId(x.id, id); });
+  var p = products.find(function(x){ return x.id === id; });
   if (!p) return;
   var sel = document.getElementById('qty-' + id);
   var cfg = getQtyCfg(p.category);
@@ -1999,7 +1849,7 @@ function addDirectToCart(id, btn) {
   var unit = cfg.unit;
   var totalPrice = unit === 'ml' ? Math.round(p.price * (qtyVal / 1000)) : Math.round(p.price * qtyVal);
   var label = fmtQty(qtyVal, unit);
-  var ex = cart.find(function(i){ return sameId(i.id, id) && i.qtyLabel === label; });
+  var ex = cart.find(function(i){ return i.id === id && i.qtyLabel === label; });
   if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image, qty:1, qtyVal:qtyVal, qtyLabel:label}); }
   saveCart();
   showToast(p.name + ' (' + label + ') added to cart!');
@@ -2010,35 +1860,20 @@ function addDirectToCart(id, btn) {
     setTimeout(function(){ btn.innerHTML = orig; btn.style.background = ''; }, 1800);
   }
 }
-const HEART_EMPTY = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>`;
-const HEART_FILLED = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>`;
-
 function toggleWish(id,btn){
-  const now = Date.now();
-  if (btn._lastToggle && now - btn._lastToggle < 800) return;
-  btn._lastToggle = now;
-  // normalise: always compare as strings so numeric and string IDs match
-  const sid = String(id);
-  const idx = wishlist.findIndex(x => String(x) === sid);
+  const idx=wishlist.indexOf(id);
   if(idx>-1){
     wishlist.splice(idx,1);
-    if(btn){ btn.innerHTML=HEART_EMPTY; }
-    showToast('Removed from wishlist');
-    if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.remove(sid).catch(()=>{});
+    if(btn){btn.style.color='';btn.textContent='[[icon:heart]]';}
+    showToast('[[icon:heart-crack]] Removed from wishlist');
+    if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.remove(String(id)).catch(()=>{});
   } else {
-    wishlist.push(sid);
-    if(btn){
-      btn.innerHTML=HEART_FILLED;
-      btn.classList.remove('popping');
-      void btn.offsetWidth;
-      btn.classList.add('popping');
-      btn.addEventListener('animationend',()=>btn.classList.remove('popping'),{once:true});
-    }
-    showToast('Added to wishlist!');
-    if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(sid).catch(()=>{});
+    wishlist.push(id);
+    if(btn){btn.style.color='#ef4444';btn.textContent='[[icon:heart]]';}
+    showToast('[[icon:heart]] Added to wishlist!');
+    if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(String(id)).catch(()=>{});
   }
-  localStorage.setItem('wishlist',JSON.stringify(wishlist));
-  syncCounters();
+  localStorage.setItem('wishlist',JSON.stringify(wishlist));syncCounters();
 }
 
 /* ════ CATEGORY FILTER ════ */
@@ -2058,43 +1893,102 @@ function filterProds(cat){
   else list=products.filter(p=>p.category===cat);
   renderFlat(list,cat);
 }
-function doSearch(){
-  const q=(document.getElementById('searchInput')?.value||document.getElementById('mobSearchInput')?.value||'').trim().toLowerCase();
-  if(!q){renderSections();return;}
-  const list=products.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)||(p.description||p.desc||'').toLowerCase().includes(q)||(p.tagline||'').toLowerCase().includes(q));
-  renderFlat(list,null);
+function searchMatches(q){
+  const term=String(q||'').trim().toLowerCase();
+  if(!term) return [];
+  return products.filter(p=>p.name.toLowerCase().includes(term)||p.category.toLowerCase().includes(term)||(p.description||p.desc||'').toLowerCase().includes(term)||(p.tagline||'').toLowerCase().includes(term));
 }
+function hideSearchSuggestions(){
+  document.querySelectorAll('.search-suggestions').forEach(el=>{
+    el.classList.remove('show');
+    el.innerHTML='';
+  });
+}
+function renderSearchSuggestions(input,matches){
+  const box=input?.id==='mobSearchInput'?document.getElementById('mobSearchSuggestions'):document.getElementById('searchSuggestions');
+  if(!box) return;
+  if(!matches.length){ box.classList.remove('show'); box.innerHTML=''; return; }
+  box.innerHTML=matches.slice(0,6).map(p=>`
+    <button type="button" class="suggestion-item" onclick="selectSearchSuggestion(${p.id})">
+      <img src="${p.image}" alt="${p.name}" loading="lazy">
+      <span style="min-width:0;">
+        <span class="suggestion-name">${p.name}</span>
+        <span class="suggestion-meta">${p.category}</span>
+      </span>
+      <span class="suggestion-price">₹${p.price}</span>
+    </button>
+  `).join('');
+  box.classList.add('show');
+}
+function handleSearchInput(input){
+  const q=input.value.trim();
+  const deskInp=document.getElementById('searchInput');
+  const mobInp=document.getElementById('mobSearchInput');
+  if(deskInp && input!==deskInp) deskInp.value=q;
+  if(mobInp && input!==mobInp) mobInp.value=q;
+  if(!q){ hideSearchSuggestions(); renderSections(); return; }
+  const matches=searchMatches(q);
+  renderSearchSuggestions(input,matches);
+  renderFlat(matches,null);
+}
+function selectSearchSuggestion(id){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const deskInp=document.getElementById('searchInput');
+  const mobInp=document.getElementById('mobSearchInput');
+  if(deskInp) deskInp.value=p.name;
+  if(mobInp) mobInp.value=p.name;
+  hideSearchSuggestions();
+  renderFlat([p],null);
+  document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function focusMobileSearch(event){
+  if(event?.target?.closest('button,.suggestion-item')) return;
+  const input=document.getElementById('mobSearchInput');
+  if(!input) return;
+  try {
+    input.focus({preventScroll:true});
+  } catch (_) {
+    input.focus();
+  }
+  const end=input.value.length;
+  try { input.setSelectionRange(end,end); } catch (_) {}
+  if(input.value.trim()) renderSearchSuggestions(input,searchMatches(input.value));
+}
+function doSearch(shouldScroll = true){
+  const deskInp = document.getElementById('searchInput');
+  const mobInp = document.getElementById('mobSearchInput');
+  const active = document.activeElement === mobInp ? mobInp : deskInp;
+  const q = (active?.value || deskInp?.value || mobInp?.value || '').trim().toLowerCase();
+  hideSearchSuggestions();
+  if(!q){ renderSections(); return; }
+  if(deskInp) deskInp.value = q;
+  if(mobInp) mobInp.value = q;
+  const list=searchMatches(q);
+  renderFlat(list,null);
+  if(shouldScroll) document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.nav-search')&&!e.target.closest('.mob-search-row')) hideSearchSuggestions();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') hideSearchSuggestions();
+});
 
 /* ════ SLIDE 0 SOUND TOGGLE ════ */
 function toggleSlide0Sound(){
-  const vid = document.getElementById('slide0-video');
-  const btn = document.getElementById('slide0-sound-btn');
-  const icon = document.getElementById('slide0-sound-icon');
-  if(!vid) return;
-  vid.muted = !vid.muted;
-  // Try to play if it was blocked by autoplay policy
-  if(!vid.muted && vid.paused) vid.play().catch(()=>{ vid.muted=true; });
-  icon.innerHTML = vid.muted
-    ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
-    : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+  const v=document.getElementById('slide0-video');
+  const icon=document.getElementById('slide0-sound-icon');
+  if(!v)return;
+  v.muted=!v.muted;
+  icon.innerHTML=v.muted
+    ?'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>'
+    :'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
 }
-
-// Start muted (browser autoplay policy), show muted icon initially
-document.addEventListener('DOMContentLoaded', function(){
-  const vid = document.getElementById('slide0-video');
-  if(!vid) return;
-  // Attempt unmuted play; if blocked, fall back to muted
-  vid.muted = false;
-  vid.play().catch(() => {
-    vid.muted = true;
-    // icon already shows muted X by default
-  });
-});
 
 /* ════ HERO SLIDER — 3D CAROUSEL ════ */
 (function(){
   const TOTAL=5, DUR=5000;
-  let cur=0, pct=0, rafId=null, lastTS=null;
+  let cur=0, pct=0, rafId=null, lastTS=null, slide0Paused=true;
   const slides=document.querySelectorAll('#heroSection .slide');
   const dots=document.querySelectorAll('#dotList .dot');
   const fill=document.getElementById('timerFill');
@@ -2116,56 +2010,43 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function goTo(i){
+    // clean up slide0 video listeners when leaving slide 0
+    if(cur===0){
+      const v=document.getElementById('slide0-video');
+      if(v){ v.onended=null; v.ontimeupdate=null; }
+    }
     cur=((i%TOTAL)+TOTAL)%TOTAL;
     setClasses();
-    // Manage loop on video slides
-    const v0 = document.getElementById('slide0-video');
-    const v1 = document.getElementById('slide1-video');
-    if(v0) v0.loop = (cur === 0);
-    if(v1) { v1.loop = (cur === 1); if(cur === 1){ v1.currentTime=0; v1.play(); } }
     resetTimer();
   }
 
   function resetTimer(){
-    cancelAnimationFrame(rafId);
-    pct=0; lastTS=null;
+    cancelAnimationFrame(rafId); pct=0; lastTS=null;
     fill.style.transition='none'; fill.style.width='0%';
-    // Video slides: wait for ended event, fill tracks playback progress
-    const vidMap = { 0: document.getElementById('slide0-video'), 1: document.getElementById('slide1-video') };
-    const activeVid = vidMap[cur];
-    if(activeVid && !activeVid.ended){
-      function videoTick(){
-        if(cur !== +Object.keys(vidMap).find(k => vidMap[k] === activeVid)) return;
-        if(activeVid.duration > 0){
-          fill.style.width = Math.min((activeVid.currentTime / activeVid.duration) * 100, 100) + '%';
-        }
-        if(!activeVid.ended) rafId = requestAnimationFrame(videoTick);
+    if(cur===0){
+      // wait for video to end before advancing
+      slide0Paused=true;
+      const v=document.getElementById('slide0-video');
+      if(v){
+        v.currentTime=0;
+        v.play();
+        fill.style.width='0%';
+        v.onended=()=>{ slide0Paused=false; goTo(1); };
+        v.ontimeupdate=()=>{
+          if(v.duration) fill.style.width=(v.currentTime/v.duration*100)+'%';
+        };
       }
-      rafId = requestAnimationFrame(videoTick);
-      return;
+    } else {
+      slide0Paused=false;
+      rafId=requestAnimationFrame(tick);
     }
-    rafId=requestAnimationFrame(tick);
   }
-
   function tick(ts){
+    if(slide0Paused) return;
     if(!lastTS) lastTS=ts;
     pct+=((ts-lastTS)/DUR)*100; lastTS=ts;
     fill.style.width=Math.min(pct,100)+'%';
     pct<100 ? rafId=requestAnimationFrame(tick) : goTo(cur+1);
-  }
-
-  // When slide-0 video ends, advance to next slide
-  const slide0Vid = document.getElementById('slide0-video');
-  if(slide0Vid){
-    slide0Vid.addEventListener('ended', () => { if(cur === 0) goTo(1); });
-    slide0Vid.addEventListener('error', () => { if(cur === 0) resetTimer(); });
-  }
-
-  // When slide-1 video ends, advance to next slide
-  const slide1Vid = document.getElementById('slide1-video');
-  if(slide1Vid){
-    slide1Vid.addEventListener('ended', () => { if(cur === 1) goTo(2); });
-    slide1Vid.addEventListener('error', () => { if(cur === 1) resetTimer(); });
   }
 
   document.getElementById('prevBtn').onclick=()=>goTo(cur-1);
@@ -2237,14 +2118,14 @@ setTimeout(initScrollBtns, 100);
       const apiProds = data.products.map(p => ({
         id:       p._id,
         name:     p.name,
-        category: normalizeCategory(p.category),
+        category: p.category,
         price:    p.price,
         oldPrice: p.oldPrice || Math.round(p.price * 1.25),
         rating:   p.rating || 4.5,
         reviews:  p.numReviews || 0,
         badge:    p.badge || 'new',
-        section:  normalizeSection(p.section, p.badge),
-        image:    firstImage(p.images) || p.image || '',
+        section:  p.section || 'category',
+        image:    p.images?.[0]?.url || p.image || '',
         tagline:  p.tagline || '',
         desc:     p.description || '',
       }));
@@ -2266,30 +2147,8 @@ setTimeout(initScrollBtns, 100);
   const mob = document.getElementById('mobSearchInput');
   if(inp) inp.value = q;
   if(mob) mob.value = q;
-
-  // Find best matching product
-  const ql = q.toLowerCase();
-  const match = products.find(p => p.name.toLowerCase() === ql) ||
-                products.find(p => p.name.toLowerCase().includes(ql));
-
-  if(match){
-    // Render all sections so the card exists in DOM
-    renderSections();
-    // Wait for DOM then scroll + highlight
-    setTimeout(()=>{
-      const card = document.getElementById('cardbtn-area-' + match.id)?.closest('.prod-card');
-      if(card){
-        card.scrollIntoView({behavior:'smooth', block:'center'});
-        card.style.transition = 'box-shadow .3s';
-        card.style.boxShadow = '0 0 0 3px #c9a84c, 0 20px 52px rgba(10,30,15,.22)';
-        setTimeout(()=>{ card.style.boxShadow = ''; }, 2200);
-      }
-    }, 500);
-  } else {
-    // No match — show filtered results
-    doSearch();
-    setTimeout(()=>document.getElementById('products')?.scrollIntoView({behavior:'smooth'}), 300);
-  }
+  doSearch();
+  setTimeout(()=>document.getElementById('products')?.scrollIntoView({behavior:'smooth'}), 300);
 })();
 
 /* ════ BLOG TILT ════ */
@@ -2372,8 +2231,7 @@ function renderCartDrawer(){
   const footer=document.getElementById('cartFooter');
   if(!body)return;
   if(!cart.length){
-    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;"></div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
-    window.nansaiApplyIcons?.(body);
+    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">[[icon:shopping-cart]]</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
     if(footer)footer.style.display='none';
     return;
   }
@@ -2397,7 +2255,6 @@ function renderCartDrawer(){
       </div>
     </div>`;
   }).join('');
-  window.nansaiApplyIcons?.(body);
   if(footer){
     footer.style.display='block';
     footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">₹${total}</span></div><a href="checkoutmyorderpage.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout →</a>`;
@@ -2459,22 +2316,37 @@ function attachCarousel3D(){
   const target = document.getElementById('filterTabs');
   if(!widget || !target) return;
 
-  // start hidden via class
-  widget.classList.add('hidden-offscreen');
+  // start hidden
+  widget.style.opacity = '0';
+  widget.style.pointerEvents = 'none';
+  widget.style.transform = 'translateX(calc(100% + 20px))';
 
   let visible = false;
+  let minimized = false;
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting && !visible && !widget.classList.contains('minimized')) {
+      if (entry.isIntersecting && !visible && !minimized) {
         visible = true;
         widget.style.transition = 'opacity .5s ease, transform .5s cubic-bezier(.4,0,.2,1)';
-        widget.classList.remove('hidden-offscreen');
+        widget.style.opacity = '1';
+        widget.style.pointerEvents = 'all';
+        widget.style.transform = '';
       }
     });
   }, { threshold: 0.1 });
 
   observer.observe(target);
+
+  // patch minimize to also track state
+  const origMin = document.getElementById('btn-reel-minimize');
+  if(origMin) {
+    origMin.addEventListener('click', () => { minimized = true; }, { capture: true });
+  }
+  const origTab = document.getElementById('reel-tab');
+  if(origTab) {
+    origTab.addEventListener('click', () => { minimized = false; }, { capture: true });
+  }
 })();
 
 /* ════════════════════════════════════════
@@ -2694,21 +2566,13 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
 (function(){
   const el = document.getElementById('reel-widget');
   if (!el) return;
+  let dragging = false, ox = 0, oy = 0;
 
-  // On mobile — disable drag entirely to prevent black gap issue
-  if ('ontouchstart' in window) {
-    // Touch devices: only allow swipe inside the reel, no drag
-    return;
-  }
-
-  let dragging = false, ox = 0, oy = 0, moved = false;
-  let startX = 0, startY = 0;
+  let moved = false;
 
   function startDrag(cx, cy) {
     dragging = true;
     moved = false;
-    startX = cx;
-    startY = cy;
     const rect = el.getBoundingClientRect();
     ox = cx - rect.left;
     oy = cy - rect.top;
@@ -2721,7 +2585,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
 
   function moveDrag(cx, cy) {
     if (!dragging) return;
-    if (Math.abs(cx - startX) > 5 || Math.abs(cy - startY) > 5) moved = true;
+    moved = true;
     const maxX = window.innerWidth  - el.offsetWidth;
     const maxY = window.innerHeight - el.offsetHeight;
     el.style.left = Math.min(Math.max(0, cx - ox), maxX) + 'px';
@@ -2733,6 +2597,10 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   el.addEventListener('mousedown',  e => { if (e.target.closest('#btn-reel-minimize')) return; startDrag(e.clientX, e.clientY); e.preventDefault(); });
   document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
   document.addEventListener('mouseup',   endDrag);
+
+  el.addEventListener('touchstart', e => { if (e.target.closest('#btn-reel-minimize')) return; const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, { passive: true });
+  document.addEventListener('touchmove',  e => { if (!dragging) return; const t = e.touches[0]; moveDrag(t.clientX, t.clientY); e.preventDefault(); }, { passive: false });
+  document.addEventListener('touchend',   endDrag);
 
   el.addEventListener('click', e => { if (moved) { moved = false; e.stopImmediatePropagation(); e.preventDefault(); } });
 })();
@@ -2768,10 +2636,6 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   <a href="blog.html" class="mob-bar-btn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     Blogs
-  </a>
-  <a href="#products" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'});return false;" class="mob-bar-btn primary">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    Shop
   </a>
   <a href="news.html" class="mob-bar-btn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>

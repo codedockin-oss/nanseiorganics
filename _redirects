@@ -1,1 +1,2 @@
-/* /index.html 200
+# Let all real files and folders serve normally
+# No catch-all redirect needed for a multi-page site

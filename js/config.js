@@ -8,7 +8,7 @@
  */
 
 (function () {
-  const PRODUCTION_API = 'https://nansei-backend.onrender.com/api';
+  const PRODUCTION_API = 'https://nanseiorganics.onrender.com/api';
   const LOCAL_API      = 'http://localhost:5000/api';
 
   // Auto-detect: if running on localhost/file:// → use local, else use production

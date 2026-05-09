@@ -106,7 +106,7 @@ const Wish = {
 
   async has(productId) {
     const safeId = _safeId(productId);
-    const ids = await this.getIds();
+    const ids = _lcWish();
     return ids.includes(safeId) || ids.includes(String(safeId));
   },
 
@@ -142,14 +142,15 @@ const Wish = {
    BADGE SYNC
 ════════════════════════════════ */
 async function _updateBadge() {
-  const total = (await Cart.count());
+  const cart = _lcCart();
+  const total = cart.reduce((s, i) => s + (i.qty || 1), 0);
   document.querySelectorAll('#cartCount, #mobCartCnt, #cartBadge').forEach(el => {
     if (el) el.textContent = total;
   });
 }
 
 async function _updateWishBadge() {
-  const ids = await Wish.getIds();
+  const ids = _lcWish();
   document.querySelectorAll('#wishlistCount').forEach(el => {
     if (el) el.textContent = ids.length;
   });
