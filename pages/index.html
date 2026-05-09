@@ -653,9 +653,40 @@ video.slide-bg { transform:none!important; transition:none!important; }
   border-radius: 10px; transition: color .2s, background .2s;
   -webkit-tap-highlight-color: transparent;
 }
-.mob-bar-btn svg { width: 20px; height: 20px; }
-.mob-bar-btn:active { background: rgba(74,140,92,.08); color: var(--forest-leaf); }
+.mob-bar-btn svg { width: 20px; height: 20px; transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+.mob-bar-btn:active svg { transform: scale(1.28) translateY(-2px); }
+.mob-bar-btn:active { color: var(--forest-leaf); }
 .mob-bar-btn.active { color: var(--forest-deep); }
+
+/* tap ripple */
+@keyframes mobBarRipple {
+  0%   { transform: scale(0); opacity: .35; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+.mob-bar-btn { position: relative; overflow: hidden; }
+.mob-bar-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: radial-gradient(circle, var(--forest-leaf) 10%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+.mob-bar-btn:active::after { animation: mobBarRipple .38s ease-out forwards; }
+
+/* active tab indicator dot */
+.mob-bar-btn.active::before {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--forest-deep);
+}
 .mob-bar-btn.primary {
   background: var(--forest-deep);
   color: #fff; border-radius: 14px;
@@ -1240,8 +1271,89 @@ a .nansai-icon,
 }
 </style>
 
+<!-- ═══════════════════════════════════════
+     TRADITIONAL HAND MILL BANNER
+═══════════════════════════════════════ -->
+<section style="background:#f7f3ec;padding:1.5rem 1.5rem;overflow:hidden;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div id="mill-card-idx" style="display:grid;grid-template-columns:minmax(280px,420px) 1fr;border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 20px 60px rgba(15,34,24,.1),0 4px 16px rgba(15,34,24,.06);transform:perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1);will-change:transform;" onmousemove="millTiltIdx(event,this)" onmouseleave="millResetIdx(this)">
 
+      <!-- LEFT: IMAGE -->
+      <div style="position:relative;overflow:hidden;height:420px;">
+        <img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/thirukai/1776950241632.png" alt="Traditional Hand Mill"
+          id="mill-img-idx"
+          style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s cubic-bezier(.22,1,.36,1);"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.18) 0%,transparent 50%);pointer-events:none;"></div>
+        <div id="mill-shine-idx" style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.12) 0%,transparent 65%);opacity:0;transition:opacity .3s;pointer-events:none;"></div>
+      </div>
 
+      <!-- RIGHT: CONTENT -->
+      <div style="display:flex;flex-direction:column;justify-content:center;padding:1.25rem 1.75rem;border-left:1px solid rgba(26,58,42,.06);">
+        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem;">
+          <div style="width:1rem;height:1.5px;background:#4a8c5c;"></div>
+          <span style="font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#4a8c5c;">Traditional Process</span>
+        </div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,2.4vw,2.4rem);font-weight:700;color:#0f2218;line-height:1.15;margin-bottom:.5rem;">
+          Freshly Ground Grains from
+          <em style="font-style:italic;color:#4a8c5c;">Traditional Hand Mill</em>
+        </h2>
+        <div style="width:2.5rem;height:2px;background:linear-gradient(to right,#b8922a,transparent);margin-bottom:.75rem;"></div>
+        <p style="font-size:.95rem;color:#1a2416;line-height:1.7;margin-bottom:1.1rem;max-width:400px;">
+          Authentic, natural, and handmade process — preserving every nutrient, every flavour, every tradition.
+        </p>
+        <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:.85rem;">
+          <div style="display:flex;align-items:center;gap:.35rem;">
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:wheat]]</div>
+            <div><p style="font-size:.82rem;font-weight:700;color:#0f2218;">Stone Ground</p><p style="font-size:.72rem;color:#7a9980;">No heat damage</p></div>
+          </div>
+          <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
+          <div style="display:flex;align-items:center;gap:.35rem;">
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:hand]]</div>
+            <div><p style="font-size:.82rem;font-weight:700;color:#0f2218;">Hand Operated</p><p style="font-size:.72rem;color:#7a9980;">Zero electricity</p></div>
+          </div>
+          <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
+          <div style="display:flex;align-items:center;gap:.35rem;">
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:leaf]]</div>
+            <div><p style="font-size:.82rem;font-weight:700;color:#0f2218;">Farm Direct</p><p style="font-size:.72rem;color:#7a9980;">25-acre organic farm</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+@media(max-width:768px){
+  #mill-card-idx { grid-template-columns:140px 1fr !important; border-radius:14px !important; transform:none !important; box-shadow:0 6px 20px rgba(15,34,24,.08) !important; }
+  #mill-card-idx > div:first-child { height:100% !important; }
+  #mill-card-idx > div:first-child img { object-fit:cover !important; width:100% !important; height:100% !important; }
+  #mill-card-idx > div:last-child { padding:.75rem 1rem !important; }
+  #mill-card-idx h2 { font-size:.95rem !important; margin-bottom:.25rem !important; }
+  #mill-card-idx p { font-size:.68rem !important; margin-bottom:.5rem !important; }
+  #mill-card-idx > div:last-child > div:last-child { display:none !important; }
+}
+</style>
+<script>
+function millTiltIdx(e, card) {
+  if(window.innerWidth < 768) return;
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const cx = rect.width/2, cy = rect.height/2;
+  const rotY = ((x-cx)/cx)*6, rotX = -((y-cy)/cy)*4;
+  card.style.transform = `perspective(1200px) rotateY(${rotY}deg) rotateX(${rotX}deg) translateZ(12px) scale(1.01)`;
+  card.style.boxShadow = `${-rotY*2}px ${rotX*2}px 60px rgba(15,34,24,.18), 0 8px 32px rgba(15,34,24,.1)`;
+  const shine = document.getElementById('mill-shine-idx');
+  if(shine){ shine.style.background=`radial-gradient(circle at ${(x/rect.width)*100}% ${(y/rect.height)*100}%,rgba(255,255,255,.14) 0%,transparent 60%)`; shine.style.opacity='1'; }
+  const img = document.getElementById('mill-img-idx');
+  if(img) img.style.transform = `scale(1.04) translate(${rotY*0.5}px,${-rotX*0.5}px)`;
+}
+function millResetIdx(card) {
+  if(window.innerWidth < 768) return;
+  card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0) scale(1)';
+  card.style.boxShadow = '0 20px 60px rgba(15,34,24,.1),0 4px 16px rgba(15,34,24,.06)';
+  const shine = document.getElementById('mill-shine-idx'); if(shine) shine.style.opacity='0';
+  const img = document.getElementById('mill-img-idx'); if(img) img.style.transform='scale(1) translate(0,0)';
+}
+</script>
 
 <!-- ═══════════════════════════════════════
      PRODUCTS SECTION
@@ -1498,7 +1610,7 @@ a .nansai-icon,
 <footer id="site-footer" class="bg-gray-900 text-gray-300">
   <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
     <div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;color:#fff;margin-bottom:2px;">Nan<span style="color:var(--gold-dk);">sai</span></div>
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:56px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
       <p style="font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:#6b7280;margin-bottom:.85rem;">Experience the Root of Nature</p>
       <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural products. Trusted by farmers everywhere.</p>
       <div class="flex gap-3">
@@ -1528,15 +1640,15 @@ a .nansai-icon,
       </ul>
     </div>
     <div>
-      <h3 class="font-bold text-white text-base mb-5">Newsletter</h3>
-      <p class="text-gray-400 text-sm mb-4">Subscribe for the latest offers and farming updates.</p>
-      <form onsubmit="subNewsletter(event)" class="flex gap-2">
-        <input type="email" placeholder="Your email" class="flex-1 min-w-0 px-3 py-2.5 rounded-xl text-sm bg-gray-800 border border-gray-700 text-white placeholder-gray-500 outline-none focus:border-green-500 transition"/>
-        <button class="bg-green-600 hover:bg-green-500 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition shrink-0">Join</button>
-      </form>
+      <h3 class="font-bold text-white text-base mb-5">Contact Us</h3>
+      <ul class="space-y-3 text-sm">
+        <li><a href="mailto:info@nansaiorganics.com" class="text-gray-400 hover:text-green-400 transition">info@nansaiorganics.com</a></li>
+        <li><a href="tel:+919999999999" class="text-gray-400 hover:text-green-400 transition">+91 99999 99999</a></li>
+        <li><span class="text-gray-400">Tamil Nadu, India</span></li>
+      </ul>
     </div>
   </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved.</div>
 </footer>
 
 <!-- ═══════════════════════════════════════
