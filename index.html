@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nansai — Experience the Root of Nature</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
+<script src="../js/config.js"></script>
+<script src="../frontend/js/api.js"></script>
+<script src="../frontend/js/cart.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Cormorant Garamond"','serif'],
+        body:    ['"Inter"','sans-serif'],
+      },
+      animation: {
+        marquee: 'marquee 30s linear infinite',
+        fadeUp:  'fadeUp 0.45s ease both',
+        popIn:   'popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both',
+      },
+      keyframes: {
+        marquee: { '0%':{transform:'translateX(0)'},'100%':{transform:'translateX(-50%)'} },
+        fadeUp:  { from:{opacity:'0',transform:'translateY(20px)'}, to:{opacity:'1',transform:'translateY(0)'} },
+        popIn:   { from:{opacity:'0',transform:'scale(0.85)'}, to:{opacity:'1',transform:'scale(1)'} },
+      }
+    }
+  }
+}
+</script>
+
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════ */
+:root {
+  --forest:      #1a3a2a;
+  --forest-deep: #0f2218;
+  --forest-mid:  #2d5a3d;
+  --forest-leaf: #4a8c5c;
+  --forest-sage: #8fbc9a;
+  --cream:       #f7f3ec;
+  --warm-white:  #fdfaf5;
+  --gold:        #c9a84c;
+  --gold-lt:     #e8c97a;
+  --gold-dk:     #b8922a;
+  --text-dk:     #1a2416;
+  --text-md:     #3d5a45;
+  --text-lt:     #7a9980;
+  --nav-h:       68px;
+  --bar-h:       64px;
+}
+
+*  { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk); overflow-x:hidden; }
+
+/* ── font roles ──
+   price        → Inter 900 (ExtraBold)
+   headings/ui  → Inter 700 (Bold)
+   body text    → Inter 400 (Regular)
+   atc/buy btns → Roboto 700
+*/
+.font-price   { font-family:'Inter',sans-serif; font-weight:900; }
+.font-bold-ui { font-family:'Inter',sans-serif; font-weight:700; }
+.font-body    { font-family:'Inter',sans-serif; font-weight:400; }
+.font-btn     { font-family:'Roboto',sans-serif; font-weight:700; }
+#toast {
+  position:fixed; bottom:calc(var(--bar-h) + 14px); left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--forest-deep); color:var(--cream);
+  font-size:.78rem; font-weight:600;
+  padding:.5rem 1.4rem; border-radius:30px;
+  opacity:0; pointer-events:none; white-space:nowrap;
+  z-index:9999; box-shadow:0 8px 28px rgba(10,30,15,.3);
+  border:1px solid rgba(201,168,76,.22);
+  transition:opacity .3s, transform .3s;
+}
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════
+   ── UNIFIED NAVBAR ──
+═══════════════════════════════════════ */
+.site-nav {
+  position:sticky; top:0; z-index:1000;
+  background:#fff;
+  border-bottom:1px solid rgba(26,58,42,.12);
+  height:var(--nav-h);
+}
+.nav-inner {
+  max-width:1400px; margin:0 auto;
+  display:flex; align-items:center;
+  height:100%; padding:0 1.75rem; gap:1.25rem;
+}
+.nav-logo { flex-shrink:0; text-decoration:none; }
+.nav-logo-brand {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem; font-weight:700; color:var(--forest-deep);
+  letter-spacing:.04em; line-height:1;
+}
+.nav-logo-brand em { font-style:normal; color:var(--gold-dk); }
+.nav-logo-tagline {
+  font-size:.5rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--forest-sage); margin-top:3px; display:block; font-weight:500;
+}
+.nav-search { position:relative; flex:1; max-width:340px; }
+.nav-search input {
+  width:100%; padding:.5rem 2.6rem .5rem 1rem;
+  background:#f0faf2;
+  border:1px solid rgba(26,58,42,.15); border-radius:8px;
+  font-size:.79rem; color:var(--forest-deep); font-family:'Inter',sans-serif;
+  outline:none; transition:background .2s, border-color .2s;
+}
+.nav-search input:focus { background:#fff; border-color:var(--forest-leaf); }
+.nav-search-btn {
+  position:absolute; right:.3rem; top:50%; transform:translateY(-50%);
+  width:1.9rem; height:1.9rem; background:var(--gold-dk); border:none; border-radius:6px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  color:var(--forest-deep); transition:background .2s;
+}
+.nav-search-btn:hover { background:var(--gold-lt); }
+.nav-search-btn svg { width:13px; height:13px; }
+.nav-links {
+  display:flex; align-items:stretch; height:100%; list-style:none; gap:0;
+}
+.nav-links > li { position:relative; height:100%; display:flex; align-items:center; }
+.nav-link, .nav-trigger {
+  display:flex; align-items:center; gap:4px; height:100%; padding:0 .85rem;
+  font-size:.79rem; font-weight:600; letter-spacing:.02em;
+  color:var(--forest-deep); text-decoration:none; cursor:pointer;
+  background:none; border:none; font-family:'Inter',sans-serif;
+  white-space:nowrap; transition:color .2s; position:relative;
+}
+.nav-link:hover, .nav-trigger:hover { color:var(--forest-leaf); }
+.nav-link::after, .nav-trigger::after {
+  content:''; position:absolute; bottom:0; left:50%; right:50%;
+  height:2px; background:var(--gold-dk);
+  transition:left .24s ease, right .24s ease;
+}
+.nav-link:hover::after, .nav-trigger:hover::after { left:.7rem; right:.7rem; }
+.nav-chev { width:11px; height:11px; color:var(--gold-dk); flex-shrink:0; transition:transform .3s; }
+.nav-trigger.active .nav-chev { transform:rotate(180deg); }
+.nav-actions { display:flex; align-items:center; gap:.7rem; margin-left:auto; flex-shrink:0; }
+.nav-divider  { width:1px; height:18px; background:rgba(26,58,42,.15); flex-shrink:0; }
+.nav-orders-btn {
+  display:flex; align-items:center; gap:.35rem;
+  font-size:.65rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--forest-deep); text-decoration:none;
+  padding:.38rem .7rem; border:1px solid rgba(26,58,42,.2); border-radius:6px;
+  transition:all .2s; white-space:nowrap;
+}
+.nav-orders-btn svg { width:14px; height:14px; }
+.nav-orders-btn:hover { color:var(--forest-leaf); border-color:var(--forest-leaf); background:rgba(74,140,92,.05); }
+.nav-icon-btn {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
+  background:none; color:var(--forest-deep); text-decoration:none;
+  transition:color .2s, background .2s;
+}
+.nav-icon-btn svg { width:19px; height:19px; }
+.nav-icon-btn:hover { color:var(--forest-leaf); background:rgba(74,140,92,.08); }
+.nav-badge {
+  position:absolute; top:-2px; right:-2px;
+  background:#ef4444; color:#fff; font-size:.56rem; font-weight:800;
+  min-width:15px; height:15px; padding:0 3px; border-radius:30px;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid #fff; line-height:1;
+}
+.mob-ham {
+  display:none; background:none; border:none; cursor:pointer;
+  flex-direction:column; gap:5px; padding:3px; flex-shrink:0;
+}
+.mob-ham span { display:block; width:22px; height:2px; background:var(--forest-deep); border-radius:2px; transition:all .3s; }
+.mob-ham.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.mob-ham.open span:nth-child(2) { opacity:0; }
+.mob-ham.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+/* ═══════════════════════════════════════
+   MOBILE SEARCH ROW
+═══════════════════════════════════════ */
+.mob-search-row {
+  display:none; background:#FEFCE9;
+  border-bottom:1px solid rgba(26,58,42,.08);
+  padding:.48rem .85rem .6rem;
+}
+.mob-search-row .wrap { position:relative; }
+.mob-search-row input {
+  width:100%; padding:.55rem 2.6rem .55rem 1rem;
+  background:#fff; border:1px solid rgba(26,58,42,.15);
+  border-radius:8px; font-size:.82rem; color:var(--forest-deep);
+  font-family:'Inter',sans-serif; outline:none;
+}
+.mob-search-row .sb {
+  position:absolute; right:.32rem; top:50%; transform:translateY(-50%);
+  width:1.9rem; height:1.9rem; background:var(--gold-dk); border:none; border-radius:6px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--forest-deep);
+}
+.mob-search-row .sb svg { width:13px; height:13px; }
+
+/* ═══════════════════════════════════════
+   OFFER BAR
+═══════════════════════════════════════ */
+@keyframes ping { 75%,100%{transform:scale(2);opacity:0} }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.animate-marquee { animation:marquee 35s linear infinite; }
+
+/* ═══════════════════════════════════════
+   PARALLAX HERO SLIDER — 3D CAROUSEL
+═══════════════════════════════════════ */
+.slider-shell { position:relative; width:100%; overflow:hidden; perspective:1200px; perspective-origin:50% 50%; }
+#track { display:flex; height:100%; transform-style:preserve-3d; transition:none; }
+.slide {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  overflow:hidden; transform-origin:center center;
+  transition:transform .85s cubic-bezier(.77,0,.18,1), opacity .85s cubic-bezier(.77,0,.18,1);
+  opacity:0; pointer-events:none;
+  backface-visibility:hidden;
+}
+.slide.active  { opacity:1; pointer-events:all; transform:translateX(0) rotateY(0deg) scale(1); z-index:3; }
+.slide.prev    { opacity:.45; transform:translateX(-72%) rotateY(38deg) scale(.82); z-index:2; }
+.slide.next    { opacity:.45; transform:translateX(72%) rotateY(-38deg) scale(.82); z-index:2; }
+.slide.far-prev{ opacity:.15; transform:translateX(-110%) rotateY(55deg) scale(.68); z-index:1; }
+.slide.far-next{ opacity:.15; transform:translateX(110%) rotateY(-55deg) scale(.68); z-index:1; }
+.slide-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:transform 7s ease; }
+.slide.active img.slide-bg { transform:scale(1.02); }
+video.slide-bg { transform:none!important; transition:none!important; }
+.slide-overlay {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(110deg,rgba(5,12,6,.78) 0%,rgba(5,12,6,.3) 50%,transparent 72%),
+             linear-gradient(to top,rgba(5,12,6,.45) 0%,transparent 55%);
+}
+.slide-accent { position:absolute; left:clamp(1rem,3.5vw,2.2rem); top:0; bottom:0; width:2px; z-index:2; background:linear-gradient(to bottom,transparent 0%,#c9a84c 30%,#c9a84c 70%,transparent 100%); opacity:0; transition:opacity .5s .4s; }
+.slide.active .slide-accent { opacity:1; }
+.slide-content { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; justify-content:center; padding:clamp(1.2rem,4vw,2.8rem); padding-left:calc(clamp(1.2rem,4vw,2.8rem) + 16px); }
+.eyebrow { display:flex; align-items:center; gap:.45rem; font-size:.58rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:#e8c97a; margin-bottom:.5rem; opacity:0; transform:translateY(12px); transition:opacity .5s .55s,transform .5s .55s; }
+.eyebrow span { display:block; width:1.4rem; height:1.5px; background:#c9a84c; flex-shrink:0; }
+.slide.active .eyebrow { opacity:1; transform:none; }
+.slide-title { font-family:'Cormorant Garamond',serif; font-weight:700; line-height:1.06; color:#fff; font-size:clamp(1.35rem,3vw,2.4rem); margin-bottom:.6rem; opacity:0; transform:translateY(16px); transition:opacity .55s .68s,transform .55s .68s; word-wrap:break-word; }
+.slide.active .slide-title { opacity:1; transform:none; }
+.slide-title em { font-style:italic; color:#86c98a; }
+.slide-desc { font-size:clamp(.65rem,.85vw,.8rem); font-weight:300; line-height:1.65; color:rgba(255,255,255,.58); max-width:280px; margin-bottom:1.1rem; opacity:0; transform:translateY(12px); transition:opacity .5s .8s,transform .5s .8s; }
+.slide.active .slide-desc { opacity:1; transform:none; }
+.slide-cta { display:inline-flex; align-items:center; gap:.45rem; font-size:.66rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:.48rem 1.25rem; border:1px solid #c9a84c; color:#e8c97a; background:transparent; cursor:pointer; width:fit-content; position:relative; overflow:hidden; opacity:0; transform:translateY(10px); transition:opacity .5s .92s,transform .5s .92s,background .25s,color .25s; }
+.slide.active .slide-cta { opacity:1; transform:none; }
+.slide-cta::before { content:''; position:absolute; inset:0; background:#c9a84c; transform:translateX(-101%); transition:transform .3s ease; z-index:-1; }
+.slide-cta:hover::before { transform:translateX(0); }
+.slide-cta:hover { color:#0a100b; }
+.ghost-num { position:absolute; right:1rem; bottom:.6rem; z-index:4; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:clamp(2.5rem,6vw,4.5rem); color:rgba(255,255,255,.05); pointer-events:none; user-select:none; line-height:1; }
+.arrow-btn { position:absolute; top:50%; transform:translateY(-50%); z-index:20; width:2.2rem; height:2.2rem; border:1px solid rgba(255,255,255,.18); background:rgba(5,12,6,.45); backdrop-filter:blur(6px); color:#fff; font-size:.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .25s,border-color .25s; }
+.arrow-btn:hover { background:#c9a84c; border-color:#c9a84c; color:#0a100b; }
+.slider-footer { position:absolute; bottom:0; left:0; right:0; z-index:10; display:flex; align-items:center; gap:.65rem; padding:.7rem clamp(1.2rem,4vw,2.8rem); background:linear-gradient(to top,rgba(5,12,6,.55) 0%,transparent 100%); }
+.dot { width:.42rem; height:.42rem; border-radius:50%; background:rgba(255,255,255,.28); border:none; cursor:pointer; padding:0; transition:background .3s,transform .3s; }
+.dot.active { background:#c9a84c; transform:scale(1.35); }
+.timer-track { flex:1; height:1.5px; overflow:hidden; background:rgba(255,255,255,.12); }
+.timer-fill { height:100%; width:0%; background:#c9a84c; }
+#muteBtn { position:absolute; bottom:3rem; right:.9rem; z-index:20; width:1.8rem; height:1.8rem; border-radius:50%; border:1px solid rgba(255,255,255,.25); background:rgba(5,12,6,.5); backdrop-filter:blur(5px); color:#fff; font-size:.65rem; cursor:pointer; display:none; align-items:center; justify-content:center; transition:background .2s; }
+#muteBtn:hover { background:#c9a84c; color:#0a100b; }
+#muteBtn.visible { display:flex; }
+
+/* ═══════════════════════════════════════
+   FLOATING LEAVES — injected into hero
+═══════════════════════════════════════ */
+@keyframes leafFloat1 {
+  0%,100% { transform:translateY(0) rotate(0deg) scale(1); }
+  35%     { transform:translateY(-18px) rotate(9deg) scale(1.06); }
+  68%     { transform:translateY(-7px) rotate(-4deg) scale(.97); }
+}
+@keyframes leafFloat2 {
+  0%,100% { transform:translateY(0) rotate(-8deg); }
+  50%     { transform:translateY(-22px) rotate(10deg); }
+}
+@keyframes leafDrift {
+  0%   { transform:translate(0,0) rotate(0deg) scale(1); opacity:.6; }
+  25%  { transform:translate(10px,-18px) rotate(12deg) scale(1.05); opacity:.8; }
+  50%  { transform:translate(-6px,-28px) rotate(-7deg) scale(.95); opacity:.65; }
+  75%  { transform:translate(14px,-14px) rotate(16deg) scale(1.03); opacity:.75; }
+  100% { transform:translate(0,0) rotate(0deg) scale(1); opacity:.6; }
+}
+.hero-leaf { position:absolute; pointer-events:none; user-select:none; z-index:4; }
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.sr { opacity:0; transform:translateY(32px); transition:opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
+.sr.is-visible { opacity:1; transform:none; }
+.sr-left { opacity:0; transform:translateX(-36px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.sr-left.is-visible { opacity:1; transform:none; }
+.sr-right { opacity:0; transform:translateX(36px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.sr-right.is-visible { opacity:1; transform:none; }
+.sr-scale { opacity:0; transform:scale(.9); transition:opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+.sr-scale.is-visible { opacity:1; transform:scale(1); }
+.sd-1 { transition-delay:.08s; }
+.sd-2 { transition-delay:.16s; }
+.sd-3 { transition-delay:.24s; }
+.sd-4 { transition-delay:.32s; }
+.sd-5 { transition-delay:.40s; }
+.sd-6 { transition-delay:.48s; }
+
+/* ═══════════════════════════════════════
+   PRODUCT CARDS
+═══════════════════════════════════════ */
+@keyframes floatCard {
+  0%,100% { transform:translateY(0); }
+  50%     { transform:translateY(-7px); }
+}
+.prod-card { transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s; display:flex; flex-direction:column; }
+.prod-card:hover { transform:translateY(-6px) scale(1.018); box-shadow:0 20px 52px rgba(10,30,15,.16)!important; }
+.prod-card.card-lifted { transform:translateY(-10px) scale(1.02)!important; box-shadow:0 28px 60px rgba(10,30,15,.22)!important; transition:transform 320ms ease-in-out, box-shadow 320ms ease-in-out!important; animation:none!important; }
+.prod-card:hover .prod-img { transform:scale(1.08); }
+.prod-img { display:block; width:100%; height:100%; object-fit:cover; object-position:center; transition:transform .55s cubic-bezier(.22,1,.36,1); }
+.prod-img-wrap {
+  position:relative; width:100%; height:240px; overflow:hidden;
+  background:#f0fdf4; flex-shrink:0;
+  transition:height 380ms ease-in-out;
+}
+.prod-card.card-lifted .prod-img-wrap { height:190px; }
+.prod-info { padding:.75rem; display:flex; flex-direction:column; gap:3px; flex:1; overflow:visible; }
+.prod-btn-area { margin-top:4px; }
+/* qty: full-width pill grid + square cart btn */
+.qty-selector-area { display:flex; align-items:stretch; gap:6px; width:100%; }
+.qty-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3px;
+  flex:1;
+  min-width:0;
+}
+.qty-pill {
+  padding:6px 2px; border-radius:5px; font-size:.6rem; font-weight:700;
+  border:1.5px solid rgba(26,58,42,.18); background:#f8faf8; color:var(--forest-deep);
+  cursor:pointer; transition:all .18s ease-in-out; text-align:center;
+  font-family:'Inter',sans-serif; line-height:1; width:100%;
+}
+.qty-pill:hover { border-color:var(--forest-leaf); background:rgba(74,140,92,.08); }
+.qty-pill.selected { background:var(--forest-deep); color:#fff; border-color:var(--forest-deep); }
+.qty-cart-btn {
+  flex-shrink:0;
+  width:52px;
+  border-radius:8px; border:none;
+  background:#059669; color:#fff; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  align-self:stretch;
+  transition:background .2s, transform .15s;
+}
+.qty-cart-btn:hover { background:#047857; }
+.qty-cart-btn.done { background:#16a34a; }
+@keyframes btnBounce { 0%{transform:scale(1)} 35%{transform:scale(1.22)} 65%{transform:scale(.9)} 100%{transform:scale(1)} }
+.btn-bounce { animation:btnBounce 360ms cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes cartFly {
+  0%   { transform:scale(1); opacity:1; }
+  40%  { transform:scale(1.3) translateY(-6px); opacity:1; }
+  100% { transform:scale(0.6) translateY(-20px); opacity:0; }
+}
+.cart-fly { animation:cartFly 500ms cubic-bezier(.34,1.56,.64,1) forwards; }
+.prod-float-1 { animation:floatCard 3.6s ease-in-out infinite; }
+.prod-float-2 { animation:floatCard 4.0s ease-in-out infinite .45s; }
+.prod-float-3 { animation:floatCard 3.8s ease-in-out infinite .9s; }
+.prod-float-4 { animation:floatCard 4.2s ease-in-out infinite 1.35s; }
+.prod-float-5 { animation:floatCard 3.5s ease-in-out infinite 1.8s; }
+.prod-float-6 { animation:floatCard 4.1s ease-in-out infinite .25s; }
+.prod-card.card-lifted,
+.prod-card.card-lifted.prod-float-1,
+.prod-card.card-lifted.prod-float-2,
+.prod-card.card-lifted.prod-float-3,
+.prod-card.card-lifted.prod-float-4,
+.prod-card.card-lifted.prod-float-5,
+.prod-card.card-lifted.prod-float-6 { animation:none!important; }
+@keyframes qtyFadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.qty-selector-area { animation:qtyFadeIn 260ms ease-out both; }
+
+
+/* ═══════════════════════════════════════
+   BLOG CARDS
+═══════════════════════════════════════ */
+.blog-card { background:#fff; border-radius:18px; overflow:hidden; border:1px solid rgba(26,58,42,.08); box-shadow:0 4px 20px rgba(26,58,42,.06); transition:box-shadow .4s,transform .4s; transform-style:preserve-3d; cursor:pointer; }
+.blog-card:hover { box-shadow:0 24px 60px rgba(26,58,42,.15); }
+.blog-card-img { height:210px; overflow:hidden; }
+.blog-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s cubic-bezier(.22,1,.36,1); }
+.blog-card:hover .blog-card-img img { transform:scale(1.06); }
+
+/* ═══════════════════════════════════════
+   WHY CARDS
+═══════════════════════════════════════ */
+.why-card { transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s; }
+.why-card:hover { transform:translateY(-8px); box-shadow:0 20px 48px rgba(21,128,61,.13)!important; }
+
+/* ═══════════════════════════════════════
+   PARALLAX SECTIONS
+═══════════════════════════════════════ */
+.parallax-section { position:relative; overflow:hidden; }
+.parallax-bg-layer { position:absolute; inset:0; background-size:cover; background-position:center; will-change:transform; }
+.parallax-overlay-dark {
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(135deg,rgba(5,12,6,.82) 0%,rgba(15,34,24,.65) 45%,rgba(26,58,42,.4) 100%);
+}
+.parallax-fg { position:relative; z-index:2; }
+
+/* ═══════════════════════════════════════
+   DROPDOWN (minimal, source-accurate)
+═══════════════════════════════════════ */
+#dd-overlay {
+  display:none; position:fixed;
+  inset:var(--nav-h) 0 0;
+  background:rgba(0,0,0,.38); z-index:997;
+  backdrop-filter:blur(2px);
+}
+#dd-overlay.show { display:block; }
+
+/* ═══════════════════════════════════════
+   MOBILE OVERRIDES
+═══════════════════════════════════════ */
+@media(max-width:768px){
+  .nav-links,.nav-search,.nav-orders-btn,.nav-divider { display:none!important; }
+  .mob-ham { display:flex; }
+  .mob-search-row { display:block; }
+  #desk-offer-bar { display:none!important; }
+  #mob-offer-bar  { display:block!important; }
+}
+@media(min-width:769px){
+  .mob-search-row { display:none!important; }
+  #mob-offer-bar  { display:none!important; }
+  #mob-sticky-bar { display:none!important; }
+}
+
+/* ═══════════════════════════════════════
+   MOBILE UX — COMPLETE OVERHAUL
+═══════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* ── NAV ── */
+  :root { --nav-h: 58px; }
+  .nav-inner { padding: 0 1rem; gap: .6rem; }
+  .nav-logo img { height: 48px !important; }
+  .nav-icon-btn { width: 32px; height: 32px; }
+  .nav-icon-btn svg { width: 17px; height: 17px; }
+  .nav-badge { min-width: 14px; height: 14px; font-size: .5rem; }
+
+  /* ── MOBILE SEARCH ROW ── */
+  .mob-search-row { padding: .5rem .85rem .6rem; }
+  .mob-search-row input { font-size: .85rem; padding: .6rem 2.8rem .6rem 1rem; border-radius: 10px; }
+
+  /* ── HERO SLIDER ── */
+  #sliderShell { height: clamp(260px, 58vw, 380px) !important; }
+  .slide-content { padding: 1rem 1rem 1rem 1.4rem !important; justify-content: flex-end !important; padding-bottom: 3.5rem !important; }
+  .slide-title { font-size: clamp(1.25rem, 5.5vw, 1.7rem) !important; margin-bottom: .4rem; }
+  .slide-desc { font-size: .72rem !important; max-width: 100% !important; margin-bottom: .75rem; line-height: 1.55; }
+  .slide-cta { font-size: .62rem !important; padding: .42rem 1rem !important; }
+  .eyebrow { font-size: .52rem !important; }
+  .arrow-btn { width: 1.8rem !important; height: 1.8rem !important; font-size: .7rem !important; }
+  .ghost-num { display: none; }
+  .hero-leaf { display: none; }
+
+  /* ── PRODUCTS SECTION ── */
+  #products { padding: 2rem 0 2.5rem !important; }
+  #products > div { padding: 0 .85rem !important; }
+  #sr-prod-hdr { margin-bottom: 1.5rem !important; }
+  #sr-prod-hdr h1 { font-size: clamp(1.4rem, 6vw, 1.9rem) !important; }
+  #sr-prod-hdr p { font-size: .78rem !important; }
+
+  /* ── FILTER PILLS ── */
+  .filter-bar { gap: .35rem; padding: .2rem .05rem .45rem; }
+  .fpill { padding: .38rem .85rem; font-size: .72rem; }
+
+  /* ── PRODUCT SECTIONS — hide scroll btns, show 2-col grid ── */
+  .hscroll-wrap { gap: 0 !important; }
+  .scroll-btn { display: none !important; }
+  .prod-hscroll {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    padding-bottom: 4px !important;
+    width: 100% !important;
+  }
+  .prod-card {
+    width: 100% !important;
+    flex-shrink: unset !important;
+    border-radius: 14px !important;
+  }
+  .prod-img-wrap { height: 160px !important; }
+  .prod-card.card-lifted .prod-img-wrap { height: 130px !important; }
+  .prod-info { padding: .6rem .65rem !important; gap: 2px !important; }
+  .prod-info h3 { font-size: .82rem !important; }
+  .prod-info span[style*="font-size:.68rem"] { font-size: .6rem !important; }
+  .prod-btn-area button { font-size: .65rem !important; padding: 8px 4px !important; border-radius: 8px !important; }
+  .qty-pill { font-size: .55rem !important; padding: 5px 2px !important; }
+  .qty-cart-btn { width: 40px !important; }
+
+  /* section header on mobile */
+  .prod-section > div:first-child { flex-direction: column !important; align-items: flex-start !important; gap: .5rem !important; margin-bottom: .85rem !important; }
+  .prod-section > div:first-child h2 { font-size: 1.2rem !important; }
+  .prod-section > div:first-child p { font-size: .72rem !important; }
+  .prod-section > div:first-child button { font-size: .65rem !important; padding: 5px 14px !important; }
+  .prod-section { margin-bottom: 2.2rem !important; }
+
+  /* flat grid (filtered view) */
+  #productGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    padding: 8px 2px !important;
+  }
+
+  /* ── MID PARALLAX BANNER ── */
+  #midParallax { min-height: 320px !important; }
+  #midParallax .parallax-fg { padding: 2.5rem 1.25rem !important; }
+  #midParallax h2 { font-size: clamp(1.5rem, 6vw, 2rem) !important; margin-bottom: .75rem !important; }
+  #midParallax p { font-size: .78rem !important; margin-bottom: 1.5rem !important; }
+  #sr-mid-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.2rem !important;
+    max-width: 100% !important;
+  }
+  #sr-mid-stats > div > div:first-child { font-size: 2rem !important; }
+  #sr-mid-stats > div > div:last-child { font-size: .52rem !important; }
+
+  /* ── WHY SECTION ── */
+  #why-section { padding: 2.5rem 1rem !important; }
+  #why-section .grid { gap: .75rem !important; }
+  .why-card { padding: 1rem !important; border-radius: 16px !important; }
+  .why-card .w-14 { width: 48px !important; height: 48px !important; font-size: 1.4rem !important; margin-bottom: .75rem !important; }
+  .why-card h3 { font-size: .88rem !important; margin-bottom: .35rem !important; }
+  .why-card p { font-size: .7rem !important; }
+
+  /* ── BLOG SECTION ── */
+  #blog-section {
+    display: block !important;
+    padding: 2rem .85rem 2.5rem !important;
+    background: var(--cream) !important;
+  }
+  #blog-section > div > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .6rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+  /* section title sizing */
+  #sr-blog-hdr h2 { font-size: 1.6rem !important; }
+  #sr-blog-hdr p  { font-size: .75rem !important; }
+  /* horizontal scroll row on mobile */
+  #blog-section > div > div:last-child {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: .85rem !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    scrollbar-width: none !important;
+    padding-bottom: 6px !important;
+    scroll-snap-type: x mandatory !important;
+  }
+  #blog-section > div > div:last-child::-webkit-scrollbar { display: none !important; }
+  .blog-card {
+    margin-top: 0 !important;
+    flex-shrink: 0 !important;
+    width: 78vw !important;
+    max-width: 300px !important;
+    scroll-snap-align: start !important;
+    border-radius: 16px !important;
+  }
+  .blog-card-img { height: 155px !important; }
+  .blog-card > div:last-child { padding: .85rem !important; }
+  .blog-card h3 { font-size: .95rem !important; margin-bottom: .35rem !important; }
+  .blog-card p  { font-size: .72rem !important; margin-bottom: .65rem !important; }
+  /* scroll hint dots */
+  #blog-scroll-dots {
+    display: flex !important;
+    justify-content: center;
+    gap: 5px;
+    margin-top: .85rem;
+  }
+  #blog-scroll-dots span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(26,58,42,.2);
+    transition: background .25s, transform .25s;
+  }
+  #blog-scroll-dots span.active {
+    background: var(--forest-deep);
+    transform: scale(1.35);
+  }
+
+  /* ── FOOTER ── */
+  #site-footer .grid { grid-template-columns: 1fr 1fr !important; gap: 1.5rem !important; padding: 2rem 1.25rem !important; }
+  #site-footer .grid > div:first-child { grid-column: 1 / -1; }
+  #site-footer .grid > div:last-child { grid-column: 1 / -1; }
+
+  /* ── REEL WIDGET — move up above sticky bar ── */
+  #reel-widget { bottom: 72px !important; right: 10px !important; width: 130px !important; }
+  #reel-tab { bottom: 72px !important; }
+  .mini-caption { font-size: 8.5px !important; padding: 5px 6px !important; }
+
+  /* ── TOAST — above sticky bar ── */
+  #toast { bottom: calc(64px + 14px) !important; font-size: .74rem !important; }
+
+  /* ── CART DRAWER ── */
+  #cartDrawer { width: 100vw !important; }
+}
+
+/* ── MOBILE STICKY BOTTOM BAR ── */
+#mob-sticky-bar {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1080;
+  background: #fff;
+  border-top: 1px solid rgba(26,58,42,.1);
+  box-shadow: 0 -4px 20px rgba(10,30,15,.1);
+  padding: .45rem .5rem;
+  padding-bottom: calc(.45rem + env(safe-area-inset-bottom, 0px));
+}
+@media(max-width:768px){
+  #mob-sticky-bar { display: flex; align-items: center; justify-content: space-around; gap: .25rem; }
+  body { padding-bottom: 64px; }
+}
+.mob-bar-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  flex: 1; padding: .3rem .2rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--text-md); text-decoration: none;
+  font-size: .58rem; font-weight: 600; letter-spacing: .04em;
+  border-radius: 10px; transition: color .2s, background .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.mob-bar-btn svg { width: 20px; height: 20px; }
+.mob-bar-btn:active { background: rgba(74,140,92,.08); color: var(--forest-leaf); }
+.mob-bar-btn.active { color: var(--forest-deep); }
+.mob-bar-btn.primary {
+  background: var(--forest-deep);
+  color: #fff; border-radius: 14px;
+  padding: .45rem .6rem;
+  flex: 1.4;
+  box-shadow: 0 4px 14px rgba(15,34,24,.28);
+}
+.mob-bar-btn.primary:active { background: var(--forest-mid); }
+.mob-bar-icon-wrap { position: relative; }
+.mob-bar-badge {
+  position: absolute; top: -4px; right: -6px;
+  background: #ef4444; color: #fff;
+  font-size: .48rem; font-weight: 800;
+  min-width: 14px; height: 14px; padding: 0 3px;
+  border-radius: 20px; display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid #fff; line-height: 1;
+}
+.prod-hscroll::-webkit-scrollbar { display:none; }
+.hscroll-wrap { display:flex; align-items:center; gap:10px; }
+.prod-hscroll { perspective:1200px; overflow-x:auto !important; overflow-y:visible !important; }
+.prod-hscroll .prod-card {
+  transform-origin: center center;
+}
+.scroll-btn {
+  flex-shrink:0;
+  width:42px; height:42px; border-radius:50%;
+  background:rgba(20,20,20,.75);
+  border:2px solid rgba(255,255,255,.18);
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+  backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#fff; opacity:1;
+  transform:scale(1);
+  transition:background .2s ease, border-color .2s ease, transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease, opacity .25s ease, visibility .25s ease;
+  position:relative; overflow:hidden;
+}
+.scroll-btn::before {
+  content:'';
+  position:absolute; inset:0; border-radius:50%;
+  background:radial-gradient(circle at center, rgba(255,255,255,.18) 0%, transparent 70%);
+  opacity:0;
+  transition:opacity .2s ease;
+}
+.scroll-btn:hover {
+  background:rgba(255,255,255,.95);
+  border-color:rgba(255,255,255,.9);
+  color:#111;
+  transform:scale(1.13);
+  box-shadow:0 0 0 4px rgba(255,255,255,.15), 0 8px 28px rgba(0,0,0,.5);
+}
+.scroll-btn:hover::before { opacity:1; }
+.scroll-btn:active { transform:scale(.92); box-shadow:0 2px 8px rgba(0,0,0,.4); }
+.scroll-btn svg { transition:transform .2s cubic-bezier(.34,1.56,.64,1); position:relative; z-index:1; }
+.scroll-btn.left:hover svg { transform:translateX(-2px) scale(1.1); }
+.scroll-btn.right:hover svg { transform:translateX(2px) scale(1.1); }
+@keyframes btnPulse {
+  0%,100% { box-shadow:0 4px 16px rgba(0,0,0,.4), 0 0 0 0 rgba(255,255,255,.12); }
+  50%      { box-shadow:0 4px 16px rgba(0,0,0,.4), 0 0 0 6px rgba(255,255,255,0); }
+}
+.hscroll-wrap .scroll-btn { animation:btnPulse 2.5s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════
+   FLOATING REELS WIDGET
+═══════════════════════════════════════ */
+#reel-widget {
+  position:fixed; bottom:24px; right:16px;
+  width:195px; border-radius:14px;
+  overflow:visible;
+  box-shadow:0 6px 24px rgba(10,30,15,.45);
+  background:#000; z-index:1050;
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+  cursor:grab;
+  user-select:none;
+}
+#reel-widget:active { cursor:grabbing; }
+.reel-track { border-radius:14px; overflow:hidden; }
+@media(max-width:768px){ #reel-widget{ width:175px; bottom:20px; right:14px; } }
+@media(max-width:480px){ #reel-widget{ width:155px; bottom:16px; right:12px; } }
+#reel-widget.minimized{ transform:translateX(calc(100% + 20px)); }
+.reel-track{ position:relative; width:100%; aspect-ratio:9/16; overflow:hidden; }
+.reel-slide{
+  position:absolute; inset:0;
+  transform:translateY(100%);
+  transition:transform .45s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.reel-slide.active{ transform:translateY(0); }
+.reel-slide.prev  { transform:translateY(-100%); }
+.reel-slide video { width:100%; height:100%; object-fit:cover; display:block; }
+.reel-dots{
+  position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:5px; z-index:5;
+}
+.reel-dots span{
+  width:5px; height:5px; border-radius:50%;
+  background:rgba(255,255,255,.4); cursor:pointer;
+  transition:background .25s, transform .25s;
+}
+.reel-dots span.active{ background:#e8c97a; transform:scale(1.4); }
+.mini-caption{
+  padding:6px 8px;
+  background:linear-gradient(0deg,rgba(10,30,15,.85),transparent);
+  position:absolute; bottom:0; left:0; right:0;
+  color:#f7f3ec; font-size:9.5px; line-height:1.4;
+  pointer-events:none;
+}
+#reel-tab{
+  position:fixed; bottom:24px; right:-4px;
+  background:#fff; color:var(--forest-deep);
+  border-radius:50%;
+  width:26px; height:26px;
+  cursor:pointer;
+  z-index:1049;
+  display:none;
+  align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+  border:2px solid #fff;
+  transition:background .2s;
+}
+#reel-tab:hover{ background:#f0f0f0; }
+@media(max-width:480px){ #reel-tab{ bottom:16px; } }
+#btn-reel-minimize{
+  position:absolute; top:-10px; right:-10px;
+  background:#fff; border:2px solid #fff; color:var(--forest-deep);
+  border-radius:50%; width:26px; height:26px;
+  font-size:13px; cursor:pointer; z-index:20;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+  transition:background .2s;
+  line-height:1;
+}
+#btn-reel-minimize:hover{ background:#f0f0f0; }
+/* Modal */
+#reel-modal{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0);
+  display:flex; align-items:center; justify-content:center;
+  z-index:2100; pointer-events:none;
+  transition:background .3s;
+}
+#reel-modal.open{ background:rgba(0,0,0,.78); pointer-events:all; }
+.reel-modal-box{
+  position:relative;
+  width:min(400px,95vw);
+  background:#000;
+  border-radius:20px; overflow:visible;
+  transform:scale(.9); opacity:0;
+  transition:transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
+  display:flex; flex-direction:column;
+  max-height:92vh;
+}
+#reel-modal.open .reel-modal-box{ transform:scale(1); opacity:1; }
+.reel-modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);
+  position:absolute; top:0; left:0; right:0;
+  z-index:20; pointer-events:all;
+}
+.reel-modal-caption{ color:rgba(255,255,255,.9); font-size:12px; flex:1; line-height:1.4; }
+/* Close btn — floats top-right outside the frame */
+#btn-reel-close{
+  position:absolute; top:-13px; right:-13px;
+  background:#fff; border:none; color:#111;
+  font-size:13px; cursor:pointer;
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.35);
+  transition:background .2s, transform .2s;
+  z-index:30;
+}
+#btn-reel-close:hover{ background:#f0f0f0; transform:scale(1.1); }
+/* Prev/Next arrows — outside frame, right side */
+.reel-modal-ext-btn{
+  position:absolute; right:-42px;
+  background:#fff; border:none; color:#111;
+  width:30px; height:30px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+  transition:background .2s, transform .2s;
+  z-index:30;
+}
+.reel-modal-ext-btn:hover{ background:#f0f0f0; transform:scale(1.1); }
+#modal-prev{ top:calc(50% - 36px); }
+#modal-next{ top:calc(50% + 6px); }
+@media(max-width:480px){ .reel-modal-ext-btn{ display:none; } }
+.reel-modal-track{
+  position:relative; width:100%; aspect-ratio:9/16;
+  overflow:hidden; border-radius:20px;
+}
+.reel-modal-arrows{ display:none; }
+
+/* ═══════════════════════════════════════
+   SECTION PATTERNS
+═══════════════════════════════════════ */
+.texture-section {
+  background-color:var(--cream);
+  background-image:radial-gradient(ellipse at 15% 50%,rgba(74,140,92,.04) 0%,transparent 60%),
+                   radial-gradient(ellipse at 85% 20%,rgba(201,168,76,.04) 0%,transparent 60%);
+}
+</style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════════
+     FLOATING REELS WIDGET
+═══════════════════════════════════════ -->
+<!-- Restore tab -->
+<div id="reel-tab" title="Open Reels"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1a3a2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+
+<!-- Mini player -->
+<div id="reel-widget">
+  <button id="btn-reel-minimize" title="Minimize"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1a3a2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <div class="reel-track" id="mini-track">
+    <div class="reel-dots" id="mini-dots"></div>
+  </div>
+</div>
+
+<!-- Expanded modal -->
+<div id="reel-modal">
+  <div class="reel-modal-box">
+    <!-- Close btn: top-right outside frame -->
+    <button id="btn-reel-close">&#10005;</button>
+    <!-- Up/down arrows: outside frame on sides -->
+    <button class="reel-modal-ext-btn" id="modal-prev">&#8593;</button>
+    <button class="reel-modal-ext-btn" id="modal-next">&#8595;</button>
+    <div class="reel-modal-track" id="modal-track">
+      <div class="reel-modal-header">
+        <span class="reel-modal-caption" id="modal-caption"></span>
+      </div>
+      <div class="reel-dots" id="modal-dots"></div>
+    </div>
+  </div>
+</div>
+<!-- OVERLAY -->
+<div id="dd-overlay"></div>
+
+<!-- ═══════════════════════════════════════
+     OFFER BAR — DESKTOP
+═══════════════════════════════════════ -->
+<div id="desk-offer-bar" class="w-full bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-y border-amber-200">
+  <div class="max-w-[1400px] mx-auto flex items-center justify-between h-11 px-4 gap-6 overflow-hidden">
+    <div class="flex items-center gap-2 shrink-0">
+      <div class="relative flex h-2 w-2">
+        <span class="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-70" style="animation:ping .9s cubic-bezier(0,0,.2,1) infinite;"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
+      </div>
+      <span class="text-[11px] font-bold tracking-[0.2em] text-amber-900">LIVE OFFERS</span>
+    </div>
+    <div class="flex-1 overflow-hidden">
+      <div id="offerTrack" class="flex items-center gap-8 whitespace-nowrap text-[13px] text-[#4a3510] font-medium animate-marquee hover:[animation-play-state:paused]" style="width:max-content;">
+        <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">[[icon:gift]] First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="text-amber-400">◆</span>
+        <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
+        <span class="text-amber-400">◆</span>
+        <span>[[icon:wheat]] Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹221</mark></span>
+        <span class="text-amber-400">◆</span>
+        <span>[[icon:flower]] Paneer Rose <b class="text-rose-600">Only 32 Left</b></span>
+        <span class="text-amber-400">◆</span>
+        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Supplements Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="text-amber-400">◆</span>
+        <span>[[icon:tractor]] Farm Direct · Lab Tested · Organic Certified</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <span class="text-[11px] text-amber-800 font-semibold">Ends</span>
+      <div class="flex items-center gap-1 text-sm font-bold">
+        <span id="hh" class="bg-amber-100 px-2 py-[2px] rounded text-amber-900 shadow-sm">00</span>
+        <span class="text-amber-500">:</span>
+        <span id="mm" class="bg-amber-100 px-2 py-[2px] rounded text-amber-900 shadow-sm">00</span>
+        <span class="text-amber-500">:</span>
+        <span id="ss" class="bg-amber-100 px-2 py-[2px] rounded text-amber-900 shadow-sm">00</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFER BAR — MOBILE -->
+<div id="mob-offer-bar" style="display:none;">
+  <div style="background:#FEFBE9;border-bottom:1px solid rgba(20,48,31,.1);padding:.3rem .75rem;display:flex;align-items:center;gap:.6rem;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
+      <div style="position:relative;width:6px;height:6px;flex-shrink:0;">
+        <span style="position:absolute;inset:0;border-radius:50%;background:#4ade80;opacity:.7;animation:ping .9s cubic-bezier(0,0,.2,1) infinite;"></span>
+        <span style="position:relative;display:block;width:6px;height:6px;border-radius:50%;background:#22c55e;"></span>
+      </div>
+      <span style="font-size:.52rem;font-weight:800;letter-spacing:.14em;color:#14301f;text-transform:uppercase;white-space:nowrap;">Offers</span>
+    </div>
+    <div style="flex:1;overflow:hidden;"><div id="mobMarqueeTrack" style="display:inline-flex;align-items:center;gap:1.2rem;white-space:nowrap;animation:marquee 45s linear infinite;font-size:.68rem;color:#14301f;font-weight:500;width:max-content;"></div></div>
+    <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
+      <span id="mob-hh" style="background:rgba(20,48,31,.1);color:#9a7520;font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">00</span>
+      <span style="color:#9a7520;font-size:.6rem;font-weight:800;">:</span>
+      <span id="mob-mm" style="background:rgba(20,48,31,.1);color:#9a7520;font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">00</span>
+      <span style="color:#9a7520;font-size:.6rem;font-weight:800;">:</span>
+      <span id="mob-ss" style="background:rgba(20,48,31,.1);color:#9a7520;font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">00</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<header class="site-nav">
+  <div class="nav-inner bg-white">
+    <a class="nav-logo" href="index.html" style="display:flex;align-items:center;">
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;"/>
+    </a>
+    <div class="nav-search">
+      <input id="searchInput" type="text" onkeydown="if(event.key==='Enter')doSearch()"/>
+      <span id="searchPlaceholder" class="absolute left-4 top-1/2 -translate-y-1/2 text-[0.79rem] text-black pointer-events-none font-['Inter'] transition-opacity duration-200"></span>
+      <button class="nav-search-btn" onclick="doSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+    </div>
+    <ul class="nav-links">
+      <li><a class="nav-link" href="#products">Shop</a></li>
+      <li><a class="nav-link" href="#why-section">Our Promise</a></li>
+      <li><a class="nav-link" href="blog.html">Blogs</a></li>
+      <li><a class="nav-link" href="news.html">News</a></li>
+      <li><a class="nav-link" href="#site-footer">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="checkoutmyorderpage.html" class="nav-orders-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        My Orders
+      </a>
+      <a id="adminCircleBtn" href="admin-panel.html" title="Admin Panel"
+         style="display:none;width:34px;height:34px;border-radius:50%;background:#2563EB;color:#fff;
+                font-size:.65rem;font-weight:800;align-items:center;justify-content:center;
+                text-decoration:none;flex-shrink:0;transition:background .2s;"
+         onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='#2563EB'">AD</a>
+      <div class="nav-divider"></div>
+      <a id="navSignInBtn" href="login.html" class="nav-icon-btn" style="gap:5px;width:auto;padding:0 8px;border-radius:20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="navSignInText" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);">Sign In</span>
+      </a>
+      <a href="wishlist.html" class="nav-icon-btn" style="position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+        <span class="nav-badge" id="wishlistCount" style="pointer-events:none;">0</span>
+      </a>
+      <button onclick="openCart()" class="nav-icon-btn" style="position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge" id="cartCount" style="pointer-events:none;">0</span>
+      </button>
+      <button class="mob-ham" id="mobHam" onclick="toggleMobDrawer()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
+  <nav style="display:flex;flex-direction:column;gap:.25rem;">
+    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
+    <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
+    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
+    <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
+    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
+    <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
+    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
+    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
+    <a href="wishlist.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
+    <a href="#" onclick="toggleMobDrawer();openCart();return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-bag]] Cart</a>
+  </nav>
+</div>
+
+<!-- Mobile search row -->
+<div class="mob-search-row">
+  <div class="wrap">
+    <input id="mobSearchInput" type="search" placeholder="Search products…" autocomplete="off" enterkeyhint="search" oninput="document.getElementById('searchInput').value=this.value" onkeydown="if(event.key==='Enter'){document.getElementById('searchInput').value=this.value;doSearch()}" style="-webkit-appearance:none;font-size:16px;"/>
+    <button class="sb" onclick="document.getElementById('searchInput').value=document.getElementById('mobSearchInput').value;doSearch()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HERO SLIDER — PARALLAX ENHANCED
+═══════════════════════════════════════ -->
+<section class="parallax-section" id="heroSection" style="background:#0a100b;">
+  <div class="slider-shell" id="sliderShell" style="height:clamp(220px,34vw,460px);">
+
+    <!-- Floating organic leaves over the slider -->
+    <div class="hero-leaf" style="top:14%;left:7%;opacity:.5;animation:leafFloat1 5.5s ease-in-out infinite;">
+      <svg width="52" height="52" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(74,140,92,.5)"/><path d="M10 54 C10 54 24 12 54 10" stroke="rgba(74,140,92,.3)" stroke-width="1" fill="none"/></svg>
+    </div>
+    <div class="hero-leaf" style="top:22%;right:14%;opacity:.38;animation:leafDrift 8s ease-in-out infinite;animation-delay:1.8s;">
+      <svg width="38" height="38" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(201,168,76,.45)" transform="rotate(50 32 32)"/></svg>
+    </div>
+    <div class="hero-leaf" style="bottom:28%;left:6%;opacity:.32;animation:leafFloat2 7s ease-in-out infinite;animation-delay:2.5s;">
+      <svg width="44" height="44" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(143,188,154,.45)" transform="rotate(-25 32 32)"/></svg>
+    </div>
+    <div class="hero-leaf" style="top:48%;right:8%;opacity:.28;animation:leafDrift 10s ease-in-out infinite;animation-delay:.7s;">
+      <svg width="58" height="58" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(74,140,92,.3)" transform="rotate(130 32 32)"/></svg>
+    </div>
+    <div class="hero-leaf" style="bottom:18%;right:28%;opacity:.35;animation:leafFloat1 9s ease-in-out infinite;animation-delay:3.2s;">
+      <svg width="32" height="32" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(232,201,122,.42)" transform="rotate(200 32 32)"/></svg>
+    </div>
+    <div class="hero-leaf" style="top:65%;left:28%;opacity:.22;animation:leafFloat2 11s ease-in-out infinite;animation-delay:4s;">
+      <svg width="26" height="26" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(143,188,154,.4)" transform="rotate(75 32 32)"/></svg>
+    </div>
+
+    <div id="track">
+      <div class="slide active" id="slide-0">
+        <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/slide%20video.mp4?updatedAt=1772621168744"></video>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>With Nansai</p>
+          <h2 class="slide-title">Experience the Root of <em>Nature</em></h2>
+          <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
+        </div>
+      </div>
+      <div class="slide" id="slide-1">
+        <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>With Nansai</p>
+          <h2 class="slide-title">25 Acres of naturally grown<br/><em>goodness</em></h2>
+          <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
+        </div>
+      </div>
+      <div class="slide" id="slide-1">
+        <div class="parallax-bg-layer" id="pbg-1" style="background-image:url('https://ik.imagekit.io/bq9dscs4g/agro%20store/WhatsApp%20Image%202026-03-30%20at%204.02.58%20PM.jpeg');"></div>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>Organic Products</p>
+          <h2 class="slide-title">22 years of<br/><em>organic farming</em></h2>
+          <p class="slide-desc">Heritage rice varieties, dried flowers, and natural beverages. Certified. Lab-tested. Direct from the farm.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+        </div>
+        <span class="ghost-num">02</span>
+      </div>
+      <div class="slide" id="slide-2">
+        <div class="parallax-bg-layer" id="pbg-2" style="background-image:url('https://ik.imagekit.io/bq9dscs4g/agro%20store/IMG_0191.JPG');"></div>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>With Nansai</p>
+          <h2 class="slide-title">Cultivated in Living Soil,<br/>Harvested for <em>Healthy Lives.</em></h2>
+          <p class="slide-desc">Zero chemicals. Zero compromise. 9 internationally recognised certifications.</p>
+          <button class="slide-cta" onclick="document.getElementById('why-section').scrollIntoView({behavior:'smooth'})">Our Promise →</button>
+        </div>
+        <span class="ghost-num">03</span>
+      </div>
+      <div class="slide" id="slide-3">
+        <div class="parallax-bg-layer" id="pbg-3" style="background-image:url('https://ik.imagekit.io/bq9dscs4g/agro%20store/WhatsApp%20Image%202026-03-30%20at%204.03.01%20PM.jpeg');"></div>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>Our Harvest</p>
+          <h2 class="slide-title">Paddy · Banana · Fig · Herbs</h2>
+          <p class="slide-desc">25 acres of certified organic land — seven crop varieties, 200+ farming families.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">View Products →</button>
+        </div>
+        <span class="ghost-num">04</span>
+      </div>
+    </div>
+
+    <button class="arrow-btn" id="prevBtn" style="left:.9rem">&#10094;</button>
+    <button class="arrow-btn" id="nextBtn" style="right:.9rem">&#10095;</button>
+    <div class="slider-footer">
+      <div style="display:flex;gap:5px" id="dotList">
+        <button class="dot active" data-i="0"></button>
+        <button class="dot" data-i="1"></button>
+        <button class="dot" data-i="2"></button>
+        <button class="dot" data-i="3"></button>
+        <button class="dot" data-i="4"></button>
+      </div>
+      <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+      <span style="font-size:.6rem;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.38);white-space:nowrap;">
+        <strong id="currIdx" style="font-family:'Cormorant Garamond',serif;font-size:.88rem;color:rgba(255,255,255,.72);">01</strong> / 05
+      </span>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div style="position:absolute;bottom:4.2rem;right:1.8rem;z-index:15;display:flex;flex-direction:column;align-items:center;gap:5px;animation:scrollBounce 2.2s ease-in-out infinite;">
+      <span style="font-size:.52rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);">Scroll</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+
+  </div>
+</section>
+<style>
+@keyframes scrollBounce {
+  0%,100% { opacity:.55; transform:translateY(0); }
+  50%     { opacity:.25; transform:translateY(6px); }
+}
+</style>
+
+
+
+
+<!-- ═══════════════════════════════════════
+     PRODUCTS SECTION
+═══════════════════════════════════════ -->
+<section id="products" class="texture-section" style="padding:3.5rem 0 4rem;">
+  <div style="max-width:1400px;margin:0 auto;padding:0 1.5rem;overflow:visible;">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:2.5rem;" class="sr" id="sr-prod-hdr">
+      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">[[icon:wheat]] Explore the Fields ↓</button>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#1a2416;margin-bottom:.35rem;"> Bringing Nature's Best To  <em style="color:#166534;">Your Family .</em></h1>
+      <p style="color:#7a9980;font-size:.85rem;">16 farm-fresh, certified products · Direct from Organic Farmers</p>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div id="filterTabs" style="margin-bottom:2.5rem;">
+      <div class="filter-bar sr sd-1" id="sr-filters">
+        <button class="fpill active" data-cat="all"   onclick="deskCatClick(this,'all')">All</button>
+        <button class="fpill"        data-cat="new"   onclick="deskCatClick(this,'new')">[[icon:sparkles]] New</button>
+        <button class="fpill"        data-cat="bestseller" onclick="deskCatClick(this,'bestseller')">[[icon:flame]] Best Sellers</button>
+        <button class="fpill"        data-cat="rice"  onclick="deskCatClick(this,'rice')">[[icon:wheat]] Rice</button>
+        <button class="fpill"        data-cat="flowers" onclick="deskCatClick(this,'flowers')">[[icon:flower-2]] Flowers</button>
+        <button class="fpill"        data-cat="beverages" onclick="deskCatClick(this,'beverages')">[[icon:glass-water]] Beverages</button>
+        <button class="fpill"        data-cat="flour" onclick="deskCatClick(this,'flour')">[[icon:package]] Flour</button>
+        <button class="fpill"        data-cat="other" onclick="deskCatClick(this,'other')">[[icon:leaf]] Other</button>
+      </div>
+    </div>
+    <style>
+      .filter-bar {
+        display:flex; align-items:center; gap:.5rem;
+        overflow-x:auto; padding:.25rem .1rem .5rem;
+        scrollbar-width:none;
+      }
+      .filter-bar::-webkit-scrollbar { display:none; }
+      .fpill {
+        flex-shrink:0;
+        padding:.45rem 1.1rem;
+        border-radius:30px;
+        border:1.5px solid rgba(26,58,42,.15);
+        background:#fff;
+        color:var(--text-md);
+        font-size:.78rem; font-weight:600;
+        font-family:'Inter',sans-serif;
+        cursor:pointer;
+        white-space:nowrap;
+        transition:all .2s cubic-bezier(.34,1.56,.64,1);
+        position:relative;
+      }
+      .fpill:hover {
+        border-color:var(--forest-leaf);
+        color:var(--forest-leaf);
+        background:rgba(74,140,92,.05);
+        transform:translateY(-1px);
+      }
+      .fpill.active {
+        background:var(--forest-deep);
+        color:#fff;
+        border-color:var(--forest-deep);
+        box-shadow:0 4px 14px rgba(15,34,24,.22);
+        transform:translateY(-1px);
+      }
+    </style>
+
+    <!-- Sectioned products -->
+    <div id="productSections" class="prod-section" style="overflow:visible;"></div>
+    <!-- Filtered flat grid -->
+    <div id="productGrid" style="display:none;flex-wrap:wrap;gap:20px;overflow:visible;"></div>
+    <div id="emptyState" style="display:none;text-align:center;padding:5rem 0;"><div style="font-size:3.5rem;margin-bottom:.75rem;">[[icon:leaf]]</div><p style="color:#9ca3af;font-weight:600;">No products found.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     MID PARALLAX BANNER
+═══════════════════════════════════════ -->
+<section class="parallax-section" id="midParallax" style="min-height:440px;display:flex;align-items:center;">
+  <div class="parallax-bg-layer" id="midBgLayer" style="background-image:url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1400&auto=format&fit=crop&q=85');"></div>
+  <div class="parallax-overlay-dark"></div>
+
+  <!-- floating leaves -->
+  <div style="position:absolute;top:12%;left:4%;z-index:3;opacity:.35;animation:leafFloat1 8s ease-in-out infinite;pointer-events:none;">
+    <svg width="50" height="50" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(143,188,154,.55)"/></svg>
+  </div>
+  <div style="position:absolute;bottom:15%;right:6%;z-index:3;opacity:.28;animation:leafDrift 10s ease-in-out infinite;animation-delay:2s;pointer-events:none;">
+    <svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="rgba(232,201,122,.5)" transform="rotate(65 32 32)"/></svg>
+  </div>
+
+  <div class="parallax-fg" style="width:100%;max-width:1400px;margin:0 auto;padding:4.5rem 2rem;text-align:center;">
+    <div class="sr" id="sr-mid-ey">
+      <div style="display:flex;align-items:center;justify-content:center;gap:.75rem;margin-bottom:1.2rem;">
+        <div style="width:2rem;height:1px;background:rgba(201,168,76,.55);"></div>
+        <span style="font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,201,122,.75);">Our Philosophy</span>
+        <div style="width:2rem;height:1px;background:rgba(201,168,76,.55);"></div>
+      </div>
+    </div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.4rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:1.1rem;" class="sr sd-1" id="sr-mid-h">
+      Cultivated in Living Soil,<br/><em style="color:#86c98a;font-style:italic;">Harvested for Healthy Lives.</em>
+    </h2>
+    <p style="font-size:.88rem;color:rgba(255,255,255,.5);font-weight:300;line-height:1.75;max-width:580px;margin:0 auto 2.5rem;" class="sr sd-2" id="sr-mid-p">
+      Every grain, flower and blend is grown without chemicals on our 25-acre certified farm — then lab-tested before it reaches your door.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:680px;margin:0 auto;" class="sr sd-3" id="sr-mid-stats">
+      <div style="text-align:center;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--gold-lt);">22</div>
+        <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px;">Years Organic</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--gold-lt);">25</div>
+        <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px;">Acres Farmed</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--gold-lt);">0</div>
+        <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px;">Chemicals</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--gold-lt);">9</div>
+        <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px;">Certifications</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     WHY CHOOSE US
+═══════════════════════════════════════ -->
+<section id="why-section" class="bg-gradient-to-br from-green-50 to-white py-16 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12 sr" id="sr-why-hdr">
+      <span class="inline-block bg-green-100 text-green-700 text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Our Promise</span>
+      <h2 class="font-display text-3xl sm:text-4xl font-black text-gray-900 mb-3">Why Choose Us</h2>
+      <p class="text-gray-500 max-w-md mx-auto text-sm">Trusted by thousands of farmers and families across India for over a decade.</p>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-1" id="sr-why-1">
+        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:sprout]]</div>
+        <h3 class="font-bold text-base mb-2">100% Organic</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">9 active certifications including USDA Organic, Non-GMO & Halal.</p>
+      </div>
+      <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-2" id="sr-why-2">
+        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:truck]]</div>
+        <h3 class="font-bold text-base mb-2">Fast Delivery</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">Quick & reliable delivery across all regions. Free above ₹999.</p>
+      </div>
+      <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-3" id="sr-why-3">
+        <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:circle-dollar-sign]]</div>
+        <h3 class="font-bold text-base mb-2">Best Prices</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">Farm-direct — no middlemen. Save up to 30% versus retail.</p>
+      </div>
+      <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-4" id="sr-why-4">
+        <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:phone]]</div>
+        <h3 class="font-bold text-base mb-2">24/7 Support</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">Dedicated support team available round the clock.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     BLOG SECTION
+═══════════════════════════════════════ -->
+<section id="blog-section" class="texture-section py-16 px-4">
+  <div style="max-width:1400px;margin:0 auto;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;" class="sr" id="sr-blog-hdr">
+      <div>
+        <span style="display:inline-block;background:rgba(201,168,76,.12);color:var(--gold-dk);font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid rgba(201,168,76,.2);margin-bottom:.65rem;">From the Farm</span>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;color:var(--text-dk);">Stories &amp; <em style="color:var(--forest-leaf);font-style:italic;">Insights</em></h2>
+        <p style="font-size:.78rem;color:var(--text-lt);margin-top:.25rem;">Organic wisdom, recipes and farm updates.</p>
+      </div>
+      <a href="blog.html" style="display:inline-flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;padding:.55rem 1.2rem;border:1.5px solid rgba(74,140,92,.3);border-radius:8px;transition:all .2s;white-space:nowrap;" onmouseover="this.style.background='var(--forest-leaf)';this.style.color='#fff';this.style.borderColor='var(--forest-leaf)'" onmouseout="this.style.background='';this.style.color='var(--forest-leaf)';this.style.borderColor='rgba(74,140,92,.3)'">
+        View All Articles →
+      </a>
+    </div>
+
+    <!-- Blog Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;">
+
+      <!-- Card 1 -->
+      <div class="blog-card sr sd-1" id="sr-blog-1" onclick="openBlogArticle(0)" style="cursor:pointer;">
+        <div class="blog-card-img">
+          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop&q=80" alt="Blog"/>
+        </div>
+        <div style="padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:.55rem;margin-bottom:.8rem;">
+            <span style="background:#dcfce7;color:#166534;font-size:.58rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.08em;">Organic Farming</span>
+            <span style="font-size:.68rem;color:var(--text-lt);">Mar 12, 2026</span>
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:700;color:var(--text-dk);margin-bottom:.55rem;line-height:1.25;">Why Heritage Rice Varieties Are the Future of Healthy Eating</h3>
+          <p style="font-size:.78rem;color:var(--text-lt);line-height:1.68;margin-bottom:1.1rem;">Karunguruvai, Mappillai Samba and Black Kavuni are not just grains — they are living traditions packed with nutrition that modern rice has lost.</p>
+          <span style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:var(--forest-leaf);">Read More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="blog-card sr sd-2" id="sr-blog-2" onclick="openBlogArticle(1)" style="cursor:pointer;margin-top:1.5rem;">
+        <div class="blog-card-img">
+          <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=700&auto=format&fit=crop&q=80" alt="Blog"/>
+        </div>
+        <div style="padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:.55rem;margin-bottom:.8rem;">
+            <span style="background:#fce7f3;color:#9d174d;font-size:.58rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.08em;">Wellness</span>
+            <span style="font-size:.68rem;color:var(--text-lt);">Feb 28, 2026</span>
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:700;color:var(--text-dk);margin-bottom:.55rem;line-height:1.25;">The Ancient Healing Power of Hibiscus &amp; Butterfly Pea Flowers</h3>
+          <p style="font-size:.78rem;color:var(--text-lt);line-height:1.68;margin-bottom:1.1rem;">Centuries-old Ayurvedic tradition meets modern science. Here is what our sun-dried flowers can do for your daily wellness routine.</p>
+          <span style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:var(--forest-leaf);">Read More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="blog-card sr sd-3" id="sr-blog-3" onclick="openBlogArticle(2)" style="cursor:pointer;">
+        <div class="blog-card-img">
+          <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=700&auto=format&fit=crop&q=80" alt="Blog"/>
+        </div>
+        <div style="padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:.55rem;margin-bottom:.8rem;">
+            <span style="background:#e0f2fe;color:#075985;font-size:.58rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.08em;">Sustainability</span>
+            <span style="font-size:.68rem;color:var(--text-lt);">Feb 5, 2026</span>
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:700;color:var(--text-dk);margin-bottom:.55rem;line-height:1.25;">Zero Chemicals, Zero Waste: Our Commitment to the Planet</h3>
+          <p style="font-size:.78rem;color:var(--text-lt);line-height:1.68;margin-bottom:1.1rem;">From seed to shelf, every decision we make is guided by our pledge to leave the earth better than we found it — for future generations of farmers.</p>
+          <span style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:var(--forest-leaf);">Read More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- blog scroll dots (mobile only) -->
+<div id="blog-scroll-dots" style="display:none;">
+  <span class="active"></span><span></span><span></span>
+</div>
+
+<!-- ═══════════════════════════════════════
+     BLOG ARTICLE MODAL
+═══════════════════════════════════════ -->
+<div id="blog-modal" onclick="if(event.target===this)closeBlogModal()" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0);transition:background .3s,backdrop-filter .3s;align-items:center;justify-content:center;padding:1rem;">
+  <div id="blog-modal-box" style="background:#fdfaf5;border-radius:24px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;transform:scale(.92) translateY(20px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;position:relative;scrollbar-width:thin;">
+    <button onclick="closeBlogModal()" style="position:fixed;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:2001;backdrop-filter:blur(4px);">[[icon:x]]</button>
+    <img id="blog-modal-hero" src="" alt="" style="width:100%;height:280px;object-fit:cover;border-radius:24px 24px 0 0;display:block;"/>
+    <div style="padding:2rem 2.5rem 2.5rem;">
+      <div id="blog-modal-meta" style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;flex-wrap:wrap;"></div>
+      <h2 id="blog-modal-title" style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:#1a2416;line-height:1.15;margin-bottom:1rem;"></h2>
+      <div style="height:1px;background:rgba(26,58,42,.08);margin-bottom:1.25rem;"></div>
+      <div id="blog-modal-content" style="font-size:.88rem;line-height:1.8;color:#3d4d3e;"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer id="site-footer" class="bg-gray-900 text-gray-300">
+  <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;color:#fff;margin-bottom:2px;">Nan<span style="color:var(--gold-dk);">sai</span></div>
+      <p style="font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:#6b7280;margin-bottom:.85rem;">Experience the Root of Nature</p>
+      <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural products. Trusted by farmers everywhere.</p>
+      <div class="flex gap-3">
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">𝕏</a>
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">f</a>
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">in</a>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-white text-base mb-5">Quick Links</h3>
+      <ul class="space-y-3 text-sm">
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Home</a></li>
+        <li><a href="#products" class="text-gray-400 hover:text-green-400 transition">Shop</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">About Us</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Our Farmers</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-bold text-white text-base mb-5">Customer Service</h3>
+      <ul class="space-y-3 text-sm">
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">FAQ</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Returns Policy</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Shipping Info</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Track Order</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Certifications</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-bold text-white text-base mb-5">Newsletter</h3>
+      <p class="text-gray-400 text-sm mb-4">Subscribe for the latest offers and farming updates.</p>
+      <form onsubmit="subNewsletter(event)" class="flex gap-2">
+        <input type="email" placeholder="Your email" class="flex-1 min-w-0 px-3 py-2.5 rounded-xl text-sm bg-gray-800 border border-gray-700 text-white placeholder-gray-500 outline-none focus:border-green-500 transition"/>
+        <button class="bg-green-600 hover:bg-green-500 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition shrink-0">Join</button>
+      </form>
+    </div>
+  </div>
+  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+/* ════ OFFER BAR DUPLICATE ════ */
+const ot=document.getElementById('offerTrack');
+if(ot) ot.innerHTML+=ot.innerHTML;
+const cs=document.getElementById('certStrip');
+if(cs) cs.innerHTML+=cs.innerHTML;
+
+/* ════ MOBILE OFFER BAR POPULATE ════ */
+(function(){
+  const mobTrack=document.getElementById('mobMarqueeTrack');
+  if(!mobTrack)return;
+  const items=['[[icon:gift]] First Order 10% OFF — NANSAI10','◆','[[icon:truck]] Free Delivery above ₹999','◆','[[icon:wheat]] Heritage Rice Varieties — Farm Direct','◆','[[icon:flower]] Paneer Rose — Only 32 Left','◆','[[icon:heart]] Buy 2 Flowers Get 1 FREE — HEALTH3','◆','[[icon:leaf]] Organic · Lab Tested · 9 Certifications'];
+  const html=items.map(t=>t==='◆'?`<span style="color:#9a7520;">◆</span>`:`<span>${t}</span>`).join('');
+  mobTrack.innerHTML=html+html;
+})();
+
+/* ════ COPY COUPON ════ */
+document.querySelectorAll('[data-code]').forEach(el=>{
+  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('[[icon:circle-check]] Code '+el.dataset.code+' copied!'); };
+});
+
+/* ════ COUNTDOWN ════ */
+function updateTimer(){
+  const now=new Date(),end=new Date();
+  end.setHours(23,59,59);
+  const diff=end-now;
+  const h=Math.floor(diff/1000/60/60),m=Math.floor(diff/1000/60)%60,s=Math.floor(diff/1000)%60;
+  ['hh','mm','ss'].forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=String([h,m,s][i]).padStart(2,'0'); });
+  ['mob-hh','mob-mm','mob-ss'].forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=String([h,m,s][i]).padStart(2,'0'); });
+}
+setInterval(updateTimer,1000); updateTimer();
+
+/* ════ TOAST ════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ════ NEWSLETTER ════ */
+function subNewsletter(e){
+  e.preventDefault();
+  showToast('[[icon:leaf]] Subscribed! Welcome to the farm family.');
+  e.target.reset();
+}
+
+/* ════ PRODUCTS DATA ════ */
+const products=[
+  {id:1, name:"Karunguruvai Rice",                 category:"rice",     price:180,oldPrice:220,rating:4.7,reviews:142,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602"},
+  {id:2, name:"Karuppu Kavuni Rice",               category:"rice",     price:220,oldPrice:270,rating:4.8,reviews:198,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741"},
+  {id:3, name:"Arubatham Kuruvai Rice",            category:"rice",     price:160,oldPrice:200,rating:4.5,reviews:87, badge:"new", section:"new",       image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
+  {id:4, name:"Poongar Rice",                      category:"rice",     price:200,oldPrice:250,rating:4.6,reviews:113,badge:"sale",section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674"},
+  {id:5, name:"Mappillai Samba Rice",              category:"rice",     price:210,oldPrice:260,rating:4.7,reviews:156,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
+  {id:6, name:"Iluppai Poo Samba Rice",            category:"rice",     price:195,oldPrice:240,rating:4.5,reviews:74, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667"},
+  {id:7, name:"Vellai Kavuni Rice",                category:"rice",     price:190,oldPrice:235,rating:4.6,reviews:91, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240"},
+  {id:8, name:"Paneer Rose",                       category:"flowers",  price:150,oldPrice:190,rating:4.8,reviews:204,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:9, name:"Hibiscus Flower",                   category:"flowers",  price:120,oldPrice:155,rating:4.6,reviews:167,badge:"sale",section:"bestseller",image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
+  {id:10,name:"Aavaram Flower",                    category:"flowers",  price:110,oldPrice:145,rating:4.5,reviews:88, badge:"new", section:"new",       image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:11,name:"Butterfly Pea Flower",              category:"flowers",  price:180,oldPrice:220,rating:4.7,reviews:132,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:12,name:"Organic Rose Milk",                 category:"beverages",price:140,oldPrice:175,rating:4.7,reviews:219,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
+  {id:13,name:"Hibiscus Sherbet",                  category:"beverages",price:130,oldPrice:165,rating:4.6,reviews:143,badge:"sale",section:"bestseller",image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:14,name:"Idiyappam Flour",                   category:"flour",    price:160,oldPrice:200,rating:4.8,reviews:178,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:15,name:"Health Mix Powder",                 category:"flour",    price:175,oldPrice:215,rating:4.6,reviews:94, badge:"new", section:"new",       image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:16,name:"Country Fig Powder",                category:"other",    price:200,oldPrice:250,rating:4.7,reviews:61, badge:"new", section:"new",       image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
+];
+
+let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]');
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+
+function stars(r){return[1,2,3,4,5].map(i=>i<=Math.floor(r)?'★':i-r<1?'★':'☆').join('');}
+function disc(p){return Math.round((1-p.price/p.oldPrice)*100);}
+
+function saveCart(){
+  localStorage.setItem('cart',JSON.stringify(cart));
+  syncCounters();
+  // Sync to backend if logged in
+  if(typeof CartAPI!=='undefined'&&localStorage.getItem('nansai_token')){
+    cart.forEach(i=>CartAPI.add(String(i.id),i.qty||1,i.price).catch(()=>{}));
+  }
+}
+function syncCounters(){
+  const total=cart.reduce((s,i)=>s+(i.qty||1),0);
+  document.querySelectorAll('#cartCount').forEach(el=>{if(el)el.textContent=total;});
+  document.querySelectorAll('#wishlistCount').forEach(el=>{if(el)el.textContent=wishlist.length;});
+  const mbc=document.getElementById('mobBarCartCount'); if(mbc) mbc.textContent=total;
+  const mbw=document.getElementById('mobBarWishCount'); if(mbw) mbw.textContent=wishlist.length;
+}
+
+/* ════ PRODUCT CARD HTML ════ */
+const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4','prod-float-5','prod-float-6'];
+function prodCardHTML(p,i){
+  const d=disc(p);
+  const isW=wishlist.includes(p.id);
+  const badgeEl=p.badge==='hot'
+    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:flame]] HOT</span>`
+    :p.badge==='new'
+    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:sparkles]] NEW</span>`
+    :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
+  const fc=floatClasses[i%floatClasses.length];
+  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
+    <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
+      ${badgeEl}
+      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);border:none;cursor:pointer;z-index:10;font-size:.85rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${isW?'[[icon:heart]]':'[[icon:heart]]'}</button>
+      <img src="${p.image}" alt="${p.name}" loading="lazy" class="prod-img"/>
+    </div>
+    <div class="prod-info" style="overflow:visible;">
+      <span style="font-size:.68rem;font-weight:400;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;">${p.category}</span>
+      <h3 style="font-size:.95rem;font-weight:700;color:#1a2416;line-height:1.3;font-family:'Inter',sans-serif;">${p.name}</h3>
+      <div style="display:flex;align-items:center;gap:3px;"><span style="color:#f59e0b;font-size:.78rem;">${stars(p.rating)}</span><span style="color:#9ca3af;font-size:.72rem;margin-left:2px;font-family:'Inter',sans-serif;">${p.rating}</span></div>
+      <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:2px;">
+        <span data-card-price style="color:#166534;font-weight:900;font-size:1.1rem;font-family:'Inter',sans-serif;">₹${p.price}</span>
+        <span data-card-old style="color:#9ca3af;font-size:.78rem;text-decoration:line-through;font-family:'Inter',sans-serif;">₹${p.oldPrice}</span>
+        <span data-card-disc style="background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px;font-family:'Inter',sans-serif;">${d}% off</span>
+      </div>
+      <div id="cardbtn-area-${p.id}" class="prod-btn-area" style="margin-top:auto;">
+        <button id="cartbtn-${p.id}" onclick="startQtySelect(${p.id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+const sectionMeta={
+  new:        {icon:'[[icon:sparkles]]',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
+  bestseller: {icon:'[[icon:flame]]',label:'Natures Favorites',     sub:'Most loved by thousands of families',           accent:'#d97706'},
+  rice:       {icon:'[[icon:wheat]]',label:'Rice Varieties',   sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
+  flowers:    {icon:'[[icon:flower-2]]',label:'Dried Flowers',    sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
+  beverages:  {icon:'[[icon:glass-water]]',label:'Beverages',        sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
+  flour:      {icon:'[[icon:package]]',label:'Flour Varieties',  sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
+  other:      {icon:'[[icon:leaf]]',label:'Other Products',   sub:'More goodness from nature',                     accent:'#16a34a'},
+};
+const SECTION_ORDER=['new','bestseller','rice','flowers','beverages','flour','other'];
+
+function sectionHTML(key,list){
+  const m=sectionMeta[key];
+  return `<div class="prod-section sr" id="sec-${key}" style="margin-bottom:3.5rem;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,58,42,.07);">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(26,58,42,.06);border-radius:30px;padding:3px 12px 3px 8px;margin-bottom:6px;">
+          <span style="font-size:.85rem;">${m.icon}</span>
+          <span style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${m.accent};">${m.label}</span>
+        </div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:#1a2416;">${m.label}</h2>
+        <p style="color:#7a9980;font-size:.8rem;margin-top:2px;">${m.sub}</p>
+      </div>
+      <button onclick="filterProds('${key}')" style="font-size:.72rem;font-weight:700;color:${m.accent};border:1.5px solid ${m.accent}33;padding:6px 18px;border-radius:30px;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;transition:all .2s;" onmouseover="this.style.background='${m.accent}11'" onmouseout="this.style.background='transparent'">
+        View All (${list.length}) ›
+      </button>
+    </div>
+    <div class="hscroll-wrap">
+      <button class="scroll-btn left" onclick="scrollRow('sec-${key}',-1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div style="display:flex;gap:16px;overflow-x:auto;overflow-y:visible;padding-bottom:12px;scrollbar-width:none;flex:1;" class="prod-hscroll" id="hscroll-sec-${key}">
+        ${list.map((p,i)=>prodCardHTML(p,i)).join('')}
+      </div>
+      <button class="scroll-btn right" onclick="scrollRow('sec-${key}',1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderSections(){
+  const wrap=document.getElementById('productSections');
+  const grid=document.getElementById('productGrid');
+  const empty=document.getElementById('emptyState');
+  if(!wrap)return;
+  if(grid){ grid.style.display='none'; grid.innerHTML=''; } // clear filtered cards so duplicate IDs don't exist
+  empty.style.display='none';
+  wrap.style.display='block';
+  wrap.innerHTML=SECTION_ORDER.map(key=>{
+    const list=key==='new'?products.filter(p=>p.section==='new'):key==='bestseller'?products.filter(p=>p.section==='bestseller'):products.filter(p=>p.category===key);
+    return list.length?sectionHTML(key,list):'';
+  }).join('');
+  wrap.querySelectorAll('.sr').forEach(el=>srObserver.observe(el));
+  attachCarousel3D();
+  setTimeout(initScrollBtns, 100);
+}
+
+function renderFlat(list,cat){
+  const wrap=document.getElementById('productSections');
+  const grid=document.getElementById('productGrid');
+  const empty=document.getElementById('emptyState');
+  if(!grid)return;
+  if(wrap){ wrap.style.display='none'; wrap.innerHTML=''; } // clear old cards so duplicate IDs don't exist
+  if(!list.length){ grid.style.display='none'; empty.style.display='block'; return; }
+  empty.style.display='none';
+  const m=cat&&sectionMeta[cat]?sectionMeta[cat]:null;
+  const heading=m?`<div style="width:100%;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,58,42,.07);text-align:left;">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:#1a2416;margin-bottom:4px;">${m.label}</h2>
+    <p style="color:#7a9980;font-size:.8rem;">${m.sub} · <strong style="color:#1a2416;">${list.length} product${list.length!==1?'s':''}</strong></p>
+  </div>`:'';
+  grid.style.display='flex';
+  grid.style.flexWrap='wrap';
+  grid.style.gap='20px';
+  grid.style.overflow='visible';
+  grid.style.padding='12px 4px';
+  grid.innerHTML=heading+list.map((p,i)=>prodCardHTML(p,i)).join('');
+  grid.querySelectorAll('.sr').forEach(el=>el.classList.add('is-visible'));
+  attachCarousel3D();
+}
+
+/* ════ QUANTITY CONFIG ════ */
+const QTY_CFG={
+  flowers:   {unit:'pcs',  options:[1,5,10,25]},
+  rice:      {unit:'kg',   options:[0.25,0.5,1,2]},
+  flour:     {unit:'kg',   options:[0.25,0.5,1,2]},
+  beverages: {unit:'ml',   options:[250,500,1000,2000]},
+  other:     {unit:'kg',   options:[0.25,0.5,1,2]},
+};
+function getQtyCfg(cat){ return QTY_CFG[cat]||{unit:'pcs',options:[1,2,3,5]}; }
+function fmtQty(v,unit){
+  if(unit==='ml') return v>=1000?(v/1000)+'L':v+'ml';
+  if(unit==='kg') return v+'kg';
+  return v+(v===1?' pc':' pcs');
+}
+
+const cardState={};
+
+function startQtySelect(id,triggerBtn){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const cfg=getQtyCfg(p.category);
+  cardState[id]={qty:cfg.options[0],unit:cfg.unit};
+  const area=triggerBtn?triggerBtn.closest('.prod-btn-area'):document.getElementById('cardbtn-area-'+id);
+  const card=area?.closest('.prod-card');
+  if(card){
+    card.classList.add('card-lifted');
+    card.style.zIndex='10';
+  }
+  const pills=cfg.options.map((v,i)=>
+    `<button class="qty-pill${i===0?' selected':''}" onclick="selectPill(${id},${v},this);event.preventDefault();event.stopPropagation()">${fmtQty(v,cfg.unit)}</button>`
+  ).join('');
+  area.innerHTML=`<div class="qty-selector-area" onclick="event.preventDefault();event.stopPropagation()">
+    <div class="qty-grid">${pills}</div>
+    <button id="confirm-btn-${id}" class="qty-cart-btn" onclick="confirmAddToCart(${id},this);event.preventDefault();event.stopPropagation()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+    </button>
+  </div>
+  <a href="product.html?id=${p.id}" onclick="event.stopPropagation()" style="display:block;width:100%;text-align:center;font-size:.68rem;font-weight:600;color:var(--forest-leaf);padding:5px 0 2px;text-decoration:none;letter-spacing:.03em;border-top:1px solid rgba(26,58,42,.07);margin-top:5px;transition:color .2s;" onmouseover="this.style.color='var(--forest-deep)'" onmouseout="this.style.color='var(--forest-leaf)'">View Product →</a>`;
+}
+
+function selectPill(id,val,btn){
+  if(!cardState[id])return;
+  cardState[id].qty=val;
+  btn.closest('.qty-selector-area').querySelectorAll('.qty-pill').forEach(p=>p.classList.remove('selected'));
+  btn.classList.add('selected');
+  // update price on card dynamically
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const {unit}=cardState[id];
+  const totalPrice=unit==='ml'?Math.round(p.price*(val/1000)):Math.round(p.price*val);
+  const oldTotal=unit==='ml'?Math.round(p.oldPrice*(val/1000)):Math.round(p.oldPrice*val);
+  const d=Math.round((1-p.price/p.oldPrice)*100);
+  const card=btn.closest('.prod-card'); if(!card)return;
+  const priceEl=card.querySelector('[data-card-price]');
+  const oldEl=card.querySelector('[data-card-old]');
+  const discEl=card.querySelector('[data-card-disc]');
+  if(priceEl) priceEl.textContent='₹'+totalPrice;
+  if(oldEl)   oldEl.textContent='₹'+oldTotal;
+  if(discEl)  discEl.textContent=d+'% off';
+}
+
+function confirmAddToCart(id,triggerBtn){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const {qty,unit}=cardState[id]||{qty:1,unit:'pcs'};
+  const totalPrice=unit==='ml'?Math.round(p.price*(qty/1000)):Math.round(p.price*qty);
+  const label=fmtQty(qty,unit);
+  const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
+  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
+  saveCart();
+  showToast(`[[icon:shopping-cart]] ${p.name} · ${fmtQty(qty,unit)} added!`);
+  const confirmBtn=triggerBtn||null;
+  if(confirmBtn){
+    confirmBtn.classList.add('done');
+    confirmBtn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    confirmBtn.classList.add('btn-bounce');
+    confirmBtn.addEventListener('animationend',()=>confirmBtn.classList.remove('btn-bounce'),{once:true});
+  }
+  // animate cart icon in navbar
+  const cartIcon=document.querySelector('button[onclick="openCart()"]');
+  if(cartIcon){ cartIcon.classList.add('cart-fly'); cartIcon.addEventListener('animationend',()=>cartIcon.classList.remove('cart-fly'),{once:true}); }
+  const area=triggerBtn?triggerBtn.closest('.prod-card')?.querySelector('.prod-btn-area'):null;
+  const card=area?.closest('.prod-card');
+  setTimeout(()=>{
+    if(card){
+      card.classList.remove('card-lifted');
+      card.style.zIndex='1';
+      if(card._floatClass) card.classList.add(card._floatClass);
+    }
+    area.innerHTML=`<button id="cartbtn-${id}" onclick="startQtySelect(${id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      Add to Cart
+    </button>`;
+  },1600);
+}
+
+function addDirectToCart(id, btn) {
+  var p = products.find(function(x){ return x.id === id; });
+  if (!p) return;
+  var sel = document.getElementById('qty-' + id);
+  var cfg = getQtyCfg(p.category);
+  var qtyVal = sel ? parseFloat(sel.value) : cfg.options[0];
+  var unit = cfg.unit;
+  var totalPrice = unit === 'ml' ? Math.round(p.price * (qtyVal / 1000)) : Math.round(p.price * qtyVal);
+  var label = fmtQty(qtyVal, unit);
+  var ex = cart.find(function(i){ return i.id === id && i.qtyLabel === label; });
+  if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image, qty:1, qtyVal:qtyVal, qtyLabel:label}); }
+  saveCart();
+  showToast(p.name + ' (' + label + ') added to cart!');
+  if (btn) {
+    var orig = btn.innerHTML;
+    btn.innerHTML = 'Added!';
+    btn.style.background = '#16a34a';
+    setTimeout(function(){ btn.innerHTML = orig; btn.style.background = ''; }, 1800);
+  }
+}
+function toggleWish(id,btn){
+  const idx=wishlist.indexOf(id);
+  if(idx>-1){
+    wishlist.splice(idx,1);
+    if(btn){btn.style.color='';btn.textContent='[[icon:heart]]';}
+    showToast('[[icon:heart-crack]] Removed from wishlist');
+    if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.remove(String(id)).catch(()=>{});
+  } else {
+    wishlist.push(id);
+    if(btn){btn.style.color='#ef4444';btn.textContent='[[icon:heart]]';}
+    showToast('[[icon:heart]] Added to wishlist!');
+    if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(String(id)).catch(()=>{});
+  }
+  localStorage.setItem('wishlist',JSON.stringify(wishlist));syncCounters();
+}
+
+/* ════ CATEGORY FILTER ════ */
+const deskCatMeta={all:{label:'All Products',sub:'All 16 farm-fresh certified products'},new:{label:'New Arrivals',sub:'Just landed — fresh from the farm'},bestseller:{label:'Best Sellers',sub:'Most loved by thousands of families'},rice:{label:'Rice Varieties',sub:'Heritage & traditional rice from Tamil Nadu'},flowers:{label:'Dried Flowers',sub:'Sun-dried, aromatic & medicinal flowers'},beverages:{label:'Beverages',sub:'Natural drinks crafted with pure ingredients'},flour:{label:'Flour Varieties',sub:'Hand-pounded & stone-ground flours'},other:{label:'Other Products',sub:'More goodness from nature'}};
+
+function deskCatClick(el,cat){
+  document.querySelectorAll('.fpill').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  filterProds(cat);
+  document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function filterProds(cat){
+  if(cat==='all'){renderSections();return;}
+  let list;
+  if(cat==='new') list=products.filter(p=>p.section==='new');
+  else if(cat==='bestseller') list=products.filter(p=>p.section==='bestseller');
+  else list=products.filter(p=>p.category===cat);
+  renderFlat(list,cat);
+}
+function doSearch(){
+  const q=(document.getElementById('searchInput')?.value||document.getElementById('mobSearchInput')?.value||'').trim().toLowerCase();
+  if(!q){renderSections();return;}
+  const list=products.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)||(p.description||p.desc||'').toLowerCase().includes(q)||(p.tagline||'').toLowerCase().includes(q));
+  renderFlat(list,null);
+}
+
+/* ════ HERO SLIDER — 3D CAROUSEL ════ */
+(function(){
+  const TOTAL=5, DUR=5000;
+  let cur=0, pct=0, rafId=null, lastTS=null;
+  const slides=document.querySelectorAll('#heroSection .slide');
+  const dots=document.querySelectorAll('#dotList .dot');
+  const fill=document.getElementById('timerFill');
+  const idxEl=document.getElementById('currIdx');
+  if(!slides.length) return;
+
+  function setClasses(){
+    slides.forEach((s,i)=>{
+      s.classList.remove('active','prev','next','far-prev','far-next');
+      const diff=((i-cur)+TOTAL)%TOTAL;
+      if(diff===0)           s.classList.add('active');
+      else if(diff===1)      s.classList.add('next');
+      else if(diff===TOTAL-1)s.classList.add('prev');
+      else if(diff===2)      s.classList.add('far-next');
+      else                   s.classList.add('far-prev');
+    });
+    dots.forEach((d,i)=>d.classList.toggle('active',i===cur));
+    if(idxEl) idxEl.textContent=String(cur+1).padStart(2,'0');
+  }
+
+  function goTo(i){
+    cur=((i%TOTAL)+TOTAL)%TOTAL;
+    setClasses();
+    resetTimer();
+  }
+
+  function resetTimer(){ cancelAnimationFrame(rafId); pct=0; lastTS=null; fill.style.transition='none'; fill.style.width='0%'; rafId=requestAnimationFrame(tick); }
+  function tick(ts){
+    if(!lastTS) lastTS=ts;
+    pct+=((ts-lastTS)/DUR)*100; lastTS=ts;
+    fill.style.width=Math.min(pct,100)+'%';
+    pct<100 ? rafId=requestAnimationFrame(tick) : goTo(cur+1);
+  }
+
+  document.getElementById('prevBtn').onclick=()=>goTo(cur-1);
+  document.getElementById('nextBtn').onclick=()=>goTo(cur+1);
+  dots.forEach(d=>d.onclick=()=>goTo(+d.dataset.i));
+  document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft')goTo(cur-1); if(e.key==='ArrowRight')goTo(cur+1); });
+
+  let tx=0;
+  const shell=document.getElementById('sliderShell');
+  shell.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+  shell.addEventListener('touchend',e=>{ const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>45) goTo(cur+(d<0?1:-1)); });
+  shell.addEventListener('mouseenter',()=>cancelAnimationFrame(rafId));
+  shell.addEventListener('mouseleave',()=>{ lastTS=null; rafId=requestAnimationFrame(tick); });
+
+  // Click prev/next slides to navigate
+  slides.forEach((s,i)=>{
+    s.addEventListener('click',()=>{
+      if(s.classList.contains('prev')||s.classList.contains('far-prev')) goTo(cur-1);
+      else if(s.classList.contains('next')||s.classList.contains('far-next')) goTo(cur+1);
+    });
+  });
+
+  setClasses();
+  resetTimer();
+})();
+
+/* ════ PARALLAX SCROLL ════ */
+// parallax config (used by onScroll)
+function onScroll(){
+  const scrollY=window.scrollY;
+  [0,1,2,3].forEach(i=>{
+    const pbg=document.getElementById('pbg-'+i);
+    if(pbg) pbg.style.transform=`translateY(${scrollY*0.12}px)`;
+  });
+  // Mid section parallax
+  const mid=document.getElementById('midParallax');
+  const midBg=document.getElementById('midBgLayer');
+  if(mid&&midBg){
+    const rect=mid.getBoundingClientRect();
+    const offset=(rect.top+rect.height/2-window.innerHeight/2);
+    midBg.style.transform=`translateY(${offset*0.3}px)`;
+  }
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+/* ════ SCROLL REVEAL ════ */
+const srObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){ entry.target.classList.add('is-visible'); }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -36px 0px'});
+document.querySelectorAll('.sr,.sr-left,.sr-right,.sr-scale').forEach(el=>srObserver.observe(el));
+
+/* ════ INIT ════ */
+renderSections();
+attachCarousel3D();
+syncCounters();
+setTimeout(initScrollBtns, 100);
+
+/* ════ LOAD PRODUCTS FROM API ════ */
+(function(){
+  const base = window.API_BASE || 'http://localhost:5000/api';
+  fetch(base + '/products?limit=100')
+    .then(r => r.json())
+    .then(data => {
+      if (!data.success || !data.products?.length) return;
+      // Map API products to the same shape as static products
+      const apiProds = data.products.map(p => ({
+        id:       p._id,
+        name:     p.name,
+        category: p.category,
+        price:    p.price,
+        oldPrice: p.oldPrice || Math.round(p.price * 1.25),
+        rating:   p.rating || 4.5,
+        reviews:  p.numReviews || 0,
+        badge:    p.badge || 'new',
+        section:  p.section || 'category',
+        image:    p.images?.[0]?.url || p.image || '',
+        tagline:  p.tagline || '',
+        desc:     p.description || '',
+      }));
+      // Replace static products array with API data
+      products.length = 0;
+      apiProds.forEach(p => products.push(p));
+      renderSections();
+      syncCounters();
+      setTimeout(initScrollBtns, 100);
+    })
+    .catch(() => { /* silently keep static data on error */ });
+})();
+
+/* ════ AUTO-SEARCH FROM URL PARAM ════ */
+(function(){
+  const q = new URLSearchParams(window.location.search).get('search');
+  if(!q) return;
+  const inp = document.getElementById('searchInput');
+  const mob = document.getElementById('mobSearchInput');
+  if(inp) inp.value = q;
+  if(mob) mob.value = q;
+  doSearch();
+  setTimeout(()=>document.getElementById('products')?.scrollIntoView({behavior:'smooth'}), 300);
+})();
+
+/* ════ BLOG TILT ════ */
+document.querySelectorAll('[data-tilt]').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const rect=card.getBoundingClientRect();
+    const x=(e.clientX-rect.left-rect.width/2)/rect.width;
+    const y=(e.clientY-rect.top-rect.height/2)/rect.height;
+    card.style.transform=`perspective(900px) rotateY(${x*7}deg) rotateX(${-y*5}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transition='transform .5s cubic-bezier(.22,1,.36,1)';
+    card.style.transform='';
+    setTimeout(()=>card.style.transition='',500);
+  });
+  card.addEventListener('mouseenter',()=>{ card.style.transition='transform .14s ease'; });
+});
+
+/* ════ TYPING PLACEHOLDER ════ */
+(function(){
+  const words=['Karunguruvai Rice...','Paneer Rose Flowers...','Hibiscus Sherbet...','Idiyappam Flour...','Black Kavuni Rice...','Butterfly Pea...','Mappillai Samba...'];
+  let ci=0,char=0,del=false;
+  const dp=document.getElementById('searchPlaceholder');
+  const mp=document.getElementById('mobSearchPlaceholder');
+  function tick(){
+    const w=words[ci];
+    const text=del?w.substring(0,char-1):w.substring(0,char+1);
+    if(del)char--; else char++;
+    if(dp)dp.textContent=text;
+    if(mp)mp.textContent=text;
+    let speed=del?45:95;
+    if(!del&&char===w.length){speed=2000;del=true;}
+    else if(del&&char===0){del=false;ci=(ci+1)%words.length;speed=450;}
+    setTimeout(tick,speed);
+  }
+  setTimeout(tick,800);
+  [document.getElementById('searchInput'),document.getElementById('mobSearchInput')].forEach(inp=>{
+    if(!inp)return;
+    const pl=inp.id==='searchInput'?dp:mp;
+    inp.addEventListener('focus',()=>{if(pl)pl.style.opacity='0';});
+    inp.addEventListener('blur',()=>{if(!inp.value&&pl)pl.style.opacity='1';});
+    inp.addEventListener('input',()=>{if(pl)pl.style.opacity=inp.value?'0':'1';});
+  });
+})();
+
+/* ════ MOBILE DRAWER ════ */
+function toggleMobDrawer(){
+  const drawer=document.getElementById('mobDrawer');
+  const ham=document.getElementById('mobHam');
+  if(!drawer)return;
+  const open=drawer.style.display==='none'||drawer.style.display==='';
+  drawer.style.display=open?'block':'none';
+  if(ham)ham.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+}
+document.addEventListener('click',function(e){
+  const drawer=document.getElementById('mobDrawer');
+  const ham=document.getElementById('mobHam');
+  if(drawer&&drawer.style.display==='block'&&!drawer.contains(e.target)&&ham&&!ham.contains(e.target)){
+    drawer.style.display='none';
+    ham.classList.remove('open');
+    document.body.style.overflow='';
+  }
+});
+
+/* ════ CART DRAWER ════ */
+function openCart(){
+  renderCartDrawer();
+  document.getElementById('cartDrawer').style.transform='translateX(0)';
+  document.getElementById('cartBackdrop').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function closeCart(){
+  document.getElementById('cartDrawer').style.transform='translateX(100%)';
+  document.getElementById('cartBackdrop').style.display='none';
+  document.body.style.overflow='';
+}
+function renderCartDrawer(){
+  const body=document.getElementById('cartBody');
+  const footer=document.getElementById('cartFooter');
+  if(!body)return;
+  if(!cart.length){
+    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">[[icon:shopping-cart]]</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
+    if(footer)footer.style.display='none';
+    return;
+  }
+  const total=cart.reduce((s,i)=>s+i.price*(i.qty||1),0);
+  body.innerHTML=cart.map((item,idx)=>{
+    const prod=products.find(p=>p.id===item.id);
+    const label=item.qtyLabel||'';
+    const unitPrice=item.price;
+    return `<div style="display:flex;gap:.85rem;align-items:center;padding:.85rem 0;border-bottom:1px solid rgba(26,58,42,.07);">
+      <div style="width:56px;height:56px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0fdf4;"><img src="${prod?.image||''}" style="width:100%;height:100%;object-fit:cover;"/></div>
+      <div style="flex:1;min-width:0;">
+        <p style="font-size:.78rem;font-weight:700;color:#1a2416;line-height:1.3;">${item.name}</p>
+        <p style="font-size:.68rem;color:#6b7280;font-weight:500;margin-top:1px;">${label}</p>
+        <p style="font-size:.72rem;color:#166534;font-weight:700;margin-top:2px;">&#8377;${unitPrice} &times; ${item.qty||1} = <strong>&#8377;${unitPrice*(item.qty||1)}</strong></p>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <button onclick="cartQty(${idx},-1)" style="width:24px;height:24px;border:1px solid #d1d5db;border-radius:5px;background:#f3f4f6;cursor:pointer;font-weight:700;font-size:.75rem;">&#8722;</button>
+        <span style="font-size:.78rem;font-weight:700;min-width:18px;text-align:center;">${item.qty||1}</span>
+        <button onclick="cartQty(${idx},1)" style="width:24px;height:24px;border:1px solid #d1d5db;border-radius:5px;background:#f3f4f6;cursor:pointer;font-weight:700;font-size:.75rem;">+</button>
+        <button onclick="removeFromCart(${idx})" style="width:24px;height:24px;border:none;background:none;cursor:pointer;color:#ef4444;font-size:.85rem;margin-left:2px;">&#10005;</button>
+      </div>
+    </div>`;
+  }).join('');
+  if(footer){
+    footer.style.display='block';
+    footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">₹${total}</span></div><a href="checkoutmyorderpage.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout →</a>`;
+  }
+}
+function cartQty(idx,delta){
+  const item=cart[idx];
+  if(!item)return;
+  item.qty=Math.max(1,(item.qty||1)+delta);
+  // recalculate price from basePrice × qtyVal so the correct amount is always shown
+  if(item.basePrice&&item.qtyVal&&item.unit){
+    const m=item.unit==='ml'?item.qtyVal/1000:item.qtyVal;
+    item.price=Math.round(item.basePrice*m);
+  }
+  saveCart();renderCartDrawer();
+}
+function removeFromCart(idx){
+  cart.splice(idx,1);
+  saveCart();renderCartDrawer();
+}
+
+/* ════ 3D CAROUSEL SCROLL ════ */
+function scrollRow(secId, dir) {
+  const el = document.getElementById('hscroll-' + secId);
+  if (!el) return;
+  el.scrollBy({ left: dir * 276, behavior: 'smooth' });
+  setTimeout(() => updateScrollBtns(secId), 350);
+}
+
+function updateScrollBtns(secId) {
+  const el = document.getElementById('hscroll-' + secId);
+  if (!el) return;
+  const wrap = el.closest('.hscroll-wrap');
+  if (!wrap) return;
+  const atStart = el.scrollLeft <= 4;
+  const atEnd   = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+  const lBtn = wrap.querySelector('.scroll-btn.left');
+  const rBtn = wrap.querySelector('.scroll-btn.right');
+  if (lBtn) lBtn.style.visibility = atStart ? 'hidden' : 'visible';
+  if (rBtn) rBtn.style.visibility = atEnd   ? 'hidden' : 'visible';
+}
+
+function initScrollBtns() {
+  document.querySelectorAll('.prod-hscroll').forEach(el => {
+    const id = el.id.replace('hscroll-', '');
+    updateScrollBtns(id);
+    el.addEventListener('scroll', () => updateScrollBtns(id), { passive: true });
+  });
+}
+
+function attachCarousel3D(){
+  // intentionally empty — removed to prevent inline style conflicts with card-lifted
+}
+
+/* ════ REEL WIDGET SCROLL TRIGGER ════ */
+(function(){
+  const widget = document.getElementById('reel-widget');
+  const tab    = document.getElementById('reel-tab');
+  const target = document.getElementById('filterTabs');
+  if(!widget || !target) return;
+
+  // start hidden
+  widget.style.opacity = '0';
+  widget.style.pointerEvents = 'none';
+  widget.style.transform = 'translateX(calc(100% + 20px))';
+
+  let visible = false;
+  let minimized = false;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !visible && !minimized) {
+        visible = true;
+        widget.style.transition = 'opacity .5s ease, transform .5s cubic-bezier(.4,0,.2,1)';
+        widget.style.opacity = '1';
+        widget.style.pointerEvents = 'all';
+        widget.style.transform = '';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(target);
+
+  // patch minimize to also track state
+  const origMin = document.getElementById('btn-reel-minimize');
+  if(origMin) {
+    origMin.addEventListener('click', () => { minimized = true; }, { capture: true });
+  }
+  const origTab = document.getElementById('reel-tab');
+  if(origTab) {
+    origTab.addEventListener('click', () => { minimized = false; }, { capture: true });
+  }
+})();
+
+/* ════════════════════════════════════════
+   FLOATING REELS WIDGET
+════════════════════════════════════════ */
+(function(){
+  /* Video data — swap src with your real product videos */
+  const REELS = [
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%201.mp4',       caption:'[[icon:wheat]] 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4',          caption:'[[icon:flower-2]] Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4',       caption:'[[icon:leaf]] Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4',          caption:'[[icon:flower-2]] From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
+  ];
+
+  let cur = 0, autoTimer = null;
+  const INTERVAL = 6000;
+  const $ = id => document.getElementById(id);
+
+  /* Build slides into a track */
+  function buildSlides(trackEl, dotsEl, isMini) {
+    REELS.forEach((r, i) => {
+      const slide = document.createElement('div');
+      slide.className = 'reel-slide' + (i === 0 ? ' active' : '');
+
+      const vid = document.createElement('video');
+      vid.src = r.src;
+      vid.muted = true; vid.loop = true; vid.playsInline = true;
+      vid.preload = i === 0 ? 'auto' : 'none';
+      if (i === 0) vid.play();
+      slide.appendChild(vid);
+
+      if (isMini) {
+        const cap = document.createElement('div');
+        cap.className = 'mini-caption';
+        cap.textContent = r.caption;
+        slide.appendChild(cap);
+      }
+
+      trackEl.insertBefore(slide, dotsEl);
+
+      const dot = document.createElement('span');
+      dot.className = i === 0 ? 'active' : '';
+      dot.addEventListener('click', e => { e.stopPropagation(); syncTo(i); startAuto(); });
+      dotsEl.appendChild(dot);
+    });
+  }
+
+  function goTo(trackEl, dotsEl, index) {
+    const slides = trackEl.querySelectorAll('.reel-slide');
+    const dots   = dotsEl.querySelectorAll('span');
+    const prev   = cur;
+
+    slides[prev].classList.remove('active');
+    slides[prev].classList.add('prev');
+    slides[prev].querySelector('video').pause();
+    setTimeout(() => slides[prev].classList.remove('prev'), 460);
+
+    const next = slides[index];
+    next.classList.add('active');
+    const vid = next.querySelector('video');
+    vid.preload = 'auto';
+    vid.play();
+
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  }
+
+  function syncTo(index) {
+    const miniTrack  = $('mini-track'),  miniDots  = $('mini-dots');
+    const modalTrack = $('modal-track'), modalDots = $('modal-dots');
+    goTo(miniTrack,  miniDots,  index);
+    goTo(modalTrack, modalDots, index);
+    cur = index;
+    $('modal-caption').textContent = REELS[cur].caption;
+  }
+
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => syncTo((cur + 1) % REELS.length), INTERVAL);
+  }
+
+  /* Init */
+  buildSlides($('mini-track'),  $('mini-dots'),  true);
+  buildSlides($('modal-track'), $('modal-dots'), false);
+  $('modal-caption').textContent = REELS[0].caption;
+  startAuto();
+
+  /* Mini player → open modal */
+  $('reel-widget').addEventListener('click', e => {
+    if (e.target.closest('#btn-reel-minimize')) return;
+    $('reel-modal').classList.add('open');
+  });
+
+  /* Close modal */
+  $('btn-reel-close').addEventListener('click', () => $('reel-modal').classList.remove('open'));
+  $('reel-modal').addEventListener('click', e => {
+    if (e.target === $('reel-modal')) $('reel-modal').classList.remove('open');
+  });
+
+  /* Arrow buttons */
+  $('modal-prev').addEventListener('click', e => { e.stopPropagation(); syncTo((cur - 1 + REELS.length) % REELS.length); startAuto(); });
+  $('modal-next').addEventListener('click', e => { e.stopPropagation(); syncTo((cur + 1) % REELS.length); startAuto(); });
+
+  /* Minimize / restore */
+  $('btn-reel-minimize').addEventListener('click', e => {
+    e.stopPropagation();
+    $('reel-widget').classList.add('minimized');
+    $('reel-tab').style.display = 'flex';
+  });
+  $('reel-tab').addEventListener('click', () => {
+    $('reel-widget').classList.remove('minimized');
+    $('reel-tab').style.display = 'none';
+  });
+
+  /* Swipe support */
+  function addSwipe(el) {
+    let sy = 0;
+    el.addEventListener('touchstart', e => { sy = e.touches[0].clientY; }, { passive: true });
+    el.addEventListener('touchend',   e => {
+      const dy = sy - e.changedTouches[0].clientY;
+      if (Math.abs(dy) < 40) return;
+      syncTo(dy > 0 ? (cur + 1) % REELS.length : (cur - 1 + REELS.length) % REELS.length);
+      startAuto();
+    }, { passive: true });
+  }
+  addSwipe($('mini-track'));
+  addSwipe($('modal-track'));
+})();
+
+/* ════ BLOG MOBILE SCROLL DOTS ════ */
+(function(){
+  const dotsWrap = document.getElementById('blog-scroll-dots');
+  const blogGrid = document.querySelector('#blog-section > div > div:last-child');
+  if(!dotsWrap || !blogGrid) return;
+  const dots = dotsWrap.querySelectorAll('span');
+  blogGrid.addEventListener('scroll', () => {
+    const idx = Math.round(blogGrid.scrollLeft / (blogGrid.scrollWidth / dots.length));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }, { passive: true });
+})();
+
+/* ════ BLOG MODAL ════ */
+const BLOGS = [
+  {
+    title: 'Why Heritage Rice Varieties Are the Future of Healthy Eating',
+    cat: 'Organic Farming', catColor: '#166534', catBg: '#dcfce7',
+    date: 'Mar 12, 2026', readTime: '4 min read',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop&q=80',
+    content: `<p>Karunguruvai, Mappillai Samba and Black Kavuni are not just grains — they are living traditions packed with nutrition that modern rice has lost over decades of industrial farming.</p>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a2416;margin:1.5rem 0 .5rem;">What Makes Heritage Rice Different?</h4>
+      <p>Heritage rice varieties were cultivated over centuries to thrive in specific microclimates. They are naturally drought-resistant, require no chemical inputs, and contain significantly higher levels of antioxidants, fibre, and minerals than polished white rice.</p>
+      <p>Karunguruvai, for example, has a glycaemic index of just 51 — compared to 72 for regular white rice — making it ideal for diabetics and those managing blood sugar.</p>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a2416;margin:1.5rem 0 .5rem;">The Nansai Commitment</h4>
+      <p>At Nansai, we cultivate 7 heritage rice varieties across our 25 certified acres. Each variety is grown using traditional seed-saving methods, ensuring genetic diversity is preserved for future generations. When you buy from us, you are not just buying rice — you are sustaining a 2,000-year-old agricultural tradition.</p>`
+  },
+  {
+    title: 'The Ancient Healing Power of Hibiscus & Butterfly Pea Flowers',
+    cat: 'Wellness', catColor: '#9d174d', catBg: '#fce7f3',
+    date: 'Feb 28, 2026', readTime: '3 min read',
+    image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&auto=format&fit=crop&q=80',
+    content: `<p>Centuries-old Ayurvedic tradition meets modern science. Our sun-dried flowers are among the most potent natural wellness ingredients available — and they come straight from our certified organic farm.</p>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a2416;margin:1.5rem 0 .5rem;">Hibiscus: The Heart Flower</h4>
+      <p>Clinical studies have shown that hibiscus tea can reduce systolic blood pressure by up to 7 points. Rich in Vitamin C and anthocyanins, it supports liver health, aids digestion, and has powerful anti-inflammatory properties. Our hibiscus is shade-dried within 24 hours of harvest to preserve maximum potency.</p>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a2416;margin:1.5rem 0 .5rem;">Butterfly Pea: Nature’s Blue Elixir</h4>
+      <p>The vivid blue of Butterfly Pea Flower comes from anthocyanins — the same compounds found in blueberries. Research confirms benefits for cognitive function, eye health, and skin elasticity. Steep in hot water for a stunning blue tea that turns violet with lemon juice.</p>`
+  },
+  {
+    title: 'Zero Chemicals, Zero Waste: Our Commitment to the Planet',
+    cat: 'Sustainability', catColor: '#075985', catBg: '#e0f2fe',
+    date: 'Feb 5, 2026', readTime: '5 min read',
+    image: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&auto=format&fit=crop&q=80',
+    content: `<p>From seed to shelf, every decision we make is guided by our pledge to leave the earth better than we found it — for future generations of farmers and families.</p>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a2416;margin:1.5rem 0 .5rem;">Our Zero-Input Farming Model</h4>
+      <p>We use no synthetic fertilisers, pesticides, or herbicides. Instead, we rely on composting, green manuring, crop rotation, and natural pest management. Our soil organic matter has increased by 18% over five years — a direct result of these practices.</p>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a2416;margin:1.5rem 0 .5rem;">Packaging & Waste</h4>
+      <p>All our packaging is either biodegradable or recyclable. We have eliminated single-use plastic from our supply chain entirely since 2023. Our processing facility runs on 60% solar energy, and all organic waste is composted back into the farm.</p>
+      <p>Sustainability is not a marketing claim for us — it is the only way we know how to farm.</p>`
+  }
+];
+
+function openBlogArticle(i) {
+  const b = BLOGS[i];
+  document.getElementById('blog-modal-hero').src = b.image;
+  document.getElementById('blog-modal-title').textContent = b.title;
+  document.getElementById('blog-modal-content').innerHTML = b.content;
+  document.getElementById('blog-modal-meta').innerHTML = `
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:.6rem;font-weight:800;padding:3px 10px;border-radius:20px;color:${b.catColor};background:${b.catBg};">${b.cat}</span>
+    <span style="font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;gap:4px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${b.date}
+    </span>
+    <span style="font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;gap:4px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${b.readTime}
+    </span>`;
+  const modal = document.getElementById('blog-modal');
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => {
+    modal.style.background = 'rgba(0,0,0,.72)';
+    modal.style.backdropFilter = 'blur(4px)';
+    const box = document.getElementById('blog-modal-box');
+    box.style.transform = 'scale(1) translateY(0)';
+    box.style.opacity = '1';
+  });
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBlogModal() {
+  const modal = document.getElementById('blog-modal');
+  const box = document.getElementById('blog-modal-box');
+  box.style.transform = 'scale(.92) translateY(20px)';
+  box.style.opacity = '0';
+  modal.style.background = 'rgba(0,0,0,0)';
+  modal.style.backdropFilter = '';
+  setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 320);
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModal(); });
+
+/* ════ REEL WIDGET DRAG ════ */
+(function(){
+  const el = document.getElementById('reel-widget');
+  if (!el) return;
+  let dragging = false, ox = 0, oy = 0;
+
+  let moved = false;
+
+  function startDrag(cx, cy) {
+    dragging = true;
+    moved = false;
+    const rect = el.getBoundingClientRect();
+    ox = cx - rect.left;
+    oy = cy - rect.top;
+    el.style.transition = 'none';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    el.style.left = rect.left + 'px';
+    el.style.top  = rect.top  + 'px';
+  }
+
+  function moveDrag(cx, cy) {
+    if (!dragging) return;
+    moved = true;
+    const maxX = window.innerWidth  - el.offsetWidth;
+    const maxY = window.innerHeight - el.offsetHeight;
+    el.style.left = Math.min(Math.max(0, cx - ox), maxX) + 'px';
+    el.style.top  = Math.min(Math.max(0, cy - oy), maxY) + 'px';
+  }
+
+  function endDrag() { dragging = false; el.style.transition = ''; }
+
+  el.addEventListener('mousedown',  e => { if (e.target.closest('#btn-reel-minimize')) return; startDrag(e.clientX, e.clientY); e.preventDefault(); });
+  document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+  document.addEventListener('mouseup',   endDrag);
+
+  el.addEventListener('touchstart', e => { if (e.target.closest('#btn-reel-minimize')) return; const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, { passive: true });
+  document.addEventListener('touchmove',  e => { if (!dragging) return; const t = e.touches[0]; moveDrag(t.clientX, t.clientY); e.preventDefault(); }, { passive: false });
+  document.addEventListener('touchend',   endDrag);
+
+  el.addEventListener('click', e => { if (moved) { moved = false; e.stopImmediatePropagation(); e.preventDefault(); } });
+})();
+
+/* ════ AUTH NAV ════ */
+(function(){
+  const user = JSON.parse(localStorage.getItem('nansai_user') || 'null');
+  if (!user) return;
+  const firstName = (user.name || '').split(' ')[0] || 'User';
+  const btn = document.getElementById('navSignInBtn');
+  const txt = document.getElementById('navSignInText');
+  const mob = document.getElementById('mobSignInLink');
+
+  // Show AD circle for admin only
+  if (user.role === 'admin') {
+    const adminCircle = document.getElementById('adminCircleBtn');
+    if (adminCircle) adminCircle.style.display = 'flex';
+  }
+  // Profile icon — always shows greeting for all logged-in users
+  const greeting = 'Hi, ' + firstName;
+  if (btn) btn.href = 'account.html';
+  if (txt) txt.textContent = greeting;
+  if (mob) { mob.href = 'account.html'; mob.textContent = '[[icon:user]] ' + greeting; }
+})();
+</script>
+
+<!-- MOBILE STICKY BOTTOM BAR -->
+<nav id="mob-sticky-bar">
+  <a href="index.html" class="mob-bar-btn active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </a>
+  <a href="blog.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    Blogs
+  </a>
+  <a href="#products" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'});return false;" class="mob-bar-btn primary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    Shop
+  </a>
+  <a href="news.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+    News
+  </a>
+  <a href="login.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Account
+  </a>
+</nav>
+
+<!-- CART DRAWER -->
+<div id="cartBackdrop" onclick="closeCart()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1100;backdrop-filter:blur(2px);"></div>
+<div id="cartDrawer" style="position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);background:#fff;z-index:1101;transform:translateX(100%);transition:transform .35s cubic-bezier(.77,0,.18,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.15);">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(26,58,42,.1);">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--forest-deep);">Your Cart</h2>
+    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">[[icon:x]]</button>
+  </div>
+  <div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>
+  <div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(26,58,42,.1);"></div>
+</div>
+
+</body>
+</html>

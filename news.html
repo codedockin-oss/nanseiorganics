@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Newsroom — Nansai Organics</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Cormorant Garamond"','serif'],
+        body:    ['"Inter"','sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+/* ═══════════════ TOKENS ═══════════════ */
+:root {
+  --forest:      #1a3a2a;
+  --forest-deep: #0f2218;
+  --forest-mid:  #2d5a3d;
+  --forest-leaf: #4a8c5c;
+  --forest-sage: #8fbc9a;
+  --cream:       #f7f3ec;
+  --warm-white:  #fdfaf5;
+  --gold:        #c9a84c;
+  --gold-lt:     #e8c97a;
+  --gold-dk:     #b8922a;
+  --text-dk:     #1a2416;
+  --text-md:     #3d5a45;
+  --text-lt:     #7a9980;
+  --nav-h:       68px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text-dk); overflow-x: hidden; }
+
+/* ═══════════════ NAVBAR (copied from main) ═══════════════ */
+.site-nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid rgba(26,58,42,.12);
+  height: var(--nav-h);
+}
+.nav-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center;
+  height: 100%; padding: 0 1.75rem; gap: 1.25rem;
+}
+.nav-logo { flex-shrink:0; text-decoration:none; display:flex; align-items:center; }
+.nav-logo img { height:64px; width:auto; object-fit:contain; }
+.nav-links { display:flex; align-items:stretch; height:100%; list-style:none; gap:0; }
+.nav-links > li { position:relative; height:100%; display:flex; align-items:center; }
+.nav-link {
+  display:flex; align-items:center; height:100%; padding:0 .85rem;
+  font-size:.79rem; font-weight:600; letter-spacing:.02em;
+  color:var(--forest-deep); text-decoration:none;
+  white-space:nowrap; transition:color .2s; position:relative;
+}
+.nav-link:hover { color:var(--forest-leaf); }
+.nav-link::after {
+  content:''; position:absolute; bottom:0; left:50%; right:50%;
+  height:2px; background:var(--gold-dk);
+  transition:left .24s ease, right .24s ease;
+}
+.nav-link:hover::after { left:.7rem; right:.7rem; }
+.nav-link.active { color:var(--forest-leaf); }
+.nav-link.active::after { left:.7rem; right:.7rem; }
+.nav-actions { display:flex; align-items:center; gap:.7rem; margin-left:auto; flex-shrink:0; }
+.nav-icon-btn {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
+  background:none; color:var(--forest-deep); text-decoration:none;
+  transition:color .2s, background .2s;
+}
+.nav-icon-btn svg { width:19px; height:19px; }
+.nav-icon-btn:hover { color:var(--forest-leaf); background:rgba(74,140,92,.08); }
+.nav-badge {
+  position:absolute; top:-2px; right:-2px;
+  background:#ef4444; color:#fff; font-size:.56rem; font-weight:800;
+  min-width:15px; height:15px; padding:0 3px; border-radius:30px;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid #fff;
+}
+.mob-ham {
+  display:none; background:none; border:none; cursor:pointer;
+  flex-direction:column; gap:5px; padding:3px; flex-shrink:0;
+}
+.mob-ham span { display:block; width:22px; height:2px; background:var(--forest-deep); border-radius:2px; transition:all .3s; }
+
+/* ═══════════════ HERO MASTHEAD ═══════════════ */
+.news-masthead {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 1.5rem 4rem;
+}
+.masthead-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1400&auto=format&fit=crop&q=80');
+  background-size: cover; background-position: center;
+  transform: scale(1.08);
+  transition: transform 8s ease;
+}
+.masthead-bg-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(135deg, rgba(10,25,15,.88) 0%, rgba(15,34,24,.75) 50%, rgba(26,58,42,.6) 100%);
+}
+.masthead-grain {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .45;
+  pointer-events: none;
+}
+.masthead-rings {
+  position: absolute; right: -80px; top: -80px;
+  width: 520px; height: 520px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.10);
+  pointer-events: none;
+}
+.masthead-rings::before {
+  content: '';
+  position: absolute; inset: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.08);
+}
+.masthead-rings::after {
+  content: '';
+  position: absolute; inset: 120px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.06);
+}
+.masthead-leaf {
+  position: absolute; pointer-events: none; opacity: .12;
+}
+.masthead-inner {
+  position: relative; z-index: 2;
+  max-width: 1400px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 1.25rem;
+}
+.masthead-tag {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: rgba(201,168,76,.14);
+  border: 1px solid rgba(201,168,76,.28);
+  color: var(--gold-lt);
+  font-size: .6rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 30px;
+}
+.masthead-tag span { width: 1.2rem; height: 1.5px; background: var(--gold); display: block; }
+.masthead-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 700; color: #fff; line-height: 1.05;
+}
+.masthead-title em { font-style: italic; color: #86c98a; }
+.masthead-sub {
+  color: rgba(255,255,255,.48);
+  font-size: .88rem; font-weight: 300; line-height: 1.7;
+  max-width: 520px;
+}
+.masthead-stats {
+  display: flex; align-items: center; gap: 2.5rem; margin-top: .5rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 1.5rem;
+}
+.masthead-stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 700; color: var(--gold-lt);
+}
+.masthead-stat-lbl {
+  font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); margin-top: 2px;
+}
+.masthead-divider { width: 1px; height: 36px; background: rgba(255,255,255,.1); }
+
+/* ═══════════════ FILTER BAR ═══════════════ */
+.filter-strip {
+  position: sticky; top: var(--nav-h); z-index: 800;
+  background: rgba(247,243,236,.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(26,58,42,.1);
+  padding: .75rem 1.5rem;
+}
+.filter-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: .5rem;
+  overflow-x: auto; scrollbar-width: none;
+}
+.filter-inner::-webkit-scrollbar { display: none; }
+.f-pill {
+  flex-shrink: 0;
+  padding: .42rem 1.1rem;
+  border-radius: 30px;
+  border: 1.5px solid rgba(26,58,42,.15);
+  background: #fff;
+  color: var(--text-md);
+  font-size: .76rem; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer; white-space: nowrap;
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+}
+.f-pill:hover {
+  border-color: var(--forest-leaf);
+  color: var(--forest-leaf);
+  transform: translateY(-1px);
+}
+.f-pill.active {
+  background: var(--forest-deep);
+  color: #fff; border-color: var(--forest-deep);
+  box-shadow: 0 4px 14px rgba(15,34,24,.22);
+  transform: translateY(-1px);
+}
+.search-box {
+  margin-left: auto; flex-shrink: 0;
+  position: relative;
+}
+.search-box input {
+  padding: .42rem 2.4rem .42rem .95rem;
+  border: 1.5px solid rgba(26,58,42,.15);
+  border-radius: 30px; background: #fff;
+  font-size: .76rem; color: var(--text-dk);
+  font-family: 'Inter', sans-serif; outline: none;
+  transition: border-color .2s;
+  width: 200px;
+}
+.search-box input:focus { border-color: var(--forest-leaf); }
+.search-box svg {
+  position: absolute; right: .75rem; top: 50%; transform: translateY(-50%);
+  width: 13px; height: 13px; color: var(--text-lt); pointer-events: none;
+}
+
+/* ═══════════════ LAYOUT ═══════════════ */
+.news-layout {
+  max-width: 1400px; margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 3rem;
+}
+
+/* ═══════════════ FEATURED CARD ═══════════════ */
+.featured-card {
+  position: relative;
+  border-radius: 22px; overflow: hidden;
+  background: var(--forest-deep);
+  cursor: pointer;
+  box-shadow: 0 20px 60px rgba(10,30,15,.18);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s;
+  margin-bottom: 2.5rem;
+}
+.featured-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 32px 80px rgba(10,30,15,.26);
+}
+.featured-img {
+  width: 100%; height: 420px; object-fit: cover;
+  display: block;
+  transition: transform .6s cubic-bezier(.22,1,.36,1);
+  filter: brightness(.75);
+}
+.featured-card:hover .featured-img { transform: scale(1.04); }
+.featured-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(5,12,6,.9) 0%, rgba(5,12,6,.4) 50%, transparent 80%);
+}
+.featured-body {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 2rem 2.2rem;
+  z-index: 2;
+}
+.news-cat-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .58rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px; margin-bottom: .8rem;
+}
+.featured-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700; color: #fff; line-height: 1.15;
+  margin-bottom: .7rem;
+}
+.featured-title em { font-style: italic; color: #86c98a; }
+.featured-excerpt {
+  font-size: .82rem; color: rgba(255,255,255,.6);
+  line-height: 1.65; max-width: 600px; margin-bottom: 1.25rem;
+}
+.read-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: .5rem 1.4rem;
+  border: 1px solid rgba(201,168,76,.5);
+  color: var(--gold-lt); background: transparent;
+  border-radius: 6px; cursor: pointer;
+  transition: all .22s;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  position: relative; overflow: hidden;
+}
+.read-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--gold-dk); transform: translateX(-101%);
+  transition: transform .28s ease; z-index: -1;
+}
+.read-btn:hover::before { transform: translateX(0); }
+.read-btn:hover { color: var(--forest-deep); border-color: var(--gold-dk); }
+.featured-meta {
+  display: flex; align-items: center; gap: 1rem;
+  font-size: .68rem; color: rgba(255,255,255,.38);
+}
+.featured-meta span { display: flex; align-items: center; gap: 4px; }
+
+/* ═══════════════ NEWS GRID ═══════════════ */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.news-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(26,58,42,.07);
+  box-shadow: 0 4px 20px rgba(26,58,42,.05);
+  cursor: pointer;
+  transition: transform .32s cubic-bezier(.34,1.56,.64,1), box-shadow .32s;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: cardIn .55s ease forwards;
+}
+@keyframes cardIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+.news-card:hover {
+  transform: translateY(-7px) scale(1.012);
+  box-shadow: 0 24px 60px rgba(26,58,42,.14);
+}
+.news-card-img {
+  height: 200px; overflow: hidden; position: relative;
+}
+.news-card-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .55s cubic-bezier(.22,1,.36,1);
+}
+.news-card:hover .news-card-img img { transform: scale(1.08); }
+.news-card-body { padding: 1.4rem 1.5rem 1.5rem; }
+.news-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--text-dk); line-height: 1.3;
+  margin-bottom: .55rem;
+}
+.news-card-excerpt {
+  font-size: .78rem; color: var(--text-lt);
+  line-height: 1.65; margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.news-meta { font-size: .68rem; color: var(--text-lt); display: flex; align-items: center; gap: .5rem; }
+.card-read-link {
+  font-size: .7rem; font-weight: 700; color: var(--forest-leaf);
+  text-decoration: none; display: flex; align-items: center; gap: 3px;
+  transition: gap .2s;
+}
+.card-read-link:hover { gap: 7px; }
+
+/* ═══════════════ SIDEBAR ═══════════════ */
+.sidebar { display: flex; flex-direction: column; gap: 2rem; }
+.sidebar-box {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid rgba(26,58,42,.07);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(26,58,42,.04);
+}
+.sidebar-hdr {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(26,58,42,.07);
+  display: flex; align-items: center; gap: .5rem;
+}
+.sidebar-hdr h3 {
+  font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--text-dk);
+}
+.sidebar-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--forest-leaf);
+}
+.sidebar-body { padding: 1.25rem 1.5rem; }
+
+/* sidebar news items */
+.side-news-item {
+  display: flex; gap: .85rem; align-items: flex-start;
+  padding: .85rem 0;
+  border-bottom: 1px solid rgba(26,58,42,.06);
+  cursor: pointer;
+  transition: transform .2s;
+}
+.side-news-item:last-child { border-bottom: none; }
+.side-news-item:hover { transform: translateX(4px); }
+.side-news-thumb {
+  width: 60px; height: 60px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+}
+.side-news-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.side-news-title {
+  font-size: .8rem; font-weight: 700; color: var(--text-dk);
+  line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.side-news-date { font-size: .65rem; color: var(--text-lt); margin-top: 3px; }
+
+/* newsletter widget */
+.nl-widget {
+  background: linear-gradient(135deg, var(--forest-deep) 0%, var(--forest-mid) 100%);
+  border-radius: 18px; padding: 1.75rem 1.5rem;
+  position: relative; overflow: hidden;
+}
+.nl-widget::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.12);
+}
+.nl-widget::after {
+  content: '';
+  position: absolute; top: -10px; right: -10px;
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.08);
+}
+.nl-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 700; color: #fff;
+  margin-bottom: .4rem; position: relative; z-index: 1;
+}
+.nl-sub {
+  font-size: .74rem; color: rgba(255,255,255,.5);
+  line-height: 1.6; margin-bottom: 1.1rem;
+  position: relative; z-index: 1;
+}
+.nl-form { display: flex; flex-direction: column; gap: .6rem; position: relative; z-index: 1; }
+.nl-input {
+  padding: .6rem 1rem;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 10px; background: rgba(255,255,255,.08);
+  color: #fff; font-family: 'Inter', sans-serif; font-size: .8rem;
+  outline: none; transition: border-color .2s;
+}
+.nl-input::placeholder { color: rgba(255,255,255,.3); }
+.nl-input:focus { border-color: var(--gold); }
+.nl-btn {
+  padding: .65rem;
+  background: var(--gold-dk); color: var(--forest-deep);
+  font-family: 'Inter', sans-serif; font-size: .78rem; font-weight: 800;
+  border: none; border-radius: 10px; cursor: pointer;
+  transition: background .2s, transform .15s;
+  letter-spacing: .04em;
+}
+.nl-btn:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+/* categories list */
+.cat-list { display: flex; flex-direction: column; gap: .2rem; }
+.cat-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .6rem .85rem; border-radius: 10px;
+  cursor: pointer; transition: background .2s;
+  font-size: .82rem; font-weight: 600; color: var(--text-md);
+}
+.cat-item:hover { background: rgba(74,140,92,.07); color: var(--forest-leaf); }
+.cat-item.active { background: rgba(26,58,42,.06); color: var(--forest-deep); }
+.cat-count {
+  font-size: .65rem; font-weight: 700;
+  background: rgba(26,58,42,.08); color: var(--text-lt);
+  padding: 2px 8px; border-radius: 20px;
+}
+.cat-item.active .cat-count { background: var(--forest-deep); color: #fff; }
+
+/* ═══════════════ TICKER ═══════════════ */
+.news-ticker {
+  background: var(--forest-deep);
+  overflow: hidden; white-space: nowrap;
+  padding: .5rem 0;
+  position: relative;
+}
+.ticker-inner {
+  display: inline-flex; align-items: center; gap: 3rem;
+  animation: tickerRun 40s linear infinite;
+}
+.ticker-inner:hover { animation-play-state: paused; }
+@keyframes tickerRun {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-item {
+  font-size: .72rem; font-weight: 500; color: rgba(255,255,255,.65);
+  display: inline-flex; align-items: center; gap: .5rem;
+}
+.ticker-item strong { color: var(--gold-lt); }
+.ticker-sep { color: rgba(201,168,76,.35); font-size: .7rem; }
+
+/* ═══════════════ EMPTY STATE ═══════════════ */
+.empty-state {
+  text-align: center; padding: 5rem 1rem;
+  display: none;
+}
+.empty-state.visible { display: block; }
+
+/* ═══════════════ LOAD MORE ═══════════════ */
+.load-more-btn {
+  display: flex; align-items: center; gap: .6rem;
+  margin: 2.5rem auto 0;
+  padding: .7rem 2rem;
+  border: 1.5px solid rgba(26,58,42,.2);
+  border-radius: 30px; background: #fff;
+  font-size: .78rem; font-weight: 700; color: var(--forest-deep);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+}
+.load-more-btn:hover {
+  background: var(--forest-deep); color: #fff;
+  border-color: var(--forest-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15,34,24,.2);
+}
+
+/* ═══════════════ ARTICLE MODAL ═══════════════ */
+#article-modal {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background .3s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+#article-modal.open {
+  background: rgba(0,0,0,.7);
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+}
+.modal-box {
+  background: var(--warm-white);
+  border-radius: 24px;
+  max-width: 760px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  transform: scale(.92) translateY(20px);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+  position: relative;
+  scrollbar-width: thin;
+}
+#article-modal.open .modal-box { transform: scale(1) translateY(0); opacity: 1; }
+.modal-hero {
+  width: 100%; height: 280px; object-fit: cover;
+  border-radius: 24px 24px 0 0;
+  display: block;
+}
+.modal-body { padding: 2rem 2.5rem 2.5rem; }
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(0,0,0,.5); color: #fff;
+  border: none; cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s; z-index: 10;
+  backdrop-filter: blur(4px);
+}
+.modal-close:hover { background: rgba(0,0,0,.8); }
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700; color: var(--text-dk); line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.modal-content p {
+  font-size: .88rem; line-height: 1.8; color: #3d4d3e;
+  margin-bottom: 1.1rem;
+}
+.modal-content p:last-child { margin-bottom: 0; }
+.modal-content h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 700; color: var(--text-dk);
+  margin: 1.5rem 0 .5rem;
+}
+.modal-divider {
+  height: 1px; background: rgba(26,58,42,.08);
+  margin: 1.25rem 0;
+}
+
+/* ═══════════════ TOAST ═══════════════ */
+#toast {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--forest-deep); color:var(--cream);
+  font-size:.78rem; font-weight:600;
+  padding:.5rem 1.4rem; border-radius:30px;
+  opacity:0; pointer-events:none; white-space:nowrap;
+  z-index:9999; box-shadow:0 8px 28px rgba(10,30,15,.3);
+  border:1px solid rgba(201,168,76,.22);
+  transition:opacity .3s, transform .3s;
+}
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ═══════════════ MOBILE ═══════════════ */
+@media(max-width:768px) {
+  :root { --nav-h: 58px; }
+  .nav-links { display: none; }
+  .mob-ham { display: flex; }
+  .nav-inner { padding: 0 1rem; }
+  .nav-logo img { height: 48px !important; }
+  .news-layout { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1rem 3rem; }
+  .sidebar { display: none; }
+  .featured-img { height: 280px; }
+  .featured-body { padding: 1.5rem; }
+  .news-grid { grid-template-columns: 1fr; }
+  .masthead-stats { gap: 1.5rem; }
+  .masthead-stat-val { font-size: 1.5rem; }
+  .filter-strip { top: var(--nav-h); padding: .6rem 1rem; }
+  .search-box { display: none; }
+  .modal-body { padding: 1.5rem; }
+}
+
+/* ═══════════════ SCROLL REVEAL ═══════════════ */
+.sr { opacity:0; transform:translateY(28px); transition:opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
+.sr.visible { opacity:1; transform:none; }
+.sd1 { transition-delay:.06s; } .sd2 { transition-delay:.12s; }
+.sd3 { transition-delay:.18s; } .sd4 { transition-delay:.24s; }
+
+/* ═══════════════ MOBILE DRAWER ═══════════════ */
+#mob-drawer {
+  display:none; position:fixed; top:var(--nav-h); left:0; right:0; bottom:0;
+  background:#fff; z-index:999; overflow-y:auto; padding:1.5rem;
+  border-top:1px solid rgba(26,58,42,.1);
+}
+.mob-drawer-link {
+  display:block; padding:.85rem 1rem; font-size:.9rem; font-weight:600;
+  color:var(--forest-deep); text-decoration:none; border-radius:10px;
+  transition:background .2s;
+}
+.mob-drawer-link:hover { background:rgba(74,140,92,.06); }
+.mob-ham.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.mob-ham.open span:nth-child(2) { opacity:0; }
+.mob-ham.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+</style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<span style=\'font-family:Cormorant Garamond,serif;font-size:1.55rem;font-weight:700;color:#0f2218;\'>Nan<span style=\'color:#b8922a;\'>sai</span></span>'"/>
+    </a>
+    <ul class="nav-links">
+      <li><a class="nav-link" href="index.html">Shop</a></li>
+      <li><a class="nav-link" href="index.html#why-section">Our Promise</a></li>
+      <li><a class="nav-link" href="index.html#blog-section">Blogs</a></li>
+      <li><a class="nav-link active" href="news.html">News</a></li>
+      <li><a class="nav-link" href="index.html#site-footer">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="checkoutmyorderpage.html" style="display:flex;align-items:center;gap:.35rem;font-size:.65rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--forest-deep);text-decoration:none;padding:.38rem .7rem;border:1px solid rgba(26,58,42,.2);border-radius:6px;transition:all .2s;white-space:nowrap;" onmouseover="this.style.color='var(--forest-leaf)';this.style.borderColor='var(--forest-leaf)'" onmouseout="this.style.color='var(--forest-deep)';this.style.borderColor='rgba(26,58,42,.2)'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        My Orders
+      </a>
+      <div style="width:1px;height:18px;background:rgba(26,58,42,.15);"></div>
+      <a href="login.html" class="nav-icon-btn" id="navAccountBtn" style="gap:5px;width:auto;padding:0 8px;border-radius:20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="navAccountText" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);">Sign In</span>
+      </a>
+      <a href="wishlist.html" class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+        <span class="nav-badge" id="wishlistBadge">0</span>
+      </a>
+      <a href="checkoutmyorderpage.html" class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge" id="cartBadge">0</span>
+      </a>
+      <button class="mob-ham" id="mobHam" onclick="toggleMobDrawer()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div id="mob-drawer">
+  <nav>
+    <a class="mob-drawer-link" href="index.html">[[icon:shopping-cart]] Shop</a>
+    <a class="mob-drawer-link" href="index.html#why-section">[[icon:leaf]] Our Promise</a>
+    <a class="mob-drawer-link" href="index.html#blog-section">[[icon:book-open]] Blogs</a>
+    <a class="mob-drawer-link" href="news.html" style="color:var(--forest-leaf);">[[icon:newspaper]] News</a>
+    <a class="mob-drawer-link" href="index.html#site-footer">[[icon:house]] About</a>
+    <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
+    <a class="mob-drawer-link" href="login.html" id="mobAccountLink">[[icon:user]] Sign In</a>
+    <a class="mob-drawer-link" href="checkoutmyorderpage.html">[[icon:package]] My Orders</a>
+    <a class="mob-drawer-link" href="wishlist.html">[[icon:heart]] Wishlist</a>
+    <a class="mob-drawer-link" href="checkoutmyorderpage.html">[[icon:shopping-bag]] Cart</a>
+  </nav>
+</div>
+
+<!-- ═══════════════ BREAKING TICKER ═══════════════ -->
+<div class="news-ticker" id="tickerBar">
+  <div class="ticker-inner" id="tickerInner"></div>
+</div>
+
+
+<!-- ═══════════════ FILTER STRIP ═══════════════ -->
+<div class="filter-strip">
+  <div class="filter-inner" id="filterInner">
+    <button class="f-pill active" data-cat="all" onclick="filterNews('all',this)">All News</button>
+    <button class="f-pill" data-cat="milestone" onclick="filterNews('milestone',this)">[[icon:trophy]] Milestones</button>
+    <button class="f-pill" data-cat="certification" onclick="filterNews('certification',this)">[[icon:leaf]] Certifications</button>
+    <button class="f-pill" data-cat="product" onclick="filterNews('product',this)">[[icon:package]] Product Launches</button>
+    <button class="f-pill" data-cat="community" onclick="filterNews('community',this)">[[icon:handshake]] Community</button>
+    <button class="f-pill" data-cat="award" onclick="filterNews('award',this)">[[icon:medal]] Awards</button>
+    <div class="search-box">
+      <input type="text" placeholder="Search news…" id="newsSearchInput" oninput="searchNews(this.value)"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN LAYOUT ═══════════════ -->
+<div class="news-layout">
+
+  <!-- Main Column -->
+  <div>
+    <!-- Featured Pinned Post -->
+    <div id="featuredSection"></div>
+
+    <!-- Section Label -->
+    <div style="display:flex;align-items:center;gap:.85rem;margin-bottom:1.5rem;" class="sr sd1" id="latestLabel">
+      <div style="width:3px;height:22px;background:linear-gradient(to bottom,var(--forest-leaf),var(--gold));border-radius:2px;"></div>
+      <span style="font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text-md);">Latest Updates</span>
+      <div style="flex:1;height:1px;background:rgba(26,58,42,.08);"></div>
+    </div>
+
+    <!-- News Grid -->
+    <div class="news-grid" id="newsGrid"></div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <div style="font-size:3.5rem;margin-bottom:.75rem;">[[icon:newspaper]]</div>
+      <p style="font-weight:700;color:#9ca3af;font-size:1rem;">No articles found</p>
+      <p style="font-size:.82rem;color:#d1d5db;margin-top:.4rem;">Try a different search or category</p>
+    </div>
+
+    <!-- Load More -->
+    <div style="text-align:center;" id="loadMoreWrap">
+      <button class="load-more-btn" onclick="loadMore()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        Load More Articles
+      </button>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- Newsletter -->
+    <div class="nl-widget sr sd1">
+      <div class="nl-title">Stay in the Loop [[icon:leaf]]</div>
+      <p class="nl-sub">Get the latest Nansai news, harvest updates and offers straight to your inbox.</p>
+      <form class="nl-form" onsubmit="handleNLSubmit(event)">
+        <input class="nl-input" type="email" placeholder="Your email address" required/>
+        <button class="nl-btn" type="submit">Subscribe for Free →</button>
+      </form>
+    </div>
+
+    <!-- Categories -->
+    <div class="sidebar-box sr sd2">
+      <div class="sidebar-hdr">
+        <div class="sidebar-dot"></div>
+        <h3>Browse by Category</h3>
+      </div>
+      <div class="sidebar-body">
+        <div class="cat-list" id="catList"></div>
+      </div>
+    </div>
+
+    <!-- Recent News -->
+    <div class="sidebar-box sr sd3">
+      <div class="sidebar-hdr">
+        <div class="sidebar-dot" style="background:var(--gold-dk);"></div>
+        <h3>Recent Articles</h3>
+      </div>
+      <div class="sidebar-body" id="recentList"></div>
+    </div>
+
+    <!-- Share widget -->
+    <div class="sidebar-box sr sd4" style="padding:1.5rem;text-align:center;">
+      <div style="font-size:1.8rem;margin-bottom:.75rem;">[[icon:wheat]]</div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--text-dk);margin-bottom:.3rem;">Spread the Word</p>
+      <p style="font-size:.74rem;color:var(--text-lt);line-height:1.55;margin-bottom:1rem;">Share Nansai's journey with your community.</p>
+      <div style="display:flex;gap:.6rem;justify-content:center;">
+        <button onclick="shareLink('twitter')" style="flex:1;padding:.5rem;border:1.5px solid rgba(26,58,42,.15);border-radius:8px;background:#fff;font-size:.7rem;font-weight:700;cursor:pointer;color:var(--text-md);transition:all .2s;" onmouseover="this.style.background='#e7f3ff';this.style.borderColor='#1d9bf0';this.style.color='#1d9bf0'" onmouseout="this.style.background='#fff';this.style.borderColor='rgba(26,58,42,.15)';this.style.color='var(--text-md)'">𝕏 Twitter</button>
+        <button onclick="shareLink('facebook')" style="flex:1;padding:.5rem;border:1.5px solid rgba(26,58,42,.15);border-radius:8px;background:#fff;font-size:.7rem;font-weight:700;cursor:pointer;color:var(--text-md);transition:all .2s;" onmouseover="this.style.background='#e7f0ff';this.style.borderColor='#1877f2';this.style.color='#1877f2'" onmouseout="this.style.background='#fff';this.style.borderColor='rgba(26,58,42,.15)';this.style.color='var(--text-md)'">f Facebook</button>
+        <button onclick="shareLink('copy')" style="flex:1;padding:.5rem;border:1.5px solid rgba(26,58,42,.15);border-radius:8px;background:#fff;font-size:.7rem;font-weight:700;cursor:pointer;color:var(--text-md);transition:all .2s;" onmouseover="this.style.background='#f0fdf4';this.style.borderColor='var(--forest-leaf)';this.style.color='var(--forest-leaf)'" onmouseout="this.style.background='#fff';this.style.borderColor='rgba(26,58,42,.15)';this.style.color='var(--text-md)'">[[icon:link]] Copy</button>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ═══════════════ ARTICLE MODAL ═══════════════ -->
+<div id="article-modal" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeArticleModal()">[[icon:x]]</button>
+    <img class="modal-hero" id="modalHero" src="" alt=""/>
+    <div class="modal-body">
+      <div id="modalMeta" style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;flex-wrap:wrap;"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-divider"></div>
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer style="background:#111827;color:#9ca3af;">
+  <div style="max-width:1400px;margin:0 auto;padding:3rem 1.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem;border-bottom:1px solid #1f2937;">
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;color:#fff;margin-bottom:2px;">Nan<span style="color:var(--gold-dk);">sai</span></div>
+      <p style="font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:#4b5563;">Experience the Root of Nature</p>
+    </div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+      <a href="index.html" style="font-size:.78rem;color:#9ca3af;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='#9ca3af'">Home</a>
+      <a href="index.html#products" style="font-size:.78rem;color:#9ca3af;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='#9ca3af'">Shop</a>
+      <a href="news.html" style="font-size:.78rem;color:#86efac;text-decoration:none;">News</a>
+      <a href="#" style="font-size:.78rem;color:#9ca3af;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='#9ca3af'">Contact</a>
+    </div>
+  </div>
+  <div style="text-align:center;padding:1.25rem;font-size:.72rem;color:#4b5563;">&copy; 2026 Nansai Organics. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+/* ════ NEWS DATA ════ */
+const NEWS = [
+  {
+    id: 1,
+    title: "Nansai Achieves USDA Organic Certification — A 22-Year Journey Recognised",
+    excerpt: "After two decades of chemical-free farming across 25 acres of Tamil Nadu's finest soil, Nansai Organics has received the prestigious USDA Organic certification, making us one of South India's most-certified organic farms.",
+    category: "certification",
+    catLabel: "Certification",
+    catColor: "#166534",
+    catBg: "#dcfce7",
+    date: "April 5, 2026",
+    readTime: "4 min read",
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop&q=80",
+    featured: true,
+    pinned: true,
+    content: `
+      <p>We are proud to announce that Nansai Organics has officially received USDA Organic Certification — a milestone that represents over 22 years of uncompromising commitment to chemical-free, sustainable farming.</p>
+      <h4>What This Means for Our Farmers</h4>
+      <p>This certification is not just a badge — it is validation for every farmer family who chose the harder, purer path. Our 200+ farming families across the Madurai region can now access global markets with confidence.</p>
+      <p>The USDA certification process is one of the most rigorous in the world, covering soil health, water management, crop rotation, and every input used in the growing process. Our farm passed all 148 inspection criteria without a single exception.</p>
+      <h4>9 Certifications and Counting</h4>
+      <p>This brings our total active certifications to 9, including Non-GMO Project Verified, Halal Certified, India Organic, FSSAI Organic, and now USDA Organic. Each certification is a promise kept to our customers and our land.</p>
+      <p>We invite you to explore our full range of certified products and be part of this journey toward a healthier India.</p>
+    `
+  },
+  {
+    id: 2,
+    title: "New Launch: Butterfly Pea Flower — Nature's Blue Elixir",
+    excerpt: "Our newest harvest product, the sun-dried Butterfly Pea Flower, is now available across India. Known for its vivid blue hue and powerful antioxidant properties, this ancient Ayurvedic ingredient is finally farm-direct.",
+    category: "product",
+    catLabel: "Product Launch",
+    catColor: "#0891b2",
+    catBg: "#e0f2fe",
+    date: "March 28, 2026",
+    readTime: "3 min read",
+    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>Nansai Organics is thrilled to announce the launch of our Butterfly Pea Flower — one of Ayurveda's most celebrated yet under-appreciated botanicals, now available direct from our certified organic farm.</p>
+      <h4>Why Butterfly Pea?</h4>
+      <p>Rich in anthocyanins, the same pigments that give blueberries and red wine their health benefits, Butterfly Pea Flower has been used in traditional Southeast Asian and Indian medicine for centuries. Modern science now confirms its benefits for cognitive function, eye health, and inflammation reduction.</p>
+      <p>Our flowers are hand-harvested at peak bloom, shade-dried for 72 hours to preserve the colour compounds, and packed without any additives or preservatives.</p>
+      <h4>How to Use</h4>
+      <p>Steep 8–10 dried flowers in hot water for a stunning blue tea that turns violet with a squeeze of lemon. Add to rice, desserts, lemonades, and cocktails for natural colour and nutrition.</p>
+      <p>Available now in 50g, 100g, and 250g packs. Order directly from our shop.</p>
+    `
+  },
+  {
+    id: 3,
+    title: "200 Farming Families — Celebrating a Decade of Partnership",
+    excerpt: "This April marks 10 years since Nansai began its co-operative farming model. Today, over 200 families across the Madurai and Dindigul districts are part of our organic community, earning 40% more than conventional farming averages.",
+    category: "community",
+    catLabel: "Community",
+    catColor: "#7c3aed",
+    catBg: "#ede9fe",
+    date: "March 15, 2026",
+    readTime: "5 min read",
+    image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>Ten years ago, Nansai began with a simple belief: that small farmers deserve fair prices, and that their knowledge of the land is irreplaceable. Today, we celebrate a community of 200 farming families who have made this belief a reality.</p>
+      <h4>The Numbers Behind the Community</h4>
+      <p>Across 25 certified acres in the Madurai and Dindigul districts, our partner families cultivate 7 primary crop varieties and 12 seasonal crops. On average, they earn 40% more per hectare than conventional farming methods — without the cost of chemical inputs.</p>
+      <h4>From Doubt to Pride</h4>
+      <p>In 2016, fewer than 30 families trusted the organic model enough to commit their entire farm. Many neighbours called it foolish. Today, those same neighbours are on our waitlist. The turnaround came when families saw their soil recovering — earthworms returning, water retention improving, and yields stabilising.</p>
+      <p>We are proud to have started a movement that now ripples through 14 villages. This anniversary belongs entirely to the families who said yes when it was not the obvious choice.</p>
+    `
+  },
+  {
+    id: 4,
+    title: "Nansai Wins 'Best Organic Brand' at India Agri Excellence Awards 2026",
+    excerpt: "At the India Agri Excellence Awards held in New Delhi, Nansai Organics was honoured with the Best Organic Brand award — recognising our contribution to sustainable agriculture and consumer health.",
+    category: "award",
+    catLabel: "Award",
+    catColor: "#b45309",
+    catBg: "#fef3c7",
+    date: "March 4, 2026",
+    readTime: "2 min read",
+    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>We are deeply honoured to receive the Best Organic Brand award at the India Agri Excellence Awards 2026, held at the India International Centre, New Delhi.</p>
+      <h4>Recognition at the National Level</h4>
+      <p>The award was presented by the Ministry of Agriculture, in collaboration with the Confederation of Indian Industry (CII). Over 340 brands across 22 states were evaluated over a six-month period, with Nansai ranking first in the categories of Certification Quality, Farmer Welfare, and Supply Chain Transparency.</p>
+      <p>Our founder, receiving the award, said: "This is not our award. It belongs to every farmer who woke up at 4am to tend to crops they believed in, even when the world hadn't caught up yet."</p>
+      <h4>What Comes Next</h4>
+      <p>With this recognition, we plan to expand our reach to 5 new states by the end of 2026, bringing our farm-direct model to more families across India.</p>
+    `
+  },
+  {
+    id: 5,
+    title: "Nansai Samba Rice Now Available in 500g Packs — Starter Size Launched",
+    excerpt: "By popular demand, our flagship Mappillai Samba heritage rice is now available in a 500g introductory pack — making it easier for new customers to try before committing to a larger order.",
+    category: "product",
+    catLabel: "Product Launch",
+    catColor: "#0891b2",
+    catBg: "#e0f2fe",
+    date: "February 20, 2026",
+    readTime: "2 min read",
+    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>We have heard you loud and clear. For months, customers have been asking for a smaller pack size of our beloved Mappillai Samba heritage rice — and today, we are delivering.</p>
+      <h4>The Starter Pack</h4>
+      <p>The 500g pack is priced at ₹105, making it the most accessible entry point into heritage rice. Mappillai Samba, known for its earthy aroma, high fibre content, and exceptional taste, is one of Tamil Nadu's oldest cultivated rice varieties.</p>
+      <p>It cooks slightly firmer than polished white rice and pairs exceptionally well with sambar, rasam, and coconut-based curries.</p>
+      <h4>Shipping and Availability</h4>
+      <p>The 500g pack is available immediately across all major metros and begins shipping to Tier-2 cities from 1st March 2026. Subscribe to auto-monthly delivery and save an additional 8%.</p>
+    `
+  },
+  {
+    id: 6,
+    title: "25 Acres, Zero Chemicals — Our Annual Soil Health Report 2025",
+    excerpt: "Every year, Nansai publishes an independent soil health report. This year's findings confirm that our soil's organic matter content has increased by 18% over five years — a direct result of natural composting and crop rotation.",
+    category: "milestone",
+    catLabel: "Milestone",
+    catColor: "#166534",
+    catBg: "#dcfce7",
+    date: "February 8, 2026",
+    readTime: "6 min read",
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>Nansai Organics is committed to radical transparency. Every year, we commission an independent soil health audit from a third-party laboratory, and we publish the full results — the good and the challenging.</p>
+      <h4>2025 Headline Findings</h4>
+      <p>Our soil's organic matter content has risen from 1.2% (2020) to 2.34% (2025) — an 18% improvement. This is significant because organic matter is the foundation of soil fertility, water retention, and carbon sequestration.</p>
+      <p>Earthworm density, a key indicator of living soil, has increased from an average of 8 per cubic foot (2020) to 23 per cubic foot (2025). Microbial diversity scores have similarly improved across all 12 test sites.</p>
+      <h4>What This Means for Customers</h4>
+      <p>Healthier soil produces more nutritionally dense food. When soil has high organic matter and active microbial life, plants absorb minerals more efficiently. Studies consistently show that organic produce from living soil has higher levels of vitamins, minerals, and polyphenols than conventionally grown alternatives.</p>
+      <p>You can download the full 2025 Soil Health Report at our website.</p>
+    `
+  },
+  {
+    id: 7,
+    title: "ISO 22000 Food Safety Certification Renewed for the Third Consecutive Year",
+    excerpt: "Nansai's processing facility in Madurai has renewed its ISO 22000:2018 Food Safety Management certification — the third consecutive renewal, covering all 16 of our packaged product lines.",
+    category: "certification",
+    catLabel: "Certification",
+    catColor: "#166534",
+    catBg: "#dcfce7",
+    date: "January 22, 2026",
+    readTime: "3 min read",
+    image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>Nansai Organics is pleased to announce the third consecutive renewal of its ISO 22000:2018 Food Safety Management System certification — covering our Madurai processing facility and all 16 packaged product lines.</p>
+      <h4>What ISO 22000 Covers</h4>
+      <p>ISO 22000 is the international standard for food safety management across the entire supply chain — from harvesting through processing, packaging, storage, and distribution. It requires documented hazard analysis, preventive controls, and ongoing monitoring at every stage.</p>
+      <p>The renewal audit was conducted over three days, reviewing 240 documented procedures, 12 months of production records, and live observations across all processing lines.</p>
+      <h4>Our Commitment</h4>
+      <p>Food safety is not a compliance exercise for Nansai — it is a promise to every family that opens our products. We will continue investing in our quality systems to ensure that every product that leaves our facility meets the highest global standards.</p>
+    `
+  },
+  {
+    id: 8,
+    title: "Nansai Partners with 3 Tamil Nadu Schools for Farm-to-Table Education Programme",
+    excerpt: "Starting June 2026, three government schools in Madurai will receive weekly visits from our organic farmers as part of a new educational initiative to teach children about organic food, soil health, and sustainable agriculture.",
+    category: "community",
+    catLabel: "Community",
+    catColor: "#7c3aed",
+    catBg: "#ede9fe",
+    date: "January 10, 2026",
+    readTime: "4 min read",
+    image: "https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=700&auto=format&fit=crop&q=80",
+    featured: false,
+    content: `
+      <p>We are excited to announce that Nansai Organics has entered a formal partnership with three Tamil Nadu government schools in Madurai to launch a Farm-to-Table Education Programme beginning June 2026.</p>
+      <h4>About the Programme</h4>
+      <p>Each week, a Nansai farmer will visit one of the partner schools to run a 45-minute interactive session covering topics such as: why organic farming matters, how soil health affects nutrition, the story of heritage rice varieties, and how to grow plants at home.</p>
+      <p>In addition, each school will receive a small rooftop garden kit — 12 raised beds with composting systems — for students to practise growing their own vegetables and herbs throughout the year.</p>
+      <h4>Why This Matters</h4>
+      <p>Over 70% of children in urban and peri-urban India have no direct connection to how their food is grown. We believe that changing this — one curious child at a time — is one of the most important investments we can make in the future of food and farming in India.</p>
+      <p>Applications for the 2027 cohort of partner schools are now open. Contact us to learn more.</p>
+    `
+  },
+];
+
+/* ════ STATE ════ */
+let activeFilter = 'all';
+let visibleCount = 6;
+// Merge hardcoded NEWS with admin-posted news from localStorage
+const adminNews = JSON.parse(localStorage.getItem('nansai_news') || '[]');
+const allNews = [...adminNews, ...NEWS.filter(n => !adminNews.find(a => a.id == n.id))];
+let filteredNews = [...allNews];
+
+/* ════ CATEGORY META ════ */
+const CAT_META = {
+  all:           { label: 'All News',        icon: '[[icon:newspaper]]' },
+  milestone:     { label: 'Milestones',       icon: '[[icon:trophy]]' },
+  certification: { label: 'Certifications',   icon: '[[icon:leaf]]' },
+  product:       { label: 'Product Launches', icon: '[[icon:package]]' },
+  community:     { label: 'Community',        icon: '[[icon:handshake]]' },
+  award:         { label: 'Awards',           icon: '[[icon:medal]]' },
+};
+
+/* ════ TICKER ════ */
+(function(){
+  const items = NEWS.slice(0,5).map(n => `<span class="ticker-item">[[icon:megaphone]] <strong>${n.catLabel}</strong> — ${n.title.substring(0,60)}…</span><span class="ticker-sep">◆</span>`).join('');
+  const inner = document.getElementById('tickerInner');
+  inner.innerHTML = items + items;
+})();
+
+/* ════ RENDER FEATURED ════ */
+function renderFeatured(){
+  const pin = allNews.find(n => n.pinned);
+  if(!pin) return;
+  const sec = document.getElementById('featuredSection');
+  sec.innerHTML = `
+    <div class="featured-card sr" id="featuredCard" onclick="openArticle(${pin.id})">
+      <img class="featured-img" src="${pin.image}" alt="${pin.title}" loading="eager"/>
+      <div class="featured-overlay"></div>
+      <div class="featured-body">
+        <div class="news-cat-tag" style="color:${pin.catColor};background:${pin.catBg};">
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="${pin.catColor}"><circle cx="4" cy="4" r="4"/></svg>
+          ${pin.catLabel}
+        </div>
+        <h2 class="featured-title">${pin.title.replace(/—/g,'<em>—</em>')}</h2>
+        <p class="featured-excerpt">${pin.excerpt}</p>
+        <div class="featured-meta" style="margin-bottom:1rem;">
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${pin.date}</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${pin.readTime}</span>
+          <span style="background:rgba(201,168,76,.25);color:var(--gold-lt);font-size:.6rem;font-weight:800;padding:2px 10px;border-radius:20px;letter-spacing:.1em;">[[icon:pin]] PINNED</span>
+        </div>
+        <a href="#" class="read-btn" onclick="event.preventDefault();openArticle(${pin.id})">Read Full Story →</a>
+      </div>
+    </div>
+  `;
+  setTimeout(()=>{ const el=document.getElementById('featuredCard'); if(el) el.classList.add('visible'); },100);
+}
+
+/* ════ RENDER GRID ════ */
+function renderGrid(list, showCount){
+  const grid = document.getElementById('newsGrid');
+  const empty = document.getElementById('emptyState');
+  const lmWrap = document.getElementById('loadMoreWrap');
+  const lbl = document.getElementById('latestLabel');
+
+  const nonFeatured = list.filter(n => !n.pinned || activeFilter !== 'all');
+  const toShow = nonFeatured.slice(0, showCount);
+
+  if(!toShow.length){
+    grid.innerHTML = '';
+    empty.classList.add('visible');
+    lmWrap.style.display = 'none';
+    if(lbl) lbl.style.display = 'none';
+    return;
+  }
+
+  empty.classList.remove('visible');
+  if(lbl) lbl.style.display = '';
+  lmWrap.style.display = nonFeatured.length > showCount ? 'block' : 'none';
+
+  grid.innerHTML = toShow.map((n, i) => `
+    <div class="news-card" style="animation-delay:${i * 0.07}s;" onclick="openArticle(${n.id})">
+      <div class="news-card-img">
+        <span style="position:absolute;top:10px;left:10px;z-index:2;display:inline-flex;align-items:center;gap:4px;font-size:.58rem;font-weight:800;padding:3px 10px;border-radius:20px;color:${n.catColor};background:${n.catBg};">${n.catLabel}</span>
+        <img src="${n.image}" alt="${n.title}" loading="lazy"/>
+      </div>
+      <div class="news-card-body">
+        <h3 class="news-card-title">${n.title}</h3>
+        <p class="news-card-excerpt">${n.excerpt}</p>
+        <div class="news-card-footer">
+          <div class="news-meta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ${n.date}
+            <span style="width:3px;height:3px;border-radius:50%;background:rgba(26,58,42,.2);display:inline-block;"></span>
+            ${n.readTime}
+          </div>
+          <a href="#" class="card-read-link" onclick="event.preventDefault();openArticle(${n.id})">
+            Read <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ════ RENDER SIDEBAR ════ */
+function renderSidebar(){
+  // Categories
+  const catList = document.getElementById('catList');
+  const counts = {};
+  NEWS.forEach(n => { counts[n.category] = (counts[n.category]||0)+1; });
+  catList.innerHTML = Object.entries(CAT_META).map(([k,v]) => {
+    if(k==='all') return `<div class="cat-item${activeFilter==='all'?' active':''}" onclick="filterNews('${k}',null)">${v.icon} ${v.label}<span class="cat-count">${NEWS.length}</span></div>`;
+    if(!counts[k]) return '';
+    return `<div class="cat-item${activeFilter===k?' active':''}" onclick="filterNews('${k}',null)">${v.icon} ${v.label}<span class="cat-count">${counts[k]}</span></div>`;
+  }).join('');
+
+  // Recent
+  const recentList = document.getElementById('recentList');
+  recentList.innerHTML = allNews.slice(0,4).map(n => `
+    <div class="side-news-item" onclick="openArticle(${n.id})">
+      <div class="side-news-thumb"><img src="${n.image}" alt="${n.title}" loading="lazy"/></div>
+      <div>
+        <div class="side-news-title">${n.title}</div>
+        <div class="side-news-date">${n.date} · ${n.readTime}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ════ FILTER ════ */
+function filterNews(cat, btn){
+  activeFilter = cat;
+  visibleCount = 6;
+  document.querySelectorAll('#article-modal.open').length && closeArticleModal();
+
+  if(btn){
+    document.querySelectorAll('.f-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.f-pill').forEach(p => p.classList.toggle('active', p.dataset.cat===cat));
+  }
+
+  if(cat === 'all'){
+    filteredNews = [...allNews];
+    renderFeatured();
+    document.getElementById('featuredSection').style.display = '';
+  } else {
+    filteredNews = allNews.filter(n => n.category === cat);
+    document.getElementById('featuredSection').style.display = 'none';
+    document.getElementById('latestLabel').style.display = '';
+  }
+  renderGrid(filteredNews, visibleCount);
+  renderSidebar();
+}
+
+/* ════ SEARCH ════ */
+function searchNews(q){
+  const query = q.trim().toLowerCase();
+  if(!query){ filterNews(activeFilter, null); return; }
+  filteredNews = allNews.filter(n =>
+    n.title.toLowerCase().includes(query) ||
+    n.excerpt.toLowerCase().includes(query) ||
+    n.catLabel.toLowerCase().includes(query)
+  );
+  document.getElementById('featuredSection').style.display = 'none';
+  renderGrid(filteredNews, visibleCount);
+}
+
+/* ════ LOAD MORE ════ */
+function loadMore(){
+  visibleCount += 4;
+  renderGrid(filteredNews, visibleCount);
+  showToast('[[icon:newspaper]] Loaded more articles');
+}
+
+/* ════ ARTICLE MODAL ════ */
+function openArticle(id){
+  const n = allNews.find(x => String(x.id) === String(id));
+  if(!n) return;
+  document.getElementById('modalHero').src = n.image;
+  document.getElementById('modalHero').alt = n.title;
+  document.getElementById('modalTitle').textContent = n.title;
+  document.getElementById('modalContent').innerHTML = n.content;
+  document.getElementById('modalMeta').innerHTML = `
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:.6rem;font-weight:800;padding:3px 10px;border-radius:20px;color:${n.catColor};background:${n.catBg};">${n.catLabel}</span>
+    <span style="font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;gap:4px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${n.date}
+    </span>
+    <span style="font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;gap:4px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${n.readTime}
+    </span>
+  `;
+  document.getElementById('article-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById('article-modal')) closeArticleModal();
+}
+function closeArticleModal(){
+  document.getElementById('article-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeArticleModal(); });
+
+/* ════ NEWSLETTER ════ */
+function handleNLSubmit(e){
+  e.preventDefault();
+  showToast('[[icon:leaf]] Subscribed! Welcome to the Nansai family.');
+  e.target.reset();
+}
+
+/* ════ SHARE ════ */
+function shareLink(type){
+  const url = encodeURIComponent(window.location.href);
+  if(type === 'twitter') window.open(`https://twitter.com/intent/tweet?url=${url}&text=Check+out+Nansai+Organics+news!`,'_blank');
+  else if(type === 'facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`,'_blank');
+  else { navigator.clipboard.writeText(window.location.href).catch(()=>{}); showToast('[[icon:link]] Link copied to clipboard!'); }
+}
+
+/* ════ TOAST ════ */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ════ BADGES + AUTH NAV ════ */
+(function(){
+  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+  const total = cart.reduce((s,i)=>s+(i.qty||1),0);
+  const cartBadge = document.getElementById('cartBadge');
+  if(cartBadge) cartBadge.textContent = total;
+
+  const wl = JSON.parse(localStorage.getItem('wishlist')||'[]');
+  const wishBadge = document.getElementById('wishlistBadge');
+  if(wishBadge) wishBadge.textContent = wl.length;
+
+  const user = JSON.parse(localStorage.getItem('nansai_user')||'null');
+  if(user && user.role !== 'admin'){
+    const firstName = (user.name||'').split(' ')[0]||'User';
+    const btn = document.getElementById('navAccountBtn');
+    const txt = document.getElementById('navAccountText');
+    const mob = document.getElementById('mobAccountLink');
+    if(btn) btn.href = 'account.html';
+    if(txt) txt.textContent = 'Hi, '+firstName;
+    if(mob){ mob.href='account.html'; mob.textContent='[[icon:user]] Hi, '+firstName; }
+  }
+})();
+
+/* ════ SCROLL REVEAL ════ */
+const srObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+},{ threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.sr').forEach(el => srObs.observe(el));
+
+/* ════ MOBILE DRAWER ════ */
+function toggleMobDrawer(){
+  const d = document.getElementById('mob-drawer');
+  const h = document.getElementById('mobHam');
+  const open = d.style.display !== 'block';
+  d.style.display = open ? 'block' : 'none';
+  h.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+/* ════ INIT ════ */
+renderFeatured();
+renderGrid(filteredNews, visibleCount);
+renderSidebar();
+
+</script>
+
+</body>
+</html>

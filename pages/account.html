@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Account — Nansai Organics</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../js/config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          forest: {
+            dark:  '#0f2218',
+            mid:   '#2d5a3d',
+            light: '#4a8c5c',
+            soft:  '#8fbc9a',
+            pale:  '#e6f4ec',
+          },
+          cream: '#f7f3ec',
+          warm:  '#fdfaf5',
+          bg:    '#f0f7f2',
+          gold: {
+            DEFAULT: '#c9a84c',
+            light:   '#e8c97a',
+            dark:    '#b8922a',
+          },
+          text: {
+            dark:  '#1a2416',
+            mid:   '#3d5a45',
+            light: '#7a9980',
+          },
+        },
+        fontFamily: {
+          serif: ['"Cormorant Garamond"', 'serif'],
+          sans:  ['"Inter"', 'sans-serif'],
+        },
+        boxShadow: {
+          'nansai':    '0 2px 10px rgba(15,34,24,.07)',
+          'nansai-md': '0 6px 24px rgba(15,34,24,.12)',
+        },
+        borderRadius: {
+          'nansai': '12px',
+          'nansai-sm': '8px',
+        },
+        keyframes: {
+          pgIn: {
+            from: { opacity: '0', transform: 'translateY(6px)' },
+            to:   { opacity: '1', transform: 'translateY(0)' },
+          }
+        },
+        animation: {
+          pgIn: 'pgIn 0.28s ease both',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* Minimal custom overrides — everything else is Tailwind */
+  :root { --nav-h: 62px; }
+  @media (max-width: 767px) { :root { --nav-h: 54px; } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-thumb { background: rgba(26,58,42,.2); border-radius: 99px; }
+
+  /* Hide scrollbar utility */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+
+  /* Page transition */
+  .page { display: none; }
+  .page.active { display: block; animation: pgIn 0.28s ease both; }
+  @keyframes pgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Password strength bar transition */
+  .pw-fill { transition: width .4s, background .4s; }
+
+  /* Tracking line */
+  .track-line {
+    position: absolute; top: 11px; left: 50%; right: -50%;
+    height: 2px; background: rgba(26,58,42,.12); z-index: 0;
+  }
+  .track-line.done { background: #4a8c5c; }
+  .track-step:last-child .track-line { display: none; }
+
+  /* Hamburger open state */
+  .ham-btn.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px,4.5px); }
+  .ham-btn.open span:nth-child(2) { opacity: 0; }
+  .ham-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px,-4.5px); }
+
+  /* Mobile drawer open */
+  .mob-drawer { transform: translateX(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
+  .mob-drawer.open { transform: translateX(0); }
+
+  /* Toast transition */
+  #toast { transition: opacity .28s, transform .28s; }
+  #toast.show { opacity: 1 !important; transform: translateX(-50%) translateY(0) !important; }
+
+  /* accent-color */
+  input[type=radio], input[type=checkbox] { accent-color: #4a8c5c; }
+
+  /* Line clamp */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Sticky nav height offsets */
+  .sub-nav-sticky {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 290;
+  }
+
+  /* Wish card hover image scale */
+  .wish-card:hover .wish-img { transform: scale(1.05); }
+  .wish-img { transition: transform .35s; }
+
+  select { -webkit-appearance: auto; appearance: auto; }
+</style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
+</head>
+<body class="font-sans bg-bg text-text-dark min-h-screen" style="font-family:'Inter',sans-serif;">
+
+<!-- Toast -->
+<div id="toast"
+     class="fixed bottom-[22px] left-1/2 -translate-x-1/2 translate-y-3
+            bg-forest-dark text-cream px-6 py-2 rounded-full text-[0.78rem] font-semibold
+            opacity-0 pointer-events-none z-[9999] whitespace-nowrap
+            border border-gold/25 shadow-[0_6px_24px_rgba(10,30,15,.28)]">
+</div>
+
+<!-- ══════════════════════════════
+  NAVIGATION
+══════════════════════════════ -->
+<header class="sticky top-0 z-[300] bg-white border-b border-[rgba(26,58,42,.12)] shadow-[0_2px_8px_rgba(10,30,15,.06)]">
+  <div class="max-w-[1200px] mx-auto px-4 h-[62px] flex items-center gap-4">
+
+    <!-- Mobile hamburger -->
+    <button class="ham-btn md:hidden flex flex-col gap-[4.5px] p-[5px] cursor-pointer border-none bg-transparent shrink-0"
+            id="hamBtn" onclick="toggleDrawer()">
+      <span class="block w-[22px] h-[2px] bg-[#0f2218] rounded-sm transition-all duration-300"></span>
+      <span class="block w-[22px] h-[2px] bg-[#0f2218] rounded-sm transition-all duration-300"></span>
+      <span class="block w-[22px] h-[2px] bg-[#0f2218] rounded-sm transition-all duration-300"></span>
+    </button>
+
+    <!-- Logo -->
+    <a href="index.html" class="shrink-0">
+      <img src="nansei organics.png" alt="Nansei Organics" class="h-[38px] w-auto"/>
+    </a>
+
+    <!-- Search bar -->
+    <form onsubmit="event.preventDefault();window.location.href='index.html?search='+encodeURIComponent(document.getElementById('acctSearch').value)" class="hidden md:flex items-center flex-1 max-w-[300px] rounded-xl border-2 overflow-hidden" style="border-color:rgba(26,58,42,.18);background:#fff;">
+      <input id="acctSearch" type="text" placeholder="Search organic products"
+             class="flex-1 px-4 py-2 text-sm outline-none bg-transparent"
+             style="font-family:'Inter',sans-serif;color:#0f2218;"/>
+      <button type="submit" class="px-3 py-2 flex items-center justify-center transition" style="background:#0f2218;color:#f7f3ec;" onmouseover="this.style.background='#2d5a3d'" onmouseout="this.style.background='#0f2218'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+    </form>
+
+    <!-- Desktop nav links -->
+    <nav class="hidden md:flex items-center gap-[0.15rem] ml-6 flex-1">
+      <button onclick="goPage('home')"
+              class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
+                     hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Account</button>
+      <button onclick="goPage('orders')"
+              class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
+                     hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Orders</button>
+      <a id="adminPanelBtn" href="admin-panel.html"
+         class="hidden w-8 h-8 rounded-full bg-[#2563EB] text-white text-[0.68rem] font-black
+                flex items-center justify-center shrink-0 hover:bg-[#1D4ED8] transition-all"
+         title="Admin Panel">AD</a>
+      <button onclick="goPage('addresses')"
+              class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
+                     hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Addresses</button>
+      <button onclick="goPage('profile')"
+              class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
+                     hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Profile</button>
+      <button onclick="goPage('security')"
+              class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
+                     hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Login &amp; Security</button>
+      <button onclick="goPage('wishlist')"
+              class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
+                     hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Wishlist</button>
+    </nav>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-[0.5rem] ml-auto shrink-0">
+      <button onclick="logout()"
+              class="hidden md:inline-flex items-center gap-1.5 px-[0.85rem] py-[0.38rem] text-[0.75rem] font-semibold
+                     text-text-mid border border-forest-dark/20 rounded-md
+                     hover:border-red-300 hover:text-red-600 hover:bg-red-50 transition-all whitespace-nowrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+      <div class="w-px h-[18px] bg-[rgba(26,58,42,.15)]"></div>
+      <a href="checkoutmyorderpage.html"
+         class="w-9 h-9 rounded-full flex items-center justify-center text-[#0f2218]
+                hover:text-[#4a8c5c] hover:bg-[rgba(74,140,92,.08)] transition-all relative">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/>
+        </svg>
+        <span class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[0.5rem] font-black
+                     min-w-[15px] h-[15px] rounded-full flex items-center justify-center
+                     border-2 border-white px-0.5">0</span>
+      </a>
+      <a href="wishlist.html"
+         class="w-9 h-9 rounded-full flex items-center justify-center text-[#0f2218]
+                hover:text-[#4a8c5c] hover:bg-[rgba(74,140,92,.08)] transition-all">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="mob-drawer md:hidden fixed top-[var(--nav-h)] left-0 right-0 bottom-0
+            bg-forest-dark z-[280] overflow-y-auto" id="mobDrawer">
+  <div class="px-5 py-4 border-b border-white/[0.07]">
+    <div class="font-serif text-[1.05rem] font-bold text-white" id="drawerName">Welcome!</div>
+    <div class="text-[0.7rem] text-white/40 mt-0.5" id="drawerEmail">—</div>
+  </div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('home')">[[icon:chart-no-axes-column-increasing]]&nbsp; Your Account</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('orders')">[[icon:package]]&nbsp; Your Orders</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('wishlist')">[[icon:heart]]&nbsp; Wishlist</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('addresses')">[[icon:map-pin]]&nbsp; Addresses</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('profile')">[[icon:settings]]&nbsp; Edit Profile</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('security')">[[icon:shield-keyhole]]&nbsp; Login &amp; Security</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="navTo('wallet')" style="display:none">[[icon:leaf]]&nbsp; Points &amp; Coupons</div>
+  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
+               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
+               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
+       onclick="window.location.href='index.html'">[[icon:shopping-bag]]&nbsp; Continue Shopping</div>
+  <div class="flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-red-400/70
+               border-b border-white/[0.05] cursor-pointer transition-all
+               hover:text-red-300 hover:bg-red-500/[0.08]"
+       onclick="logout()">[[icon:log-out]]&nbsp; Sign Out</div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: HOME — DASHBOARD
+══════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  
+
+  <div class="max-w-[1140px] mx-auto px-5 py-[1.4rem] pb-12">
+
+    <!-- Tile Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-[0.9rem] mb-[1.4rem]">
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="goPage('orders')">
+        <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Your Orders</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Track, return or buy again from recent purchases.</div>
+        <div class="text-[0.71rem] text-forest-light font-semibold pt-2 border-t border-forest-dark/[0.07] mt-1" id="tileFoot1">View all 5 orders →</div>
+      </div>
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="goPage('security')">
+        <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b8922a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Login &amp; Security</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Edit password, email, and mobile number.</div>
+        <div class="text-[0.71rem] text-forest-light font-semibold pt-2 border-t border-forest-dark/[0.07] mt-1">Password · Email · Phone →</div>
+      </div>
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="goPage('addresses')">
+        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Your Addresses</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Add or edit delivery addresses for orders.</div>
+        <div class="text-[0.71rem] text-forest-light font-semibold pt-2 border-t border-forest-dark/[0.07] mt-1" id="tileFoot4">Manage saved addresses →</div>
+      </div>
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="goPage('wishlist')">
+        <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Your Wishlist</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Saved items ready to move to cart anytime.</div>
+        <div class="text-[0.71rem] text-forest-light font-semibold pt-2 border-t border-forest-dark/[0.07] mt-1">4 saved items →</div>
+      </div>
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="goPage('profile')">
+        <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Your Profile</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Manage personal info and communication preferences.</div>
+        <div class="text-[0.71rem] text-forest-light font-semibold pt-2 border-t border-forest-dark/[0.07] mt-1" id="tileFoot6">Edit name, phone, DOB →</div>
+      </div>
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="copyRef()">
+        <div class="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Refer &amp; Earn</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Share your code — earn ₹100 store credits per referral.</div>
+        <div class="text-[0.78rem] text-forest-light font-black font-mono pt-2 border-t border-forest-dark/[0.07] mt-1" id="tileFoot7">NSI-COPY</div>
+      </div>
+
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
+                  flex flex-col gap-1.5 shadow-nansai transition-all duration-200
+                  hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
+           onclick="showToast('[[icon:phone]] Support: 1800-NSI-HELP · Mon–Sat 9am–6pm')">
+        <div class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center mb-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="font-serif text-[1.05rem] font-bold text-forest-dark">Customer Service</div>
+        <div class="text-[0.73rem] text-text-light leading-relaxed flex-1">Browse help topics or contact our support team directly.</div>
+        <div class="text-[0.71rem] text-forest-light font-semibold pt-2 border-t border-forest-dark/[0.07] mt-1">Chat · Call · Email →</div>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: ORDERS
+══════════════════════════════ -->
+<div class="page" id="page-orders">
+  <div class="bg-white border-b border-forest-dark/[0.09] px-5 py-2 flex items-center gap-[0.35rem] text-[0.74rem] text-text-light flex-wrap">
+    <a onclick="goPage('home')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline transition-colors">Your Account</a>
+    <span class="text-forest-dark/20">›</span>
+    <span class="text-text-dark font-semibold">Your Orders</span>
+  </div>
+  <div class="max-w-[1000px] mx-auto px-5 py-[1.4rem] pb-12">
+    <div class="flex items-center justify-between flex-wrap gap-3 mb-[0.9rem]">
+      <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark">Your Orders</h1>
+      <input id="orderSearch" type="text" class="border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm px-3 py-[0.42rem] text-[0.84rem] font-sans text-text-dark bg-white outline-none max-w-[200px] focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all placeholder:text-text-light"
+             placeholder="Search orders…" oninput="filterOrders()"/>
+    </div>
+    <div class="flex border-b-2 border-forest-dark/10 overflow-x-auto no-scrollbar mb-4">
+      <a class="ftab active text-[0.78rem] font-bold pb-[0.52rem] px-4 border-b-[3px] border-b-forest-light -mb-0.5 cursor-pointer text-forest-dark whitespace-nowrap transition-all shrink-0"
+         onclick="setOrderTab('all',this)">All Orders</a>
+      <a class="ftab text-[0.78rem] font-medium pb-[0.52rem] px-4 border-b-[3px] border-b-transparent -mb-0.5 cursor-pointer text-text-light whitespace-nowrap transition-all shrink-0 hover:text-forest-light"
+         onclick="setOrderTab('processing',this)">Processing</a>
+      <a class="ftab text-[0.78rem] font-medium pb-[0.52rem] px-4 border-b-[3px] border-b-transparent -mb-0.5 cursor-pointer text-text-light whitespace-nowrap transition-all shrink-0 hover:text-forest-light"
+         onclick="setOrderTab('shipped',this)">Shipped</a>
+      <a class="ftab text-[0.78rem] font-medium pb-[0.52rem] px-4 border-b-[3px] border-b-transparent -mb-0.5 cursor-pointer text-text-light whitespace-nowrap transition-all shrink-0 hover:text-forest-light"
+         onclick="setOrderTab('delivered',this)">Delivered</a>
+      <a class="ftab text-[0.78rem] font-medium pb-[0.52rem] px-4 border-b-[3px] border-b-transparent -mb-0.5 cursor-pointer text-text-light whitespace-nowrap transition-all shrink-0 hover:text-forest-light"
+         onclick="setOrderTab('cancelled',this)">Cancelled</a>
+    </div>
+    <div id="ordersContainer"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: ORDER DETAIL
+══════════════════════════════ -->
+<div class="page" id="page-order-detail">
+  <div class="bg-white border-b border-forest-dark/[0.09] px-5 py-2 flex items-center gap-[0.35rem] text-[0.74rem] text-text-light flex-wrap">
+    <a onclick="goPage('home')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline">Your Account</a>
+    <span class="text-forest-dark/20">›</span>
+    <a onclick="goPage('orders')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline">Your Orders</a>
+    <span class="text-forest-dark/20">›</span>
+    <span class="text-text-dark font-semibold" id="detailId">Order</span>
+  </div>
+  <div class="max-w-[1000px] mx-auto px-5 py-[1.4rem] pb-12" id="orderDetailBody"></div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: ADDRESSES
+══════════════════════════════ -->
+<div class="page" id="page-addresses">
+  <div class="bg-white border-b border-forest-dark/[0.09] px-5 py-2 flex items-center gap-[0.35rem] text-[0.74rem] text-text-light flex-wrap">
+    <a onclick="goPage('home')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline">Your Account</a>
+    <span class="text-forest-dark/20">›</span>
+    <span class="text-text-dark font-semibold">Your Addresses</span>
+  </div>
+  <div class="max-w-[860px] mx-auto px-5 py-[1.4rem] pb-12">
+    <div class="flex items-center justify-between flex-wrap gap-[0.6rem] mb-4">
+      <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark">Your Addresses</h1>
+      <button onclick="showAddrForm(null)"
+              class="inline-flex items-center gap-1.5 px-[1.1rem] py-[0.5rem] text-[0.8rem] font-bold
+                     bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none
+                     hover:bg-forest-mid hover:shadow-nansai-md transition-all">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add new address
+      </button>
+    </div>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(255px,1fr))] gap-[0.85rem]" id="addrGrid"></div>
+
+    <!-- Add/Edit Form -->
+    <div id="addrFormWrap" class="hidden mt-[1.1rem] bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai">
+      <div class="px-[1.15rem] py-[0.8rem] border-b border-forest-dark/[0.07] flex items-center justify-between bg-bg/50">
+        <h2 class="font-serif text-[1.1rem] font-bold text-forest-dark" id="addrFormTitle">Add new address</h2>
+        <button class="text-[0.75rem] text-forest-light cursor-pointer bg-none border-none font-sans font-medium hover:text-gold-dark hover:underline"
+                onclick="hideAddrForm()">Cancel</button>
+      </div>
+      <style>
+        .addr-inp:focus{border-color:#4a8c5c!important;box-shadow:0 0 0 3px rgba(74,140,92,.12)}
+        .addr-inp.inp-error{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)}
+        .addr-inp.inp-ok{border-color:#4a8c5c!important}
+        .addr-type-btn.active-type{border-color:#4a8c5c!important;background:rgba(74,140,92,.08)!important;color:#2d5a3d!important}
+      </style>
+      <form onsubmit="submitAddr(event)" class="p-[1.1rem]" novalidate>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-[0.85rem] mb-[0.85rem]">
+
+          <!-- Full Name -->
+          <div class="col-span-full">
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Full name <span class="text-red-500">*</span></label>
+            <input id="aName" type="text" autocomplete="name"
+              class="addr-inp w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none transition-all placeholder:text-text-light"
+              placeholder="e.g. Arjun Mehta"
+              oninput="addrValidate('aName')"/>
+            <p class="hidden text-[0.7rem] text-red-500 mt-1 font-medium" id="aName-err"></p>
+          </div>
+
+          <!-- Mobile -->
+          <div class="col-span-full">
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Mobile number <span class="text-red-500">*</span></label>
+            <div class="flex gap-2">
+              <div class="flex items-center px-3 py-[0.55rem] bg-[#f0f7f2] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-bold text-text-mid shrink-0 select-none">+91</div>
+              <input id="aPhone" type="tel" maxlength="10" autocomplete="tel"
+                class="addr-inp flex-1 px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none transition-all placeholder:text-text-light"
+                placeholder="10-digit mobile number"
+                oninput="this.value=this.value.replace(/\D/g,'').slice(0,10);addrValidate('aPhone')"/>
+            </div>
+            <p class="hidden text-[0.7rem] text-red-500 mt-1 font-medium" id="aPhone-err"></p>
+          </div>
+
+          <!-- PIN Code -->
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">PIN code <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <input id="aPincode" type="text" maxlength="6" autocomplete="postal-code"
+                class="addr-inp w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none transition-all placeholder:text-text-light"
+                placeholder="6-digit PIN"
+                oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);onPinInput(this.value)"/>
+              <span id="aPinSpinner" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[0.68rem] text-text-light">Looking up…</span>
+            </div>
+            <p class="hidden text-[0.7rem] text-red-500 mt-1 font-medium" id="aPincode-err"></p>
+          </div>
+
+          <!-- Address Type -->
+          <div class="flex flex-col justify-end">
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Address type</label>
+            <div class="flex gap-2">
+              <button type="button" onclick="setAddrTypeAcc('Home',this)" id="aTypeHome"
+                class="addr-type-btn active-type flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] transition-all">[[icon:house]] Home</button>
+              <button type="button" onclick="setAddrTypeAcc('Work',this)" id="aTypeWork"
+                class="addr-type-btn flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] border-forest-dark/15 bg-white text-text-mid transition-all">[[icon:building-2]] Work</button>
+              <button type="button" onclick="setAddrTypeAcc('Other',this)" id="aTypeOther"
+                class="addr-type-btn flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] border-forest-dark/15 bg-white text-text-mid transition-all">[[icon:map-pin]] Other</button>
+            </div>
+          </div>
+
+          <!-- Flat / House no. -->
+          <div class="col-span-full">
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Flat, House no., Building <span class="text-red-500">*</span></label>
+            <input id="aLine1" type="text" autocomplete="address-line1"
+              class="addr-inp w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none transition-all placeholder:text-text-light"
+              placeholder="e.g. Flat 4B, Sunrise Apartments"
+              oninput="addrValidate('aLine1')"/>
+            <p class="hidden text-[0.7rem] text-red-500 mt-1 font-medium" id="aLine1-err"></p>
+          </div>
+
+          <!-- Area / Street -->
+          <div class="col-span-full">
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Area, Street, Colony <span class="text-[0.65rem] text-text-light font-normal normal-case">(optional)</span></label>
+            <input id="aLine2" type="text" autocomplete="address-line2"
+              class="addr-inp w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none transition-all placeholder:text-text-light"
+              placeholder="e.g. MG Road, Koramangala"/>
+          </div>
+
+          <!-- City -->
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">City / District <span class="text-red-500">*</span></label>
+            <input id="aCity" type="text" autocomplete="address-level2"
+              class="addr-inp w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none transition-all placeholder:text-text-light"
+              placeholder="Auto-filled from PIN"
+              oninput="addrValidate('aCity')"/>
+            <p class="hidden text-[0.7rem] text-red-500 mt-1 font-medium" id="aCity-err"></p>
+          </div>
+
+          <!-- State (read-only, auto-filled) -->
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">State <span class="text-red-500">*</span></label>
+            <input id="aState" type="text" autocomplete="address-level1" readonly
+              class="addr-inp w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-[#f0f7f2] outline-none transition-all placeholder:text-text-light cursor-not-allowed"
+              placeholder="Auto-filled from PIN"/>
+            <p class="text-[0.68rem] text-text-light mt-1">Filled automatically when you enter PIN</p>
+          </div>
+
+          <!-- Default checkbox -->
+          <div class="col-span-full flex items-center gap-2 pt-1">
+            <input type="checkbox" id="aDefault" class="w-4 h-4 rounded"/>
+            <label for="aDefault" class="text-[0.82rem] text-text-mid cursor-pointer font-medium select-none">Make this my default address</label>
+          </div>
+
+          <div class="col-span-full flex gap-2 flex-wrap">
+            <button type="submit"
+                    class="inline-flex items-center justify-center gap-1.5 px-[1.1rem] py-[0.5rem] text-[0.8rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid hover:shadow-nansai-md transition-all">
+              Save address
+            </button>
+            <button type="button" onclick="hideAddrForm()"
+                    class="inline-flex items-center justify-center gap-1.5 px-[1.1rem] py-[0.5rem] text-[0.8rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark hover:bg-forest-light/[0.04] transition-all">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: LOGIN & SECURITY
+══════════════════════════════ -->
+<div class="page" id="page-security">
+  <div class="bg-white border-b border-forest-dark/[0.09] px-5 py-2 flex items-center gap-[0.35rem] text-[0.74rem] text-text-light flex-wrap">
+    <a onclick="goPage('home')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline">Your Account</a>
+    <span class="text-forest-dark/20">›</span>
+    <span class="text-text-dark font-semibold">Login &amp; Security</span>
+  </div>
+  <div class="max-w-[640px] mx-auto px-5 py-[1.4rem] pb-12">
+    <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark mb-[1.1rem]">Login &amp; Security</h1>
+
+    <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai mb-4">
+
+      <!-- Name -->
+      <div class="px-[1.1rem] py-[0.9rem] flex items-center justify-between gap-3 flex-wrap border-b border-forest-dark/[0.07]">
+        <div>
+          <div class="text-[0.6rem] font-black uppercase tracking-[0.1em] text-text-light mb-0.5">Name</div>
+          <div class="text-[0.88rem] font-semibold text-text-dark" id="secNameVal">—</div>
+        </div>
+        <button onclick="toggleSecEdit('Name')"
+                class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Edit</button>
+      </div>
+      <div class="sec-panel hidden px-[1.1rem] py-[0.9rem] bg-bg/50 border-b border-forest-dark/[0.07]" id="secEditName">
+        <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">New name</label>
+        <input id="sName" type="text" class="max-w-[310px] w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all mb-[0.7rem]"/>
+        <div class="flex gap-[0.45rem] flex-wrap">
+          <button onclick="saveSec('Name')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid transition-all">Save changes</button>
+          <button onclick="toggleSecEdit('Name')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="px-[1.1rem] py-[0.9rem] flex items-center justify-between gap-3 flex-wrap border-b border-forest-dark/[0.07]">
+        <div>
+          <div class="text-[0.6rem] font-black uppercase tracking-[0.1em] text-text-light mb-0.5">Email</div>
+          <div class="text-[0.88rem] font-semibold text-text-dark" id="secEmailVal">—</div>
+        </div>
+        <button onclick="toggleSecEdit('Email')"
+                class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Edit</button>
+      </div>
+      <div class="sec-panel hidden px-[1.1rem] py-[0.9rem] bg-bg/50 border-b border-forest-dark/[0.07]" id="secEditEmail">
+        <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">New email address</label>
+        <input id="sEmail" type="email" class="max-w-[310px] w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all mb-[0.7rem]"/>
+        <div class="flex gap-[0.45rem] flex-wrap">
+          <button onclick="saveSec('Email')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid transition-all">Save changes</button>
+          <button onclick="toggleSecEdit('Email')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="px-[1.1rem] py-[0.9rem] flex items-center justify-between gap-3 flex-wrap border-b border-forest-dark/[0.07]">
+        <div>
+          <div class="text-[0.6rem] font-black uppercase tracking-[0.1em] text-text-light mb-0.5">Mobile Number</div>
+          <div class="text-[0.88rem] font-semibold text-text-dark" id="secPhoneVal">—</div>
+        </div>
+        <button onclick="toggleSecEdit('Phone')"
+                class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Edit</button>
+      </div>
+      <div class="sec-panel hidden px-[1.1rem] py-[0.9rem] bg-bg/50 border-b border-forest-dark/[0.07]" id="secEditPhone">
+        <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">New mobile number</label>
+        <input id="sPhone" type="tel" class="max-w-[310px] w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all mb-[0.7rem]"/>
+        <div class="flex gap-[0.45rem] flex-wrap">
+          <button onclick="saveSec('Phone')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid transition-all">Save changes</button>
+          <button onclick="toggleSecEdit('Phone')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="px-[1.1rem] py-[0.9rem] flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <div class="text-[0.6rem] font-black uppercase tracking-[0.1em] text-text-light mb-0.5">Password</div>
+          <div class="text-[0.88rem] font-semibold text-text-dark">••••••••</div>
+        </div>
+        <button onclick="toggleSecEdit('Password')"
+                class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Edit</button>
+      </div>
+      <div class="sec-panel hidden px-[1.1rem] py-[0.9rem] bg-bg/50" id="secEditPassword">
+        <div class="grid gap-3 max-w-[310px]">
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Current password</label>
+            <input id="sCurPw" type="password" class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all"/>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">New password</label>
+            <input id="sNewPw" type="password" oninput="checkPwStr(this.value)"
+                   class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all"/>
+            <div class="h-1 rounded-full bg-forest-dark/10 overflow-hidden mt-1.5 mb-1">
+              <div id="pwFill" class="pw-fill h-full rounded-full" style="width:0%;background:rgba(26,58,42,.15);"></div>
+            </div>
+            <div id="pwLbl" class="text-[0.68rem] text-text-light"></div>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Re-enter new password</label>
+            <input id="sConfPw" type="password" class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all"/>
+          </div>
+          <div class="flex gap-[0.45rem] flex-wrap">
+            <button onclick="saveSec('Password')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid transition-all">Save changes</button>
+            <button onclick="toggleSecEdit('Password')" class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2SV -->
+    <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai mb-4">
+      <div class="px-[1.1rem] py-[0.9rem] flex items-center justify-between flex-wrap gap-[0.6rem]">
+        <div>
+          <div class="text-[0.88rem] font-bold text-text-dark mb-0.5">Two-Step Verification</div>
+          <div class="text-[0.72rem] text-text-light">Add an extra layer of security to your Nansai account.</div>
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="twoSv"
+                 onchange="showToast(this.checked?'[[icon:circle-check]] Two-step verification enabled':'Two-step verification disabled')"/>
+          <span class="text-[0.82rem] font-semibold">Enable</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Danger -->
+    <div class="bg-white border border-red-200/60 rounded-nansai overflow-hidden shadow-nansai">
+      <div class="px-[1.1rem] py-[0.9rem] flex items-center justify-between flex-wrap gap-[0.6rem]">
+        <div>
+          <div class="text-[0.88rem] font-bold text-red-600 mb-0.5">Close Account</div>
+          <div class="text-[0.72rem] text-text-light">Permanently delete your Nansai account and all data.</div>
+        </div>
+        <button onclick="showToast('[[icon:triangle-alert]] Contact support to close your account')"
+                class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-red-600 border-[1.5px] border-red-200/60 rounded-nansai-sm cursor-pointer hover:border-red-500 hover:bg-red-50 transition-all">
+          Close account
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: PROFILE
+══════════════════════════════ -->
+<div class="page" id="page-profile">
+  <div class="bg-white border-b border-forest-dark/[0.09] px-5 py-2 flex items-center gap-[0.35rem] text-[0.74rem] text-text-light flex-wrap">
+    <a onclick="goPage('home')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline">Your Account</a>
+    <span class="text-forest-dark/20">›</span>
+    <span class="text-text-dark font-semibold">Your Profile</span>
+  </div>
+  <div class="max-w-[640px] mx-auto px-5 py-[1.4rem] pb-12">
+    <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark mb-[1.1rem]">Your Profile</h1>
+
+    <!-- Avatar strip -->
+    <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai mb-4">
+      <div class="px-[1.1rem] py-4 flex items-center gap-4 flex-wrap">
+        <div id="profAvatar"
+             class="w-14 h-14 rounded-full border-2 border-gold/45 bg-cream
+                    flex items-center justify-center shrink-0
+                    font-serif text-[1.45rem] font-bold text-gold-dark">A</div>
+        <div>
+          <div class="text-[0.86rem] font-bold text-text-dark mb-0.5">Your Avatar</div>
+          <div class="text-[0.72rem] text-text-light">Auto-generated from your name initials</div>
+        </div>
+        <span class="ml-auto text-[0.6rem] font-black bg-forest-light/10 text-forest-light
+                     px-[10px] py-[3px] rounded-full border border-forest-light/20
+                     uppercase tracking-[0.07em]">[[icon:leaf]] Green Member</span>
+      </div>
+    </div>
+
+    <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai">
+      <form onsubmit="saveProfile(event)" class="p-[1.1rem]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-[0.85rem] mb-[0.85rem]">
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Full name</label>
+            <input id="pName" type="text" class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all placeholder:text-text-light" placeholder="Your full name"/>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Email</label>
+            <input id="pEmail" type="email" class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all placeholder:text-text-light" placeholder="you@example.com"/>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Mobile number</label>
+            <input id="pPhone" type="tel" class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all placeholder:text-text-light" placeholder="+91 98765 43210"/>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Date of birth</label>
+            <input id="pDob" type="date" class="w-full px-[0.85rem] py-[0.55rem] border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm text-[0.84rem] font-sans text-text-dark bg-white outline-none focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all"/>
+          </div>
+          <div class="col-span-full">
+            <label class="block text-[0.72rem] font-bold text-text-mid mb-2 uppercase tracking-[0.07em]">Gender</label>
+            <div class="flex gap-5 flex-wrap">
+              <label class="flex items-center gap-1.5 text-[0.82rem] text-text-mid cursor-pointer font-medium"><input type="radio" name="gender" value="male"/> Male</label>
+              <label class="flex items-center gap-1.5 text-[0.82rem] text-text-mid cursor-pointer font-medium"><input type="radio" name="gender" value="female"/> Female</label>
+              <label class="flex items-center gap-1.5 text-[0.82rem] text-text-mid cursor-pointer font-medium"><input type="radio" name="gender" value="other"/> Prefer not to say</label>
+            </div>
+          </div>
+          <div class="col-span-full bg-bg/60 border border-forest-dark/[0.08] rounded-nansai-sm p-[0.85rem]">
+            <div class="text-[0.72rem] font-bold text-text-mid uppercase tracking-[0.07em] mb-[0.65rem]">Communication Preferences</div>
+            <div class="flex flex-col gap-[0.45rem]">
+              <label class="flex items-center gap-1.5 text-[0.82rem] text-text-mid cursor-pointer font-medium"><input type="checkbox" checked/> Order notifications &amp; shipping updates</label>
+              <label class="flex items-center gap-1.5 text-[0.82rem] text-text-mid cursor-pointer font-medium"><input type="checkbox" checked/> Exclusive offers &amp; seasonal deals</label>
+              <label class="flex items-center gap-1.5 text-[0.82rem] text-text-mid cursor-pointer font-medium"><input type="checkbox"/> Farm updates &amp; new product launches</label>
+            </div>
+          </div>
+          <div class="col-span-full flex gap-2 flex-wrap">
+            <button type="submit"
+                    class="inline-flex items-center justify-center gap-1.5 px-[1.1rem] py-[0.5rem] text-[0.8rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid hover:shadow-nansai-md transition-all">
+              Save changes
+            </button>
+            <button type="button" onclick="loadProfile()"
+                    class="inline-flex items-center justify-center gap-1.5 px-[1.1rem] py-[0.5rem] text-[0.8rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+  PAGE: WISHLIST
+══════════════════════════════ -->
+<div class="page" id="page-wishlist">
+  <div class="bg-white border-b border-forest-dark/[0.09] px-5 py-2 flex items-center gap-[0.35rem] text-[0.74rem] text-text-light flex-wrap">
+    <a onclick="goPage('home')" class="text-forest-light cursor-pointer hover:text-forest-dark hover:underline">Your Account</a>
+    <span class="text-forest-dark/20">›</span>
+    <span class="text-text-dark font-semibold">Your Wishlist</span>
+  </div>
+  <div class="max-w-[1140px] mx-auto px-5 py-[1.4rem] pb-12">
+    <div class="flex items-center justify-between flex-wrap gap-[0.6rem] mb-4">
+      <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark">Your Wishlist</h1>
+      <span id="wlTotal"
+            class="text-[0.76rem] text-text-light bg-white border border-forest-dark/10 px-3 py-1 rounded-full">4 items</span>
+    </div>
+    <div id="wishGrid" class="grid gap-[0.85rem]"
+         style="grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));"></div>
+  </div>
+</div>
+
+
+
+
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-300">
+  <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div>
+      <img src="nansei organics.png" alt="Nansei Organics" class="h-16 w-auto mb-4 brightness-0 invert"/>
+      <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural products. Trusted by farmers everywhere.</p>
+      <div class="flex gap-3">
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">𝕏</a>
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">f</a>
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">in</a>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-white text-base mb-5">Quick Links</h3>
+      <ul class="space-y-3 text-sm">
+        <li><a href="index.html" class="text-gray-400 hover:text-green-400 transition">Home</a></li>
+        <li><a href="index.html#products" class="text-gray-400 hover:text-green-400 transition">Shop</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">About Us</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-bold text-white text-base mb-5">Customer Service</h3>
+      <ul class="space-y-3 text-sm">
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">FAQ</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Returns Policy</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Shipping Info</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Track Order</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+</footer>
+
+<!-- ══════════════════════════════
+  JAVASCRIPT (unchanged logic)
+══════════════════════════════ -->
+<script>
+const API=window.API_BASE||'http://localhost:5000/api';
+const getTok=()=>localStorage.getItem('nansai_token');
+const aH=()=>({'Content-Type':'application/json',...(getTok()?{Authorization:'Bearer '+getTok()}:{})});
+async function apiReq(m,p,b=null){const r=await fetch(API+p,{method:m,headers:aH(),...(b?{body:JSON.stringify(b)}:{})});const d=await r.json();if(!r.ok)throw new Error(d.message||'Failed');return d;}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+function toggleDrawer(){
+  document.getElementById('mobDrawer').classList.toggle('open');
+  document.getElementById('hamBtn').classList.toggle('open');
+}
+function navTo(id){
+  document.getElementById('mobDrawer').classList.remove('open');
+  document.getElementById('hamBtn').classList.remove('open');
+  goPage(id);
+}
+document.addEventListener('click',e=>{
+  const d=document.getElementById('mobDrawer');
+  const h=document.getElementById('hamBtn');
+  if(d.classList.contains('open')&&!d.contains(e.target)&&!h.contains(e.target)){
+    d.classList.remove('open');h.classList.remove('open');
+  }
+});
+
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  // Update nav active state
+  document.querySelectorAll('.sub-link').forEach(l=>{
+    l.classList.remove('bg-forest-pale','text-forest-dark','font-bold');
+    l.classList.add('text-text-mid');
+    if(l.getAttribute('onclick')?.includes("'"+id+"'")){
+      l.classList.remove('text-text-mid');
+      l.classList.add('bg-forest-pale','text-forest-dark','font-bold');
+    }
+  });
+  const el=document.getElementById('page-'+id);
+  if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function getUser(){try{return JSON.parse(localStorage.getItem('nansai_user')||'null');}catch{return null;}}
+function initials(n=''){return n.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase()||'U';}
+let USER=null;
+
+function loadProfile(){
+  USER=getUser()||{};
+  const fn=(USER.name||'User').split(' ')[0];
+  const ini=initials(USER.name||'U');
+  document.getElementById('drawerName').textContent=USER.name||'User';
+  document.getElementById('drawerEmail').textContent=USER.email||'—';
+  const tf6=document.getElementById('tileFoot6');if(tf6)tf6.textContent=(USER.name||'User')+' · Edit →';
+  const rc='NSI-'+(USER.name||'USER').replace(/\s/g,'').toUpperCase().slice(0,6);
+  const tf7=document.getElementById('tileFoot7');if(tf7)tf7.textContent=rc;
+  const ri=document.getElementById('refInput');if(ri)ri.value=rc;
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=v;};
+  sv('pName',USER.name);sv('pEmail',USER.email);sv('pPhone',USER.phone);
+  const av=document.getElementById('profAvatar');if(av)av.textContent=ini;
+  const sn=document.getElementById('secNameVal');if(sn)sn.textContent=USER.name||'—';
+  const se=document.getElementById('secEmailVal');if(se)se.textContent=USER.email||'—';
+  const sp=document.getElementById('secPhoneVal');if(sp)sp.textContent=USER.phone||'—';
+  sv('sName',USER.name);sv('sEmail',USER.email);sv('sPhone',USER.phone);
+  const adminBtn=document.getElementById('adminPanelBtn');
+  if(adminBtn)adminBtn.classList.toggle('hidden', USER.role!=='admin');
+  if(adminBtn)adminBtn.classList.toggle('flex', USER.role==='admin');
+}
+
+function saveProfile(e){
+  e.preventDefault();
+  const u=getUser()||{};
+  u.name=document.getElementById('pName').value;
+  u.email=document.getElementById('pEmail').value;
+  u.phone=document.getElementById('pPhone').value;
+  localStorage.setItem('nansai_user',JSON.stringify(u));
+  if(getTok())apiReq('PUT','/users/profile',u).then(r=>{if(r.data)localStorage.setItem('nansai_user',JSON.stringify(r.data));}).catch(()=>{});
+  USER=u;loadProfile();showToast('[[icon:circle-check]] Profile saved!');
+}
+
+function toggleSecEdit(f){
+  const panel=document.getElementById('secEdit'+f);if(!panel)return;
+  const wasOpen=!panel.classList.contains('hidden');
+  ['Name','Email','Phone','Password'].forEach(x=>{
+    const p=document.getElementById('secEdit'+x);if(p)p.classList.add('hidden');
+  });
+  if(!wasOpen)panel.classList.remove('hidden');
+}
+function saveSec(f){
+  const u=getUser()||{};
+  if(f==='Name'){u.name=document.getElementById('sName').value;}
+  else if(f==='Email'){u.email=document.getElementById('sEmail').value;}
+  else if(f==='Phone'){u.phone=document.getElementById('sPhone').value;}
+  else if(f==='Password'){
+    const np=document.getElementById('sNewPw').value,cp=document.getElementById('sConfPw').value,cur=document.getElementById('sCurPw').value;
+    if(np!==cp){showToast('[[icon:circle-x]] Passwords do not match');return;}
+    if(np.length<8){showToast('[[icon:circle-x]] Minimum 8 characters required');return;}
+    if(getTok())apiReq('PUT','/users/profile',{currentPassword:cur,newPassword:np}).then(()=>showToast('[[icon:lock]] Password updated!')).catch(err=>showToast('[[icon:circle-x]] '+err.message));
+    else showToast('[[icon:lock]] Password updated!');
+    toggleSecEdit('Password');return;
+  }
+  localStorage.setItem('nansai_user',JSON.stringify(u));
+  if(getTok())apiReq('PUT','/users/profile',u).then(r=>{if(r.data)localStorage.setItem('nansai_user',JSON.stringify(r.data));}).catch(()=>{});
+  USER=u;loadProfile();toggleSecEdit(f);showToast('[[icon:circle-check]] Changes saved!');
+}
+function checkPwStr(v){
+  const bar=document.getElementById('pwFill'),lbl=document.getElementById('pwLbl');
+  if(!v){if(bar)bar.style.width='0';if(lbl)lbl.textContent='';return;}
+  let s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;
+  const cfg=[{w:'22%',c:'#ef4444',l:'Weak'},{w:'48%',c:'#f59e0b',l:'Fair'},{w:'74%',c:'#3b82f6',l:'Good'},{w:'100%',c:'#4a8c5c',l:'Strong'}];
+  const cc=cfg[Math.min(s,3)];
+  if(bar){bar.style.width=cc.w;bar.style.background=cc.c;}
+  if(lbl){lbl.textContent=cc.l;lbl.style.color=cc.c;}
+}
+
+let ORDERS = [];
+
+// Map API order status → local status key
+function mapStatus(s) {
+  if (!s) return 'processing';
+  const m = s.toLowerCase();
+  if (m === 'delivered') return 'delivered';
+  if (m === 'shipped')   return 'shipped';
+  if (m === 'cancelled' || m === 'refunded') return 'cancelled';
+  return 'processing';
+}
+// Map status → tracking step index (1-5)
+function mapStep(s) {
+  const steps = { pending:1, processing:2, shipped:3, delivered:5, cancelled:0 };
+  return steps[mapStatus(s)] ?? 1;
+}
+// Format date nicely
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+async function loadOrders() {
+  try {
+    const res = await apiReq('GET', '/orders/my-orders');
+    const raw = res.data || [];
+    ORDERS = raw.map(o => ({
+      id:      o.orderNumber || o._id,
+      _id:     o._id,
+      placed:  fmtDate(o.createdAt),
+      date:    fmtDate(o.deliveredAt || o.createdAt),
+      status:  mapStatus(o.orderStatus),
+      items:   (o.items || []).map(it => ({
+        name:  it.name || it.product?.name || 'Product',
+        qty:   it.quantity,
+        price: it.price,
+        img:   it.product?.images?.[0]?.url || it.image || 'https://via.placeholder.com/80'
+      })),
+      total:    o.totalPrice,
+      addr:     o.shippingAddress
+        ? [o.shippingAddress.fullName, o.shippingAddress.addressLine1, o.shippingAddress.city].filter(Boolean).join(', ')
+        : '—',
+      tracking: o.trackingNumber || '—',
+      step:     mapStep(o.orderStatus)
+    }));
+  } catch { ORDERS = []; }
+  // Update dashboard tile
+  const tf = document.getElementById('tileFoot1');
+  if (tf) tf.textContent = 'View all ' + ORDERS.length + ' order' + (ORDERS.length !== 1 ? 's' : '') + ' →';
+  renderOrders();
+}
+const SC={
+  delivered:{label:'Delivered',badge:'bg-green-50 text-green-800 border border-green-200',dot:'bg-green-700'},
+  shipped:{label:'Shipped',badge:'bg-blue-50 text-blue-800 border border-blue-200',dot:'bg-blue-600'},
+  processing:{label:'Processing',badge:'bg-amber-50 text-amber-800 border border-amber-200',dot:'bg-amber-500'},
+  cancelled:{label:'Cancelled',badge:'bg-red-50 text-red-700 border border-red-200',dot:'bg-red-500'},
+};
+const TSTEPS=['Order Placed','Confirmed','Shipped','Out for Delivery','Delivered'];
+
+function trackHTML(step){
+  return '<div class="flex items-start overflow-x-auto pb-1 my-4 no-scrollbar">'+TSTEPS.map((s,i)=>{
+    const done=i<step,active=i===step-1;
+    return '<div class="flex flex-col items-center flex-1 min-w-[64px] relative">'
+      +'<div class="track-line'+(i<step-1?' done':'')+'"></div>'
+      +'<div class="relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-[0.58rem] font-black flex-shrink-0 transition-all '+(done?'bg-forest-light border-2 border-forest-light text-white':active?'bg-white border-2 border-forest-light shadow-[0_0_0_4px_rgba(74,140,92,.18)]':'bg-white border-2 border-forest-dark/15')+'">✓</div>'
+      +'<div class="text-[0.57rem] font-semibold mt-1.5 text-center leading-tight '+(done?'text-text-mid font-bold':active?'text-forest-light font-black':'text-text-light')+'">'+s+'</div>'
+      +'</div>';
+  }).join('')+'</div>';
+}
+
+function orderCardHTML(o){
+  const s=SC[o.status]||SC.processing;
+  const items=o.items.map(it=>`
+    <div class="flex gap-[0.85rem] items-start py-[0.6rem] border-b border-forest-dark/[0.06] last:border-b-0">
+      <img src="${it.img}" class="w-[62px] h-[62px] object-cover flex-shrink-0 border border-forest-dark/10 rounded-nansai-sm" loading="lazy" alt="${it.name}"/>
+      <div class="flex-1 min-w-0">
+        <div class="text-[0.82rem] font-semibold text-text-dark mb-0.5 leading-snug">${it.name}</div>
+        <div class="text-[0.7rem] text-text-light">Qty: ${it.qty} &nbsp;·&nbsp; ₹${it.price.toLocaleString()} each</div>
+        <div class="flex gap-1.5 flex-wrap mt-2">
+          <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:shopping-cart]] Added to cart!')">Buy it again</button>
+          <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:notebook-pen]] Review submitted!')">Write a review</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  return `<div class="border border-forest-dark/[0.09] rounded-nansai overflow-hidden mb-[0.9rem] bg-white shadow-nansai">
+    <div class="bg-bg/80 px-4 py-[0.65rem] flex flex-wrap gap-[0.6rem_1.1rem] border-b border-forest-dark/[0.07] items-center">
+      <div class="flex flex-col gap-px"><span class="text-[0.58rem] font-black uppercase tracking-[0.1em] text-text-light">Order placed</span><span class="text-[0.8rem] font-bold text-text-dark">${o.placed}</span></div>
+      <div class="flex flex-col gap-px"><span class="text-[0.58rem] font-black uppercase tracking-[0.1em] text-text-light">Total</span><span class="text-[0.8rem] font-bold text-text-dark">₹${o.total.toLocaleString()}</span></div>
+      <div class="flex flex-col gap-px"><span class="text-[0.58rem] font-black uppercase tracking-[0.1em] text-text-light">Ship to</span><span class="text-[0.8rem] font-bold text-text-dark">${o.addr.split(',')[0]}</span></div>
+      <div class="flex flex-col gap-px ml-auto text-right"><span class="text-[0.58rem] font-black uppercase tracking-[0.1em] text-text-light">Order #</span><span class="text-[0.78rem] font-bold text-forest-light">${o.id}</span></div>
+    </div>
+    <div class="px-4 py-[0.9rem]">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="inline-flex items-center gap-1 text-[0.68rem] font-bold px-[10px] py-[3px] rounded-full ${s.badge}"><span class="w-[5px] h-[5px] rounded-full ${s.dot} inline-block flex-shrink-0"></span>${s.label}</span>
+          ${o.status==='shipped'?`<span class="text-[0.72rem] text-text-light">Tracking: <strong class="text-forest-light">${o.tracking}</strong></span>`:''}
+          ${o.status==='delivered'?`<span class="text-[0.72rem] text-green-700 font-semibold">Delivered on ${o.date}</span>`:''}
+          ${o.status==='processing'?`<span class="text-[0.72rem] text-text-light">Estimated delivery in 3–5 days</span>`:''}
+        </div>
+        <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="openDetail('${o.id}')">View order details</button>
+      </div>
+      ${o.status!=='cancelled'?trackHTML(o.step):''}
+      ${items}
+    </div>
+    <div class="border-t border-forest-dark/[0.07] px-4 py-[0.65rem] flex gap-[0.4rem] flex-wrap bg-cream/35">
+      ${o.status==='delivered'?`<button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('Return/refund request submitted for ${o.id}')">Return items</button>`:''}
+      ${o.status==='processing'?`<button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-red-600 border-[1.5px] border-red-200/60 rounded-nansai-sm cursor-pointer hover:border-red-500 hover:bg-red-50 transition-all" onclick="showToast('Cancel request submitted for ${o.id}')">Cancel order</button>`:''}
+      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:receipt-text]] Invoice for ${o.id} downloading...')">Download invoice</button>
+      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:phone]] Connecting to support...')">Get help</button>
+    </div>
+  </div>`;
+}
+
+let curTab='all';
+function renderOrders(f='all'){
+  curTab=f;
+  const q=(document.getElementById('orderSearch')?.value||'').toLowerCase();
+  let list=f==='all'?ORDERS:ORDERS.filter(o=>o.status===f);
+  if(q)list=list.filter(o=>o.id.toLowerCase().includes(q)||o.items.some(i=>i.name.toLowerCase().includes(q)));
+  const wrap=document.getElementById('ordersContainer');if(!wrap)return;
+  wrap.innerHTML=list.length?list.map(orderCardHTML).join('')
+    :'<div class="text-center py-14 px-4"><div class="text-5xl mb-3">[[icon:package]]</div><p class="text-text-light text-[0.88rem] font-semibold mb-2">No orders found</p><a onclick="window.location.href=\'index.html\'" class="text-forest-light text-[0.8rem] cursor-pointer">Continue shopping →</a></div>';
+
+}
+function filterOrders(){renderOrders(curTab);}
+function setOrderTab(f,btn){
+  document.querySelectorAll('.ftab').forEach(t=>{
+    t.classList.remove('active','text-forest-dark','border-b-forest-light','font-bold');
+    t.classList.add('text-text-light','border-b-transparent');
+  });
+  if(btn){
+    btn.classList.add('active','text-forest-dark','border-b-forest-light','font-bold');
+    btn.classList.remove('text-text-light','border-b-transparent');
+  }
+  renderOrders(f);
+}
+function openDetail(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  document.getElementById('detailId').textContent=o.id;
+  document.getElementById('orderDetailBody').innerHTML=`
+    <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark mb-[1.1rem]">Order Details</h1>
+    ${orderCardHTML(o)}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-[0.85rem] mt-4">
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai">
+        <div class="px-[1.15rem] py-[0.8rem] border-b border-forest-dark/[0.07] bg-bg/50"><h2 class="font-serif text-[1.1rem] font-bold text-forest-dark">Delivery address</h2></div>
+        <div class="px-4 py-[0.9rem] text-[0.81rem] text-text-dark leading-[1.75]">${o.addr.split(',').join('<br/>')}<br/>India</div>
+      </div>
+      <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai">
+        <div class="px-[1.15rem] py-[0.8rem] border-b border-forest-dark/[0.07] bg-bg/50"><h2 class="font-serif text-[1.1rem] font-bold text-forest-dark">Order summary</h2></div>
+        <div class="px-4 py-[0.9rem]">
+          ${o.items.map(it=>`<div class="flex justify-between text-[0.8rem] text-text-dark py-[0.28rem] border-b border-forest-dark/[0.06]"><span>${it.name} × ${it.qty}</span><span>₹${(it.price*it.qty).toLocaleString()}</span></div>`).join('')}
+          <div class="flex justify-between text-[0.78rem] text-text-light py-[0.3rem]"><span>Delivery</span><span class="text-green-700 font-bold">FREE</span></div>
+          <div class="flex justify-between text-[0.9rem] font-black text-forest-dark py-[0.38rem] border-t-2 border-forest-dark/12 mt-0.5"><span>Order total</span><span>₹${o.total.toLocaleString()}</span></div>
+        </div>
+      </div>
+    </div>`;
+  goPage('order-detail');
+}
+
+let addrs=[];
+let editAddrId=null;
+let _addrType='Home';
+
+// ── Address type selector ──
+function setAddrTypeAcc(type, btn){
+  _addrType=type;
+  ['Home','Work','Other'].forEach(t=>{
+    const b=document.getElementById('aType'+t);
+    if(!b)return;
+    if(t===type){b.classList.add('active-type');b.classList.remove('border-forest-dark/15','bg-white','text-text-mid');}
+    else{b.classList.remove('active-type');b.classList.add('border-forest-dark/15','bg-white','text-text-mid');}
+  });
+}
+
+// ── Inline field validation ──
+const _addrRules={
+  aName:  {test:v=>/^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg:'Enter a valid full name (3–50 letters)'},
+  aPhone: {test:v=>/^[6-9]\d{9}$/.test(v),                  msg:'Enter a valid 10-digit Indian mobile number'},
+  aPincode:{test:v=>/^[1-9]\d{5}$/.test(v),                 msg:'Enter a valid 6-digit PIN code'},
+  aLine1: {test:v=>v.trim().length>=5,                       msg:'Enter at least 5 characters for address'},
+  aCity:  {test:v=>/^[a-zA-Z\s.'-]{2,50}$/.test(v.trim()),  msg:'Enter a valid city name'},
+};
+function addrValidate(id){
+  const el=document.getElementById(id);
+  const errEl=document.getElementById(id+'-err');
+  if(!el||!errEl)return true;
+  const rule=_addrRules[id];
+  if(!rule)return true;
+  const ok=rule.test(el.value);
+  el.classList.toggle('inp-error',!ok);
+  el.classList.toggle('inp-ok', ok && el.value.length>0);
+  errEl.textContent=ok?'':rule.msg;
+  errEl.classList.toggle('hidden',ok);
+  return ok;
+}
+function _addrShowErr(id,msg){
+  const el=document.getElementById(id);
+  const errEl=document.getElementById(id+'-err');
+  if(el)el.classList.add('inp-error');
+  if(errEl){errEl.textContent=msg;errEl.classList.remove('hidden');}
+}
+function _addrClearErr(id){
+  const el=document.getElementById(id);
+  const errEl=document.getElementById(id+'-err');
+  if(el){el.classList.remove('inp-error');el.classList.add('inp-ok');}
+  if(errEl)errEl.classList.add('hidden');
+}
+
+// ── PIN code → city/state auto-fill (India Post API) ──
+let _pinTimer=null;
+function onPinInput(val){
+  const errEl=document.getElementById('aPincode-err');
+  const spinner=document.getElementById('aPinSpinner');
+  const cityEl=document.getElementById('aCity');
+  const stateEl=document.getElementById('aState');
+  if(val.length<6){addrValidate('aPincode');return;}
+  if(!/^[1-9]\d{5}$/.test(val)){
+    _addrShowErr('aPincode','Enter a valid 6-digit PIN code');
+    return;
+  }
+  clearTimeout(_pinTimer);
+  if(spinner)spinner.classList.remove('hidden');
+  _pinTimer=setTimeout(async()=>{
+    try{
+      const res=await fetch('https://api.postalpincode.in/pincode/'+val);
+      const data=await res.json();
+      if(data[0]?.Status==='Success'){
+        const po=data[0].PostOffice[0];
+        if(cityEl){cityEl.value=po.District;addrValidate('aCity');}
+        if(stateEl){stateEl.value=po.State;stateEl.classList.add('inp-ok');}
+        _addrClearErr('aPincode');
+      } else {
+        _addrShowErr('aPincode','PIN code not found. Please check and re-enter.');
+        if(cityEl){cityEl.value='';cityEl.classList.remove('inp-ok','inp-error');}
+        if(stateEl){stateEl.value='';stateEl.classList.remove('inp-ok');}
+      }
+    }catch{
+      _addrClearErr('aPincode'); // offline — don't block
+    } finally{
+      if(spinner)spinner.classList.add('hidden');
+    }
+  },600);
+}
+
+async function loadAddresses(){
+  try{
+    const res=await apiReq('GET','/addresses');
+    addrs=res.data||[];
+  }catch{addrs=[];}
+  renderAddresses();
+}
+
+function renderAddresses(){
+  const wrap=document.getElementById('addrGrid');if(!wrap)return;
+  const def=addrs.find(a=>a.isDefault);
+  const tf=document.getElementById('tileFoot4');
+  if(tf)tf.textContent=def?def.name+', '+def.city+' '+def.pincode+' →':'Manage saved addresses →';
+  if(!addrs.length){
+    wrap.innerHTML='<div class="col-span-full text-center py-8 text-text-light text-[0.85rem]">No saved addresses. Add one below.</div>';
+    return;
+  }
+  wrap.innerHTML=addrs.map(a=>`
+    <div class="border-[1.5px] ${a.isDefault?'border-forest-light bg-forest-light/[0.025]':'border-forest-dark/10'} rounded-nansai px-4 py-[0.9rem] bg-white relative transition-all hover:border-forest-light/35 hover:shadow-nansai-md">
+      ${a.isDefault?'<div class="absolute top-[0.65rem] right-3 text-[0.58rem] font-black bg-forest-light text-white px-[9px] py-[2px] rounded-full uppercase tracking-[0.05em]">Default</div>':''}
+      <div class="text-[0.86rem] font-bold text-text-dark mb-[0.35rem]">${a.name}</div>
+      <div class="text-[0.76rem] text-text-light leading-relaxed">${a.line1}${a.line2?'<br/>'+a.line2:''}<br/>${a.city}, ${a.state} ${a.pincode}<br/>India<br/>Phone: ${a.phone}</div>
+      <div class="flex items-center gap-2 flex-wrap mt-[0.7rem]">
+        <a class="text-[0.73rem] text-forest-light cursor-pointer font-semibold hover:text-gold-dark transition-colors" onclick="showAddrForm('${a._id}')">Edit</a>
+        <span class="text-forest-dark/18 text-[0.73rem]">|</span>
+        <a class="text-[0.73rem] text-forest-light cursor-pointer font-semibold hover:text-gold-dark transition-colors" onclick="delAddr('${a._id}')">Remove</a>
+        ${!a.isDefault?`<span class="text-forest-dark/18 text-[0.73rem]">|</span><a class="text-[0.73rem] text-forest-light cursor-pointer font-semibold hover:text-gold-dark transition-colors" onclick="setDefAddr('${a._id}')">Set as default</a>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function showAddrForm(id){
+  editAddrId=id||null;
+  _addrType='Home';
+  document.getElementById('addrFormTitle').textContent=id?'Edit address':'Add new address';
+  // Reset all field states
+  ['aName','aPhone','aLine1','aLine2','aCity','aState','aPincode'].forEach(fid=>{
+    const el=document.getElementById(fid);
+    if(el){el.value='';el.classList.remove('inp-ok','inp-error');}
+    const err=document.getElementById(fid+'-err');
+    if(err)err.classList.add('hidden');
+  });
+  document.getElementById('aDefault').checked=false;
+  setAddrTypeAcc('Home',document.getElementById('aTypeHome'));
+  if(id){
+    const a=addrs.find(x=>x._id===id);
+    if(a){
+      const sv=(elId,v)=>{const el=document.getElementById(elId);if(el&&v){el.value=v;el.classList.add('inp-ok');}}
+      sv('aName',a.name);sv('aPhone',a.phone);sv('aLine1',a.line1);sv('aLine2',a.line2);
+      sv('aCity',a.city);sv('aState',a.state);sv('aPincode',a.pincode);
+      document.getElementById('aDefault').checked=!!a.isDefault;
+      _addrType=a.addressType||'Home';
+      setAddrTypeAcc(_addrType,document.getElementById('aType'+_addrType));
+    }
+  }
+  const fw=document.getElementById('addrFormWrap');
+  fw.classList.remove('hidden');fw.style.display='block';
+  setTimeout(()=>fw.scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
+function hideAddrForm(){
+  document.getElementById('addrFormWrap').classList.add('hidden');
+  document.getElementById('addrFormWrap').style.display='none';
+  editAddrId=null;
+}
+async function submitAddr(e){
+  e.preventDefault();
+  // Validate all required fields
+  const required=['aName','aPhone','aPincode','aLine1','aCity'];
+  let valid=true;
+  required.forEach(fid=>{ if(!addrValidate(fid))valid=false; });
+  const stateEl=document.getElementById('aState');
+  if(!stateEl||!stateEl.value.trim()){
+    _addrShowErr('aPincode','Enter a valid PIN code to auto-fill state');
+    valid=false;
+  }
+  if(!valid){
+    // Scroll to first error
+    const firstErr=document.querySelector('.inp-error');
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    showToast('[[icon:triangle-alert]] Please fix the errors before saving');
+    return;
+  }
+  const body={
+    name:document.getElementById('aName').value.trim(),
+    phone:document.getElementById('aPhone').value.trim(),
+    line1:document.getElementById('aLine1').value.trim(),
+    line2:document.getElementById('aLine2').value.trim(),
+    city:document.getElementById('aCity').value.trim(),
+    state:stateEl.value.trim(),
+    pincode:document.getElementById('aPincode').value.trim(),
+    addressType:_addrType,
+    isDefault:document.getElementById('aDefault').checked
+  };
+  const btn=e.target.querySelector('button[type=submit]');
+  if(btn){btn.disabled=true;btn.textContent='Saving…';}
+  try{
+    if(editAddrId){await apiReq('PUT','/addresses/'+editAddrId,body);}
+    else{await apiReq('POST','/addresses',body);}
+    await loadAddresses();hideAddrForm();e.target.reset();showToast('[[icon:map-pin]] Address saved!');
+  }catch(err){
+    showToast('[[icon:circle-x]] '+err.message);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Save address';}
+  }
+}
+async function delAddr(id){
+  if(!confirm('Remove this address?'))return;
+  try{await apiReq('DELETE','/addresses/'+id);await loadAddresses();showToast('[[icon:trash-2]] Address removed');}
+  catch(err){showToast('[[icon:circle-x]] '+err.message);}
+}
+async function setDefAddr(id){
+  try{await apiReq('PUT','/addresses/'+id,{isDefault:true});await loadAddresses();showToast('[[icon:circle-check]] Default address updated');}
+  catch(err){showToast('[[icon:circle-x]] '+err.message);}
+}
+
+function starStr(r){return'★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r));}
+const PRODUCTS_DATA = [
+  {id:1,  name:"Karunguruvai Rice",      price:180, oldPrice:220, rating:4.7, image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop"},
+  {id:2,  name:"Karuppu Kavuni Rice",    price:220, oldPrice:270, rating:4.8, image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
+  {id:3,  name:"Arubatham Kuruvai Rice", price:160, oldPrice:200, rating:4.5, image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
+  {id:4,  name:"Poongar Rice",           price:200, oldPrice:250, rating:4.6, image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:5,  name:"Mappillai Samba Rice",   price:210, oldPrice:260, rating:4.7, image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
+  {id:6,  name:"Iluppai Poo Samba Rice", price:195, oldPrice:240, rating:4.5, image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:7,  name:"Vellai Kavuni Rice",     price:190, oldPrice:235, rating:4.6, image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
+  {id:8,  name:"Paneer Rose",            price:150, oldPrice:190, rating:4.8, image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:9,  name:"Hibiscus Flower",        price:120, oldPrice:155, rating:4.6, image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
+  {id:10, name:"Aavaram Flower",         price:110, oldPrice:145, rating:4.5, image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:11, name:"Butterfly Pea Flower",   price:180, oldPrice:220, rating:4.7, image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:12, name:"Organic Rose Milk",      price:140, oldPrice:175, rating:4.7, image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
+  {id:13, name:"Hibiscus Sherbet",       price:130, oldPrice:165, rating:4.6, image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:14, name:"Idiyappam Flour",        price:160, oldPrice:200, rating:4.8, image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:15, name:"Health Mix Powder",      price:175, oldPrice:215, rating:4.6, image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:16, name:"Country Fig Powder",     price:200, oldPrice:250, rating:4.7, image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
+];
+
+function removeFromWishlistAccount(id) {
+  let wl = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const idx = wl.indexOf(id);
+  if (idx > -1) wl.splice(idx, 1);
+  localStorage.setItem('wishlist', JSON.stringify(wl));
+  showToast('[[icon:heart-crack]] Removed from wishlist');
+  renderWish();
+}
+
+function addToCartFromWish(id, name) {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const ex = cart.find(i => i.id === id);
+  if (ex) { ex.qty += 1; } else {
+    const p = PRODUCTS_DATA.find(x => x.id === id);
+    if (p) cart.push({id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, qtyLabel: '1 pc'});
+  }
+  localStorage.setItem('cart', JSON.stringify(cart));
+  showToast('[[icon:shopping-cart]] ' + name + ' added to cart!');
+}
+
+function renderWish(){
+  const wrap=document.getElementById('wishGrid');
+  const cnt=document.getElementById('wlTotal');
+  const wl = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const items = wl.map(id => PRODUCTS_DATA.find(p => p.id === id)).filter(Boolean);
+  if(cnt)cnt.textContent=items.length+' item'+(items.length!==1?'s':'');
+  if(!wrap)return;
+  if(!items.length){
+    wrap.innerHTML='<div class="col-span-full text-center py-12"><div style="font-size:2.5rem;margin-bottom:.75rem;">[[icon:leaf]]</div><p class="text-text-light text-sm font-semibold mb-3">Your wishlist is empty</p><a href="index.html#products" class="text-forest-light text-sm font-semibold hover:underline">Browse Products →</a></div>';
+    return;
+  }
+  wrap.innerHTML=items.map(p=>`
+    <div class="wish-card bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai flex flex-col transition-all duration-200 hover:shadow-nansai-md hover:-translate-y-0.5">
+      <div class="relative overflow-hidden bg-forest-pale">
+        <img src="${p.image}" loading="lazy" alt="${p.name}" class="wish-img w-full aspect-square object-cover"/>
+        <div class="absolute top-[7px] left-[7px] bg-forest-light text-white text-[0.58rem] font-black px-[7px] py-[2px] rounded-full">${Math.round((1-p.price/p.oldPrice)*100)}% OFF</div>
+        <button class="absolute top-[7px] right-[7px] w-[26px] h-[26px] bg-white border border-forest-dark/12 rounded-md text-[0.75rem] cursor-pointer flex items-center justify-center transition-all hover:bg-red-50 hover:border-red-300 hover:text-red-600 text-text-dark"
+                onclick="removeFromWishlistAccount(${p.id})">[[icon:x]]</button>
+      </div>
+      <div class="px-[0.8rem] py-[0.7rem] flex flex-col gap-[0.3rem] flex-1">
+        <div class="text-[0.78rem] font-semibold text-text-dark leading-snug line-clamp-2">${p.name}</div>
+        <div class="text-[0.7rem] tracking-[0.5px]" style="color:#f0a500;">${starStr(p.rating)} <span class="text-text-light text-[0.65rem]">(${p.rating})</span></div>
+        <div class="flex items-center gap-[0.4rem] flex-wrap">
+          <span class="text-[0.92rem] font-black text-forest-dark">₹${p.price}</span>
+          <span class="text-[0.7rem] text-text-light line-through">₹${p.oldPrice}</span>
+        </div>
+        <div class="text-[0.68rem] text-green-700 font-bold">✓ In Stock</div>
+        <div class="flex flex-col gap-[0.3rem] mt-auto pt-[0.45rem]">
+          <button class="w-full px-0 py-[0.32rem] text-[0.73rem] font-bold bg-forest-dark text-white rounded-nansai-sm cursor-pointer border-none hover:bg-forest-mid transition-all"
+                  onclick="addToCartFromWish(${p.id},'${p.name.replace(/'/g,'')}')">Add to Cart</button>
+          <button class="w-full px-0 py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all"
+                  onclick="removeFromWishlistAccount(${p.id})">Remove</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+
+function doSearch(){const q=(document.getElementById('navQ')?.value||document.getElementById('mobQ')?.value||'').trim();window.location.href='index.html'+(q?'?q='+encodeURIComponent(q):'');}
+function copyRef(){const el=document.getElementById('refInput');if(el)navigator.clipboard.writeText(el.value).then(()=>showToast('[[icon:gift]] Referral code copied!'));}
+function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
+
+// Auth guard — redirect to login if not signed in
+(function(){
+  if(!localStorage.getItem('nansai_token')){
+    window.location.replace('login.html');
+  }
+})();
+
+loadProfile();
+loadOrders();
+loadAddresses();
+// sync wishlist count from localStorage
+(function(){
+  const wl = JSON.parse(localStorage.getItem('wishlist')||'[]');
+  const hc = document.getElementById('heroWishCount'); if(hc) hc.textContent = wl.length;
+  const tileFootWish = document.querySelector('[onclick="goPage(\'wishlist\')"] .text-forest-light');
+  if(tileFootWish) tileFootWish.textContent = wl.length + ' saved item' + (wl.length !== 1 ? 's' : '') + ' →';
+})();
+renderWish();
+
+// ── NEW USER: prompt to add address after first login ──
+(function(){
+  if(new URLSearchParams(window.location.search).get('newuser') !== '1') return;
+  // Clean URL without reload
+  history.replaceState(null,'',window.location.pathname);
+  // Show addresses page with form open and a welcome banner
+  goPage('addresses');
+  setTimeout(()=>{
+    const banner = document.createElement('div');
+    banner.id = 'newUserBanner';
+    banner.innerHTML = `
+      <div style="background:linear-gradient(135deg,#0f2218,#2d5a3d);color:#fff;border-radius:12px;padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">
+        <div style="font-size:1.6rem;flex-shrink:0">[[icon:map-pin]]</div>
+        <div>
+          <p style="font-weight:700;font-size:.95rem;margin-bottom:3px">Welcome! Add your delivery address</p>
+          <p style="font-size:.78rem;opacity:.75">Save an address so we can deliver your organic orders right to your door.</p>
+        </div>
+        <button onclick="document.getElementById('newUserBanner').remove()" style="margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:1rem;flex-shrink:0">[[icon:x]]</button>
+      </div>`;
+    const grid = document.getElementById('addrGrid');
+    if(grid) grid.parentElement.insertBefore(banner, grid);
+    showAddrForm(null);
+  }, 200);
+})();
+</script>
+</body>
+</html>

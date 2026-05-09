@@ -1,0 +1,49 @@
+{
+  "name": "nansai-organics-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Nansai Organics E-commerce Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "cluster": "pm2 start ecosystem.config.js --env production",
+    "reload": "pm2 reload nansai-backend",
+    "stop": "pm2 stop nansai-backend",
+    "logs": "pm2 logs nansai-backend",
+    "seed": "node seeders/seed.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "ecommerce",
+    "organic",
+    "agriculture"
+  ],
+  "author": "Nansai Organics",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.9.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.1.0",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^8.0.2",
+    "razorpay": "^2.9.2",
+    "stripe": "^14.7.0",
+    "twilio": "^5.13.1",
+    "pm2": "^5.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

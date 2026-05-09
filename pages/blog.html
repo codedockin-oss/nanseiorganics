@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blog & Stories | Nansai Organics</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS — Nansai Brand
+═══════════════════════════════════════ */
+:root {
+  --forest:      #1a3a2a;
+  --forest-deep: #0f2218;
+  --forest-mid:  #2d5a3d;
+  --forest-leaf: #4a8c5c;
+  --forest-sage: #8fbc9a;
+  --cream:       #f7f3ec;
+  --warm-white:  #fdfaf5;
+  --gold:        #c9a84c;
+  --gold-lt:     #e8c97a;
+  --gold-dk:     #b8922a;
+  --text-dk:     #1a2416;
+  --text-md:     #3d5a45;
+  --text-lt:     #7a9980;
+  --nav-h:       68px;
+  --radius:      18px;
+  --shadow-sm:   0 2px 12px rgba(15,34,24,.07);
+  --shadow-md:   0 8px 32px rgba(15,34,24,.13);
+  --shadow-lg:   0 24px 60px rgba(15,34,24,.18);
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cream);
+  color:var(--text-dk);
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+.site-nav{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px solid rgba(26,58,42,.12);height:var(--nav-h);}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;height:100%;padding:0 1.75rem;gap:1.25rem;}
+.nav-logo{flex-shrink:0;text-decoration:none;display:flex;align-items:center;}
+.nav-logo img{height:64px;width:auto;object-fit:contain;}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;flex-shrink:0;}
+@media(max-width:768px){
+  .site-nav .nav-inner{justify-content:center;padding:0 1rem;}
+  .site-nav .nav-links,.site-nav .nav-actions{display:none!important;}
+  .site-nav .nav-logo{margin:0 auto;}
+  .mob-ham{display:none!important;}
+}
+.nav-links>li{display:flex;align-items:center;}
+.nav-link,.nav-trigger{display:inline-flex;align-items:center;gap:4px;padding:8px 14px;font-size:.79rem;font-weight:600;letter-spacing:.02em;color:var(--forest-deep);text-decoration:none;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;white-space:nowrap;transition:color .2s;position:relative;border-radius:6px;}
+.nav-link:hover,.nav-trigger:hover{color:var(--forest-leaf);background:rgba(74,140,92,.06);}
+.nav-link.active{color:var(--forest-leaf);}
+.nav-link::after,.nav-trigger::after{content:'';position:absolute;bottom:2px;left:14px;right:14px;height:2px;background:var(--gold-dk);transform:scaleX(0);transition:transform .24s ease;pointer-events:none;}
+.nav-link:hover::after,.nav-trigger:hover::after,.nav-link.active::after{transform:scaleX(1);}
+.nav-actions{display:flex;align-items:center;gap:.7rem;margin-left:auto;flex-shrink:0;}
+.nav-divider{width:1px;height:18px;background:rgba(26,58,42,.15);flex-shrink:0;}
+.nav-orders-btn{display:flex;align-items:center;gap:.35rem;font-size:.65rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--forest-deep);text-decoration:none;padding:.38rem .7rem;border:1px solid rgba(26,58,42,.2);border-radius:6px;transition:all .2s;white-space:nowrap;}
+.nav-orders-btn svg{width:14px;height:14px;}
+.nav-orders-btn:hover{color:var(--forest-leaf);border-color:var(--forest-leaf);background:rgba(74,140,92,.05);}
+.nav-icon-btn{position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;background:none;color:var(--forest-deep);text-decoration:none;transition:color .2s,background .2s;}
+.nav-icon-btn svg{width:19px;height:19px;}
+.nav-icon-btn:hover{color:var(--forest-leaf);background:rgba(74,140,92,.08);}
+.nav-badge{position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;font-size:.56rem;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:30px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;line-height:1;}
+.mob-ham{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:3px;flex-shrink:0;}
+.mob-ham span{display:block;width:22px;height:2px;background:var(--forest-deep);border-radius:2px;transition:all .3s;}
+.mob-ham.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.mob-ham.open span:nth-child(2){opacity:0;}
+.mob-ham.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+@media(max-width:768px){:root{--nav-h:58px;}.nav-links,.nav-orders-btn,.nav-divider{display:none!important;}.mob-ham{display:flex;}}
+
+/* ═══════════════════════════════════════
+   HERO 3D CAROUSEL
+═══════════════════════════════════════ */
+.blog-hero{
+  position:relative;
+  background:#0a100b;
+  overflow:hidden;
+}
+.slider-shell{
+  position:relative;width:100%;
+  overflow:hidden;
+  perspective:1200px;
+  perspective-origin:50% 50%;
+  height:clamp(320px,42vw,540px);
+}
+.slide{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  overflow:hidden;transform-origin:center center;
+  transition:transform .85s cubic-bezier(.77,0,.18,1),opacity .85s cubic-bezier(.77,0,.18,1);
+  opacity:0;pointer-events:none;
+  backface-visibility:hidden;
+}
+.slide.active {opacity:1;pointer-events:all;transform:translateX(0) rotateY(0deg) scale(1);z-index:3;}
+.slide.prev   {opacity:.4;transform:translateX(-72%) rotateY(38deg) scale(.82);z-index:2;}
+.slide.next   {opacity:.4;transform:translateX(72%) rotateY(-38deg) scale(.82);z-index:2;}
+.slide.far-prev{opacity:.12;transform:translateX(-110%) rotateY(55deg) scale(.68);z-index:1;}
+.slide.far-next{opacity:.12;transform:translateX(110%) rotateY(-55deg) scale(.68);z-index:1;}
+.slide-bg{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  transition:transform 7s ease;
+}
+.slide.active .slide-bg{transform:scale(1.04);}
+.slide-overlay{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(110deg,rgba(5,12,6,.82) 0%,rgba(5,12,6,.35) 50%,transparent 72%),
+             linear-gradient(to top,rgba(5,12,6,.55) 0%,transparent 55%);
+}
+.slide-accent{
+  position:absolute;left:clamp(1rem,3.5vw,2.2rem);top:0;bottom:0;width:2px;z-index:2;
+  background:linear-gradient(to bottom,transparent 0%,#c9a84c 30%,#c9a84c 70%,transparent 100%);
+  opacity:0;transition:opacity .5s .4s;
+}
+.slide.active .slide-accent{opacity:1;}
+.slide-content{
+  position:absolute;inset:0;z-index:3;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(1.2rem,4vw,2.8rem);
+  padding-left:calc(clamp(1.2rem,4vw,2.8rem) + 16px);
+  max-width:560px;
+}
+.slide-eyebrow{
+  display:flex;align-items:center;gap:.45rem;
+  font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:#e8c97a;margin-bottom:.5rem;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .5s .55s,transform .5s .55s;
+}
+.slide-eyebrow span{display:block;width:1.4rem;height:1.5px;background:#c9a84c;flex-shrink:0;}
+.slide.active .slide-eyebrow{opacity:1;transform:none;}
+.slide-title{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;line-height:1.1;color:#fff;
+  font-size:clamp(1.3rem,2.8vw,2.2rem);
+  margin-bottom:.6rem;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .55s .68s,transform .55s .68s;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.slide.active .slide-title{opacity:1;transform:none;}
+.slide-title em{font-style:italic;color:#86c98a;}
+.slide-desc{
+  font-size:clamp(.65rem,.85vw,.8rem);font-weight:300;
+  line-height:1.65;color:rgba(255,255,255,.58);
+  max-width:340px;margin-bottom:1.1rem;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .5s .8s,transform .5s .8s;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.slide.active .slide-desc{opacity:1;transform:none;}
+.slide-meta{
+  display:flex;align-items:center;gap:.55rem;
+  font-size:.62rem;color:rgba(255,255,255,.45);
+  margin-bottom:.9rem;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .5s .88s,transform .5s .88s;
+}
+.slide.active .slide-meta{opacity:1;transform:none;}
+.slide-meta-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);}
+.slide-cta{
+  display:inline-flex;align-items:center;gap:.45rem;
+  font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.48rem 1.25rem;
+  border:1px solid #c9a84c;color:#e8c97a;
+  background:transparent;cursor:pointer;
+  width:fit-content;position:relative;overflow:hidden;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .5s .95s,transform .5s .95s,background .25s,color .25s;
+  text-decoration:none;
+}
+.slide.active .slide-cta{opacity:1;transform:none;}
+.slide-cta::before{
+  content:'';position:absolute;inset:0;
+  background:#c9a84c;transform:translateX(-101%);
+  transition:transform .3s ease;z-index:-1;
+}
+.slide-cta:hover::before{transform:translateX(0);}
+.slide-cta:hover{color:#0a100b;}
+.slide-cat-badge{
+  position:absolute;top:16px;right:16px;z-index:4;
+  font-size:.54rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.ghost-num{
+  position:absolute;right:1rem;bottom:.6rem;z-index:4;
+  font-family:'Cormorant Garamond',serif;font-weight:700;
+  font-size:clamp(2.5rem,6vw,4.5rem);
+  color:rgba(255,255,255,.05);pointer-events:none;user-select:none;line-height:1;
+}
+.arrow-btn{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:20;
+  width:2.2rem;height:2.2rem;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(5,12,6,.45);backdrop-filter:blur(6px);
+  color:#fff;font-size:.8rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s,border-color .25s;
+}
+.arrow-btn:hover{background:#c9a84c;border-color:#c9a84c;color:#0a100b;}
+.slider-footer{
+  position:absolute;bottom:0;left:0;right:0;z-index:10;
+  display:flex;align-items:center;gap:.65rem;
+  padding:.7rem clamp(1.2rem,4vw,2.8rem);
+  background:linear-gradient(to top,rgba(5,12,6,.55) 0%,transparent 100%);
+}
+.sdot{
+  width:.42rem;height:.42rem;border-radius:50%;
+  background:rgba(255,255,255,.28);border:none;cursor:pointer;padding:0;
+  transition:background .3s,transform .3s;
+}
+.sdot.active{background:#c9a84c;transform:scale(1.35);}
+.timer-track{flex:1;height:1.5px;overflow:hidden;background:rgba(255,255,255,.12);}
+.timer-fill{height:100%;width:0%;background:#c9a84c;}
+@keyframes leafFloat1{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-18px) rotate(8deg);}
+}
+@keyframes leafFloat2{
+  0%,100%{transform:translateY(0) rotate(-6deg);}
+  50%{transform:translateY(-22px) rotate(10deg);}
+}
+.hero-leaf{position:absolute;pointer-events:none;user-select:none;z-index:4;}
+@media(max-width:768px){
+  .slider-shell{height:clamp(260px,62vw,380px);}
+  .slide-content{padding:1rem 1rem 1rem 1.4rem;justify-content:flex-end;padding-bottom:3.5rem;}
+  .slide-title{font-size:clamp(1.1rem,5vw,1.5rem);}
+  .slide-desc{font-size:.72rem;max-width:100%;}
+  .ghost-num{display:none;}
+  .hero-leaf{display:none;}
+  .arrow-btn{width:1.8rem;height:1.8rem;font-size:.7rem;}
+}
+
+/* ═══════════════════════════════════════
+   FILTER BAR
+═══════════════════════════════════════ */
+.filter-section{
+  background:#fff;
+  border-bottom:1px solid rgba(26,58,42,.1);
+  position:sticky;top:var(--nav-h);z-index:900;
+}
+.filter-inner{
+  max-width:1400px;margin:0 auto;
+  padding:.85rem 1.75rem;
+  display:flex;align-items:center;gap:.5rem;
+  overflow-x:auto;scrollbar-width:none;
+}
+.filter-inner::-webkit-scrollbar{display:none;}
+.fpill{
+  flex-shrink:0;padding:.42rem 1.1rem;
+  border-radius:30px;border:1.5px solid rgba(26,58,42,.15);
+  background:#fff;color:var(--text-md);
+  font-size:.76rem;font-weight:600;
+  white-space:nowrap;
+  cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.fpill:hover{border-color:var(--forest-leaf);color:var(--forest-leaf);transform:translateY(-1px);}
+.fpill.active{
+  background:var(--forest-deep);color:#fff;
+  border-color:var(--forest-deep);
+  box-shadow:0 4px 14px rgba(15,34,24,.22);
+  transform:translateY(-1px);
+}
+.result-count{
+  margin-left:auto;flex-shrink:0;
+  font-size:.72rem;font-weight:600;color:var(--text-lt);
+  white-space:nowrap;
+}
+
+/* ═══════════════════════════════════════
+   3D ARTICLE CAROUSEL
+═══════════════════════════════════════ */
+.article-carousel-section{
+  background:linear-gradient(160deg,var(--forest-deep) 0%,var(--forest-mid) 100%);
+  padding:2.5rem 0 2.2rem;
+  overflow:hidden;
+  position:relative;
+}
+.article-carousel-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+.carousel-heading{
+  text-align:center;margin-bottom:2.2rem;position:relative;z-index:1;
+}
+.carousel-heading h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:700;color:#fff;
+  letter-spacing:.02em;
+}
+.carousel-heading h2 em{font-style:italic;color:#86c98a;}
+.carousel-heading p{
+  font-size:.78rem;color:rgba(255,255,255,.45);
+  margin-top:.35rem;
+}
+.carousel-stage{
+  position:relative;
+  height:clamp(260px,55vw,420px);
+  perspective:1100px;
+  perspective-origin:50% 50%;
+}
+.ac-card{
+  position:absolute;
+  top:50%;left:50%;
+  width:clamp(160px,38vw,300px);
+  transform-origin:center center;
+  transform:translate(-50%,-50%);
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 12px 40px rgba(0,0,0,.35);
+  transition:transform .38s cubic-bezier(.77,0,.18,1),
+             opacity .38s cubic-bezier(.77,0,.18,1),
+             box-shadow .2s;
+  will-change:transform,opacity;
+  user-select:none;
+}
+.ac-card.pos-center{
+  opacity:1;z-index:5;
+  transform:translate(-50%,-50%) translateZ(0) rotateY(0deg) scale(1);
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.ac-card.pos-prev1{
+  opacity:.75;z-index:4;
+  transform:translate(calc(-50% - clamp(120px,22vw,260px)),-50%) rotateY(32deg) scale(.88);
+}
+.ac-card.pos-next1{
+  opacity:.75;z-index:4;
+  transform:translate(calc(-50% + clamp(120px,22vw,260px)),-50%) rotateY(-32deg) scale(.88);
+}
+.ac-card.pos-prev2{
+  opacity:.28;z-index:3;
+  transform:translate(calc(-50% - clamp(220px,38vw,440px)),-50%) rotateY(50deg) scale(.72);
+}
+.ac-card.pos-next2{
+  opacity:.28;z-index:3;
+  transform:translate(calc(-50% + clamp(220px,38vw,440px)),-50%) rotateY(-50deg) scale(.72);
+}
+.ac-card.pos-hidden{
+  opacity:0;z-index:1;
+  pointer-events:none;
+  transform:translate(-50%,-50%) rotateY(90deg) scale(.5);
+}
+.ac-card:hover.pos-center{
+  box-shadow:0 32px 80px rgba(0,0,0,.6);
+  transform:translate(-50%,-50%) translateZ(0) rotateY(0deg) scale(1.03);
+}
+.ac-img{
+  width:100%;height:clamp(110px,18vw,180px);
+  object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.ac-card.pos-center:hover .ac-img{transform:scale(1.06);}
+.ac-body{
+  padding:.9rem 1rem 1rem;
+}
+.ac-cat{
+  display:inline-block;
+  font-size:.5rem;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+  color:#fff;margin-bottom:.5rem;
+}
+.ac-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.78rem,2.2vw,1rem);
+  font-weight:700;color:var(--forest-deep);
+  line-height:1.3;margin-bottom:.4rem;
+  display:-webkit-box;-webkit-line-clamp:3;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.ac-meta{
+  font-size:.58rem;color:var(--text-lt);
+  display:flex;align-items:center;gap:.35rem;
+}
+.ac-meta-dot{width:2px;height:2px;border-radius:50%;background:var(--text-lt);flex-shrink:0;}
+.ac-read-btn{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:.6rem;font-weight:700;
+  color:var(--forest-leaf);margin-top:.55rem;
+  transition:gap .2s,color .2s;
+}
+.ac-read-btn:hover{color:var(--forest);gap:6px;}
+.ac-read-btn svg{width:9px;height:9px;}
+.carousel-controls{
+  display:flex;align-items:center;justify-content:center;
+  gap:1rem;margin-top:1.8rem;position:relative;z-index:10;
+}
+.ac-arrow{
+  width:2.2rem;height:2.2rem;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.08);backdrop-filter:blur(6px);
+  color:#fff;cursor:pointer;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s,transform .15s;
+  flex-shrink:0;
+}
+.ac-arrow:hover{background:var(--gold-dk);border-color:var(--gold-dk);transform:scale(1.1);}
+.ac-arrow svg{width:14px;height:14px;}
+.ac-dots{display:flex;align-items:center;gap:.45rem;}
+.ac-dot{
+  width:.38rem;height:.38rem;border-radius:50%;
+  background:rgba(255,255,255,.25);border:none;cursor:pointer;padding:0;
+  transition:background .3s,transform .3s;
+}
+.ac-dot.active{background:var(--gold);transform:scale(1.4);}
+@media(max-width:768px){
+  .article-carousel-section{padding:2rem 0 1.8rem;}
+  .carousel-heading{margin-bottom:1.4rem;}
+  .carousel-stage{height:clamp(280px,90vw,360px);}
+  .ac-card{width:58vw;max-width:240px;border-radius:12px;}
+  .ac-card.pos-prev2,.ac-card.pos-next2{opacity:0;pointer-events:none;}
+  .ac-card.pos-prev1{transform:translate(calc(-50% - 52vw),-50%) rotateY(22deg) scale(.84);opacity:.6;}
+  .ac-card.pos-next1{transform:translate(calc(-50% + 52vw),-50%) rotateY(-22deg) scale(.84);opacity:.6;}
+  .ac-img{height:140px;}
+  .ac-body{padding:.7rem .8rem .8rem;}
+  .ac-title{font-size:.82rem;-webkit-line-clamp:2;}
+  .ac-meta{font-size:.55rem;}
+  .ac-read-btn{font-size:.58rem;margin-top:.4rem;}
+  .carousel-controls{margin-top:1.2rem;gap:.7rem;}
+  .ac-arrow{width:2rem;height:2rem;}
+  .ac-arrow svg{width:12px;height:12px;}
+}
+@media(max-width:400px){
+  .ac-card{width:72vw;max-width:220px;}
+  .ac-card.pos-prev1{transform:translate(calc(-50% - 62vw),-50%) rotateY(18deg) scale(.82);opacity:.5;}
+  .ac-card.pos-next1{transform:translate(calc(-50% + 62vw),-50%) rotateY(-18deg) scale(.82);opacity:.5;}
+  .ac-img{height:120px;}
+}
+
+/* ═══════════════════════════════════════
+   MAIN BLOG GRID
+═══════════════════════════════════════ */
+.blog-main{
+  max-width:1400px;margin:0 auto;
+  padding:3rem 1.75rem 5rem;
+}
+.meta-dot{
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(26,58,42,.2);flex-shrink:0;
+}
+
+/* Blog grid */
+.blog-grid-label{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.75rem;
+}
+.blog-grid-label h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:700;color:var(--forest-deep);
+}
+.blog-grid-label::after{
+  content:'';flex:1;height:1px;
+  background:rgba(26,58,42,.1);
+}
+.blog-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:1.5rem;
+}
+.blog-card{
+  background:#fff;
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid rgba(26,58,42,.09);
+  box-shadow:var(--shadow-sm);
+  cursor:pointer;
+  display:flex;flex-direction:column;
+  transition:transform .32s cubic-bezier(.34,1.56,.64,1),box-shadow .32s;
+  opacity:0;transform:translateY(28px);
+  will-change:transform,opacity;
+}
+.blog-card.visible{
+  opacity:1;transform:translateY(0);
+  transition:transform .6s cubic-bezier(.22,1,.36,1),
+             box-shadow .32s cubic-bezier(.34,1.56,.64,1),
+             opacity .6s ease;
+}
+.blog-card:hover{
+  transform:translateY(-7px) scale(1.012);
+  box-shadow:var(--shadow-lg);
+}
+.blog-card-img{
+  position:relative;height:215px;overflow:hidden;
+  background:#e8f5e9;flex-shrink:0;
+}
+.blog-card-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .55s cubic-bezier(.22,1,.36,1),filter .35s;
+}
+.blog-card:hover .blog-card-img img{transform:scale(1.07);filter:brightness(1.04);}
+.blog-cat-tag{
+  position:absolute;top:12px;left:12px;
+  font-size:.54rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;
+  color:#fff;z-index:2;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.blog-card-body{
+  padding:1.35rem 1.4rem 1.5rem;
+  display:flex;flex-direction:column;flex:1;
+}
+.blog-card-tags{
+  display:flex;align-items:center;gap:.45rem;
+  margin-bottom:.7rem;flex-wrap:wrap;
+}
+.blog-tag-pill{
+  font-size:.54rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 8px;border-radius:20px;
+  border:1px solid;
+}
+.blog-card-body h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.12rem;font-weight:700;
+  color:var(--forest-deep);line-height:1.35;
+  margin-bottom:.55rem;
+  display:-webkit-box;-webkit-line-clamp:3;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.blog-card-body p{
+  font-size:.74rem;color:var(--text-md);
+  line-height:1.72;
+  display:-webkit-box;-webkit-line-clamp:3;
+  -webkit-box-orient:vertical;overflow:hidden;
+  flex:1;margin-bottom:.85rem;
+}
+.blog-card-meta{
+  display:flex;align-items:center;gap:.45rem;
+  font-size:.62rem;color:var(--text-lt);
+  border-top:1px solid rgba(26,58,42,.07);
+  padding-top:.75rem;margin-top:auto;
+  flex-wrap:wrap;
+}
+.blog-card-meta svg{width:10px;height:10px;flex-shrink:0;}
+.card-read-link{
+  margin-left:auto;
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:.65rem;font-weight:700;
+  color:var(--forest-leaf);
+  transition:color .2s,gap .2s;
+}
+.card-read-link:hover{color:var(--forest);gap:6px;}
+.card-read-link svg{width:10px;height:10px;}
+
+/* no results */
+.no-results{
+  text-align:center;padding:5rem 1rem;
+  grid-column:1/-1;
+}
+.no-results .icon{font-size:3.5rem;margin-bottom:.75rem;}
+.no-results p{color:#9ca3af;font-weight:600;font-size:.9rem;}
+
+/* ═══════════════════════════════════════
+   ARTICLE MODAL
+═══════════════════════════════════════ */
+#articleModal{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(10,22,14,.8);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+}
+#articleModal.open{opacity:1;pointer-events:all;}
+.modal-box{
+  background:var(--warm-white);
+  border-radius:22px;
+  max-width:760px;width:100%;
+  max-height:92vh;
+  overflow-y:auto;
+  position:relative;
+  transform:scale(.94) translateY(18px);
+  opacity:0;
+  transition:transform .38s cubic-bezier(.22,1,.36,1),opacity .35s ease;
+  scrollbar-width:thin;
+  scrollbar-color:var(--forest-leaf) transparent;
+  box-shadow:0 40px 100px rgba(0,0,0,.35);
+}
+#articleModal.open .modal-box{transform:scale(1) translateY(0);opacity:1;}
+.modal-close{
+  position:fixed;top:1.1rem;right:1.1rem;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(15,34,24,.75);color:#fff;
+  font-size:1rem;cursor:pointer;z-index:2001;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.15);
+  transition:background .2s,transform .2s;
+}
+.modal-close:hover{background:var(--forest-deep);transform:scale(1.1);}
+.modal-hero-img{
+  width:100%;height:300px;object-fit:cover;
+  border-radius:22px 22px 0 0;display:block;
+}
+.modal-body{padding:2.2rem 2.5rem 2.8rem;}
+.modal-category{
+  display:inline-block;
+  font-size:.52rem;font-weight:800;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;
+  color:#fff;margin-bottom:.9rem;
+}
+.modal-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,3vw,2.3rem);
+  font-weight:700;color:var(--forest-deep);
+  line-height:1.15;margin-bottom:.85rem;
+}
+.modal-meta{
+  display:flex;align-items:center;gap:.65rem;
+  font-size:.65rem;color:var(--text-lt);
+  border-bottom:1px solid rgba(26,58,42,.09);
+  padding-bottom:.9rem;margin-bottom:1.5rem;
+  flex-wrap:wrap;
+}
+.modal-content{
+  font-size:.875rem;color:#3d4d3e;
+  line-height:1.85;
+}
+.modal-content p{margin-bottom:1rem;}
+.modal-content h4{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;font-weight:700;
+  color:var(--forest-deep);
+  margin:1.5rem 0 .55rem;
+}
+.modal-content ul{
+  margin:.5rem 0 1rem 1.2rem;
+  display:flex;flex-direction:column;gap:.4rem;
+}
+.modal-content ul li{font-size:.85rem;color:#4b5563;}
+.modal-content blockquote{
+  border-left:3px solid var(--forest-leaf);
+  padding-left:1rem;margin:1.2rem 0;
+  font-style:italic;color:var(--text-md);
+  font-size:.9rem;
+}
+.modal-product-cta{
+  margin-top:2rem;padding:1.25rem 1.5rem;
+  background:linear-gradient(135deg,#e8f5e9,#f0faf2);
+  border:1px solid rgba(74,140,92,.2);
+  border-radius:14px;
+  display:flex;align-items:center;gap:1rem;
+  flex-wrap:wrap;
+}
+.modal-product-cta p{
+  font-size:.78rem;font-weight:600;
+  color:var(--forest-deep);
+  margin-bottom:0;
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:var(--forest-deep);color:#fff;
+  font-size:.72rem;font-weight:700;
+  padding:.55rem 1.2rem;border-radius:8px;
+  transition:background .2s,transform .15s;
+  white-space:nowrap;flex-shrink:0;
+}
+.cta-btn:hover{background:var(--forest-mid);transform:translateY(-1px);}
+
+/* ═══════════════════════════════════════
+   NEWSLETTER SECTION
+═══════════════════════════════════════ */
+.newsletter-section{
+  background:linear-gradient(135deg,var(--forest-deep) 0%,var(--forest-mid) 100%);
+  padding:4.5rem 1.75rem;text-align:center;position:relative;overflow:hidden;
+}
+.newsletter-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 120%,rgba(201,168,76,.15) 0%,transparent 60%);
+}
+.newsletter-inner{position:relative;z-index:1;max-width:520px;margin:0 auto;}
+.newsletter-section h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+  font-weight:700;color:#fff;margin-bottom:.65rem;
+}
+.newsletter-section h2 em{font-style:italic;color:#86c98a;}
+.newsletter-section p{
+  font-size:.84rem;color:rgba(255,255,255,.55);
+  line-height:1.7;margin-bottom:1.75rem;
+}
+.newsletter-form{
+  display:flex;gap:.5rem;
+  background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.2);
+}
+.newsletter-form input{
+  flex:1;padding:.75rem 1.25rem;
+  font-size:.84rem;color:var(--forest-deep);
+  background:transparent;
+}
+.newsletter-form input::placeholder{color:#9ca3af;}
+.newsletter-form button{
+  padding:.75rem 1.4rem;
+  background:var(--gold-dk);color:#fff;
+  font-size:.78rem;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;
+  transition:background .2s;flex-shrink:0;
+}
+.newsletter-form button:hover{background:var(--gold);}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.site-footer{
+  background:#111827;color:#d1d5db;
+}
+.footer-grid{
+  max-width:1400px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:2.5rem;padding:3rem 1.75rem 2rem;
+}
+.footer-brand-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.55rem;font-weight:700;color:#fff;margin-bottom:3px;
+}
+.footer-brand-name em{font-style:normal;color:var(--gold-dk);}
+.footer-tagline{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:#6b7280;margin-bottom:.85rem;}
+.footer-desc{font-size:.78rem;color:#9ca3af;line-height:1.7;margin-bottom:1rem;}
+.footer-socials{display:flex;gap:.5rem;}
+.footer-social{
+  width:32px;height:32px;background:rgba(255,255,255,.07);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#9ca3af;font-size:.7rem;
+  transition:background .2s;
+}
+.footer-social:hover{background:#166534;}
+.footer-col h3{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:.85rem;letter-spacing:.06em;text-transform:uppercase;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+.footer-col a{font-size:.78rem;color:#9ca3af;transition:color .2s;}
+.footer-col a:hover{color:#4ade80;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.75rem;text-align:center;font-size:.72rem;color:#6b7280;}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--forest-deep);color:var(--cream);
+  font-size:.78rem;font-weight:600;
+  padding:.55rem 1.4rem;border-radius:30px;
+  opacity:0;pointer-events:none;white-space:nowrap;
+  z-index:9999;box-shadow:0 8px 28px rgba(10,30,15,.3);
+  border:1px solid rgba(201,168,76,.22);
+  transition:opacity .3s,transform .3s;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.sr{opacity:0;transform:translateY(32px);transition:opacity .72s cubic-bezier(.22,1,.36,1),transform .72s cubic-bezier(.22,1,.36,1);}
+.sr.is-visible{opacity:1;transform:none;}
+.sd-1{transition-delay:.08s;}.sd-2{transition-delay:.16s;}.sd-3{transition-delay:.24s;}
+
+/* ═══════════════════════════════════════
+   MOBILE
+═══════════════════════════════════════ */
+@media(max-width:768px){
+  :root{--nav-h:56px;}
+  .nav-links,.mob-search,.hidden-mob{display:none!important;}
+  .mob-ham{display:flex;}
+  .blog-hero{padding:3.5rem 1rem 3rem;}
+  .blog-hero h1{font-size:2rem;}
+  .hero-stats{gap:1.25rem;}
+  .featured-post{grid-template-columns:1fr;}
+  .featured-post-img{height:220px;}
+  .featured-post-body{padding:1.5rem;}
+  .blog-main{padding:2rem 1rem 3.5rem;}
+  .filter-inner{padding:.7rem 1rem;}
+  .blog-grid{grid-template-columns:1fr 1fr;gap:.85rem;}
+  .blog-card-img{height:155px;}
+  .blog-card-body{padding:1rem;}
+  .blog-card-body h3{font-size:.95rem;}
+  .blog-card-body p{font-size:.7rem;}
+  .modal-body{padding:1.25rem 1.1rem 1.75rem;}
+  .modal-hero-img{height:195px;}
+  .modal-title{font-size:1.45rem;}
+  .newsletter-section{padding:3rem 1rem;}
+  .newsletter-form{flex-direction:column;border-radius:12px;gap:.5rem;background:transparent;box-shadow:none;}
+  .newsletter-form input{background:#fff;border-radius:10px;border:none;}
+  .newsletter-form button{border-radius:10px;}
+}
+@media(max-width:480px){
+  .blog-grid{grid-template-columns:1fr;}
+  .blog-card-img{height:195px;}
+}
+
+/* ═══════════════════════════════════════
+   MOBILE STICKY BAR
+═══════════════════════════════════════ */
+#mob-sticky-bar{
+  display:none;
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:1080;
+  background:#fff;
+  border-top:1px solid rgba(26,58,42,.1);
+  box-shadow:0 -4px 20px rgba(10,30,15,.1);
+  padding:.45rem .5rem;
+  padding-bottom:calc(.45rem + env(safe-area-inset-bottom,0px));
+}
+@media(max-width:768px){
+  #mob-sticky-bar{display:flex;align-items:center;justify-content:space-around;gap:.25rem;}
+  body{padding-bottom:64px;}
+}
+.mob-bar-btn{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;padding:.3rem .2rem;
+  background:none;border:none;cursor:pointer;
+  color:var(--text-md);text-decoration:none;
+  font-size:.58rem;font-weight:600;letter-spacing:.04em;
+  border-radius:10px;transition:color .2s,background .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.mob-bar-btn svg{width:20px;height:20px;}
+.mob-bar-btn:active{background:rgba(74,140,92,.08);color:var(--forest-leaf);}
+.mob-bar-btn.active{color:var(--forest-deep);}
+.mob-bar-btn.primary{
+  background:var(--forest-deep);color:#fff;border-radius:14px;
+  padding:.45rem .6rem;flex:1.4;
+  box-shadow:0 4px 14px rgba(15,34,24,.28);
+}
+.mob-bar-btn.primary:active{background:var(--forest-mid);}
+.mob-bar-icon-wrap{position:relative;}
+.mob-bar-badge{
+  position:absolute;top:-4px;right:-6px;
+  background:#ef4444;color:#fff;
+  font-size:.48rem;font-weight:800;
+  min-width:14px;height:14px;padding:0 3px;
+  border-radius:20px;display:flex;align-items:center;justify-content:center;
+  border:1.5px solid #fff;line-height:1;
+}
+
+/* ═══════════════════════════════════════
+   MOBILE DRAWER
+═══════════════════════════════════════ */
+#mobDrawer{
+  display:none;position:fixed;
+  top:var(--nav-h);left:0;right:0;bottom:0;
+  background:#fff;z-index:999;
+  overflow-y:auto;padding:1.5rem;
+  border-top:1px solid rgba(26,58,42,.1);
+}
+.mob-drawer-link{
+  display:block;padding:.85rem 1rem;
+  font-size:.9rem;font-weight:600;
+  color:var(--forest-deep);border-radius:10px;
+  transition:background .15s;
+}
+.mob-drawer-link:hover{background:rgba(74,140,92,.06);}
+.mob-drawer-hr{border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;}
+
+/* ─── Category color dots ─── */
+.dot-rice      { background:#65a30d; }
+.dot-flowers   { background:#db2777; }
+.dot-beverages { background:#0891b2; }
+.dot-flour     { background:#ca8a04; }
+.dot-other     { background:#16a34a; }
+</style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" onerror="this.style.display='none'"/>
+    </a>
+    <ul class="nav-links">
+      <li><a class="nav-link" href="index.html">Home</a></li>
+      <li><a class="nav-link" href="index.html#products">Shop</a></li>
+      <li><a class="nav-link" href="index.html#why-section">Our Promise</a></li>
+      <li><a class="nav-link active" href="blog.html">Blogs</a></li>
+      <li><a class="nav-link" href="news.html">News</a></li>
+      <li><a class="nav-link" href="index.html#site-footer">About</a></li>
+    </ul>
+    <!-- Search bar -->
+    <div style="position:relative;flex:1;max-width:320px;display:flex;align-items:center;border:1.5px solid rgba(26,58,42,.18);border-radius:8px;overflow:hidden;background:#fff;" class="hidden-mob">
+      <input id="blogSearchInput" type="text" placeholder="Search articles…"
+             oninput="onSearch(this.value)"
+             onkeydown="if(event.key==='Escape'){this.value='';onSearch('')}"
+             style="flex:1;padding:.5rem 1rem;font-size:.79rem;color:var(--forest-deep);font-family:'Inter',sans-serif;border:none;outline:none;background:transparent;"/>
+      <button onclick="onSearch(document.getElementById('blogSearchInput').value)"
+              style="padding:.5rem .85rem;background:var(--forest-deep);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;"
+              onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest-deep)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+    </div>
+    <div class="nav-actions">
+      <a href="checkoutmyorderpage.html" class="nav-orders-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        My Orders
+      </a>
+      <div class="nav-divider"></div>
+      <a id="navSignInBtn" href="login.html" class="nav-icon-btn" style="gap:5px;width:auto;padding:0 8px;border-radius:20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="navSignInText" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);">Sign In</span>
+      </a>
+      <a href="wishlist.html" class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+        <span class="nav-badge" id="wishlistCount">0</span>
+      </a>
+      <a href="checkoutmyorderpage.html" class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge" id="cartCount">0</span>
+      </a>
+      <button class="mob-ham" id="mobHam" onclick="toggleMobDrawer()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
+  <nav style="display:flex;flex-direction:column;gap:.15rem;">
+    <a href="index.html"             style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] Home</a>
+    <a href="index.html#products"    style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
+    <a href="index.html#why-section" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
+    <a href="blog.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
+    <a href="news.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
+    <a href="index.html#site-footer" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
+    <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
+    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
+    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
+    <a href="wishlist.html"          style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
+  </nav>
+</div>
+<!-- ═══════════════════════════════════════
+     3D ARTICLE CAROUSEL
+═══════════════════════════════════════ -->
+<section class="article-carousel-section">
+  <div class="carousel-heading">
+    <h2>Featured <em>Articles</em></h2>
+    <p>Stories from our farm, kitchen &amp; wellness research</p>
+  </div>
+  <div class="carousel-stage" id="acStage"></div>
+  <div class="carousel-controls">
+    <button class="ac-arrow" id="acPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="ac-dots" id="acDots"></div>
+    <button class="ac-arrow" id="acNext" aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CATEGORY FILTER
+═══════════════════════════════════════ -->
+<div class="filter-section">
+  <div class="filter-inner">
+    <button class="fpill active" data-cat="all"       onclick="filterBlog('all',this)">All Articles</button>
+    <button class="fpill" data-cat="rice"             onclick="filterBlog('rice',this)">[[icon:wheat]] Rice Varieties</button>
+    <button class="fpill" data-cat="flowers"          onclick="filterBlog('flowers',this)">[[icon:flower-2]] Dried Flowers</button>
+    <button class="fpill" data-cat="beverages"        onclick="filterBlog('beverages',this)">[[icon:glass-water]] Beverages</button>
+    <button class="fpill" data-cat="flour"            onclick="filterBlog('flour',this)">[[icon:package]] Flour & Mixes</button>
+    <button class="fpill" data-cat="other"            onclick="filterBlog('other',this)">[[icon:leaf]] Other</button>
+    <button class="fpill" data-cat="wellness"         onclick="filterBlog('wellness',this)">[[icon:heart]] Wellness</button>
+    <button class="fpill" data-cat="recipes"          onclick="filterBlog('recipes',this)">[[icon:chef-hat]] Recipes</button>
+    <button class="fpill" data-cat="sustainability"   onclick="filterBlog('sustainability',this)">[[icon:recycle]] Sustainability</button>
+    <span class="result-count" id="resultCount">48 articles</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════ -->
+<main class="blog-main">
+  <!-- Grid -->
+  <div id="gridLabel" class="blog-grid-label sr sd-1"><h3>All Articles</h3></div>
+  <div id="blogGrid" class="blog-grid"></div>
+</main>
+
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
+      <div class="footer-tagline">Experience the Root of Nature</div>
+      <p class="footer-desc">100% organic & high-quality agricultural products. Trusted by farmers and families across India for over 22 years.</p>
+      <div class="footer-socials">
+        <a href="#" class="footer-social">𝕏</a>
+        <a href="#" class="footer-social">f</a>
+        <a href="#" class="footer-social">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#products">Shop</a></li>
+        <li><a href="blog.html">Blogs</a></li>
+        <li><a href="news.html">News</a></li>
+        <li><a href="index.html#site-footer">About Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Certifications</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="index.html#products">Rice Varieties</a></li>
+        <li><a href="index.html#products">Dried Flowers</a></li>
+        <li><a href="index.html#products">Beverages</a></li>
+        <li><a href="index.html#products">Flour & Mixes</a></li>
+        <li><a href="index.html#products">Other Products</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+</footer>
+
+<!-- MOBILE STICKY BOTTOM BAR -->
+<nav id="mob-sticky-bar">
+  <a href="index.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </a>
+  <a href="blog.html" class="mob-bar-btn active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    Blogs
+  </a>
+  <a href="index.html#products" class="mob-bar-btn primary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    Shop
+  </a>
+  <a href="news.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+    News
+  </a>
+  <a href="login.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Account
+  </a>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     ARTICLE MODAL
+═══════════════════════════════════════ -->
+<div id="articleModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">[[icon:x]]</button>
+    <img id="modalImg" src="" alt="" class="modal-hero-img"/>
+    <div class="modal-body">
+      <span id="modalCat" class="modal-category"></span>
+      <h2 id="modalTitle" class="modal-title"></h2>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div id="modalContent" class="modal-content"></div>
+      <div id="modalCTA" class="modal-product-cta"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+const BLOGS = [
+
+  /* ──────────── RICE VARIETIES ──────────── */
+  {
+    id:1, productId:1,
+    category:'rice', tags:['wellness','heritage'],
+    product:'Karunguruvai Rice',
+    title:'Karunguruvai Rice: The Ancient Tamil Remedy You Should Be Eating Daily',
+    excerpt:'This short-grain medicinal rice has a glycemic index of just 51 — and has been prescribed in Siddha medicine for over 2,000 years.',
+    date:'Mar 12, 2026', read:'5 min',
+    author:'Dr. Nithya Kumar',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602',
+    catColor:'#65a30d',
+    content:`<p>Walk into any traditional Tamil household and you will find that the oldest member of the family knows exactly what Karunguruvai rice is. It is not just a grain — it is a prescription from nature, passed down through generations of Siddha practitioners.</p>
+    <h4>What Makes It Medicinal?</h4>
+    <p>Karunguruvai is a short-grain, dark-husked heritage rice variety native to the Cauvery delta region of Tamil Nadu. Its deep pigmentation comes from natural anthocyanins — the same powerful antioxidants found in blueberries and black grapes. These compounds actively fight oxidative stress at the cellular level.</p>
+    <blockquote>"In Siddha medicine, Karunguruvai is classified as a cooling grain that balances pitta dosha and strengthens the digestive fire." — Traditional Siddha text, Agasthiyar Gunavagadam</blockquote>
+    <h4>Glycemic Index & Diabetes</h4>
+    <p>Modern nutritional science has confirmed what Siddha practitioners knew for centuries. With a glycemic index of just 51 (compared to 72 for white rice), Karunguruvai causes a much slower, steadier rise in blood sugar. This makes it an excellent daily staple for people managing Type 2 diabetes or insulin resistance.</p>
+    <h4>Nutritional Profile per 100g</h4>
+    <ul>
+      <li>Calories: 350 kcal (slow-release energy)</li>
+      <li>Dietary Fiber: 4–6g (excellent for gut health)</li>
+      <li>Iron: 2–3mg (prevents anemia)</li>
+      <li>Magnesium: 60–80mg (supports muscle & nerve function)</li>
+      <li>Protein: 7–9g (builds and repairs tissue)</li>
+    </ul>
+    <h4>How to Cook Karunguruvai Rice</h4>
+    <p>Use a 1:2.5 rice-to-water ratio. Soak for 30 minutes before cooking for best results. Cook on medium-low heat for 25–30 minutes. The grain will have a slightly chewy texture and a subtle earthy aroma. Serve with curd rice, sambar, or rasam for a complete meal.</p>
+    <p>At Nansai Organics, our Karunguruvai is grown on our 25-acre certified farm in Tamil Nadu using traditional seed-saving methods — ensuring you receive grain that is both authentic and genuinely nutritious.</p>`
+  },
+  {
+    id:2, productId:2,
+    category:'rice', tags:['wellness','antioxidants'],
+    product:'Karuppu Kavuni Rice',
+    title:'Black Kavuni Rice: Why This Purple Payasam Ingredient Is a Superfood',
+    excerpt:'Karuppu Kavuni is among the richest plant sources of anthocyanins on earth. Here is everything you need to know.',
+    date:'Feb 28, 2026', read:'4 min',
+    author:'Nansai Farm Team',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741',
+    catColor:'#65a30d',
+    content:`<p>Karuppu Kavuni — literally "black glutinous rice" — has been a ceremonial grain in Tamil Nadu for centuries. Served at weddings, temple festivals and new year celebrations, it is now recognised by modern nutrition science as one of the most antioxidant-rich foods you can eat.</p>
+    <h4>The Science of its Deep Black Color</h4>
+    <p>The striking black-purple color of Kavuni rice comes from anthocyanins — a class of flavonoid antioxidants. Research published in the Journal of Agricultural and Food Chemistry found that black rice bran contains more anthocyanins than blueberries, weight for weight. These compounds actively neutralise free radicals that cause inflammation, aging, and chronic disease.</p>
+    <h4>Heart Health & Cholesterol</h4>
+    <p>Studies have shown that the phytochemicals in black rice can reduce LDL (bad) cholesterol oxidation — a key driver of arterial plaque formation. Regular consumption is associated with improved cardiovascular outcomes in observational studies from both India and China, where black rice has been consumed for millennia.</p>
+    <h4>Traditional Kavuni Payasam Recipe</h4>
+    <ul>
+      <li>Soak 1 cup Kavuni rice overnight</li>
+      <li>Pressure cook with 3 cups water (3 whistles)</li>
+      <li>Add 1 cup coconut milk, ½ cup jaggery, and cardamom</li>
+      <li>Simmer on low for 15 minutes until thick</li>
+      <li>Garnish with cashews and raisins fried in ghee</li>
+    </ul>
+    <p>The result is a stunning deep purple dessert with a rich, nutty flavor that guests will remember long after the meal is finished.</p>
+    <blockquote>"Let food be thy medicine and medicine be thy food." — Hippocrates, echoed in centuries of Tamil food wisdom.</blockquote>`
+  },
+  {
+    id:3, productId:3,
+    category:'rice', tags:['recipes','heritage'],
+    product:'Arubatham Kuruvai Rice',
+    title:'Arubatham Kuruvai: The 60-Day Rice That Feeds Families and Heals the Soil',
+    excerpt:'Short-duration heritage varieties like Arubatham Kuruvai are the unsung heroes of sustainable Tamil farming.',
+    date:'Feb 15, 2026', read:'4 min',
+    author:'Nansai Farm Team',
+    image:'https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=700&auto=format&fit=crop',
+    catColor:'#65a30d',
+    content:`<p>Most modern paddy varieties take 120 to 150 days to mature. Arubatham Kuruvai matures in just 60 days — earning it the name "sixty-day rice" (arubatham = sixty in Tamil). This remarkable efficiency has made it a staple of Tamil Nadu's traditional three-crop cycle for centuries.</p>
+    <h4>Why Short-Duration Rice Matters</h4>
+    <p>Short-duration varieties like Arubatham Kuruvai require significantly less water than high-yield modern varieties. They fit naturally into crop rotation schedules, allowing land to rest and regenerate. Their shallow roots loosen the soil without depleting deep mineral reserves, making them genuinely regenerative crops.</p>
+    <h4>Light on the Stomach, Rich in Minerals</h4>
+    <p>Arubatham Kuruvai produces a soft, light grain that is remarkably easy to digest. It is particularly recommended for the elderly, children, and anyone recovering from illness. The rice is rich in zinc, magnesium, and phosphorus — minerals that support immune function and bone health.</p>
+    <h4>Perfect Everyday Rice</h4>
+    <p>Unlike some heritage varieties that require special preparation, Arubatham Kuruvai cooks beautifully with a simple 1:2 water ratio. The result is a light, non-sticky cooked grain with a delicate flavor that pairs with everything from dal to fish curry. This is the rice your grandmother would have served every day — because it was the right rice to serve every day.</p>`
+  },
+  {
+    id:4, productId:4,
+    category:'rice', tags:['wellness','women'],
+    product:'Poongar Rice',
+    title:'Poongar Rice: The Heritage Grain That Supports Women\'s Health Naturally',
+    excerpt:'With an iron content of 6.6mg per 100g and a glycemic index under 46, Poongar is the grain every woman should know about.',
+    date:'Feb 5, 2026', read:'5 min',
+    author:'Nansai Farm Team',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674',
+    catColor:'#65a30d',
+    content:`<p>In many Tamil Nadu villages, a new bride's household would receive a gift of Poongar rice from her mother. The tradition was rooted not in ceremony but in practical wisdom: Poongar was known to regulate menstrual cycles, support lactation, and maintain iron levels during pregnancy. Modern nutritional analysis has confirmed every one of these traditional claims.</p>
+    <h4>Iron That Prevents Anemia</h4>
+    <p>Poongar rice contains 6.6mg of iron per 100g — significantly higher than most other rice varieties and comparable to many iron-fortified cereals. Iron-deficiency anemia affects roughly 51% of Indian women of reproductive age. A daily serving of Poongar rice, combined with a source of Vitamin C (such as tomatoes or lemon), dramatically improves iron absorption.</p>
+    <h4>Menstrual Health & Hormonal Balance</h4>
+    <p>Traditional Siddha texts prescribe Poongar kanji (rice porridge) specifically for women experiencing irregular periods or hormonal imbalance. The grain's unique phytochemical profile — including natural phytoestrogens — is thought to support hormonal regulation. While clinical trials are still limited, the empirical evidence from centuries of use is substantial.</p>
+    <h4>Pregnancy & Lactation</h4>
+    <p>Poongar rice kanji, prepared with small amounts of ghee and rock sugar, has been a postpartum food in Tamil Nadu for centuries. It is said to support milk production in nursing mothers and provide the energy needed for recovery after childbirth. Its low glycemic index (41–46) also makes it safe for women who develop gestational diabetes.</p>
+    <blockquote>"Poongar sadham — the women's rice — is our grandmother's gift to every daughter." — Traditional Tamil saying</blockquote>`
+  },
+  {
+    id:5, productId:5,
+    category:'rice', tags:['heritage','wellness'],
+    product:'Mappillai Samba Rice',
+    title:'Mappillai Samba: The Bridegroom\'s Rice That Builds Real Strength',
+    excerpt:'Traditionally fed to grooms before their wedding day, this iron-rich heritage variety has been a strength builder for generations.',
+    date:'Jan 28, 2026', read:'4 min',
+    author:'Nansai Farm Team',
+    image:'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=700&auto=format&fit=crop',
+    catColor:'#65a30d',
+    content:`<p>The name tells the story: "Mappillai" means bridegroom in Tamil, and "Samba" is the rice type. This grain was traditionally given to the groom for weeks before his wedding to build physical stamina, improve digestion, and strengthen the body for the demands of married life and farming. It is, in essence, Tamil Nadu's original energy food.</p>
+    <h4>What Gives It Its Strength?</h4>
+    <p>Mappillai Samba is a long-grain, reddish-brown rice with a naturally high fiber content and a rich supply of iron, zinc, and natural plant sterols. Its bran layer — which is preserved in our hand-pounded preparation — contains phytosterols that support testosterone metabolism and hormonal health in men.</p>
+    <h4>Stamina and Endurance</h4>
+    <p>Athletes and fitness enthusiasts who have incorporated Mappillai Samba into their diet consistently report sustained energy throughout long training sessions. Unlike refined white rice that causes a rapid spike and crash in blood sugar, this heritage variety provides slow, steady fuel — perfect for endurance sports or long days of physical work.</p>
+    <h4>How to Cook It</h4>
+    <p>Soak for one hour before cooking. Use a 1:2.5 water ratio and cook for 30–35 minutes. Mappillai Samba pairs beautifully with coconut milk curries and is exceptional when cooked as a simple pulao with ginger and turmeric — a recipe that maximises its natural anti-inflammatory properties.</p>`
+  },
+  {
+    id:6, productId:6,
+    category:'rice', tags:['recipes','heritage'],
+    product:'Iluppai Poo Samba Rice',
+    title:'Iluppai Poo Samba: The Floral Rice That Makes Every Meal Feel Special',
+    excerpt:'Named after the Mahua flower, this aromatic heritage rice fills your kitchen with a distinctive floral fragrance that no modern variety can replicate.',
+    date:'Jan 18, 2026', read:'3 min',
+    author:'Nansai Farm Team',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667',
+    catColor:'#65a30d',
+    content:`<p>There is a moment when you open the lid of a pot of Iluppai Poo Samba rice that is simply unforgettable. A gentle, floral fragrance — reminiscent of the Mahua (Iluppai) tree flower after which this rice is named — fills the entire kitchen. It is one of those sensory experiences that connects you immediately to Tamil Nadu's rich agricultural heritage.</p>
+    <h4>The Science of the Aroma</h4>
+    <p>The distinctive fragrance of Iluppai Poo Samba comes from natural volatile compounds — primarily 2-acetyl-1-pyrroline — that develop during the grain's growth in specific soil and climate conditions in the Cauvery delta. This same compound is responsible for the aroma of Basmati, but in Iluppai Poo Samba it carries an additional floral note that is uniquely Tamil.</p>
+    <h4>Everyday Versatility</h4>
+    <p>Despite its premium aroma, Iluppai Poo Samba is an everyday rice — light, easy to digest, and suitable for the whole family. It cooks in 20–25 minutes with a 1:2 water ratio and can be used for everything from plain rice to biriyani, pongal, and curd rice. Its moderate fiber content supports healthy digestion without heaviness.</p>
+    <h4>Preservation Through Purchase</h4>
+    <p>Iluppai Poo Samba is classified as a rare heritage variety. Fewer than 200 farming families in Tamil Nadu still cultivate it. When you buy this rice from Nansai Organics, you are directly funding the continued cultivation of a 1,500-year-old grain variety. Your purchase is an act of cultural preservation.</p>`
+  },
+  {
+    id:7, productId:7,
+    category:'rice', tags:['recipes','heritage'],
+    product:'Vellai Kavuni Rice',
+    title:'Vellai Kavuni: The Sticky White Rice Behind Tamil Nadu\'s Best Sweet Pongal',
+    excerpt:'White Kavuni\'s gentle stickiness and mild sweetness make it the traditional choice for pongal, payasam, and celebration rice dishes.',
+    date:'Jan 8, 2026', read:'3 min',
+    author:'Nansai Farm Team',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240',
+    catColor:'#65a30d',
+    content:`<p>While its sibling Karuppu Kavuni gets the nutritional headlines, Vellai Kavuni — white Kavuni rice — has a devoted following among Tamil cooks who know it as the secret to the most texturally perfect sweet pongal imaginable. Its natural stickiness creates a creamy, unified dish that simply cannot be replicated with modern short-grain rice.</p>
+    <h4>Why Sticky Rice for Pongal?</h4>
+    <p>The slightly glutinous nature of Vellai Kavuni comes from a naturally higher amylopectin content. When cooked, the grains bind together without becoming glue-like — creating the silky, cohesive texture that defines perfect pongal. Modern rice varieties lack this quality because they have been bred for yield and separation, not texture.</p>
+    <h4>Nutritional Benefits</h4>
+    <p>Vellai Kavuni retains more of its natural nutrients than polished white rice because it is minimally processed. It provides steady, complex carbohydrate energy and contains good amounts of calcium, phosphorus, and magnesium — minerals essential for bone health and muscle function. It is a healthier alternative to the heavily polished white rice most urban families consume daily.</p>
+    <h4>Classic Sweet Pongal Recipe</h4>
+    <ul>
+      <li>1 cup Vellai Kavuni rice + ¼ cup moong dal (soaked 30 min)</li>
+      <li>3 cups water, pressure cook for 4 whistles</li>
+      <li>Add ¾ cup jaggery syrup, 2 tbsp ghee, cardamom, saffron</li>
+      <li>Mix well on low heat until glossy and unified</li>
+      <li>Garnish with cashews and raisins fried in ghee</li>
+    </ul>
+    <p>The result is a golden, fragrant pongal with a texture that is simultaneously creamy and structured — the kind that earns compliments long after the meal is done.</p>`
+  },
+
+  /* ──────────── DRIED FLOWERS ──────────── */
+  {
+    id:8, productId:8,
+    category:'flowers', tags:['wellness','skincare'],
+    product:'Paneer Rose',
+    title:'Panneer Rose: Tamil Nadu\'s Fragrant Rose and Its 12 Remarkable Uses',
+    excerpt:'From face tonics to cooling drinks to hair masks — the Panneer rose petal has been central to Tamil women\'s beauty routines for centuries.',
+    date:'Mar 8, 2026', read:'5 min',
+    author:'Dr. Priya Selvam',
+    image:'https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=700&auto=format&fit=crop',
+    catColor:'#db2777',
+    content:`<p>The Panneer rose — Rosa damascena grown in Tamil Nadu's specific climate — is not just a flower. It is a pharmacy, a perfumery, a kitchen ingredient, and a skincare product all at once. Tamil women have known this for generations. Modern cosmetic science is only now catching up.</p>
+    <h4>Panneer Rose Water for Skin</h4>
+    <p>Pure Panneer rose water is one of the most effective natural toners available. Rich in phenylethanol and natural flavonoids, it lowers skin pH to the optimal range of 5.0–5.5, tightens pores, and provides a natural, long-lasting fragrance. Apply with a cotton pad morning and night after cleansing for visibly improved skin texture within 4 weeks.</p>
+    <h4>Panneer Rose Milk Recipe</h4>
+    <ul>
+      <li>Steep 15–20 dried petals in 200ml warm milk for 10 minutes</li>
+      <li>Strain and add 1 tsp rose sugar or jaggery</li>
+      <li>Add a pinch of cardamom and serve warm or cold</li>
+    </ul>
+    <p>This is Tamil Nadu's beloved rose milk — the authentic version that uses real petals, not artificial rose essence. The difference in taste is extraordinary.</p>
+    <h4>Hair Growth Mask</h4>
+    <p>Grind dried petals with 2 tbsp coconut oil into a smooth paste. Apply to scalp and hair roots, leave for 45 minutes, rinse with a mild shampoo. Rose petals contain geraniol and citronellol — compounds that stimulate circulation in the scalp and support healthy hair follicle activity. Use twice weekly for best results.</p>
+    <h4>Anti-Inflammatory Face Pack</h4>
+    <p>Mix powdered Panneer rose petals with raw honey and a few drops of rose water into a smooth paste. Apply for 15 minutes. The natural gallic acid in rose petals has confirmed anti-inflammatory properties that reduce redness and calm sensitized skin — without the irritation risk of synthetic actives.</p>`
+  },
+  {
+    id:9, productId:9,
+    category:'flowers', tags:['wellness','recipes'],
+    product:'Hibiscus Flower',
+    title:'Hibiscus: The Blood Pressure Flower with 8 Proven Health Benefits',
+    excerpt:'Clinical trials have confirmed what traditional medicine has known for centuries — hibiscus tea is one of the most effective natural remedies for hypertension.',
+    date:'Feb 22, 2026', read:'5 min',
+    author:'Nansai Wellness Team',
+    image:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=700&auto=format&fit=crop',
+    catColor:'#db2777',
+    content:`<p>Hibiscus sabdariffa — known as Sembaruthi or Chembarathi in Tamil — is one of the most researched medicinal plants in traditional and modern medicine. Its vivid red calyces contain a concentration of natural acids and anthocyanins that have been clinically demonstrated to lower blood pressure, improve liver function, and fight inflammation.</p>
+    <h4>Blood Pressure: The Clinical Evidence</h4>
+    <p>A randomized controlled trial published in the Journal of Nutrition found that consuming hibiscus tea daily for six weeks reduced systolic blood pressure by an average of 7.2 mmHg in pre-hypertensive adults. This effect is comparable to some pharmaceutical interventions, without the side effects.</p>
+    <h4>8 Proven Benefits</h4>
+    <ul>
+      <li>Lowers systolic blood pressure (clinically confirmed)</li>
+      <li>Reduces LDL cholesterol oxidation</li>
+      <li>Supports liver health and reduces liver damage markers</li>
+      <li>Rich in Vitamin C — supports immune function</li>
+      <li>Natural diuretic that reduces water retention</li>
+      <li>Anti-inflammatory via anthocyanins</li>
+      <li>Supports hair growth and scalp health</li>
+      <li>Improves skin elasticity through collagen support</li>
+    </ul>
+    <h4>Perfect Hibiscus Tea Recipe</h4>
+    <p>Steep 1 tablespoon dried hibiscus flowers in 250ml boiling water for 8 minutes. Strain and sweeten with jaggery to taste. Add lemon juice for an extra Vitamin C boost and a deeper red color. Drink one cup daily before breakfast for best cardiovascular benefits.</p>
+    <blockquote>"In Ayurveda, hibiscus is a rasayana — a rejuvenating herb that promotes longevity and vitality." — Classical Ayurvedic text</blockquote>`
+  },
+  {
+    id:10, productId:10,
+    category:'flowers', tags:['wellness','diabetes'],
+    product:'Aavaram Flower',
+    title:'Aavaram Flower (Avarampoo): The Siddha Medicine Superstar for Blood Sugar Control',
+    excerpt:'Avarampoo has been prescribed in Tamil Siddha medicine for diabetes for over 2,000 years. Modern science is finally proving why.',
+    date:'Feb 12, 2026', read:'4 min',
+    author:'Dr. Nithya Kumar',
+    image:'https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=700&auto=format&fit=crop',
+    catColor:'#db2777',
+    content:`<p>If you were to ask a Siddha physician in Tamil Nadu what single herb they would recommend most broadly, many would say Avarampoo — Cassia auriculata, the Tanner's Cassia flower. It is one of the foundational herbs of Siddha medicine, prescribed for everything from skin conditions to diabetes management to urinary tract health.</p>
+    <h4>Blood Sugar Management</h4>
+    <p>Avarampoo contains natural compounds called flavonoids and terpenoids that have been shown in animal studies and preliminary human trials to enhance insulin sensitivity and lower fasting blood glucose levels. Traditional Siddha practice recommends Avarampoo tea as a morning drink for people with Type 2 diabetes — a practice supported by contemporary herbal medicine research.</p>
+    <h4>How to Prepare Avarampoo Tea</h4>
+    <ul>
+      <li>Boil 1 tsp dried Avarampoo in 300ml water for 10 minutes</li>
+      <li>Strain well and drink warm, unsweetened</li>
+      <li>Best consumed on an empty stomach in the morning</li>
+      <li>Consistent daily use for at least 4 weeks for best results</li>
+    </ul>
+    <h4>Skin Health Applications</h4>
+    <p>Avarampoo is naturally antibacterial and anti-inflammatory. Ground into a powder and mixed with raw honey, it makes an effective face pack for acne-prone skin. The natural tannins in the flower tighten pores and reduce sebum production. Used regularly, it visibly improves skin tone and texture within 3–4 weeks.</p>
+    <h4>Cooling Effect</h4>
+    <p>In Siddha medicine, Avarampoo is classified as a cooling herb — one that reduces excess body heat (pitta). This makes it particularly valuable in Tamil Nadu's hot climate as a summer drink that prevents heat-related exhaustion and keeps the body's internal temperature regulated naturally.</p>`
+  },
+  {
+    id:11, productId:11,
+    category:'flowers', tags:['recipes','wellness'],
+    product:'Butterfly Pea Flower',
+    title:'Butterfly Pea Flower: The Color-Changing Herb That Boosts Your Brain',
+    excerpt:'Butterfly pea flower tea turns purple with lemon juice, blue in water, and according to growing research, it may turn back the clock on cognitive aging.',
+    date:'Jan 25, 2026', read:'4 min',
+    author:'Nansai Wellness Team',
+    image:'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=700&auto=format&fit=crop',
+    catColor:'#db2777',
+    content:`<p>The first time you add lemon to a cup of Butterfly Pea Flower tea and watch it transform from deep ocean blue to vivid violet purple, you understand immediately why this flower has captured the imagination of bartenders, wellness enthusiasts, and traditional healers for centuries. But the magic goes far beyond the color change.</p>
+    <h4>Brain Health: The Research</h4>
+    <p>Clitoria ternatea — the scientific name for Butterfly Pea Flower — contains ternatins, a class of anthocyanin compounds that have shown significant promise in preliminary cognitive research. Studies have found that ternatin supplementation in rodent models improved memory formation and reduced neuroinflammation — two key factors in age-related cognitive decline.</p>
+    <h4>The Color-Changing Chemistry</h4>
+    <p>The blue color comes from anthocyanins — natural pH-sensitive pigments. In neutral or alkaline water, they appear deep blue. When you add lemon juice (acidic), the pH drops and the molecular structure changes, shifting the color to purple-pink. This natural chemistry makes Butterfly Pea Flower tea one of the most visually spectacular natural drinks you can make.</p>
+    <h4>Blue Lemonade Recipe</h4>
+    <ul>
+      <li>Steep 1 tsp dried flowers in 200ml hot water for 10 minutes</li>
+      <li>Cool and pour over ice</li>
+      <li>Squeeze ½ fresh lemon and watch the color transform</li>
+      <li>Sweeten with honey to taste</li>
+    </ul>
+    <h4>Hair and Skin Benefits</h4>
+    <p>The ternatins in Butterfly Pea Flower have been incorporated into premium hair care products by several global cosmetic brands due to their ability to promote hair follicle cell growth. A simple hair rinse — diluted tea poured over clean hair after washing — can support scalp health and improve hair luster over time.</p>`
+  },
+
+  /* ──────────── BEVERAGES ──────────── */
+  {
+    id:12, productId:12,
+    category:'beverages', tags:['recipes','wellness'],
+    product:'Organic Rose Milk',
+    title:'The Real Rose Milk: A Tamil Nadu Classic That Deserves a Global Audience',
+    excerpt:'Authentic rose milk uses Panneer Rose petals — not artificial rose essence. Here is the history, the recipe, and why the real thing is incomparably better.',
+    date:'Mar 5, 2026', read:'4 min',
+    author:'Chef Arun Balaji',
+    image:'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=700&auto=format&fit=crop',
+    catColor:'#0891b2',
+    content:`<p>In the 1970s and 1980s, every street-corner tea shop in Tamil Nadu served rose milk made from actual Panneer Rose petals steeped in syrup. Somewhere along the way, artificial rose essence replaced the real thing — cheaper, more uniform, and utterly inferior in taste. Nansai Organics was founded, in part, to bring the real rose milk back.</p>
+    <h4>What Makes Real Rose Milk Different?</h4>
+    <p>Artificial rose essence contains synthetic versions of the natural aromatic compounds found in rose petals — primarily phenylethanol and geraniol. The synthetic versions are one-dimensional; they smell and taste of "rose" in a generic, flattened way. Real Panneer Rose petals contain dozens of aromatic compounds that work together to create a complex, layered fragrance with a natural sweetness that no synthetic can replicate.</p>
+    <h4>The Authentic Recipe</h4>
+    <ul>
+      <li>Steep 2 tbsp of dried Panneer Rose petals in 100ml hot water for 20 minutes</li>
+      <li>Strain and add natural cane sugar or jaggery to taste</li>
+      <li>Mix with 200ml cold full-fat milk</li>
+      <li>Add a pinch of cardamom and two strands of saffron (optional)</li>
+      <li>Serve immediately over crushed ice</li>
+    </ul>
+    <h4>Cooling and Digestive Benefits</h4>
+    <p>In Tamil traditional medicine, rose milk is prescribed as a specific remedy for excess body heat (pitta aggravation) — particularly during summer months. The natural cooling properties of rose petals, combined with milk's calcium and fat content, make this drink genuinely medicinal as well as delicious. It also aids digestion when consumed after a heavy meal.</p>
+    <blockquote>"The rose milk at my grandfather's shop was pink from real petals. We used to collect them from the garden every morning. That fragrance — you cannot buy it in a bottle." — A Chennai resident remembering the 1970s</blockquote>`
+  },
+  {
+    id:13, productId:13,
+    category:'beverages', tags:['recipes','wellness'],
+    product:'Hibiscus Sherbet',
+    title:'Hibiscus Sherbet: Summer\'s Best Natural Cooler with a 500-Year History',
+    excerpt:'Long before soft drinks, Indian summers were survived with sherbets. Hibiscus sherbet is the most beautiful and most beneficial of them all.',
+    date:'Feb 18, 2026', read:'3 min',
+    author:'Nansai Kitchen Team',
+    image:'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=700&auto=format&fit=crop',
+    catColor:'#0891b2',
+    content:`<p>The word "sherbet" comes from the Arabic "sharbat" — a sweetened cold drink. Long before refrigerators and packaged beverages, sherbets made from natural botanical ingredients were the primary way to survive brutal South Asian summers with hydration, electrolytes, and cooling botanical compounds. Hibiscus sherbet, with its deep ruby color and refreshing tartness, is the most spectacular of them all.</p>
+    <h4>What Makes Hibiscus So Cooling?</h4>
+    <p>Hibiscus calyces contain natural organic acids — primarily hibiscus acid and citric acid — that produce a pleasant tartness while actively promoting hydration. The natural diuretic properties of hibiscus help flush excess heat and water retention. Combined with its anthocyanin content, hibiscus sherbet genuinely reduces body temperature and improves thermal comfort in hot weather.</p>
+    <h4>Classic Sherbet Recipe</h4>
+    <ul>
+      <li>Simmer 2 tbsp dried hibiscus flowers in 250ml water for 15 minutes</li>
+      <li>Strain, add jaggery or sugar to taste while still warm</li>
+      <li>Cool and dilute with chilled water (1:3 concentrate to water ratio)</li>
+      <li>Add black salt, roasted cumin powder, and mint leaves</li>
+      <li>Serve over ice for maximum refreshment</li>
+    </ul>
+    <h4>Vitamin C and Immunity</h4>
+    <p>A single serving of hibiscus sherbet prepared from fresh dried flowers provides approximately 25–30mg of natural Vitamin C — a meaningful contribution to the daily recommended intake of 65–90mg. Unlike synthetic Vitamin C supplements, the natural form in hibiscus comes packaged with synergistic flavonoids that improve its absorption and efficacy in the body.</p>`
+  },
+
+  /* ──────────── FLOUR ──────────── */
+  {
+    id:14, productId:14,
+    category:'flour', tags:['recipes','wellness'],
+    product:'Idiyappam Flour',
+    title:'Hand-Pounded vs Machine-Milled: Why Your Idiyappam Is Only as Good as Its Flour',
+    excerpt:'The secret to silk-soft idiyappam lies entirely in how the rice was milled. Here is what food science says about the difference.',
+    date:'Mar 2, 2026', read:'4 min',
+    author:'Chef Meena Sundaram',
+    image:'https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop',
+    catColor:'#ca8a04',
+    content:`<p>Ask any experienced Tamil cook what makes the best idiyappam and they will tell you immediately: the flour. Not the press, not the steaming time, not the accompaniment. The flour. Specifically, the way the rice was milled before becoming flour.</p>
+    <h4>The Problem with Industrial Milling</h4>
+    <p>Industrial roller mills operate at high speeds and generate significant heat through friction. This heat — often reaching 60–80°C — denatures heat-sensitive proteins and damages the starch granule structure of rice. The resulting flour has compromised texture properties: it either becomes too dense or too sticky, and it lacks the natural flavor compounds that make good idiyappam distinctively delicious.</p>
+    <h4>Why Hand-Pounding Changes Everything</h4>
+    <p>Traditional hand-pounding and stone-grinding operate at low speed and minimal heat. The starch granules remain intact, the natural oils in the rice bran are preserved, and the protein structure stays undamaged. The result is a flour with superior water absorption properties — creating idiyappam strings that are simultaneously delicate and structurally stable enough to hold their shape.</p>
+    <h4>Perfect Idiyappam Method</h4>
+    <ul>
+      <li>Mix 1 cup flour with 1 cup boiling water and ½ tsp salt</li>
+      <li>Mix immediately with a wooden spoon until a smooth dough forms</li>
+      <li>Let rest 5 minutes, then press through idiyappam press onto greased plates</li>
+      <li>Steam for 8–10 minutes until firm and glossy</li>
+      <li>Serve immediately with coconut milk or vegetable stew</li>
+    </ul>
+    <h4>Nutrition Preserved</h4>
+    <p>Because our Nansai idiyappam flour is hand-pounded rather than machine-milled, it retains its natural fiber content, iron, zinc, and B-vitamins — nutrients that are largely stripped away in high-heat industrial processing. The result is a flour that not only makes better idiyappam, but provides genuinely better nutrition.</p>`
+  },
+  {
+    id:15, productId:15,
+    category:'flour', tags:['wellness','recipes'],
+    product:'Health Mix Powder',
+    title:'Black Urad Dal Health Mix: The Protein-Rich Breakfast Your Family Has Been Missing',
+    excerpt:'Black urad dal contains more protein per 100g than chicken egg white. Here is how to incorporate it into your daily routine.',
+    date:'Jan 22, 2026', read:'4 min',
+    author:'Nutritionist Kavitha Rajan',
+    image:'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop',
+    catColor:'#ca8a04',
+    content:`<p>Black urad dal — whole black gram — is one of the most nutritionally dense legumes grown in South Asia. Yet it is dramatically underused as a breakfast ingredient, consumed mostly as a dal or idli batter base rather than in its most nutritious form: roasted and stone-ground into a health mix powder that can be prepared in minutes.</p>
+    <h4>Nutritional Powerhouse</h4>
+    <p>Black urad dal provides approximately 25g of protein per 100g — significantly more than many animal proteins per calorie. It is exceptionally rich in iron (7mg/100g), B-vitamins especially B1 and B3, and potassium. For vegetarian and vegan families, it is one of the most important plant proteins available in the Indian subcontinent.</p>
+    <h4>Bone and Dental Health</h4>
+    <p>The combination of calcium, phosphorus, and magnesium in black urad dal creates a mineral profile that is ideal for bone density maintenance. Regular consumption from childhood through adulthood can meaningfully contribute to peak bone mass and reduce osteoporosis risk in later years — a particularly important consideration for women over 35.</p>
+    <h4>Morning Porridge Recipe</h4>
+    <ul>
+      <li>Mix 3 tbsp health mix powder with 200ml warm milk or water</li>
+      <li>Add jaggery or honey and a pinch of cardamom</li>
+      <li>Stir well and serve immediately</li>
+      <li>Optional: add a teaspoon of ghee for extra flavor and nutrition</li>
+    </ul>
+    <p>This takes 3 minutes to prepare and provides a nutritionally complete breakfast that sustains energy for 4–5 hours. Children especially thrive on it — improved concentration and stamina are commonly reported within the first two weeks of regular consumption.</p>
+    <h4>Alternative Uses</h4>
+    <p>Stir into dosa batter for improved nutrition, blend into smoothies, or use as a protein-rich thickener for soups and curries. The roasted flavor complements both sweet and savory applications beautifully.</p>`
+  },
+
+  /* ──────────── OTHER ──────────── */
+  {
+    id:16, productId:16,
+    category:'other', tags:['wellness','sustainability'],
+    product:'Country Fig Powder',
+    title:'Country Fig Powder: Nature\'s Answer to Constipation, Anemia and Low Energy',
+    excerpt:'Sun-dried country figs contain more fiber than psyllium husk and more iron than spinach. Here is how to use this overlooked superfood every day.',
+    date:'Mar 10, 2026', read:'4 min',
+    author:'Dr. Nithya Kumar',
+    image:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop',
+    catColor:'#16a34a',
+    content:`<p>Country fig — Ficus carica, cultivated in South India for over 4,000 years — is one of the most nutritionally complete fruits available. In dried and powdered form, it becomes a concentrated source of dietary fiber, iron, calcium, and natural digestive enzymes that can address three of India's most prevalent health problems simultaneously: constipation, iron deficiency, and chronic fatigue.</p>
+    <h4>Fiber That Actually Works</h4>
+    <p>Country fig powder contains both soluble and insoluble dietary fiber in a ratio that is ideal for digestive health. The soluble fiber (pectin) feeds beneficial gut bacteria and forms a gel that slows digestion and smooths bowel movement. The insoluble fiber adds bulk and moves waste efficiently through the colon. Combined, they provide genuine constipation relief without the urgency or cramping associated with synthetic laxatives.</p>
+    <h4>Iron for Energy</h4>
+    <p>Many people are unaware that country figs are an excellent plant source of iron — providing approximately 2–3mg per 100g of fresh fruit, and significantly more in concentrated powder form. Unlike the iron in spinach, which is inhibited by oxalates, the iron in figs is accompanied by natural Vitamin C that actively enhances its absorption. This makes country fig powder a genuinely effective natural remedy for iron-deficiency anemia.</p>
+    <h4>How to Use Daily</h4>
+    <ul>
+      <li><strong>Morning tonic:</strong> 1 tsp in warm water with lemon and honey</li>
+      <li><strong>Smoothie boost:</strong> Add 2 tsp to any fruit or vegetable smoothie</li>
+      <li><strong>Porridge:</strong> Stir into oats or ragi porridge</li>
+      <li><strong>Energy balls:</strong> Mix with dates, nuts, and coconut to form energy balls</li>
+    </ul>
+    <h4>Traditional Usage</h4>
+    <p>In Tamil Nadu's traditional medicine, fig preparations have been prescribed for lung health, kidney function, and reproductive health for over 2,000 years. Our country fig powder is made from sun-dried figs grown on our organic farm — stone-ground to preserve all natural enzymes and nutrients intact.</p>
+    <blockquote>"The fig tree was considered sacred in ancient India — its fruit a medicine for the whole body." — Traditional Ayurvedic text, Charaka Samhita</blockquote>`
+  },
+
+  /* ──────────── EXTRA SUSTAINABILITY & RECIPE ARTICLES ──────────── */
+  {
+    id:17, productId:null,
+    category:'sustainability', tags:['sustainability','farming'],
+    product:null,
+    title:'Zero Chemicals, Zero Waste: How Nansai Organics Farms Without Compromise',
+    excerpt:'From seed to shelf, every decision on our 25-acre farm is guided by one principle: leave the earth better than we found it.',
+    date:'Feb 5, 2026', read:'5 min',
+    author:'Nansai Farm Team',
+    image:'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=700&auto=format&fit=crop',
+    catColor:'#16a34a',
+    content:`<p>When the founders of Nansai Organics planted their first crop in 2003, they made a commitment: no synthetic chemicals would ever touch this land. 22 years later, that commitment remains unbroken — and the soil science proves it was the right choice.</p>
+    <h4>Our Zero-Input Philosophy</h4>
+    <p>We use no synthetic fertilisers, pesticides, or herbicides. Period. Instead, we rely on a carefully designed system of composting, green manuring, crop rotation, and natural pest management. Our soil organic matter has increased by 18% over five years. Our crop yields have stabilised and become more resilient to climate variation. The farm is healthier today than it was 22 years ago.</p>
+    <h4>Packaging & Waste</h4>
+    <p>All our packaging is either biodegradable or fully recyclable. We eliminated single-use plastic from our supply chain entirely in 2023. Our processing facility operates on 60% solar energy. All organic waste from processing is composted back into the farm — closing the nutrient loop completely.</p>
+    <h4>Our 9 Certifications</h4>
+    <p>We hold active certifications from USDA Organic, India Organic (APEDA), Non-GMO Project, FSSAI, Halal, Kosher, and four additional regional and international organic bodies. These are not marketing decorations — each certification requires annual third-party audits of our farming practices, soil health, and processing facilities.</p>
+    <h4>200 Farming Families</h4>
+    <p>Nansai Organics works directly with over 200 farming families across Tamil Nadu. We provide training, seeds, and guaranteed purchase prices above market rates for certified organic produce. Sustainability, for us, means sustaining people as much as land.</p>`
+  },
+  {
+    id:18, productId:null,
+    category:'wellness', tags:['wellness','heritage'],
+    product:null,
+    title:'Why Heritage Grains Are the Future of Food Security in India',
+    excerpt:'Modern high-yield varieties feed billions, but at a hidden cost. Heritage grains hold the genetic diversity that will feed the next century.',
+    date:'Jan 12, 2026', read:'6 min',
+    author:'Dr. Nithya Kumar',
+    image:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop',
+    catColor:'#65a30d',
+    content:`<p>Between 1900 and 2000, the world lost approximately 75% of its agricultural biodiversity. Thousands of crop varieties — each the result of thousands of years of natural selection and human cultivation — were replaced by a handful of high-yield modern varieties optimized for industrial production. The consequences of this genetic narrowing are only now becoming apparent.</p>
+    <h4>The Fragility of Monocultures</h4>
+    <p>When a pathogen or climate event affects a monoculture, the damage can be catastrophic. The Irish Potato Famine of the 1840s killed one million people and displaced another million because Irish farmers had concentrated almost entirely on a single potato variety. Heritage varieties, bred over millennia in diverse environments, carry natural resistance to a wide range of pests and climate stresses.</p>
+    <h4>Nutritional Diversity</h4>
+    <p>Heritage grains also provide nutritional diversity that monocultures cannot. Different varieties contain different profiles of minerals, vitamins, and phytochemicals. A diet based on multiple heritage grains is nutritionally richer and more protective against chronic disease than one based on a single modern variety — regardless of how that single variety is fortified.</p>
+    <h4>Seed Saving at Nansai</h4>
+    <p>At Nansai Organics, we maintain active seed banks of all seven rice varieties we cultivate. Each season, a portion of the harvest is reserved specifically as seed stock — cleaned, dried, stored, and prepared for the following year's planting. This practice ensures that these varieties remain genetically viable and adapted to our specific microclimate in perpetuity.</p>
+    <p>When you buy Nansai heritage rice, you are funding seed saving. You are preserving genetic diversity. You are participating in food security for future generations. That is not marketing language — it is agricultural reality.</p>`
+  }
+];
+
+/* Category metadata */
+const CAT_META = {
+  rice:           { label:'Rice Varieties',  icon:'[[icon:wheat]]', color:'#65a30d', bg:'#f0fdf4' },
+  flowers:        { label:'Dried Flowers',   icon:'[[icon:flower-2]]', color:'#db2777', bg:'#fdf2f8' },
+  beverages:      { label:'Beverages',       icon:'[[icon:glass-water]]', color:'#0891b2', bg:'#f0f9ff' },
+  flour:          { label:'Flour & Mixes',   icon:'[[icon:package]]', color:'#ca8a04', bg:'#fefce8' },
+  other:          { label:'Other Products',  icon:'[[icon:leaf]]', color:'#16a34a', bg:'#f0fdf4' },
+  wellness:       { label:'Wellness',        icon:'[[icon:heart]]', color:'#15803d', bg:'#f0fdf4' },
+  recipes:        { label:'Recipes',         icon:'[[icon:chef-hat]]', color:'#c2410c', bg:'#fff7ed' },
+  sustainability: { label:'Sustainability',  icon:'[[icon:recycle]]', color:'#1d4ed8', bg:'#eff6ff' },
+};
+
+function catColor(cat){ return (CAT_META[cat]||{color:'#4a8c5c'}).color; }
+function catBg(cat){ return (CAT_META[cat]||{bg:'#f0fdf4'}).bg; }
+function catLabel(cat){ return (CAT_META[cat]||{label:cat}).label; }
+
+/* ── Merge admin blogs from localStorage ── */
+(function(){
+  try {
+    const admin = JSON.parse(localStorage.getItem('nansai_blogs') || '[]');
+    admin.forEach(b => {
+      if (!BLOGS.find(x => String(x.id) === String(b.id))) {
+        BLOGS.unshift({
+          id: b.id, productId: null,
+          category: b.category, tags: [],
+          product: null,
+          title: b.title, excerpt: b.excerpt,
+          date: b.date, read: b.readTime,
+          author: b.author || 'Nansai Farm Team',
+          image: b.image || '',
+          catColor: b.catColor || '#4a8c5c',
+          content: b.content || '',
+        });
+      }
+    });
+  } catch(e) {}
+})();
+
+/* ── State ── */
+let currentFilter = 'all';
+let searchQuery   = '';
+
+/* ── Filter & Search ── */
+function filterBlog(cat, btn) {
+  currentFilter = cat;
+  searchQuery   = '';
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderAll();
+}
+
+function onSearch(q) {
+  searchQuery = q.toLowerCase().trim();
+  currentFilter = 'all';
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+  document.querySelector('.fpill[data-cat="all"]').classList.add('active');
+  renderAll();
+}
+
+function getFiltered() {
+  let list = [...BLOGS];
+  if (currentFilter !== 'all') {
+    list = list.filter(b => b.category === currentFilter || b.tags.includes(currentFilter));
+  }
+  if (searchQuery) {
+    list = list.filter(b =>
+      b.title.toLowerCase().includes(searchQuery) ||
+      b.excerpt.toLowerCase().includes(searchQuery) ||
+      (b.product || '').toLowerCase().includes(searchQuery) ||
+      b.category.toLowerCase().includes(searchQuery) ||
+      b.tags.some(t => t.includes(searchQuery))
+    );
+  }
+  return list;
+}
+
+/* ── Render Grid ── */
+function renderGrid(posts) {
+  const grid = document.getElementById('blogGrid');
+  const label = document.getElementById('gridLabel');
+  const count = document.getElementById('resultCount');
+  const gridPosts = posts;
+
+  // update count
+  count.textContent = posts.length + ' article' + (posts.length !== 1 ? 's' : '');
+
+  // update label
+  const catMeta = CAT_META[currentFilter];
+  const labelTxt = currentFilter === 'all' ? 'All Articles' : ((catMeta?.icon||'') + ' ' + (catMeta?.label||currentFilter));
+  label.querySelector('h3').textContent = labelTxt;
+
+  if (!gridPosts.length) {
+    grid.innerHTML = `<div class="no-results">
+      <div class="icon">[[icon:leaf]]</div>
+      <p>No articles found${searchQuery ? ' for "'+searchQuery+'"' : ''}.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = gridPosts.map(post => {
+    const cat = CAT_META[post.category] || {};
+    const tagPills = post.tags.map(t => {
+      const tm = CAT_META[t]||{};
+      return `<span class="blog-tag-pill" style="color:${tm.color||'#4a8c5c'};border-color:${tm.color||'#4a8c5c'}22;background:${tm.bg||'#f0fdf4'}">${t}</span>`;
+    }).join('');
+    return `<article class="blog-card" onclick="openModal(${post.id})">
+      <div class="blog-card-img">
+        <img src="${post.image}" alt="${post.title}" loading="lazy"/>
+        <span class="blog-cat-tag" style="background:${post.catColor||cat.color||'#4a8c5c'}">${cat.icon||''} ${cat.label||post.category}</span>
+      </div>
+      <div class="blog-card-body">
+        <div class="blog-card-tags">${tagPills}</div>
+        <h3>${post.title}</h3>
+        <p>${post.excerpt}</p>
+        ${post.product ? `<p style="font-size:.65rem;font-weight:700;color:var(--forest-leaf);margin-bottom:.5rem;margin-top:-.3rem;">[[icon:shopping-bag]] ${post.product}</p>` : ''}
+        <div class="blog-card-meta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>${post.author}</span>
+          <span class="meta-dot"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>${post.read} read</span>
+          <a class="card-read-link" onclick="event.stopPropagation();openModal(${post.id})">
+            Read
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+
+  // stagger reveal
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.blog-card').forEach((card, i) => {
+      card.style.transitionDelay = (i * 0.06) + 's';
+      requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('visible')));
+    });
+  });
+}
+
+/* ── 3D Article Carousel ── */
+let acIndex = 0, acTimer = null;
+
+function buildCarousel() {
+  const posts = BLOGS.slice(0, 8);
+  const stage = document.getElementById('acStage');
+  const dots  = document.getElementById('acDots');
+  const total = posts.length;
+
+  stage.innerHTML = posts.map((post, i) => {
+    const cat = CAT_META[post.category] || {};
+    return `<div class="ac-card" data-i="${i}" onclick="openModal(${post.id})">
+      <img class="ac-img" src="${post.image}" alt="${post.title}" loading="lazy"/>
+      <div class="ac-body">
+        <span class="ac-cat" style="background:${post.catColor||cat.color||'#4a8c5c'}">${cat.icon||''} ${cat.label||post.category}</span>
+        <div class="ac-title">${post.title}</div>
+        <div class="ac-meta"><span>${post.author}</span><span class="ac-meta-dot"></span><span>${post.read} read</span></div>
+        <span class="ac-read-btn">Read Article <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </div>`;
+  }).join('');
+
+  dots.innerHTML = posts.map((_, i) =>
+    `<button class="ac-dot${i===0?' active':''}" onclick="acGoTo(${i})"></button>`
+  ).join('');
+
+  document.getElementById('acPrev').onclick = () => acGoTo((acIndex - 1 + total) % total);
+  document.getElementById('acNext').onclick = () => acGoTo((acIndex + 1) % total);
+
+  let tx = 0;
+  stage.addEventListener('pointerdown', e => { tx = e.clientX; });
+  stage.addEventListener('pointerup', e => {
+    const dx = e.clientX - tx;
+    if (Math.abs(dx) > 40) acGoTo(dx < 0 ? (acIndex+1)%total : (acIndex-1+total)%total);
+  });
+
+  acGoTo(0, true);
+  acTimer = setInterval(() => acGoTo((acIndex + 1) % total), 1800);
+}
+
+function acGoTo(idx, instant) {
+  const cards = document.querySelectorAll('.ac-card');
+  const total = cards.length;
+  acIndex = idx;
+  const pos = ['pos-prev2','pos-prev1','pos-center','pos-next1','pos-next2'];
+  cards.forEach(c => { c.className = 'ac-card pos-hidden'; });
+  [-2,-1,0,1,2].forEach((off, pi) => {
+    cards[(idx + off + total) % total].className = 'ac-card ' + pos[pi];
+  });
+  document.querySelectorAll('.ac-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  if (!instant) { clearInterval(acTimer); acTimer = setInterval(() => acGoTo((acIndex+1)%total), 1800); }
+}
+
+/* ── Main render ── */
+function renderAll() {
+  renderGrid(getFiltered());
+}
+
+/* ── Modal ── */
+function openModal(id) {
+  const post = BLOGS.find(b => b.id === id);
+  if (!post) return;
+  const cat = CAT_META[post.category] || {};
+
+  document.getElementById('modalImg').src = post.image;
+  document.getElementById('modalImg').alt = post.title;
+  document.getElementById('modalCat').textContent = (cat.icon||'') + ' ' + (cat.label||post.category);
+  document.getElementById('modalCat').style.background = post.catColor || cat.color || '#4a8c5c';
+  document.getElementById('modalTitle').textContent = post.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>${post.author}</span>
+    <span style="width:3px;height:3px;border-radius:50%;background:rgba(26,58,42,.2);"></span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>${post.date}</span>
+    <span style="width:3px;height:3px;border-radius:50%;background:rgba(26,58,42,.2);"></span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span>${post.read} read</span>`;
+  document.getElementById('modalContent').innerHTML = post.content;
+
+  // CTA
+  const ctaEl = document.getElementById('modalCTA');
+  if (post.productId) {
+    ctaEl.innerHTML = `
+      <p>[[icon:shopping-bag]] This article is about <strong>${post.product}</strong> — available now from our organic farm.</p>
+      <a class="cta-btn" href="product.html?id=${post.productId}">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+        Shop ${post.product}
+      </a>`;
+    ctaEl.style.display = 'flex';
+  } else {
+    ctaEl.style.display = 'none';
+  }
+
+  const modal = document.getElementById('articleModal');
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => modal.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+  document.getElementById('modalBox').scrollTop = 0;
+}
+
+function closeModal() {
+  const modal = document.getElementById('articleModal');
+  modal.classList.remove('open');
+  setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 320);
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+/* ── Newsletter ── */
+function subscribeNewsletter() {
+  const email = document.getElementById('nlEmail').value.trim();
+  if (!email || !email.includes('@')) { showToast('Please enter a valid email address.'); return; }
+  showToast('[[icon:leaf]] Subscribed! Welcome to the Nansai farm family.');
+  document.getElementById('nlEmail').value = '';
+}
+
+/* ── Toast ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ── Mobile Drawer ── */
+function toggleMobDrawer() {
+  const d = document.getElementById('mobDrawer');
+  const h = document.getElementById('mobHam');
+  const open = d.style.display === 'none' || !d.style.display;
+  d.style.display = open ? 'block' : 'none';
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('mobDrawer');
+  const h = document.getElementById('mobHam');
+  if (d?.style.display === 'block' && !d.contains(e.target) && !h?.contains(e.target)) {
+    d.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+});
+
+/* ── Scroll reveal ── */
+const srObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.sr').forEach(el => srObserver.observe(el));
+
+/* ── Auth nav ── */
+(function() {
+  const user = JSON.parse(localStorage.getItem('nansai_user') || 'null');
+  if (!user) return;
+  const btn = document.getElementById('navSignInBtn');
+  const txt = document.getElementById('navSignInText');
+  if (btn) btn.href = 'account.html';
+  if (txt) txt.textContent = 'Hi, ' + (user.name || 'User').split(' ')[0];
+})();
+
+/* ── Cart / wishlist counters ── */
+(function() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const wish = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const ct = cart.reduce((s, i) => s + (i.qty || 1), 0);
+  document.querySelectorAll('#cartCount').forEach(el => el.textContent = ct);
+  document.querySelectorAll('#wishlistCount').forEach(el => el.textContent = wish.length);
+})();
+
+/* ── Init ── */
+buildCarousel();
+renderAll();
+</script>
+</body>
+</html>
