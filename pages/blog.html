@@ -831,12 +831,27 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
   background:none;border:none;cursor:pointer;
   color:var(--text-md);text-decoration:none;
   font-size:.58rem;font-weight:600;letter-spacing:.04em;
-  border-radius:10px;transition:color .2s,background .2s;
+  border-radius:10px;transition:color .2s;
   -webkit-tap-highlight-color:transparent;
+  position:relative;overflow:hidden;
 }
-.mob-bar-btn svg{width:20px;height:20px;}
-.mob-bar-btn:active{background:rgba(74,140,92,.08);color:var(--forest-leaf);}
+.mob-bar-btn svg{width:20px;height:20px;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.mob-bar-btn:active svg{transform:scale(1.28) translateY(-2px);}
+.mob-bar-btn:active{color:var(--forest-leaf);}
 .mob-bar-btn.active{color:var(--forest-deep);}
+.mob-bar-btn.active::before{
+  content:'';
+  position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--forest-deep);
+}
+@keyframes mobBarRipple{0%{transform:scale(0);opacity:.35;}100%{transform:scale(2.8);opacity:0;}}
+.mob-bar-btn::after{
+  content:'';
+  position:absolute;inset:0;border-radius:10px;
+  background:radial-gradient(circle,var(--forest-leaf) 10%,transparent 70%);
+  transform:scale(0);opacity:0;pointer-events:none;
+}
+.mob-bar-btn:active::after{animation:mobBarRipple .38s ease-out forwards;}
 .mob-bar-btn.primary{
   background:var(--forest-deep);color:#fff;border-radius:14px;
   padding:.45rem .6rem;flex:1.4;
@@ -1146,10 +1161,6 @@ a .nansai-icon,
   <a href="blog.html" class="mob-bar-btn active">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     Blogs
-  </a>
-  <a href="index.html#products" class="mob-bar-btn primary">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    Shop
   </a>
   <a href="news.html" class="mob-bar-btn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
