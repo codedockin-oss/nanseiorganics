@@ -128,6 +128,92 @@
 
   select { -webkit-appearance: auto; appearance: auto; }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body class="font-sans bg-bg text-text-dark min-h-screen" style="font-family:'Inter',sans-serif;">
 
@@ -237,39 +323,39 @@
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('home')">📊&nbsp; Your Account</div>
+       onclick="navTo('home')">[[icon:chart-no-axes-column-increasing]]&nbsp; Your Account</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('orders')">📦&nbsp; Your Orders</div>
+       onclick="navTo('orders')">[[icon:package]]&nbsp; Your Orders</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('wishlist')">💖&nbsp; Wishlist</div>
+       onclick="navTo('wishlist')">[[icon:heart]]&nbsp; Wishlist</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('addresses')">📍&nbsp; Addresses</div>
+       onclick="navTo('addresses')">[[icon:map-pin]]&nbsp; Addresses</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('profile')">⚙️&nbsp; Edit Profile</div>
+       onclick="navTo('profile')">[[icon:settings]]&nbsp; Edit Profile</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('security')">🔐&nbsp; Login &amp; Security</div>
+       onclick="navTo('security')">[[icon:shield-keyhole]]&nbsp; Login &amp; Security</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('wallet')" style="display:none">🌿&nbsp; Points &amp; Coupons</div>
+       onclick="navTo('wallet')" style="display:none">[[icon:leaf]]&nbsp; Points &amp; Coupons</div>
   <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
                border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
                hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="window.location.href='index.html'">🛍️&nbsp; Continue Shopping</div>
+       onclick="window.location.href='index.html'">[[icon:shopping-bag]]&nbsp; Continue Shopping</div>
   <div class="flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-red-400/70
                border-b border-white/[0.05] cursor-pointer transition-all
                hover:text-red-300 hover:bg-red-500/[0.08]"
-       onclick="logout()">🚪&nbsp; Sign Out</div>
+       onclick="logout()">[[icon:log-out]]&nbsp; Sign Out</div>
 </div>
 
 
@@ -360,7 +446,7 @@
       <div class="bg-white border border-forest-dark/[0.09] rounded-nansai p-4 pb-5 cursor-pointer
                   flex flex-col gap-1.5 shadow-nansai transition-all duration-200
                   hover:shadow-nansai-md hover:border-forest-light/35 hover:-translate-y-0.5"
-           onclick="showToast('📞 Support: 1800-NSI-HELP · Mon–Sat 9am–6pm')">
+           onclick="showToast('[[icon:phone]] Support: 1800-NSI-HELP · Mon–Sat 9am–6pm')">
         <div class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center mb-1">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
@@ -389,7 +475,7 @@
     <div class="flex items-center justify-between flex-wrap gap-3 mb-[0.9rem]">
       <h1 class="font-serif text-[1.7rem] font-bold text-forest-dark">Your Orders</h1>
       <input id="orderSearch" type="text" class="border-[1.5px] border-forest-dark/[0.16] rounded-nansai-sm px-3 py-[0.42rem] text-[0.84rem] font-sans text-text-dark bg-white outline-none max-w-[200px] focus:border-forest-light focus:shadow-[0_0_0_3px_rgba(74,140,92,.12)] transition-all placeholder:text-text-light"
-             placeholder="🔍  Search orders…" oninput="filterOrders()"/>
+             placeholder="Search orders…" oninput="filterOrders()"/>
     </div>
     <div class="flex border-b-2 border-forest-dark/10 overflow-x-auto no-scrollbar mb-4">
       <a class="ftab active text-[0.78rem] font-bold pb-[0.52rem] px-4 border-b-[3px] border-b-forest-light -mb-0.5 cursor-pointer text-forest-dark whitespace-nowrap transition-all shrink-0"
@@ -502,11 +588,11 @@
             <label class="block text-[0.72rem] font-bold text-text-mid mb-1.5 uppercase tracking-[0.07em]">Address type</label>
             <div class="flex gap-2">
               <button type="button" onclick="setAddrTypeAcc('Home',this)" id="aTypeHome"
-                class="addr-type-btn active-type flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] transition-all">🏠 Home</button>
+                class="addr-type-btn active-type flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] transition-all">[[icon:house]] Home</button>
               <button type="button" onclick="setAddrTypeAcc('Work',this)" id="aTypeWork"
-                class="addr-type-btn flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] border-forest-dark/15 bg-white text-text-mid transition-all">🏢 Work</button>
+                class="addr-type-btn flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] border-forest-dark/15 bg-white text-text-mid transition-all">[[icon:building-2]] Work</button>
               <button type="button" onclick="setAddrTypeAcc('Other',this)" id="aTypeOther"
-                class="addr-type-btn flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] border-forest-dark/15 bg-white text-text-mid transition-all">📍 Other</button>
+                class="addr-type-btn flex-1 py-[0.42rem] rounded-nansai-sm text-[0.75rem] font-bold border-[1.5px] border-forest-dark/15 bg-white text-text-mid transition-all">[[icon:map-pin]] Other</button>
             </div>
           </div>
 
@@ -683,7 +769,7 @@
         </div>
         <label class="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" id="twoSv"
-                 onchange="showToast(this.checked?'✅ Two-step verification enabled':'Two-step verification disabled')"/>
+                 onchange="showToast(this.checked?'[[icon:circle-check]] Two-step verification enabled':'Two-step verification disabled')"/>
           <span class="text-[0.82rem] font-semibold">Enable</span>
         </label>
       </div>
@@ -696,7 +782,7 @@
           <div class="text-[0.88rem] font-bold text-red-600 mb-0.5">Close Account</div>
           <div class="text-[0.72rem] text-text-light">Permanently delete your Nansai account and all data.</div>
         </div>
-        <button onclick="showToast('⚠️ Contact support to close your account')"
+        <button onclick="showToast('[[icon:triangle-alert]] Contact support to close your account')"
                 class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-red-600 border-[1.5px] border-red-200/60 rounded-nansai-sm cursor-pointer hover:border-red-500 hover:bg-red-50 transition-all">
           Close account
         </button>
@@ -731,7 +817,7 @@
         </div>
         <span class="ml-auto text-[0.6rem] font-black bg-forest-light/10 text-forest-light
                      px-[10px] py-[3px] rounded-full border border-forest-light/20
-                     uppercase tracking-[0.07em]">🌿 Green Member</span>
+                     uppercase tracking-[0.07em]">[[icon:leaf]] Green Member</span>
       </div>
     </div>
 
@@ -842,7 +928,7 @@
       </ul>
     </div>
   </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with 💚 for farmers.</div>
+  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
 </footer>
 
 <!-- ══════════════════════════════
@@ -929,7 +1015,7 @@ function saveProfile(e){
   u.phone=document.getElementById('pPhone').value;
   localStorage.setItem('nansai_user',JSON.stringify(u));
   if(getTok())apiReq('PUT','/users/profile',u).then(r=>{if(r.data)localStorage.setItem('nansai_user',JSON.stringify(r.data));}).catch(()=>{});
-  USER=u;loadProfile();showToast('✅ Profile saved!');
+  USER=u;loadProfile();showToast('[[icon:circle-check]] Profile saved!');
 }
 
 function toggleSecEdit(f){
@@ -947,15 +1033,15 @@ function saveSec(f){
   else if(f==='Phone'){u.phone=document.getElementById('sPhone').value;}
   else if(f==='Password'){
     const np=document.getElementById('sNewPw').value,cp=document.getElementById('sConfPw').value,cur=document.getElementById('sCurPw').value;
-    if(np!==cp){showToast('❌ Passwords do not match');return;}
-    if(np.length<8){showToast('❌ Minimum 8 characters required');return;}
-    if(getTok())apiReq('PUT','/users/profile',{currentPassword:cur,newPassword:np}).then(()=>showToast('🔒 Password updated!')).catch(err=>showToast('❌ '+err.message));
-    else showToast('🔒 Password updated!');
+    if(np!==cp){showToast('[[icon:circle-x]] Passwords do not match');return;}
+    if(np.length<8){showToast('[[icon:circle-x]] Minimum 8 characters required');return;}
+    if(getTok())apiReq('PUT','/users/profile',{currentPassword:cur,newPassword:np}).then(()=>showToast('[[icon:lock]] Password updated!')).catch(err=>showToast('[[icon:circle-x]] '+err.message));
+    else showToast('[[icon:lock]] Password updated!');
     toggleSecEdit('Password');return;
   }
   localStorage.setItem('nansai_user',JSON.stringify(u));
   if(getTok())apiReq('PUT','/users/profile',u).then(r=>{if(r.data)localStorage.setItem('nansai_user',JSON.stringify(r.data));}).catch(()=>{});
-  USER=u;loadProfile();toggleSecEdit(f);showToast('✅ Changes saved!');
+  USER=u;loadProfile();toggleSecEdit(f);showToast('[[icon:circle-check]] Changes saved!');
 }
 function checkPwStr(v){
   const bar=document.getElementById('pwFill'),lbl=document.getElementById('pwLbl');
@@ -1046,8 +1132,8 @@ function orderCardHTML(o){
         <div class="text-[0.82rem] font-semibold text-text-dark mb-0.5 leading-snug">${it.name}</div>
         <div class="text-[0.7rem] text-text-light">Qty: ${it.qty} &nbsp;·&nbsp; ₹${it.price.toLocaleString()} each</div>
         <div class="flex gap-1.5 flex-wrap mt-2">
-          <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('🛒 Added to cart!')">Buy it again</button>
-          <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('📝 Review submitted!')">Write a review</button>
+          <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:shopping-cart]] Added to cart!')">Buy it again</button>
+          <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:notebook-pen]] Review submitted!')">Write a review</button>
         </div>
       </div>
     </div>`).join('');
@@ -1075,8 +1161,8 @@ function orderCardHTML(o){
     <div class="border-t border-forest-dark/[0.07] px-4 py-[0.65rem] flex gap-[0.4rem] flex-wrap bg-cream/35">
       ${o.status==='delivered'?`<button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('Return/refund request submitted for ${o.id}')">Return items</button>`:''}
       ${o.status==='processing'?`<button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-red-600 border-[1.5px] border-red-200/60 rounded-nansai-sm cursor-pointer hover:border-red-500 hover:bg-red-50 transition-all" onclick="showToast('Cancel request submitted for ${o.id}')">Cancel order</button>`:''}
-      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('🧾 Invoice for ${o.id} downloading...')">Download invoice</button>
-      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('📞 Connecting to support...')">Get help</button>
+      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:receipt-text]] Invoice for ${o.id} downloading...')">Download invoice</button>
+      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:phone]] Connecting to support...')">Get help</button>
     </div>
   </div>`;
 }
@@ -1089,7 +1175,7 @@ function renderOrders(f='all'){
   if(q)list=list.filter(o=>o.id.toLowerCase().includes(q)||o.items.some(i=>i.name.toLowerCase().includes(q)));
   const wrap=document.getElementById('ordersContainer');if(!wrap)return;
   wrap.innerHTML=list.length?list.map(orderCardHTML).join('')
-    :'<div class="text-center py-14 px-4"><div class="text-5xl mb-3">📦</div><p class="text-text-light text-[0.88rem] font-semibold mb-2">No orders found</p><a onclick="window.location.href=\'index.html\'" class="text-forest-light text-[0.8rem] cursor-pointer">Continue shopping →</a></div>';
+    :'<div class="text-center py-14 px-4"><div class="text-5xl mb-3">[[icon:package]]</div><p class="text-text-light text-[0.88rem] font-semibold mb-2">No orders found</p><a onclick="window.location.href=\'index.html\'" class="text-forest-light text-[0.8rem] cursor-pointer">Continue shopping →</a></div>';
 
 }
 function filterOrders(){renderOrders(curTab);}
@@ -1291,7 +1377,7 @@ async function submitAddr(e){
     // Scroll to first error
     const firstErr=document.querySelector('.inp-error');
     if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
-    showToast('⚠️ Please fix the errors before saving');
+    showToast('[[icon:triangle-alert]] Please fix the errors before saving');
     return;
   }
   const body={
@@ -1310,21 +1396,21 @@ async function submitAddr(e){
   try{
     if(editAddrId){await apiReq('PUT','/addresses/'+editAddrId,body);}
     else{await apiReq('POST','/addresses',body);}
-    await loadAddresses();hideAddrForm();e.target.reset();showToast('📍 Address saved!');
+    await loadAddresses();hideAddrForm();e.target.reset();showToast('[[icon:map-pin]] Address saved!');
   }catch(err){
-    showToast('❌ '+err.message);
+    showToast('[[icon:circle-x]] '+err.message);
   }finally{
     if(btn){btn.disabled=false;btn.textContent='Save address';}
   }
 }
 async function delAddr(id){
   if(!confirm('Remove this address?'))return;
-  try{await apiReq('DELETE','/addresses/'+id);await loadAddresses();showToast('🗑️ Address removed');}
-  catch(err){showToast('❌ '+err.message);}
+  try{await apiReq('DELETE','/addresses/'+id);await loadAddresses();showToast('[[icon:trash-2]] Address removed');}
+  catch(err){showToast('[[icon:circle-x]] '+err.message);}
 }
 async function setDefAddr(id){
-  try{await apiReq('PUT','/addresses/'+id,{isDefault:true});await loadAddresses();showToast('✅ Default address updated');}
-  catch(err){showToast('❌ '+err.message);}
+  try{await apiReq('PUT','/addresses/'+id,{isDefault:true});await loadAddresses();showToast('[[icon:circle-check]] Default address updated');}
+  catch(err){showToast('[[icon:circle-x]] '+err.message);}
 }
 
 function starStr(r){return'★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r));}
@@ -1352,7 +1438,7 @@ function removeFromWishlistAccount(id) {
   const idx = wl.indexOf(id);
   if (idx > -1) wl.splice(idx, 1);
   localStorage.setItem('wishlist', JSON.stringify(wl));
-  showToast('💔 Removed from wishlist');
+  showToast('[[icon:heart-crack]] Removed from wishlist');
   renderWish();
 }
 
@@ -1364,7 +1450,7 @@ function addToCartFromWish(id, name) {
     if (p) cart.push({id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, qtyLabel: '1 pc'});
   }
   localStorage.setItem('cart', JSON.stringify(cart));
-  showToast('🛒 ' + name + ' added to cart!');
+  showToast('[[icon:shopping-cart]] ' + name + ' added to cart!');
 }
 
 function renderWish(){
@@ -1375,7 +1461,7 @@ function renderWish(){
   if(cnt)cnt.textContent=items.length+' item'+(items.length!==1?'s':'');
   if(!wrap)return;
   if(!items.length){
-    wrap.innerHTML='<div class="col-span-full text-center py-12"><div style="font-size:2.5rem;margin-bottom:.75rem;">🌿</div><p class="text-text-light text-sm font-semibold mb-3">Your wishlist is empty</p><a href="index.html#products" class="text-forest-light text-sm font-semibold hover:underline">Browse Products →</a></div>';
+    wrap.innerHTML='<div class="col-span-full text-center py-12"><div style="font-size:2.5rem;margin-bottom:.75rem;">[[icon:leaf]]</div><p class="text-text-light text-sm font-semibold mb-3">Your wishlist is empty</p><a href="index.html#products" class="text-forest-light text-sm font-semibold hover:underline">Browse Products →</a></div>';
     return;
   }
   wrap.innerHTML=items.map(p=>`
@@ -1384,7 +1470,7 @@ function renderWish(){
         <img src="${p.image}" loading="lazy" alt="${p.name}" class="wish-img w-full aspect-square object-cover"/>
         <div class="absolute top-[7px] left-[7px] bg-forest-light text-white text-[0.58rem] font-black px-[7px] py-[2px] rounded-full">${Math.round((1-p.price/p.oldPrice)*100)}% OFF</div>
         <button class="absolute top-[7px] right-[7px] w-[26px] h-[26px] bg-white border border-forest-dark/12 rounded-md text-[0.75rem] cursor-pointer flex items-center justify-center transition-all hover:bg-red-50 hover:border-red-300 hover:text-red-600 text-text-dark"
-                onclick="removeFromWishlistAccount(${p.id})">✕</button>
+                onclick="removeFromWishlistAccount(${p.id})">[[icon:x]]</button>
       </div>
       <div class="px-[0.8rem] py-[0.7rem] flex flex-col gap-[0.3rem] flex-1">
         <div class="text-[0.78rem] font-semibold text-text-dark leading-snug line-clamp-2">${p.name}</div>
@@ -1406,8 +1492,8 @@ function renderWish(){
 
 
 function doSearch(){const q=(document.getElementById('navQ')?.value||document.getElementById('mobQ')?.value||'').trim();window.location.href='index.html'+(q?'?q='+encodeURIComponent(q):'');}
-function copyRef(){const el=document.getElementById('refInput');if(el)navigator.clipboard.writeText(el.value).then(()=>showToast('🎁 Referral code copied!'));}
-function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('👋 Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
+function copyRef(){const el=document.getElementById('refInput');if(el)navigator.clipboard.writeText(el.value).then(()=>showToast('[[icon:gift]] Referral code copied!'));}
+function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
 
 // Auth guard — redirect to login if not signed in
 (function(){
@@ -1440,12 +1526,12 @@ renderWish();
     banner.id = 'newUserBanner';
     banner.innerHTML = `
       <div style="background:linear-gradient(135deg,#0f2218,#2d5a3d);color:#fff;border-radius:12px;padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">
-        <div style="font-size:1.6rem;flex-shrink:0">📍</div>
+        <div style="font-size:1.6rem;flex-shrink:0">[[icon:map-pin]]</div>
         <div>
           <p style="font-weight:700;font-size:.95rem;margin-bottom:3px">Welcome! Add your delivery address</p>
           <p style="font-size:.78rem;opacity:.75">Save an address so we can deliver your organic orders right to your door.</p>
         </div>
-        <button onclick="document.getElementById('newUserBanner').remove()" style="margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:1rem;flex-shrink:0">✕</button>
+        <button onclick="document.getElementById('newUserBanner').remove()" style="margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:1rem;flex-shrink:0">[[icon:x]]</button>
       </div>`;
     const grid = document.getElementById('addrGrid');
     if(grid) grid.parentElement.insertBefore(banner, grid);

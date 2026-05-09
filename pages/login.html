@@ -92,6 +92,92 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(192,57,43,.1);
 .success-bar{height:4px;background:var(--green-pale);border-radius:99px;overflow:hidden;}
 .success-bar-fill{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width 1.5s ease;}
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 <div class="bg-texture"></div>
@@ -144,27 +230,46 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(192,57,43,.1);
       <button class="btn-primary" id="btn-register-otp" onclick="doRegisterOtpSend()">Send OTP</button>
     </div>
 
-    <!-- STEP 3: OTP verification -->
+    <!-- STEP 3: OTP verification / Admin password -->
     <div id="s3" class="step">
       <button class="back-link" id="otp-back-btn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         <span id="otp-back-label">Change number</span>
       </button>
-      <div class="step-title">Verify your mobile</div>
-      <div class="step-sub">Enter the 6-digit OTP sent to your number</div>
-      <div class="phone-display">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        <span>OTP sent to <strong id="otp-phone-display">+91 XXXXXXXXXX</strong></span>
+
+      <!-- OTP mode (users) -->
+      <div id="otp-mode">
+        <div class="step-title">Verify your mobile</div>
+        <div class="step-sub">Enter the 6-digit OTP sent to your number</div>
+        <div class="phone-display">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <span>OTP sent to <strong id="otp-phone-display">+91 XXXXXXXXXX</strong></span>
+        </div>
+        <label class="fl">Enter OTP</label>
+        <div class="inp-wrap">
+          <input id="otp-box" class="otp-input" type="text" inputmode="numeric" maxlength="6" placeholder="— — — — — —" autocomplete="one-time-code"/>
+        </div>
+        <div class="timer-row">
+          <span>Expires in <span id="timer-display" class="timer-count">5:00</span></span>
+          <button id="resend-btn" class="resend-btn" onclick="doResend()" disabled>Resend OTP</button>
+        </div>
+        <button class="btn-primary" id="btn-verify" onclick="doVerify()" style="margin-top:20px;">Verify & Continue</button>
       </div>
-      <label class="fl">Enter OTP</label>
-      <div class="inp-wrap">
-        <input id="otp-box" class="otp-input" type="text" inputmode="numeric" maxlength="6" placeholder="— — — — — —" autocomplete="one-time-code"/>
+
+      <!-- Password mode (admin) -->
+      <div id="admin-mode" style="display:none">
+        <div class="step-title">Admin Login</div>
+        <div class="step-sub">Enter your admin password to continue</div>
+        <div class="phone-display">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Signing in as <strong>Admin</strong></span>
+        </div>
+        <label class="fl">Password</label>
+        <div class="inp-wrap">
+          <input id="admin-pass" class="inp" type="password" placeholder="Enter admin password" autocomplete="current-password"/>
+        </div>
+        <button class="btn-primary" id="btn-admin-login" onclick="doAdminLogin()">Sign In</button>
       </div>
-      <div class="timer-row">
-        <span>Expires in <span id="timer-display" class="timer-count">5:00</span></span>
-        <button id="resend-btn" class="resend-btn" onclick="doResend()" disabled>Resend OTP</button>
-      </div>
-      <button class="btn-primary" id="btn-verify" onclick="doVerify()" style="margin-top:20px;">Verify & Continue</button>
     </div>
 
     <!-- STEP 4: Success -->
@@ -173,7 +278,7 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(192,57,43,.1);
         <div class="success-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="success-hi" id="success-hi">Welcome! 👋</div>
+        <div class="success-hi" id="success-hi">Welcome! [[icon:hand]]</div>
         <div class="success-sub" id="success-sub">Taking you to the store…</div>
         <div class="success-bar"><div class="success-bar-fill" id="success-bar-fill"></div></div>
       </div>
@@ -193,8 +298,10 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(192,57,43,.1);
 
 <script>
 const API = window.API_BASE || 'http://localhost:5000/api';
+const ADMIN_PHONE = '6382142578';
 let _timer = null;
 let _isNewUser = false;
+let _isAdmin = false;
 
 function toast(msg, dur) {
   dur = dur || 2600;
@@ -232,8 +339,23 @@ async function doCheckPhone() {
     }
 
     if (data.exists === true) {
-      /* ── Existing user: send OTP now ── */
       _isNewUser = false;
+
+      /* ── Admin: show password field ── */
+      if (phone === ADMIN_PHONE) {
+        _isAdmin = true;
+        document.getElementById('otp-mode').style.display = 'none';
+        document.getElementById('admin-mode').style.display = 'block';
+        document.getElementById('admin-pass').value = '';
+        document.getElementById('otp-back-label').textContent = 'Change number';
+        document.getElementById('otp-back-btn').onclick = function(){ _isAdmin=false; document.getElementById('otp-mode').style.display='block'; document.getElementById('admin-mode').style.display='none'; goStep(1); };
+        goStep(3);
+        setTimeout(function(){ document.getElementById('admin-pass').focus(); }, 300);
+        return;
+      }
+
+      /* ── Regular user: send OTP ── */
+      _isAdmin = false;
       const otpRes  = await fetch(API + '/auth/login-otp-send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -244,6 +366,8 @@ async function doCheckPhone() {
         toast(otpData.message || 'Failed to send OTP');
         return;
       }
+      document.getElementById('otp-mode').style.display = 'block';
+      document.getElementById('admin-mode').style.display = 'none';
       document.getElementById('otp-phone-display').textContent = '+91 ' + phone;
       document.getElementById('otp-back-label').textContent = 'Change number';
       document.getElementById('otp-back-btn').onclick = function(){ goStep(1); };
@@ -299,6 +423,35 @@ async function doRegisterOtpSend() {
   }
 }
 
+/* ── Admin password login ── */
+async function doAdminLogin() {
+  const phone = document.getElementById('inp-phone').value.trim();
+  const pass  = document.getElementById('admin-pass').value;
+  if (!pass) { toast('Enter your admin password'); return; }
+  const btn = document.getElementById('btn-admin-login');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    const res  = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Invalid password');
+    if (_timer) clearInterval(_timer);
+    localStorage.setItem('nansai_token', data.token);
+    localStorage.setItem('nansai_user', JSON.stringify(data.user));
+    localStorage.setItem('admin_token', data.token);
+    localStorage.setItem('admin_user', JSON.stringify({ name: data.user.name, email: data.user.email }));
+    showSuccess(data.user);
+  } catch (err) {
+    const inp = document.getElementById('admin-pass');
+    inp.classList.add('err'); setTimeout(function(){ inp.classList.remove('err'); }, 400);
+    toast(err.message);
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+}
+
 /* ── STEP 3: Verify OTP ── */
 async function doVerify() {
   const phone = document.getElementById('inp-phone').value.trim();
@@ -341,7 +494,7 @@ async function doVerify() {
 /* ── Success screen ── */
 function showSuccess(user) {
   const firstName = (user.name || 'there').split(' ')[0];
-  document.getElementById('success-hi').textContent  = 'Hi, ' + firstName + '! 👋';
+  document.getElementById('success-hi').textContent  = 'Hi, ' + firstName + '! [[icon:hand]]';
   document.getElementById('success-sub').textContent = _isNewUser
     ? 'Account created! Taking you to the store…'
     : 'Welcome back! Taking you to the store…';
@@ -416,6 +569,7 @@ document.getElementById('otp-box').addEventListener('input', function() {
 /* Enter key support */
 document.getElementById('inp-phone').addEventListener('keydown', function(e){ if (e.key === 'Enter') doCheckPhone(); });
 document.getElementById('inp-pass') .addEventListener('keydown', function(e){ if (e.key === 'Enter') doRegisterOtpSend(); });
+document.getElementById('admin-pass').addEventListener('keydown', function(e){ if (e.key === 'Enter') doAdminLogin(); });
 
 /* Skip if already logged in */
 document.addEventListener('DOMContentLoaded', async function() {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -337,6 +337,92 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 .heart-pop { animation: heartPop .35s cubic-bezier(.34,1.56,.64,1) both; }
 @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -348,11 +434,11 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
     <!-- Filter Pills -->
     <div style="display:flex;align-items:center;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;" id="filterRow">
       <button class="fpill active" data-cat="all"       onclick="setFilter(this,'all')">All</button>
-      <button class="fpill"        data-cat="rice"      onclick="setFilter(this,'rice')">🌾 Rice</button>
-      <button class="fpill"        data-cat="flowers"   onclick="setFilter(this,'flowers')">🌸 Flowers</button>
-      <button class="fpill"        data-cat="beverages" onclick="setFilter(this,'beverages')">🥤 Beverages</button>
-      <button class="fpill"        data-cat="flour"     onclick="setFilter(this,'flour')">🫙 Flour</button>
-      <button class="fpill"        data-cat="other"     onclick="setFilter(this,'other')">🌿 Other</button>
+      <button class="fpill"        data-cat="rice"      onclick="setFilter(this,'rice')">[[icon:wheat]] Rice</button>
+      <button class="fpill"        data-cat="flowers"   onclick="setFilter(this,'flowers')">[[icon:flower-2]] Flowers</button>
+      <button class="fpill"        data-cat="beverages" onclick="setFilter(this,'beverages')">[[icon:glass-water]] Beverages</button>
+      <button class="fpill"        data-cat="flour"     onclick="setFilter(this,'flour')">[[icon:package]] Flour</button>
+      <button class="fpill"        data-cat="other"     onclick="setFilter(this,'other')">[[icon:leaf]] Other</button>
     </div>
     <!-- Actions -->
     <div style="display:flex;align-items:center;gap:.65rem;flex-shrink:0;">
@@ -376,7 +462,7 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 
   <!-- EMPTY STATE -->
   <div id="emptyState" class="empty-state" style="display:none;">
-    <div style="width:100px;height:100px;background:linear-gradient(135deg,rgba(74,140,92,.1) 0%,rgba(201,168,76,.08) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(74,140,92,.12);">🌿</div>
+    <div style="width:100px;height:100px;background:linear-gradient(135deg,rgba(74,140,92,.1) 0%,rgba(201,168,76,.08) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(74,140,92,.12);">[[icon:leaf]]</div>
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;color:var(--text-dk);margin-bottom:.6rem;">Your wishlist is empty</h2>
     <p style="color:var(--text-lt);font-size:.85rem;max-width:360px;line-height:1.65;margin-bottom:1.75rem;">Discover our farm-fresh organic products and save your favourites here for later.</p>
     <a href="index.html#products" style="display:inline-flex;align-items:center;gap:8px;background:var(--forest-deep);color:#fff;font-size:.8rem;font-weight:700;padding:.75rem 1.75rem;border-radius:12px;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(15,34,24,.22);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
@@ -406,16 +492,16 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
     <p style="font-size:.78rem;color:var(--text-lt);margin-bottom:1.25rem;">Let friends & family know what you love from the farm.</p>
     <div style="display:flex;gap:.65rem;flex-wrap:wrap;">
       <button onclick="shareVia('whatsapp')" style="flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:.85rem .5rem;border-radius:14px;border:1.5px solid rgba(26,58,42,.1);background:#f7fef9;cursor:pointer;font-size:.7rem;font-weight:600;color:var(--text-md);transition:all .2s;" onmouseover="this.style.borderColor='#25d366';this.style.background='rgba(37,211,102,.06)'" onmouseout="this.style.borderColor='rgba(26,58,42,.1)';this.style.background='#f7fef9'">
-        <span style="font-size:1.5rem;">💬</span> WhatsApp
+        <span style="font-size:1.5rem;">[[icon:message-circle]]</span> WhatsApp
       </button>
       <button onclick="shareVia('copy')" style="flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:.85rem .5rem;border-radius:14px;border:1.5px solid rgba(26,58,42,.1);background:#f7fef9;cursor:pointer;font-size:.7rem;font-weight:600;color:var(--text-md);transition:all .2s;" onmouseover="this.style.borderColor='var(--forest-leaf)';this.style.background='rgba(74,140,92,.06)'" onmouseout="this.style.borderColor='rgba(26,58,42,.1)';this.style.background='#f7fef9'">
-        <span style="font-size:1.5rem;">🔗</span> Copy Link
+        <span style="font-size:1.5rem;">[[icon:link]]</span> Copy Link
       </button>
       <button onclick="shareVia('email')" style="flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:.85rem .5rem;border-radius:14px;border:1.5px solid rgba(26,58,42,.1);background:#f7fef9;cursor:pointer;font-size:.7rem;font-weight:600;color:var(--text-md);transition:all .2s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='rgba(99,102,241,.06)'" onmouseout="this.style.borderColor='rgba(26,58,42,.1)';this.style.background='#f7fef9'">
-        <span style="font-size:1.5rem;">✉️</span> Email
+        <span style="font-size:1.5rem;">[[icon:mail]]</span> Email
       </button>
       <button onclick="shareVia('native')" style="flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:.85rem .5rem;border-radius:14px;border:1.5px solid rgba(26,58,42,.1);background:#f7fef9;cursor:pointer;font-size:.7rem;font-weight:600;color:var(--text-md);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold-dk)';this.style.background='rgba(184,146,42,.06)'" onmouseout="this.style.borderColor='rgba(26,58,42,.1)';this.style.background='#f7fef9'">
-        <span style="font-size:1.5rem;">📤</span> More
+        <span style="font-size:1.5rem;">[[icon:send]]</span> More
       </button>
     </div>
   </div>
@@ -426,7 +512,7 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 <div id="cartDrawer">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(26,58,42,.1);">
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--forest-deep);">Your Cart</h2>
-    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">✕</button>
+    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">[[icon:x]]</button>
   </div>
   <div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>
   <div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(26,58,42,.1);"></div>
@@ -568,7 +654,7 @@ function removeFromWishlist(id){
     card.style.opacity='0';
     setTimeout(()=>{ card.remove(); updateStats(); checkEmpty(); renderRec(); },350);
   }
-  showToast('💔 Removed from wishlist');
+  showToast('[[icon:heart-crack]] Removed from wishlist');
 }
 
 function clearWishlist(){
@@ -577,7 +663,7 @@ function clearWishlist(){
   wishlist = [];
   saveWishlist();
   renderWishlist();
-  showToast('🌿 Wishlist cleared');
+  showToast('[[icon:leaf]] Wishlist cleared');
 }
 
 /* ══════════════════════════════════
@@ -615,7 +701,7 @@ function confirmWishCart(id,btn){
   const ex = cart.find(i=>i.id===id&&i.qtyLabel===label);
   if(ex){ ex.qty+=1; } else { cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit}); }
   saveCart();
-  showToast('🛒 '+p.name+' · '+label+' added!');
+  showToast('[[icon:shopping-cart]] '+p.name+' · '+label+' added!');
   if(btn){
     btn.classList.add('done');
     btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
@@ -638,7 +724,7 @@ function atcBtnHTML(id){
 ══════════════════════════════════ */
 function addAllToCart(){
   const items = getFilteredWish();
-  if(!items.length){ showToast('🌿 No items to add'); return; }
+  if(!items.length){ showToast('[[icon:leaf]] No items to add'); return; }
   items.forEach(p=>{
     const cfg = getQtyCfg(p.category);
     const qty = cfg.options[0]; const unit = cfg.unit;
@@ -648,7 +734,7 @@ function addAllToCart(){
     if(ex){ ex.qty+=1; } else { cart.push({id:p.id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit}); }
   });
   saveCart();
-  showToast('🛒 '+items.length+' item'+(items.length>1?'s':'')+' added to cart!');
+  showToast('[[icon:shopping-cart]] '+items.length+' item'+(items.length>1?'s':'')+' added to cart!');
 }
 
 /* ══════════════════════════════════
@@ -684,9 +770,9 @@ function searchWishlist(q){
 function wishCardHTML(p, delay){
   const d = disc(p);
   const badgeEl = p.badge==='hot'
-    ? `<span class="card-badge" style="background:#f97316;">🔥 HOT</span>`
+    ? `<span class="card-badge" style="background:#f97316;">[[icon:flame]] HOT</span>`
     : p.badge==='new'
-    ? `<span class="card-badge" style="background:#166534;">✨ NEW</span>`
+    ? `<span class="card-badge" style="background:#166534;">[[icon:sparkles]] NEW</span>`
     : `<span class="card-badge" style="background:#ef4444;">${d}% OFF</span>`;
   return `<div class="wish-card sr card-enter" id="wcard-${p.id}" style="animation-delay:${delay}ms;overflow:visible;">
     <div class="wish-card-img">
@@ -697,7 +783,7 @@ function wishCardHTML(p, delay){
       <img src="${p.image}" alt="${p.name}" loading="lazy"/>
       <!-- heart overlay on hover -->
       <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;background:rgba(15,34,24,.18);" class="card-hover-overlay" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0">
-        <span style="font-size:2rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,.35));">❤️</span>
+        <span style="font-size:2rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,.35));">[[icon:heart]]</span>
       </div>
     </div>
     <div style="padding:.85rem;display:flex;flex-direction:column;gap:4px;flex:1;">
@@ -771,7 +857,7 @@ function renderRec(){
     return `<div class="wish-card" style="animation:cardIn .4s cubic-bezier(.22,1,.36,1) ${i*80}ms both;">
       <div class="wish-card-img" style="height:170px;">
         <img src="${p.image}" alt="${p.name}" loading="lazy"/>
-        <button onclick="addToWishlistFromRec(${p.id},this)" id="recwish-${p.id}" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:.8rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">♡</button>
+        <button onclick="addToWishlistFromRec(${p.id},this)" id="recwish-${p.id}" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:.8rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">[[icon:heart]]</button>
       </div>
       <div style="padding:.75rem;display:flex;flex-direction:column;gap:3px;">
         <span style="font-size:.6rem;font-weight:600;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;">${p.category}</span>
@@ -782,7 +868,7 @@ function renderRec(){
           <span style="background:#fef3c7;color:#92400e;font-size:.58rem;font-weight:700;padding:2px 5px;border-radius:20px;">${d}% off</span>
         </div>
         <button onclick="addToWishlistFromRec(${p.id},this)" id="recwish-btn-${p.id}" style="margin-top:7px;width:100%;background:rgba(26,58,42,.06);color:var(--forest-deep);font-size:.72rem;font-weight:700;padding:8px;border-radius:8px;border:1.5px solid rgba(26,58,42,.12);cursor:pointer;font-family:'Roboto',sans-serif;transition:all .2s;" onmouseover="this.style.background='var(--forest-deep)';this.style.color='#fff'" onmouseout="this.style.background='rgba(26,58,42,.06)';this.style.color='var(--forest-deep)'">
-          ♡ Save to Wishlist
+          [[icon:heart]] Save to Wishlist
         </button>
       </div>
     </div>`;
@@ -794,8 +880,8 @@ function addToWishlistFromRec(id, btn){
     wishlist.push(String(id));
     saveWishlist();
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(String(id)).catch(()=>{});
-    showToast('💖 Added to wishlist!');
-    btn.textContent='♥ Saved!';
+    showToast('[[icon:heart]] Added to wishlist!');
+    btn.textContent='[[icon:heart]] Saved!';
     btn.style.color='#ef4444';
     setTimeout(()=>renderWishlist(),600);
   }
@@ -811,7 +897,7 @@ function renderCartDrawer(){
   const footer = document.getElementById('cartFooter');
   if(!body) return;
   if(!cart.length){
-    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">🛒</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();window.location.href=\'index.html#products\'" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
+    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">[[icon:shopping-cart]]</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();window.location.href=\'index.html#products\'" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
     if(footer) footer.style.display='none'; return;
   }
   const total = cart.reduce((s,i)=>s+i.price*(i.qty||1),0);
@@ -828,7 +914,7 @@ function renderCartDrawer(){
         <button onclick="cartQty(${idx},-1)" style="width:24px;height:24px;border:1px solid #d1d5db;border-radius:5px;background:#f3f4f6;cursor:pointer;font-weight:700;font-size:.75rem;">−</button>
         <span style="font-size:.78rem;font-weight:700;min-width:18px;text-align:center;">${item.qty||1}</span>
         <button onclick="cartQty(${idx},1)" style="width:24px;height:24px;border:1px solid #d1d5db;border-radius:5px;background:#f3f4f6;cursor:pointer;font-weight:700;font-size:.75rem;">+</button>
-        <button onclick="removeCart(${idx})" style="width:24px;height:24px;border:none;background:none;cursor:pointer;color:#ef4444;font-size:.85rem;margin-left:2px;">✕</button>
+        <button onclick="removeCart(${idx})" style="width:24px;height:24px;border:none;background:none;cursor:pointer;color:#ef4444;font-size:.85rem;margin-left:2px;">[[icon:x]]</button>
       </div>
     </div>`;
   }).join('');
@@ -847,12 +933,12 @@ function openShare(){ document.getElementById('shareModal').classList.add('open'
 function closeShare(){ document.getElementById('shareModal').classList.remove('open'); }
 function shareVia(method){
   const url = window.location.href;
-  const text = '🌿 Check out my Nansai Organics wishlist! ' + wishlist.length + ' farm-fresh products: ' + url;
+  const text = 'Check out my Nansai Organics wishlist! ' + wishlist.length + ' farm-fresh products: ' + url;
   if(method==='whatsapp') window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
-  else if(method==='copy'){ navigator.clipboard.writeText(url).catch(()=>{}); showToast('🔗 Link copied!'); closeShare(); }
+  else if(method==='copy'){ navigator.clipboard.writeText(url).catch(()=>{}); showToast('[[icon:link]] Link copied!'); closeShare(); }
   else if(method==='email') window.open('mailto:?subject=My Nansai Wishlist&body='+encodeURIComponent(text),'_blank');
   else if(method==='native' && navigator.share){ navigator.share({title:'My Nansai Wishlist',text:text,url:url}).catch(()=>{}); }
-  else { navigator.clipboard.writeText(url).catch(()=>{}); showToast('🔗 Link copied!'); closeShare(); }
+  else { navigator.clipboard.writeText(url).catch(()=>{}); showToast('[[icon:link]] Link copied!'); closeShare(); }
 }
 
 /* ══════════════════════════════════

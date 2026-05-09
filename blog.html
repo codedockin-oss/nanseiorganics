@@ -915,6 +915,92 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 .dot-flour     { background:#ca8a04; }
 .dot-other     { background:#16a34a; }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -965,16 +1051,16 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 <!-- Mobile Drawer -->
 <div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
   <nav style="display:flex;flex-direction:column;gap:.15rem;">
-    <a href="index.html"             style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🏡 Home</a>
-    <a href="index.html#products"    style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🛒 Shop</a>
-    <a href="index.html#why-section" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🌿 Our Promise</a>
-    <a href="blog.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;border-radius:10px;display:block;">📖 Blogs</a>
-    <a href="news.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📰 News</a>
-    <a href="index.html#site-footer" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🏡 About</a>
+    <a href="index.html"             style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] Home</a>
+    <a href="index.html#products"    style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
+    <a href="index.html#why-section" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
+    <a href="blog.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
+    <a href="news.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
+    <a href="index.html#site-footer" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
     <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">👤 Sign In</a>
-    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📦 My Orders</a>
-    <a href="wishlist.html"          style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">💖 Wishlist</a>
+    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
+    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
+    <a href="wishlist.html"          style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
   </nav>
 </div>
 <!-- ═══════════════════════════════════════
@@ -1003,14 +1089,14 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 <div class="filter-section">
   <div class="filter-inner">
     <button class="fpill active" data-cat="all"       onclick="filterBlog('all',this)">All Articles</button>
-    <button class="fpill" data-cat="rice"             onclick="filterBlog('rice',this)">🌾 Rice Varieties</button>
-    <button class="fpill" data-cat="flowers"          onclick="filterBlog('flowers',this)">🌸 Dried Flowers</button>
-    <button class="fpill" data-cat="beverages"        onclick="filterBlog('beverages',this)">🥤 Beverages</button>
-    <button class="fpill" data-cat="flour"            onclick="filterBlog('flour',this)">🫙 Flour & Mixes</button>
-    <button class="fpill" data-cat="other"            onclick="filterBlog('other',this)">🌿 Other</button>
-    <button class="fpill" data-cat="wellness"         onclick="filterBlog('wellness',this)">💚 Wellness</button>
-    <button class="fpill" data-cat="recipes"          onclick="filterBlog('recipes',this)">👨‍🍳 Recipes</button>
-    <button class="fpill" data-cat="sustainability"   onclick="filterBlog('sustainability',this)">♻️ Sustainability</button>
+    <button class="fpill" data-cat="rice"             onclick="filterBlog('rice',this)">[[icon:wheat]] Rice Varieties</button>
+    <button class="fpill" data-cat="flowers"          onclick="filterBlog('flowers',this)">[[icon:flower-2]] Dried Flowers</button>
+    <button class="fpill" data-cat="beverages"        onclick="filterBlog('beverages',this)">[[icon:glass-water]] Beverages</button>
+    <button class="fpill" data-cat="flour"            onclick="filterBlog('flour',this)">[[icon:package]] Flour & Mixes</button>
+    <button class="fpill" data-cat="other"            onclick="filterBlog('other',this)">[[icon:leaf]] Other</button>
+    <button class="fpill" data-cat="wellness"         onclick="filterBlog('wellness',this)">[[icon:heart]] Wellness</button>
+    <button class="fpill" data-cat="recipes"          onclick="filterBlog('recipes',this)">[[icon:chef-hat]] Recipes</button>
+    <button class="fpill" data-cat="sustainability"   onclick="filterBlog('sustainability',this)">[[icon:recycle]] Sustainability</button>
     <span class="result-count" id="resultCount">48 articles</span>
   </div>
 </div>
@@ -1072,7 +1158,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">&copy; 2026 NANSEI. All Rights Reserved. Made with 💚 for farmers.</div>
+  <div class="footer-bottom">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
 </footer>
 
 <!-- MOBILE STICKY BOTTOM BAR -->
@@ -1104,7 +1190,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 ═══════════════════════════════════════ -->
 <div id="articleModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box" id="modalBox">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+    <button class="modal-close" onclick="closeModal()">[[icon:x]]</button>
     <img id="modalImg" src="" alt="" class="modal-hero-img"/>
     <div class="modal-body">
       <span id="modalCat" class="modal-category"></span>
@@ -1558,14 +1644,14 @@ const BLOGS = [
 
 /* Category metadata */
 const CAT_META = {
-  rice:           { label:'Rice Varieties',  icon:'🌾', color:'#65a30d', bg:'#f0fdf4' },
-  flowers:        { label:'Dried Flowers',   icon:'🌸', color:'#db2777', bg:'#fdf2f8' },
-  beverages:      { label:'Beverages',       icon:'🥤', color:'#0891b2', bg:'#f0f9ff' },
-  flour:          { label:'Flour & Mixes',   icon:'🫙', color:'#ca8a04', bg:'#fefce8' },
-  other:          { label:'Other Products',  icon:'🌿', color:'#16a34a', bg:'#f0fdf4' },
-  wellness:       { label:'Wellness',        icon:'💚', color:'#15803d', bg:'#f0fdf4' },
-  recipes:        { label:'Recipes',         icon:'👨‍🍳', color:'#c2410c', bg:'#fff7ed' },
-  sustainability: { label:'Sustainability',  icon:'♻️', color:'#1d4ed8', bg:'#eff6ff' },
+  rice:           { label:'Rice Varieties',  icon:'[[icon:wheat]]', color:'#65a30d', bg:'#f0fdf4' },
+  flowers:        { label:'Dried Flowers',   icon:'[[icon:flower-2]]', color:'#db2777', bg:'#fdf2f8' },
+  beverages:      { label:'Beverages',       icon:'[[icon:glass-water]]', color:'#0891b2', bg:'#f0f9ff' },
+  flour:          { label:'Flour & Mixes',   icon:'[[icon:package]]', color:'#ca8a04', bg:'#fefce8' },
+  other:          { label:'Other Products',  icon:'[[icon:leaf]]', color:'#16a34a', bg:'#f0fdf4' },
+  wellness:       { label:'Wellness',        icon:'[[icon:heart]]', color:'#15803d', bg:'#f0fdf4' },
+  recipes:        { label:'Recipes',         icon:'[[icon:chef-hat]]', color:'#c2410c', bg:'#fff7ed' },
+  sustainability: { label:'Sustainability',  icon:'[[icon:recycle]]', color:'#1d4ed8', bg:'#eff6ff' },
 };
 
 function catColor(cat){ return (CAT_META[cat]||{color:'#4a8c5c'}).color; }
@@ -1649,7 +1735,7 @@ function renderGrid(posts) {
 
   if (!gridPosts.length) {
     grid.innerHTML = `<div class="no-results">
-      <div class="icon">🌿</div>
+      <div class="icon">[[icon:leaf]]</div>
       <p>No articles found${searchQuery ? ' for "'+searchQuery+'"' : ''}.</p>
     </div>`;
     return;
@@ -1670,7 +1756,7 @@ function renderGrid(posts) {
         <div class="blog-card-tags">${tagPills}</div>
         <h3>${post.title}</h3>
         <p>${post.excerpt}</p>
-        ${post.product ? `<p style="font-size:.65rem;font-weight:700;color:var(--forest-leaf);margin-bottom:.5rem;margin-top:-.3rem;">🛍️ ${post.product}</p>` : ''}
+        ${post.product ? `<p style="font-size:.65rem;font-weight:700;color:var(--forest-leaf);margin-bottom:.5rem;margin-top:-.3rem;">[[icon:shopping-bag]] ${post.product}</p>` : ''}
         <div class="blog-card-meta">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span>${post.author}</span>
@@ -1779,7 +1865,7 @@ function openModal(id) {
   const ctaEl = document.getElementById('modalCTA');
   if (post.productId) {
     ctaEl.innerHTML = `
-      <p>🛍️ This article is about <strong>${post.product}</strong> — available now from our organic farm.</p>
+      <p>[[icon:shopping-bag]] This article is about <strong>${post.product}</strong> — available now from our organic farm.</p>
       <a class="cta-btn" href="product.html?id=${post.productId}">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
         Shop ${post.product}
@@ -1807,7 +1893,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal();
 function subscribeNewsletter() {
   const email = document.getElementById('nlEmail').value.trim();
   if (!email || !email.includes('@')) { showToast('Please enter a valid email address.'); return; }
-  showToast('🌿 Subscribed! Welcome to the Nansai farm family.');
+  showToast('[[icon:leaf]] Subscribed! Welcome to the Nansai farm family.');
   document.getElementById('nlEmail').value = '';
 }
 

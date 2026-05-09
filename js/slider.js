@@ -21,7 +21,7 @@
   function updateMute() {
     if (muteBtn) {
       muteBtn.classList.toggle('visible', cur === 0);
-      muteBtn.textContent = video.muted ? '🔇' : '🔊';
+      muteBtn.textContent = video.muted ? '[[icon:volume-x]]' : '[[icon:volume-2]]';
     }
   }
   

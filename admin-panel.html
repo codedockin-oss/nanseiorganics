@@ -135,6 +135,92 @@
   /* Top nav shadow on scroll */
   .topnav-shadow { box-shadow: 0 2px 12px rgba(0,0,0,.08); }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -406,14 +492,14 @@
             <input class="form-input" style="width:220px;font-size:13px;" placeholder="Search blogs..." id="blog-search" oninput="renderBlogs()">
             <select class="form-input" style="width:160px;font-size:13px;" id="blog-cat-filter" onchange="renderBlogs()">
               <option value="">All Categories</option>
-              <option value="rice">🌾 Rice Varieties</option>
-              <option value="flowers">🌸 Dried Flowers</option>
-              <option value="beverages">🥤 Beverages</option>
-              <option value="flour">🪴 Flour & Mixes</option>
-              <option value="wellness">💚 Wellness</option>
-              <option value="recipes">👨‍🍳 Recipes</option>
-              <option value="sustainability">♻️ Sustainability</option>
-              <option value="other">🌿 Other</option>
+              <option value="rice">Rice Varieties</option>
+              <option value="flowers">Dried Flowers</option>
+              <option value="beverages">Beverages</option>
+              <option value="flour">Flour & Mixes</option>
+              <option value="wellness">Wellness</option>
+              <option value="recipes">Recipes</option>
+              <option value="sustainability">Sustainability</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <button class="btn btn-primary" onclick="openBlogModal()">
@@ -452,14 +538,14 @@
         <div>
           <label class="form-label">Category *</label>
           <select class="form-input" id="b-cat">
-            <option value="rice">🌾 Rice Varieties</option>
-            <option value="flowers">🌸 Dried Flowers</option>
-            <option value="beverages">🥤 Beverages</option>
-            <option value="flour">🪴 Flour & Mixes</option>
-            <option value="wellness">💚 Wellness</option>
-            <option value="recipes">👨🍳 Recipes</option>
-            <option value="sustainability">♻️ Sustainability</option>
-            <option value="other">🌿 Other</option>
+            <option value="rice">Rice Varieties</option>
+            <option value="flowers">Dried Flowers</option>
+            <option value="beverages">Beverages</option>
+            <option value="flour">Flour & Mixes</option>
+            <option value="wellness">Wellness</option>
+            <option value="recipes">Recipes</option>
+            <option value="sustainability">Sustainability</option>
+            <option value="other">Other</option>
           </select>
         </div>
         <div>
@@ -512,7 +598,7 @@
   <div class="modal-box" style="width:580px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="news-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Post News</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeNewsModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeNewsModal()">[[icon:x]]</button>
     </div>
     <input type="hidden" id="news-id">
     <div style="display:grid;gap:14px;">
@@ -524,11 +610,11 @@
         <div>
           <label class="form-label">Category</label>
           <select class="form-input" id="n-cat">
-            <option value="milestone">🏆 Milestone</option>
-            <option value="certification">🌿 Certification</option>
-            <option value="product">📦 Product Launch</option>
-            <option value="community">🤝 Community</option>
-            <option value="award">🥇 Award</option>
+            <option value="milestone">Milestone</option>
+            <option value="certification">Certification</option>
+            <option value="product">Product Launch</option>
+            <option value="community">Community</option>
+            <option value="award">Award</option>
           </select>
         </div>
         <div>
@@ -563,7 +649,7 @@
 <!-- News Preview Modal -->
 <div id="news-preview-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeNewsPreview()">
   <div class="modal-box" style="width:680px;">
-    <button class="btn btn-ghost btn-sm" style="position:absolute;top:12px;right:12px;" onclick="closeNewsPreview()">✕</button>
+    <button class="btn btn-ghost btn-sm" style="position:absolute;top:12px;right:12px;" onclick="closeNewsPreview()">[[icon:x]]</button>
     <img id="np-hero" src="" style="width:100%;height:220px;object-fit:cover;border-radius:10px 10px 0 0;display:block;"/>
     <div style="padding:1.5rem;">
       <div id="np-meta" style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;"></div>
@@ -577,7 +663,7 @@
   <div class="modal-box" style="width:600px;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="product-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Add Product</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeProductModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeProductModal()">[[icon:x]]</button>
     </div>
     <input type="hidden" id="product-id">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -615,20 +701,20 @@
       <div>
         <label class="form-label">Category *</label>
         <select class="form-input" id="p-category">
-          <option value="rice">🌾 Rice</option>
-          <option value="flowers">🌸 Flowers</option>
-          <option value="beverages">🥤 Beverages</option>
-          <option value="flour">🫙 Flour</option>
-          <option value="other">🌿 Other</option>
+          <option value="rice">Rice</option>
+          <option value="flowers">Flowers</option>
+          <option value="beverages">Beverages</option>
+          <option value="flour">Flour</option>
+          <option value="other">Other</option>
         </select>
       </div>
       <div>
         <label class="form-label">Badge</label>
         <select class="form-input" id="p-badge">
-          <option value="hot">🔥 Hot</option>
-          <option value="new">✨ New</option>
+          <option value="hot">Hot</option>
+          <option value="new">New</option>
           <option value="sale">% Sale</option>
-          <option value="bestseller">⭐ Bestseller</option>
+          <option value="bestseller">Bestseller</option>
         </select>
       </div>
       <div>
@@ -642,8 +728,8 @@
       <div>
         <label class="form-label">Active</label>
         <select class="form-input" id="p-active">
-          <option value="true">✅ Active</option>
-          <option value="false">❌ Inactive</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
         </select>
       </div>
       <div style="grid-column:1/-1;">
@@ -693,7 +779,7 @@
   <div class="modal-box" style="width:600px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="order-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Order Details</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeOrderModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeOrderModal()">[[icon:x]]</button>
     </div>
     <div id="order-modal-content"></div>
   </div>
@@ -704,7 +790,7 @@
   <div class="modal-box" style="width:420px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Ship Order</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeShipModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeShipModal()">[[icon:x]]</button>
     </div>
     <input type="hidden" id="ship-order-id">
     <div style="margin-bottom:14px;">
@@ -739,7 +825,7 @@
   <div class="modal-box" style="width:580px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Customer Profile</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeCustomerModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeCustomerModal()">[[icon:x]]</button>
     </div>
     <div id="customer-modal-content"></div>
   </div>
@@ -899,14 +985,14 @@ async function initApp() {
 // BLOGS
 // ============================================================
 const BLOG_CAT_META = {
-  rice:           { label:'Rice Varieties',  icon:'🌾', color:'#166534', bg:'#dcfce7' },
-  flowers:        { label:'Dried Flowers',   icon:'🌸', color:'#9d174d', bg:'#fce7f3' },
-  beverages:      { label:'Beverages',       icon:'🥤', color:'#0891b2', bg:'#e0f2fe' },
-  flour:          { label:'Flour & Mixes',   icon:'🪴', color:'#b45309', bg:'#fef3c7' },
-  wellness:       { label:'Wellness',        icon:'💚', color:'#166534', bg:'#dcfce7' },
-  recipes:        { label:'Recipes',         icon:'👨🍳', color:'#c2410c', bg:'#fff7ed' },
-  sustainability: { label:'Sustainability',  icon:'♻️', color:'#1d4ed8', bg:'#eff6ff' },
-  other:          { label:'Other',           icon:'🌿', color:'#16a34a', bg:'#f0fdf4' },
+  rice:           { label:'Rice Varieties',  icon:'[[icon:wheat]]', color:'#166534', bg:'#dcfce7' },
+  flowers:        { label:'Dried Flowers',   icon:'[[icon:flower-2]]', color:'#9d174d', bg:'#fce7f3' },
+  beverages:      { label:'Beverages',       icon:'[[icon:glass-water]]', color:'#0891b2', bg:'#e0f2fe' },
+  flour:          { label:'Flour & Mixes',   icon:'[[icon:sprout]]', color:'#b45309', bg:'#fef3c7' },
+  wellness:       { label:'Wellness',        icon:'[[icon:heart]]', color:'#166534', bg:'#dcfce7' },
+  recipes:        { label:'Recipes',         icon:'[[icon:chef-hat]]', color:'#c2410c', bg:'#fff7ed' },
+  sustainability: { label:'Sustainability',  icon:'[[icon:recycle]]', color:'#1d4ed8', bg:'#eff6ff' },
+  other:          { label:'Other',           icon:'[[icon:leaf]]', color:'#16a34a', bg:'#f0fdf4' },
 };
 function getBlogStore() { try { return JSON.parse(localStorage.getItem('nansai_blogs') || '[]'); } catch { return []; } }
 function saveBlogStore(arr) { localStorage.setItem('nansai_blogs', JSON.stringify(arr)); }
@@ -932,7 +1018,7 @@ async function renderBlogs() {
           <img src="${b.image||''}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid #E2E8F0;flex-shrink:0;" onerror="this.style.display='none'">
           <div>
             <p style="font-weight:600;margin:0;font-size:13px;">${b.title}</p>
-            ${b.featured ? '<span style="font-size:10px;background:#f0fdf4;color:#166534;padding:1px 7px;border-radius:20px;font-weight:700;">⭐ Featured</span>' : ''}
+            ${b.featured ? '<span style="font-size:10px;background:#f0fdf4;color:#166534;padding:1px 7px;border-radius:20px;font-weight:700;">[[icon:star]] Featured</span>' : ''}
           </div>
         </div>
       </td>
@@ -1030,7 +1116,7 @@ function previewBlog(id) {
     document.getElementById('bp-meta').innerHTML = `
       <span style="font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;color:${b.catColor};background:${b.catBg};">${m.icon||''} ${b.catLabel}</span>
       <span style="font-size:12px;color:#64748B;">${b.author} &middot; ${new Date(b.createdAt).toLocaleDateString('en-IN')} &middot; ${b.readTime} read</span>
-      ${b.featured ? '<span style="font-size:11px;background:#f0fdf4;color:#166534;padding:2px 8px;border-radius:20px;font-weight:700;">⭐ Featured</span>' : ''}`;
+      ${b.featured ? '<span style="font-size:11px;background:#f0fdf4;color:#166534;padding:2px 8px;border-radius:20px;font-weight:700;">[[icon:star]] Featured</span>' : ''}`;
     document.getElementById('blog-preview-modal').style.display = 'flex';
   });
 }
@@ -1532,12 +1618,12 @@ function normalizeStatus(s) {
 }
 
 const STATUS_LABEL = {
-  pending:   '⏳ Pending',
+  pending:   '[[icon:hourglass]] Pending',
   confirmed: '✓ Confirmed',
-  packed:    '📦 Packed',
-  shipped:   '🚚 Shipped',
-  delivered: '✅ Delivered',
-  cancelled: '✖ Cancelled',
+  packed:    '[[icon:package]] Packed',
+  shipped:   '[[icon:truck]] Shipped',
+  delivered: '[[icon:circle-check]] Delivered',
+  cancelled: '[[icon:x]] Cancelled',
 };
 
 function statusBadge(status) {
@@ -1545,7 +1631,7 @@ function statusBadge(status) {
   return `<span class="badge badge-${status}">${label}</span>`;
 }
 function payBadge(pay) {
-  const label = { paid:'✓ Paid', unpaid:'✗ Unpaid', cod:'💵 COD' }[pay] || pay;
+  const label = { paid:'✓ Paid', unpaid:'✗ Unpaid', cod:'[[icon:banknote]] COD' }[pay] || pay;
   return `<span class="badge badge-${pay}">${label}</span>`;
 }
 
@@ -1591,12 +1677,12 @@ async function renderOrders() {
     } else if (next === 'confirmed') {
       actionBtn = `<button class="btn btn-sm" style="background:#DBEAFE;color:#1E40AF;border:1.5px solid #BFDBFE;" onclick="advanceOrder('${o.id}','confirmed')">✓ Confirm</button>`;
     } else if (next === 'packed') {
-      actionBtn = `<button class="btn btn-sm" style="background:#F3E8FF;color:#6B21A8;border:1.5px solid #E9D5FF;" onclick="advanceOrder('${o.id}','packed')">📦 Pack</button>`;
+      actionBtn = `<button class="btn btn-sm" style="background:#F3E8FF;color:#6B21A8;border:1.5px solid #E9D5FF;" onclick="advanceOrder('${o.id}','packed')">[[icon:package]] Pack</button>`;
     } else if (next === 'shipped') {
       actionBtn = `<button class="btn btn-sm" style="background:#FFEDD5;color:#9A3412;border:1.5px solid #FED7AA;" onclick="openShipModal('${o.id}')">
-        🚚 Ship</button>`;
+        [[icon:truck]] Ship</button>`;
     } else if (next === 'delivered') {
-      actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','delivered')">✅ Deliver</button>`;
+      actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','delivered')">[[icon:circle-check]] Deliver</button>`;
     }
     const prodNames = o.products.map(p => `${p.name} ×${p.qty}`).join(', ');
     return `
@@ -1671,7 +1757,7 @@ function openOrderModal(orderId) {
   document.getElementById('order-modal-title').textContent = `Order ${o.id}`;
 
   const idx = ORDER_FLOW.indexOf(o.status);
-  const tlIcons = { pending:'⏳', confirmed:'✓', packed:'📦', shipped:'🚚', delivered:'✅' };
+  const tlIcons = { pending:'[[icon:hourglass]]', confirmed:'✓', packed:'[[icon:package]]', shipped:'[[icon:truck]]', delivered:'[[icon:circle-check]]' };
   const tlLabels = { pending:'Pending', confirmed:'Confirmed', packed:'Packed', shipped:'Shipped', delivered:'Delivered' };
   const timelineHtml = ORDER_FLOW.map((s, i) => {
     const cls = i < idx ? 'done' : i === idx ? 'active' : 'pending';
@@ -1881,21 +1967,21 @@ window.onload = async () => {
     if (res.ok && data.success && user?.role === 'admin') {
       localStorage.setItem('admin_token', token);
       localStorage.setItem('admin_user', JSON.stringify({ name: user.name, email: user.email }));
-      dbg('✅ Admin verified — loading panel...');
+      dbg('[[icon:circle-check]] Admin verified — loading panel...');
       setTimeout(() => {
         document.getElementById('_dbg').remove();
         document.getElementById('admin-shell').style.display = 'flex';
         initApp();
       }, 1000);
     } else {
-      dbg('❌ Not admin. Role=' + user?.role + ' — redirecting in 3s...');
+      dbg('[[icon:circle-x]] Not admin. Role=' + user?.role + ' — redirecting in 3s...');
       setTimeout(() => {
         localStorage.clear();
         window.location.href = 'login.html';
       }, 3000);
     }
   } catch(e) {
-    dbg('❌ Error: ' + e.message);
+    dbg('[[icon:circle-x]] Error: ' + e.message);
     const stored = localStorage.getItem('admin_user');
     if (stored) {
       dbg('Using cached session...');

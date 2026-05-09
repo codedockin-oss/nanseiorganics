@@ -1,5 +1,6 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 dns.setServers(['1.1.1.1', '8.8.8.8']);
@@ -11,27 +12,34 @@ async function run() {
   console.log('✅ Connected');
 
   const phone = '6382142578';
+  const ADMIN_PASSWORD = 'anto';
+  const hashedPw = await bcrypt.hash(ADMIN_PASSWORD, 10);
+
   let user = await User.findOne({ phone });
 
   if (user) {
-    user.name = 'Anto';
-    user.role = 'admin';
-    user.phoneVerified = true;
-    user.emailVerified = true;
-    await user.save({ validateBeforeSave: false });
-    console.log('✅ Existing user updated to admin:', user.email);
+    await User.updateOne({ phone }, {
+      name: 'Anto',
+      role: 'admin',
+      password: hashedPw,
+      phoneVerified: true,
+      emailVerified: true,
+    });
+    console.log('✅ Admin updated — phone:', phone, '| password: anto');
   } else {
-    user = await User.create({
+    user = new User({
       name: 'Anto',
       email: `${phone}@nansai.local`,
-      password: require('crypto').randomBytes(20).toString('hex'),
       phone,
       role: 'admin',
       phoneVerified: true,
       emailVerified: true,
     });
+    // Set pre-hashed password directly to bypass minlength validator
+    user.password = hashedPw;
+    await user.save({ validateBeforeSave: false });
     await Cart.create({ user: user._id, items: [] });
-    console.log('✅ Admin user Anto created with phone', phone);
+    console.log('✅ Admin created — phone:', phone, '| password: anto');
   }
 
   await mongoose.disconnect();

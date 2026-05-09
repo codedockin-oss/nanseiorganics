@@ -11,28 +11,30 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --c-brand: #1a3a2a;
-    --c-brand-hover: #2d5a3d;
-    --c-brand-light: #f0fdf4;
-    --c-gold: #c9a84c;
-    --c-gold-lt: #e8c97a;
-    --c-gold-dk: #b8922a;
-    --c-sidebar: #0f2218;
-    --c-sidebar-text: #8fbc9a;
-    --c-sidebar-active: #1a3a2a;
+    --c-brand: #2563EB;
+    --c-brand-hover: #1d4ed8;
+    --c-brand-light: #EFF6FF;
+    --c-gold: #F59E0B;
+    --c-gold-lt: #FCD34D;
+    --c-gold-dk: #D97706;
+    --c-sidebar: #ffffff;
+    --c-sidebar-border: #E2E8F0;
+    --c-sidebar-text: #64748B;
+    --c-sidebar-active-bg: #EFF6FF;
+    --c-sidebar-active-text: #2563EB;
   }
   * { font-family: 'DM Sans', sans-serif; box-sizing: border-box; }
   body { background: #F8FAFC; margin: 0; }
   .mono { font-family: 'DM Mono', monospace; }
-  
+
   /* Sidebar */
-  #sidebar { width: 240px; min-height: 100vh; background: var(--c-sidebar); flex-shrink: 0; position: fixed; top: 0; left: 0; bottom: 0; z-index: 40; transition: transform 0.2s; }
+  #sidebar { width: 240px; min-height: 100vh; background: var(--c-sidebar); border-right: 1px solid var(--c-sidebar-border); flex-shrink: 0; position: fixed; top: 0; left: 0; bottom: 0; z-index: 40; transition: transform 0.2s; }
   #main-content { margin-left: 240px; min-height: 100vh; }
-  
+
   /* Nav items */
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; margin: 2px 8px; cursor: pointer; color: var(--c-sidebar-text); font-size: 14px; font-weight: 500; transition: all 0.15s; }
-  .nav-item:hover { background: var(--c-sidebar-active); color: #E2E8F0; }
-  .nav-item.active { background: var(--c-sidebar-active); color: #fff; border-left: 3px solid var(--c-gold); }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; margin: 2px 8px; cursor: pointer; color: var(--c-sidebar-text); font-size: 14px; font-weight: 500; transition: all 0.15s; border-left: 3px solid transparent; }
+  .nav-item:hover { background: #F8FAFC; color: #0F172A; }
+  .nav-item.active { background: var(--c-sidebar-active-bg); color: var(--c-sidebar-active-text); border-left-color: var(--c-brand); font-weight: 600; }
   .nav-item svg { flex-shrink: 0; }
   
   /* Status badges */
@@ -58,13 +60,13 @@
   
   /* Forms */
   .form-input { width: 100%; padding: 9px 12px; border: 1.5px solid #E2E8F0; border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.15s; background: #fff; color: #0F172A; }
-  .form-input:focus { border-color: var(--c-brand); box-shadow: 0 0 0 3px rgba(26,58,42,0.1); }
+  .form-input:focus { border-color: var(--c-brand); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
   .form-label { font-size: 12px; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; display: block; }
   
   /* Buttons */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13.5px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
-  .btn-primary { background: var(--c-brand); color: #fff; }
-  .btn-primary:hover { background: var(--c-brand-hover); }
+  .btn-primary { background: var(--c-brand); color: #fff; box-shadow: 0 1px 3px rgba(37,99,235,.25); }
+  .btn-primary:hover { background: var(--c-brand-hover); box-shadow: 0 4px 12px rgba(37,99,235,.3); }
   .btn-secondary { background: #F1F5F9; color: #334155; border: 1.5px solid #E2E8F0; }
   .btn-secondary:hover { background: #E2E8F0; }
   .btn-danger { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FECACA; }
@@ -84,13 +86,13 @@
   /* Toast */
   #toast-container { position: fixed; top: 20px; right: 20px; z-index: 200; display: flex; flex-direction: column; gap: 8px; }
   .toast { padding: 12px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 500; color: #fff; animation: slideIn 0.2s ease; max-width: 320px; }
-  .toast-success { background: #166534; }
-  .toast-error   { background: #991B1B; }
-  .toast-info    { background: #1a3a2a; }
+  .toast-success { background: #16a34a; }
+  .toast-error   { background: #DC2626; }
+  .toast-info    { background: #2563EB; }
   @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
   
   /* Login page */
-  #login-page { min-height: 100vh; background: #0f2218; display: flex; align-items: center; justify-content: center; }
+  #login-page { min-height: 100vh; background: #F1F5F9; display: flex; align-items: center; justify-content: center; }
   
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -126,15 +128,99 @@
   /* Sidebar overlay on mobile */
   #sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:39; }
   #sidebar.open ~ #sidebar-overlay { display:block; }
-  /* Active nav gold accent */
-  .nav-item { border-left: 3px solid transparent; }
-  .nav-item.active { border-left-color: var(--c-gold); }
+  /* Active nav accent handled in .nav-item.active above */
   /* Smooth page transitions */
   .page { animation: fadeIn .18s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
   /* Top nav shadow on scroll */
   .topnav-shadow { box-shadow: 0 2px 12px rgba(0,0,0,.08); }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -147,22 +233,22 @@
   <!-- SIDEBAR -->
   <div id="sidebar">
     <!-- Logo -->
-    <div style="padding:16px 16px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #1E293B;margin-bottom:8px;">
+    <div style="padding:20px 16px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid #E2E8F0;margin-bottom:8px;">
       <img src="nansei_org_logo.svg" alt="Nansai Organics"
-           style="height:48px;width:auto;object-fit:contain;filter:brightness(0) invert(1);flex-shrink:0;"
+           style="height:80px;width:auto;max-width:180px;object-fit:contain;"
            onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
-      <div id="logo-fallback" style="display:none;flex-direction:column;">
-        <span style="font-family:'Georgia',serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.04em;line-height:1;">Nan<span style="color:var(--c-gold);">sai</span></span>
-        <span style="font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c-sidebar-text);margin-top:2px;">Farm Dashboard</span>
+      <div id="logo-fallback" style="display:none;flex-direction:column;align-items:center;">
+        <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;color:#0F172A;letter-spacing:.04em;line-height:1;">Nan<span style="color:#2563EB;">sai</span></span>
+        <span style="font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:#94A3B8;margin-top:4px;">Farm Dashboard</span>
       </div>
     </div>
 
     <!-- View Site -->
     <div style="padding:10px 16px 4px;">
       <a href="index.html" target="_blank"
-         style="display:flex;align-items:center;gap:7px;width:100%;padding:9px 14px;border-radius:8px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);color:var(--c-gold);font-size:13px;font-weight:600;text-decoration:none;transition:all 0.15s;"
-         onmouseover="this.style.background='rgba(201,168,76,0.18)';this.style.color='#e8c97a'"
-         onmouseout="this.style.background='rgba(201,168,76,0.08)';this.style.color='var(--c-gold)'">
+         style="display:flex;align-items:center;gap:7px;width:100%;padding:9px 14px;border-radius:8px;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.15s;"
+         onmouseover="this.style.background='#DBEAFE'"
+         onmouseout="this.style.background='#EFF6FF'">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         View Site
         <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;opacity:0.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -196,7 +282,7 @@
         Blogs
       </div>
 
-      <div style="border-top:1px solid #1E293B;margin:12px 8px;"></div>
+      <div style="border-top:1px solid #E2E8F0;margin:12px 8px;"></div>
       <div class="nav-item" onclick="doLogout()" style="color:#EF4444;">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Logout
@@ -204,11 +290,11 @@
     </nav>
 
     <div style="position:absolute;bottom:16px;left:0;right:0;padding:0 8px;">
-      <div style="background:#1E293B;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--c-gold-dk);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0;" data-admin-initials>AD</div>
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0;" data-admin-initials>AD</div>
         <div>
-          <p style="font-size:13px;font-weight:600;color:#F1F5F9;margin:0;line-height:1.3;" data-admin-name>Admin</p>
-          <p style="font-size:11px;color:#64748B;margin:0;" data-admin-email></p>
+          <p style="font-size:13px;font-weight:600;color:#0F172A;margin:0;line-height:1.3;" data-admin-name>Admin</p>
+          <p style="font-size:11px;color:#94A3B8;margin:0;" data-admin-email></p>
         </div>
       </div>
     </div>
@@ -217,7 +303,7 @@
   <!-- MAIN CONTENT -->
   <div id="main-content">
     <!-- TOP NAV -->
-    <div style="background:#fff;border-bottom:1px solid #E2E8F0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;">
+    <div style="background:#fff;border-bottom:1px solid #E2E8F0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;box-shadow:0 1px 4px rgba(0,0,0,.04);">
       <div style="display:flex;align-items:center;gap:12px;">
         <button class="btn btn-ghost" id="mobile-menu-btn" style="display:none;" onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').style.display=document.getElementById('sidebar').classList.contains('open')?'block':'none'">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -225,11 +311,6 @@
         <h1 id="page-title" style="font-size:17px;font-weight:600;color:#0F172A;margin:0;">Dashboard</h1>
       </div>
       <div style="display:flex;align-items:center;gap:16px;">
-        <div style="position:relative;">
-          <input class="form-input" style="width:220px;padding-left:34px;font-size:13px;" placeholder="Search anything..." id="global-search" oninput="globalSearch(this.value)">
-          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94A3B8;" width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--c-gold-dk);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;cursor:pointer;" data-admin-initials>AD</div>
       </div>
     </div>
 
@@ -241,8 +322,8 @@
           <div class="stat-card">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
               <span style="font-size:12px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:0.04em;">Total Sales</span>
-              <div style="width:36px;height:36px;border-radius:9px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;">
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#1a3a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div style="width:36px;height:36px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
             </div>
             <p id="stat-sales" style="font-size:26px;font-weight:600;color:#0F172A;margin:0;letter-spacing:-0.02em;">₹0</p>
@@ -261,8 +342,8 @@
           <div class="stat-card">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
               <span style="font-size:12px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:0.04em;">Customers</span>
-              <div style="width:36px;height:36px;border-radius:9px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;">
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z" stroke="#1a3a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div style="width:36px;height:36px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
             </div>
             <p id="stat-customers" style="font-size:26px;font-weight:600;color:#0F172A;margin:0;">0</p>
@@ -409,14 +490,14 @@
             <input class="form-input" style="width:220px;font-size:13px;" placeholder="Search blogs..." id="blog-search" oninput="renderBlogs()">
             <select class="form-input" style="width:160px;font-size:13px;" id="blog-cat-filter" onchange="renderBlogs()">
               <option value="">All Categories</option>
-              <option value="rice">🌾 Rice Varieties</option>
-              <option value="flowers">🌸 Dried Flowers</option>
-              <option value="beverages">🥤 Beverages</option>
-              <option value="flour">🪴 Flour & Mixes</option>
-              <option value="wellness">💚 Wellness</option>
-              <option value="recipes">👨‍🍳 Recipes</option>
-              <option value="sustainability">♻️ Sustainability</option>
-              <option value="other">🌿 Other</option>
+              <option value="rice">Rice Varieties</option>
+              <option value="flowers">Dried Flowers</option>
+              <option value="beverages">Beverages</option>
+              <option value="flour">Flour & Mixes</option>
+              <option value="wellness">Wellness</option>
+              <option value="recipes">Recipes</option>
+              <option value="sustainability">Sustainability</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <button class="btn btn-primary" onclick="openBlogModal()">
@@ -457,14 +538,14 @@
         <div>
           <label class="form-label">Category *</label>
           <select class="form-input" id="b-cat">
-            <option value="rice">🌾 Rice Varieties</option>
-            <option value="flowers">🌸 Dried Flowers</option>
-            <option value="beverages">🥤 Beverages</option>
-            <option value="flour">🪴 Flour & Mixes</option>
-            <option value="wellness">💚 Wellness</option>
-            <option value="recipes">👨🍳 Recipes</option>
-            <option value="sustainability">♻️ Sustainability</option>
-            <option value="other">🌿 Other</option>
+            <option value="rice">Rice Varieties</option>
+            <option value="flowers">Dried Flowers</option>
+            <option value="beverages">Beverages</option>
+            <option value="flour">Flour & Mixes</option>
+            <option value="wellness">Wellness</option>
+            <option value="recipes">Recipes</option>
+            <option value="sustainability">Sustainability</option>
+            <option value="other">Other</option>
           </select>
         </div>
         <div>
@@ -517,7 +598,7 @@
   <div class="modal-box" style="width:580px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="news-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Post News</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeNewsModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeNewsModal()">[[icon:x]]</button>
     </div>
     <input type="hidden" id="news-id">
     <div style="display:grid;gap:14px;">
@@ -529,11 +610,11 @@
         <div>
           <label class="form-label">Category</label>
           <select class="form-input" id="n-cat">
-            <option value="milestone">🏆 Milestone</option>
-            <option value="certification">🌿 Certification</option>
-            <option value="product">📦 Product Launch</option>
-            <option value="community">🤝 Community</option>
-            <option value="award">🥇 Award</option>
+            <option value="milestone">Milestone</option>
+            <option value="certification">Certification</option>
+            <option value="product">Product Launch</option>
+            <option value="community">Community</option>
+            <option value="award">Award</option>
           </select>
         </div>
         <div>
@@ -568,7 +649,7 @@
 <!-- News Preview Modal -->
 <div id="news-preview-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeNewsPreview()">
   <div class="modal-box" style="width:680px;">
-    <button class="btn btn-ghost btn-sm" style="position:absolute;top:12px;right:12px;" onclick="closeNewsPreview()">✕</button>
+    <button class="btn btn-ghost btn-sm" style="position:absolute;top:12px;right:12px;" onclick="closeNewsPreview()">[[icon:x]]</button>
     <img id="np-hero" src="" style="width:100%;height:220px;object-fit:cover;border-radius:10px 10px 0 0;display:block;"/>
     <div style="padding:1.5rem;">
       <div id="np-meta" style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;"></div>
@@ -582,7 +663,7 @@
   <div class="modal-box" style="width:600px;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="product-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Add Product</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeProductModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeProductModal()">[[icon:x]]</button>
     </div>
     <input type="hidden" id="product-id">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -620,20 +701,20 @@
       <div>
         <label class="form-label">Category *</label>
         <select class="form-input" id="p-category">
-          <option value="rice">🌾 Rice</option>
-          <option value="flowers">🌸 Flowers</option>
-          <option value="beverages">🥤 Beverages</option>
-          <option value="flour">🫙 Flour</option>
-          <option value="other">🌿 Other</option>
+          <option value="rice">Rice</option>
+          <option value="flowers">Flowers</option>
+          <option value="beverages">Beverages</option>
+          <option value="flour">Flour</option>
+          <option value="other">Other</option>
         </select>
       </div>
       <div>
         <label class="form-label">Badge</label>
         <select class="form-input" id="p-badge">
-          <option value="hot">🔥 Hot</option>
-          <option value="new">✨ New</option>
+          <option value="hot">Hot</option>
+          <option value="new">New</option>
           <option value="sale">% Sale</option>
-          <option value="bestseller">⭐ Bestseller</option>
+          <option value="bestseller">Bestseller</option>
         </select>
       </div>
       <div>
@@ -647,8 +728,8 @@
       <div>
         <label class="form-label">Active</label>
         <select class="form-input" id="p-active">
-          <option value="true">✅ Active</option>
-          <option value="false">❌ Inactive</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
         </select>
       </div>
       <div style="grid-column:1/-1;">
@@ -698,7 +779,7 @@
   <div class="modal-box" style="width:600px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="order-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Order Details</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeOrderModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeOrderModal()">[[icon:x]]</button>
     </div>
     <div id="order-modal-content"></div>
   </div>
@@ -709,7 +790,7 @@
   <div class="modal-box" style="width:420px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Ship Order</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeShipModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeShipModal()">[[icon:x]]</button>
     </div>
     <input type="hidden" id="ship-order-id">
     <div style="margin-bottom:14px;">
@@ -744,7 +825,7 @@
   <div class="modal-box" style="width:580px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Customer Profile</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeCustomerModal()">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeCustomerModal()">[[icon:x]]</button>
     </div>
     <div id="customer-modal-content"></div>
   </div>
@@ -904,14 +985,14 @@ async function initApp() {
 // BLOGS
 // ============================================================
 const BLOG_CAT_META = {
-  rice:           { label:'Rice Varieties',  icon:'🌾', color:'#166534', bg:'#dcfce7' },
-  flowers:        { label:'Dried Flowers',   icon:'🌸', color:'#9d174d', bg:'#fce7f3' },
-  beverages:      { label:'Beverages',       icon:'🥤', color:'#0891b2', bg:'#e0f2fe' },
-  flour:          { label:'Flour & Mixes',   icon:'🪴', color:'#b45309', bg:'#fef3c7' },
-  wellness:       { label:'Wellness',        icon:'💚', color:'#166534', bg:'#dcfce7' },
-  recipes:        { label:'Recipes',         icon:'👨🍳', color:'#c2410c', bg:'#fff7ed' },
-  sustainability: { label:'Sustainability',  icon:'♻️', color:'#1d4ed8', bg:'#eff6ff' },
-  other:          { label:'Other',           icon:'🌿', color:'#16a34a', bg:'#f0fdf4' },
+  rice:           { label:'Rice Varieties',  icon:'[[icon:wheat]]', color:'#166534', bg:'#dcfce7' },
+  flowers:        { label:'Dried Flowers',   icon:'[[icon:flower-2]]', color:'#9d174d', bg:'#fce7f3' },
+  beverages:      { label:'Beverages',       icon:'[[icon:glass-water]]', color:'#0891b2', bg:'#e0f2fe' },
+  flour:          { label:'Flour & Mixes',   icon:'[[icon:sprout]]', color:'#b45309', bg:'#fef3c7' },
+  wellness:       { label:'Wellness',        icon:'[[icon:heart]]', color:'#166534', bg:'#dcfce7' },
+  recipes:        { label:'Recipes',         icon:'[[icon:chef-hat]]', color:'#c2410c', bg:'#fff7ed' },
+  sustainability: { label:'Sustainability',  icon:'[[icon:recycle]]', color:'#1d4ed8', bg:'#eff6ff' },
+  other:          { label:'Other',           icon:'[[icon:leaf]]', color:'#16a34a', bg:'#f0fdf4' },
 };
 function getBlogStore() { try { return JSON.parse(localStorage.getItem('nansai_blogs') || '[]'); } catch { return []; } }
 function saveBlogStore(arr) { localStorage.setItem('nansai_blogs', JSON.stringify(arr)); }
@@ -937,7 +1018,7 @@ async function renderBlogs() {
           <img src="${b.image||''}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid #E2E8F0;flex-shrink:0;" onerror="this.style.display='none'">
           <div>
             <p style="font-weight:600;margin:0;font-size:13px;">${b.title}</p>
-            ${b.featured ? '<span style="font-size:10px;background:#f0fdf4;color:#166534;padding:1px 7px;border-radius:20px;font-weight:700;">⭐ Featured</span>' : ''}
+            ${b.featured ? '<span style="font-size:10px;background:#f0fdf4;color:#166534;padding:1px 7px;border-radius:20px;font-weight:700;">[[icon:star]] Featured</span>' : ''}
           </div>
         </div>
       </td>
@@ -1035,7 +1116,7 @@ function previewBlog(id) {
     document.getElementById('bp-meta').innerHTML = `
       <span style="font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;color:${b.catColor};background:${b.catBg};">${m.icon||''} ${b.catLabel}</span>
       <span style="font-size:12px;color:#64748B;">${b.author} &middot; ${new Date(b.createdAt).toLocaleDateString('en-IN')} &middot; ${b.readTime} read</span>
-      ${b.featured ? '<span style="font-size:11px;background:#f0fdf4;color:#166534;padding:2px 8px;border-radius:20px;font-weight:700;">⭐ Featured</span>' : ''}`;
+      ${b.featured ? '<span style="font-size:11px;background:#f0fdf4;color:#166534;padding:2px 8px;border-radius:20px;font-weight:700;">[[icon:star]] Featured</span>' : ''}`;
     document.getElementById('blog-preview-modal').style.display = 'flex';
   });
 }
@@ -1221,10 +1302,10 @@ function renderAnalytics() {
       <div style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
           <span style="font-weight:500;color:#334155;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;">${name}</span>
-          <span style="font-weight:600;color:#1a3a2a;">${qty} sold</span>
+          <span style="font-weight:600;color:#2563EB;">${qty} sold</span>
         </div>
         <div style="height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden;">
-          <div style="height:100%;width:${Math.round(qty/maxQty*100)}%;background:linear-gradient(90deg,#1a3a2a,#4a8c5c);border-radius:3px;"></div>
+          <div style="height:100%;width:${Math.round(qty/maxQty*100)}%;background:linear-gradient(90deg,#2563EB,#60A5FA);border-radius:3px;"></div>
         </div>
       </div>`).join('')
     : '<p style="color:#94A3B8;font-size:12px;text-align:center;padding:16px 0;">No order data yet</p>';
@@ -1238,7 +1319,7 @@ function renderAnalytics() {
       catRev[cat] = (catRev[cat] || 0) + p.price * p.qty;
     });
   });
-  const catColors = { rice:'#1a3a2a', flowers:'#db2777', beverages:'#0891b2', flour:'#b8922a', other:'#4a8c5c' };
+  const catColors = { rice:'#2563EB', flowers:'#db2777', beverages:'#0891b2', flour:'#D97706', other:'#64748B' };
   const ctx3 = document.getElementById('cat-chart')?.getContext('2d');
   if (ctx3) {
     if (catChartInst) catChartInst.destroy();
@@ -1260,9 +1341,9 @@ function renderAnalytics() {
   const repeatC = Store.customers.filter(c => Store.orders.filter(o => o.customerId === c.id).length > 1).length;
   const avgOrder = Store.orders.length ? Math.round(Store.orders.reduce((s,o) => s+o.total, 0) / Store.orders.length) : 0;
   document.getElementById('customer-insights').innerHTML = [
-    ['Total Customers', totalC, '#1a3a2a'],
-    ['New This Month', newThisMonth, '#4a8c5c'],
-    ['Repeat Buyers', repeatC, '#b8922a'],
+    ['Total Customers', totalC, '#2563EB'],
+    ['New This Month', newThisMonth, '#16a34a'],
+    ['Repeat Buyers', repeatC, '#D97706'],
     ['Avg Order Value', '\u20b9' + avgOrder.toLocaleString('en-IN'), '#0891b2'],
   ].map(([label, val, color]) => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9;">
@@ -1283,8 +1364,8 @@ function renderCharts() {
     data: {
       labels: months,
       datasets: [{ label: 'Revenue (₹)', data: revenue, fill: true,
-        backgroundColor: 'rgba(26,58,42,0.07)', borderColor: '#1a3a2a',
-        borderWidth: 2, pointBackgroundColor: '#c9a84c', pointRadius: 4, tension: 0.4 }]
+        backgroundColor: 'rgba(37,99,235,0.07)', borderColor: '#2563EB',
+        borderWidth: 2, pointBackgroundColor: '#F59E0B', pointRadius: 4, tension: 0.4 }]
     },
     options: { responsive: true, plugins: { legend: { display: false } },
       scales: { y: { ticks: { callback: v => '₹' + (v/1000).toFixed(0) + 'k', font: { size: 11 } }, grid: { color: '#F1F5F9' } }, x: { ticks: { font: { size: 11 } }, grid: { display: false } } } }
@@ -1292,7 +1373,7 @@ function renderCharts() {
 
   const statusCounts = {};
   Store.orders.forEach(o => { statusCounts[o.status] = (statusCounts[o.status]||0)+1; });
-  const statusColors = { pending:'#c9a84c', confirmed:'#1a3a2a', packed:'#4a8c5c', shipped:'#b8922a', delivered:'#16a34a' };
+  const statusColors = { pending:'#F59E0B', confirmed:'#2563EB', packed:'#8B5CF6', shipped:'#D97706', delivered:'#16a34a' };
 
   const ctx2 = document.getElementById('status-chart').getContext('2d');
   if (statusChartInst) statusChartInst.destroy();
@@ -1537,12 +1618,12 @@ function normalizeStatus(s) {
 }
 
 const STATUS_LABEL = {
-  pending:   '⏳ Pending',
+  pending:   '[[icon:hourglass]] Pending',
   confirmed: '✓ Confirmed',
-  packed:    '📦 Packed',
-  shipped:   '🚚 Shipped',
-  delivered: '✅ Delivered',
-  cancelled: '✖ Cancelled',
+  packed:    '[[icon:package]] Packed',
+  shipped:   '[[icon:truck]] Shipped',
+  delivered: '[[icon:circle-check]] Delivered',
+  cancelled: '[[icon:x]] Cancelled',
 };
 
 function statusBadge(status) {
@@ -1550,7 +1631,7 @@ function statusBadge(status) {
   return `<span class="badge badge-${status}">${label}</span>`;
 }
 function payBadge(pay) {
-  const label = { paid:'✓ Paid', unpaid:'✗ Unpaid', cod:'💵 COD' }[pay] || pay;
+  const label = { paid:'✓ Paid', unpaid:'✗ Unpaid', cod:'[[icon:banknote]] COD' }[pay] || pay;
   return `<span class="badge badge-${pay}">${label}</span>`;
 }
 
@@ -1596,12 +1677,12 @@ async function renderOrders() {
     } else if (next === 'confirmed') {
       actionBtn = `<button class="btn btn-sm" style="background:#DBEAFE;color:#1E40AF;border:1.5px solid #BFDBFE;" onclick="advanceOrder('${o.id}','confirmed')">✓ Confirm</button>`;
     } else if (next === 'packed') {
-      actionBtn = `<button class="btn btn-sm" style="background:#F3E8FF;color:#6B21A8;border:1.5px solid #E9D5FF;" onclick="advanceOrder('${o.id}','packed')">📦 Pack</button>`;
+      actionBtn = `<button class="btn btn-sm" style="background:#F3E8FF;color:#6B21A8;border:1.5px solid #E9D5FF;" onclick="advanceOrder('${o.id}','packed')">[[icon:package]] Pack</button>`;
     } else if (next === 'shipped') {
       actionBtn = `<button class="btn btn-sm" style="background:#FFEDD5;color:#9A3412;border:1.5px solid #FED7AA;" onclick="openShipModal('${o.id}')">
-        🚚 Ship</button>`;
+        [[icon:truck]] Ship</button>`;
     } else if (next === 'delivered') {
-      actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','delivered')">✅ Deliver</button>`;
+      actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','delivered')">[[icon:circle-check]] Deliver</button>`;
     }
     const prodNames = o.products.map(p => `${p.name} ×${p.qty}`).join(', ');
     return `
@@ -1676,7 +1757,7 @@ function openOrderModal(orderId) {
   document.getElementById('order-modal-title').textContent = `Order ${o.id}`;
 
   const idx = ORDER_FLOW.indexOf(o.status);
-  const tlIcons = { pending:'⏳', confirmed:'✓', packed:'📦', shipped:'🚚', delivered:'✅' };
+  const tlIcons = { pending:'[[icon:hourglass]]', confirmed:'✓', packed:'[[icon:package]]', shipped:'[[icon:truck]]', delivered:'[[icon:circle-check]]' };
   const tlLabels = { pending:'Pending', confirmed:'Confirmed', packed:'Packed', shipped:'Shipped', delivered:'Delivered' };
   const timelineHtml = ORDER_FLOW.map((s, i) => {
     const cls = i < idx ? 'done' : i === idx ? 'active' : 'pending';
@@ -1770,7 +1851,7 @@ async function renderCustomers() {
 }
 
 function initials(name) { return name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2); }
-const colors = ['#1a3a2a','#2d5a3d','#4a8c5c','#b8922a','#c9a84c','#16A34A','#0891B2','#DC2626'];
+const colors = ['#2563EB','#0891B2','#16A34A','#D97706','#8B5CF6','#DC2626','#64748B','#F59E0B'];
 function randomColor(seed) { let h = 0; for(let i=0;i<seed.length;i++) h = (h*31+seed.charCodeAt(i))%colors.length; return colors[h]; }
 
 function openCustomerModal(cid) {
@@ -1869,13 +1950,11 @@ window.onload = async () => {
     const user = data.data || data.user;
 
     if (res.ok && data.success && user?.role === 'admin') {
-      // Save both token keys
       localStorage.setItem('admin_token', token);
       localStorage.setItem('admin_user', JSON.stringify({ name: user.name, email: user.email }));
       document.getElementById('admin-shell').style.display = 'block';
       initApp();
     } else {
-      // Not admin — clear and redirect
       localStorage.removeItem('admin_token');
       localStorage.removeItem('nansai_token');
       localStorage.removeItem('nansai_user');
@@ -1884,7 +1963,6 @@ window.onload = async () => {
       window.location.href = 'login.html';
     }
   } catch(e) {
-    // API unreachable — try cached session
     const stored = localStorage.getItem('admin_user');
     if (stored) {
       document.getElementById('admin-shell').style.display = 'block';

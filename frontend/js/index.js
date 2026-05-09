@@ -143,7 +143,7 @@ function openShopFAB() {
   const video=document.getElementById('heroVideo');
   if(!track) return;
   function getDur(){ return cur===0?(video.duration&&isFinite(video.duration)?video.duration*1000:10000):IMG_DUR; }
-  function updateMute(){ if(muteBtn){muteBtn.classList.toggle('visible',cur===0);muteBtn.textContent=video.muted?'🔇':'🔊';} }
+  function updateMute(){ if(muteBtn){muteBtn.classList.toggle('visible',cur===0);muteBtn.textContent=video.muted?'[[icon:volume-x]]':'[[icon:volume-2]]';} }
   if(muteBtn) muteBtn.onclick=()=>{video.muted=!video.muted;updateMute();};
   function syncVideo(i){ if(i===0){video.currentTime=0;video.play().catch(()=>{});}else{video.pause();} }
   function goTo(i){

@@ -641,7 +641,10 @@ video.slide-bg { transform:none!important; transition:none!important; }
   border-radius: 20px; display: flex; align-items: center; justify-content: center;
   border: 1.5px solid #fff; line-height: 1;
 }
-.prod-hscroll::-webkit-scrollbar { display:none; }
+.wish-btn { position:absolute; top:8px; right:8px; width:44px; height:44px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.15); border:none; cursor:pointer; z-index:10; transition:transform .2s cubic-bezier(.34,1.56,.64,1); -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+.wish-btn:hover { transform:scale(1.15) !important; }
+@keyframes heartPop { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(.9)} 100%{transform:scale(1)} }
+.wish-btn.popping { animation:heartPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
 .hscroll-wrap { display:flex; align-items:center; gap:10px; }
 .prod-hscroll { perspective:1200px; overflow-x:auto !important; overflow-y:visible !important; }
 .prod-hscroll .prod-card {
@@ -833,6 +836,92 @@ video.slide-bg { transform:none!important; transition:none!important; }
                    radial-gradient(ellipse at 85% 20%,rgba(201,168,76,.04) 0%,transparent 60%);
 }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -886,29 +975,29 @@ video.slide-bg { transform:none!important; transition:none!important; }
     </div>
     <div class="flex-1 overflow-hidden">
       <div id="offerTrack" class="flex items-center gap-8 whitespace-nowrap text-[13px] text-[#4a3510] font-medium animate-marquee hover:[animation-play-state:paused]" style="width:max-content;">
-        <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">🎁 First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">[[icon:gift]] First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
         <span class="text-amber-400">◆</span>
-        <span>🌾 <b>Karunguruvai Rice</b> — ₹180/kg · Heritage variety, low GI</span>
+        <span>[[icon:wheat]] <b>Karunguruvai Rice</b> — ₹180/kg · Heritage variety, low GI</span>
         <span class="text-amber-400">◆</span>
-        <span>🖤 <b>Karuppu Kavuni Rice</b> — ₹220/kg · Rich in antioxidants</span>
+        <span>[[icon:heart]] <b>Karuppu Kavuni Rice</b> — ₹220/kg · Rich in antioxidants</span>
         <span class="text-amber-400">◆</span>
-        <span>🌸 <b>Paneer Rose</b> — ₹150 · <b class="text-rose-600">Only 32 Left!</b></span>
+        <span>[[icon:flower-2]] <b>Paneer Rose</b> — ₹150 · <b class="text-rose-600">Only 32 Left!</b></span>
         <span class="text-amber-400">◆</span>
-        <span>🌺 <b>Hibiscus Flower</b> — ₹120 · Sun-dried, farm fresh</span>
+        <span>[[icon:flower-2]] <b>Hibiscus Flower</b> — ₹120 · Sun-dried, farm fresh</span>
         <span class="text-amber-400">◆</span>
-        <span>🦋 <b>Butterfly Pea Flower</b> — ₹180 · Natural blue tea</span>
+        <span>[[icon:bug]] <b>Butterfly Pea Flower</b> — ₹180 · Natural blue tea</span>
         <span class="text-amber-400">◆</span>
-        <span>🥛 <b>Organic Rose Milk</b> — ₹140 · Pure &amp; natural</span>
+        <span>[[icon:glass-water]] <b>Organic Rose Milk</b> — ₹140 · Pure &amp; natural</span>
         <span class="text-amber-400">◆</span>
-        <span>🫙 <b>Idiyappam Flour</b> — ₹160/kg · Stone ground</span>
+        <span>[[icon:package]] <b>Idiyappam Flour</b> — ₹160/kg · Stone ground</span>
         <span class="text-amber-400">◆</span>
-        <span>💪 <b>Health Mix Powder</b> — ₹175/kg · 12 grains blend</span>
+        <span>[[icon:dumbbell]] <b>Health Mix Powder</b> — ₹175/kg · 12 grains blend</span>
         <span class="text-amber-400">◆</span>
-        <span>🚚 Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
+        <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
         <span class="text-amber-400">◆</span>
-        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">💊 Buy 2 Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
         <span class="text-amber-400">◆</span>
-        <span>👨‍🌾 Farm Direct · Lab Tested · 9 Certifications</span>
+        <span>[[icon:tractor]] Farm Direct · Lab Tested · 9 Certifications</span>
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
@@ -1000,24 +1089,24 @@ video.slide-bg { transform:none!important; transition:none!important; }
 <!-- Mobile Drawer -->
 <div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
   <nav style="display:flex;flex-direction:column;gap:.25rem;">
-    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🛒 Shop</a>
-    <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🌿 Our Promise</a>
-    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📖 Blogs</a>
-    <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📰 News</a>
-    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🏡 About</a>
+    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;"> Shop</a>
+    <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
+    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
+    <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
+    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
     <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">👤 Sign In</a>
-    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📦 My Orders</a>
-    <a href="wishlist.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">💖 Wishlist</a>
-    <a href="#" onclick="toggleMobDrawer();openCart();return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🛍️ Cart</a>
+    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
+    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
+    <a href="wishlist.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
+    <a href="#" onclick="toggleMobDrawer();openCart();return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-bag]] Cart</a>
   </nav>
 </div>
 
 <!-- Mobile search row -->
 <div class="mob-search-row">
   <div class="wrap">
-    <input id="mobSearchInput" type="text" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')doSearch()" style="position:relative;z-index:2;background:transparent;"/>
-    <span id="mobSearchPlaceholder" class="absolute left-4 top-1/2 -translate-y-1/2 text-[0.82rem] pointer-events-none font-['Inter'] transition-opacity duration-200" style="z-index:1;color:#9ca3af;"></span>
+    <input id="mobSearchInput" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')doSearch()" style="width:100%;padding:.6rem 2.8rem .6rem 1rem;border:1px solid rgba(26,58,42,.15);border-radius:10px;font-size:.85rem;color:var(--forest-deep);font-family:'Inter',sans-serif;outline:none;background:#fff;position:relative;z-index:2;"/>
+    <span id="mobSearchPlaceholder" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:.82rem;color:#9ca3af;pointer-events:none;font-family:'Inter',sans-serif;transition:opacity .2s;z-index:1;"></span>
     <button class="sb" onclick="doSearch()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     </button>
@@ -1052,7 +1141,21 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
     <div id="track">
       <div class="slide active" id="slide-0">
-        <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
+        <video class="slide-bg" id="slide0-video" autoplay playsinline src="https://ik.imagekit.io/bq9dscs4g/slide%20video.mp4?updatedAt=1772621168744"></video>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>With Nansei</p>
+          <h2 class="slide-title">Experience the Root of <em>Nature</em></h2>
+          <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
+        </div>
+        <!-- Sound toggle -->
+        <button id="slide0-sound-btn" onclick="toggleSlide0Sound()" style="position:absolute;bottom:4.5rem;left:1rem;z-index:20;width:2rem;height:2rem;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(5,12,6,.55);backdrop-filter:blur(6px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;" title="Toggle sound">
+          <svg id="slide0-sound-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </button>
+      </div>
+      <div class="slide" id="slide-1">
+        <video class="slide-bg" id="slide1-video" autoplay muted playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
         <div class="slide-overlay"></div><div class="slide-accent"></div>
         <div class="slide-content">
           <p class="eyebrow"><span></span>With Nansai</p>
@@ -1100,10 +1203,11 @@ video.slide-bg { transform:none!important; transition:none!important; }
         <button class="dot" data-i="1"></button>
         <button class="dot" data-i="2"></button>
         <button class="dot" data-i="3"></button>
+        <button class="dot" data-i="4"></button>
       </div>
       <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       <span style="font-size:.6rem;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.38);white-space:nowrap;">
-        <strong id="currIdx" style="font-family:'Cormorant Garamond',serif;font-size:.88rem;color:rgba(255,255,255,.72);">01</strong> / 04
+        <strong id="currIdx" style="font-family:'Cormorant Garamond',serif;font-size:.88rem;color:rgba(255,255,255,.72);">01</strong> / 05
       </span>
     </div>
 
@@ -1167,7 +1271,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
         <!-- 3 features -->
         <div id="mill-features" style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:.85rem;">
           <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">🌾</div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:wheat]]</div>
             <div>
               <p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);">Stone Ground</p>
               <p style="font-size:.72rem;color:var(--text-lt);">No heat damage</p>
@@ -1175,7 +1279,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
           </div>
           <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
           <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">✋</div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:hand]]</div>
             <div>
               <p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);">Hand Operated</p>
               <p style="font-size:.72rem;color:var(--text-lt);">Zero electricity</p>
@@ -1183,7 +1287,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
           </div>
           <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
           <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">🌿</div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:leaf]]</div>
             <div>
               <p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);">Farm Direct</p>
               <p style="font-size:.72rem;color:var(--text-lt);">25-acre organic farm</p>
@@ -1266,7 +1370,7 @@ function millReset(card) {
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:2.5rem;" class="sr" id="sr-prod-hdr">
-      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">🌾 Explore the Fields ↓</button>
+      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">[[icon:wheat]] Explore the Fields ↓</button>
       <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#1a2416;margin-bottom:.35rem;"> Bringing Nature's Best To  <em style="color:#166534;">Your Family .</em></h1>
       <p style="color:#7a9980;font-size:.85rem;">16 farm-fresh, certified products · Direct from Organic Farmers</p>
     </div>
@@ -1275,13 +1379,13 @@ function millReset(card) {
     <div id="filterTabs" style="margin-bottom:2.5rem;">
       <div class="filter-bar sr sd-1" id="sr-filters">
         <button class="fpill active" data-cat="all"   onclick="deskCatClick(this,'all')">All</button>
-        <button class="fpill"        data-cat="new"   onclick="deskCatClick(this,'new')">✨ New</button>
-        <button class="fpill"        data-cat="bestseller" onclick="deskCatClick(this,'bestseller')">🔥 Best Sellers</button>
-        <button class="fpill"        data-cat="rice"  onclick="deskCatClick(this,'rice')">🌾 Rice</button>
-        <button class="fpill"        data-cat="flowers" onclick="deskCatClick(this,'flowers')">🌸 Flowers</button>
-        <button class="fpill"        data-cat="beverages" onclick="deskCatClick(this,'beverages')">🥤 Beverages</button>
-        <button class="fpill"        data-cat="flour" onclick="deskCatClick(this,'flour')">🫙 Flour</button>
-        <button class="fpill"        data-cat="other" onclick="deskCatClick(this,'other')">🌿 Other</button>
+        <button class="fpill"        data-cat="new"   onclick="deskCatClick(this,'new')">[[icon:sparkles]] New</button>
+        <button class="fpill"        data-cat="bestseller" onclick="deskCatClick(this,'bestseller')">[[icon:flame]] Best Sellers</button>
+        <button class="fpill"        data-cat="rice"  onclick="deskCatClick(this,'rice')">[[icon:wheat]] Rice</button>
+        <button class="fpill"        data-cat="flowers" onclick="deskCatClick(this,'flowers')">[[icon:flower-2]] Flowers</button>
+        <button class="fpill"        data-cat="beverages" onclick="deskCatClick(this,'beverages')">[[icon:glass-water]] Beverages</button>
+        <button class="fpill"        data-cat="flour" onclick="deskCatClick(this,'flour')">[[icon:package]] Flour</button>
+        <button class="fpill"        data-cat="other" onclick="deskCatClick(this,'other')">[[icon:leaf]] Other</button>
       </div>
     </div>
     <style>
@@ -1324,7 +1428,7 @@ function millReset(card) {
     <div id="productSections" class="prod-section" style="overflow:visible;"></div>
     <!-- Filtered flat grid -->
     <div id="productGrid" style="display:none;flex-wrap:wrap;gap:20px;overflow:visible;"></div>
-    <div id="emptyState" style="display:none;text-align:center;padding:5rem 0;"><div style="font-size:3.5rem;margin-bottom:.75rem;">🌿</div><p style="color:#9ca3af;font-weight:600;">No products found.</p></div>
+    <div id="emptyState" style="display:none;text-align:center;padding:5rem 0;"><div style="font-size:3.5rem;margin-bottom:.75rem;">[[icon:leaf]]</div><p style="color:#9ca3af;font-weight:600;">No products found.</p></div>
   </div>
 </section>
 
@@ -1390,22 +1494,22 @@ function millReset(card) {
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-1" id="sr-why-1">
-        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🌱</div>
+        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:sprout]]</div>
         <h3 class="font-bold text-base mb-2">100% Organic</h3>
         <p class="text-gray-500 text-xs leading-relaxed">9 active certifications including USDA Organic, Non-GMO & Halal.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-2" id="sr-why-2">
-        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🚚</div>
+        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:truck]]</div>
         <h3 class="font-bold text-base mb-2">Fast Delivery</h3>
         <p class="text-gray-500 text-xs leading-relaxed">Quick & reliable delivery across all regions. Free above ₹999.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-3" id="sr-why-3">
-        <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">💰</div>
+        <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:circle-dollar-sign]]</div>
         <h3 class="font-bold text-base mb-2">Best Prices</h3>
         <p class="text-gray-500 text-xs leading-relaxed">Farm-direct — no middlemen. Save up to 30% versus retail.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-4" id="sr-why-4">
-        <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📞</div>
+        <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:phone]]</div>
         <h3 class="font-bold text-base mb-2">24/7 Support</h3>
         <p class="text-gray-500 text-xs leading-relaxed">Dedicated support team available round the clock.</p>
       </div>
@@ -1495,7 +1599,7 @@ function millReset(card) {
 ═══════════════════════════════════════ -->
 <div id="blog-modal" onclick="if(event.target===this)closeBlogModal()" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0);transition:background .3s,backdrop-filter .3s;align-items:center;justify-content:center;padding:1rem;">
   <div id="blog-modal-box" style="background:#fdfaf5;border-radius:24px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;transform:scale(.92) translateY(20px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;position:relative;scrollbar-width:thin;">
-    <button onclick="closeBlogModal()" style="position:fixed;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:2001;backdrop-filter:blur(4px);">✕</button>
+    <button onclick="closeBlogModal()" style="position:fixed;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:2001;backdrop-filter:blur(4px);">[[icon:x]]</button>
     <img id="blog-modal-hero" src="" alt="" style="width:100%;height:280px;object-fit:cover;border-radius:24px 24px 0 0;display:block;"/>
     <div style="padding:2rem 2.5rem 2.5rem;">
       <div id="blog-modal-meta" style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;flex-wrap:wrap;"></div>
@@ -1542,7 +1646,7 @@ function millReset(card) {
       </ul>
     </div>
   </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with 💚 for farmers.</div>
+  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
 </footer>
 
 <!-- ═══════════════════════════════════════
@@ -1559,14 +1663,15 @@ if(cs) cs.innerHTML+=cs.innerHTML;
 (function(){
   const mobTrack=document.getElementById('mobMarqueeTrack');
   if(!mobTrack)return;
-  const items=['🌾 Karunguruvai Rice — ₹180/kg','◆','🖤 Karuppu Kavuni Rice — ₹220/kg','◆','🌸 Paneer Rose — ₹150 · Only 32 Left!','◆','🌺 Hibiscus Flower — ₹120','◆','🦋 Butterfly Pea Flower — ₹180','◆','🥛 Organic Rose Milk — ₹140','◆','🫙 Idiyappam Flour — ₹160/kg','◆','💪 Health Mix Powder — ₹175/kg','◆','🚚 Free Delivery above ₹999','◆','🎁 First Order 10% OFF — NANSAI10'];
+  const items=['[[icon:wheat]] Karunguruvai Rice — ₹180/kg','◆','[[icon:heart]] Karuppu Kavuni Rice — ₹220/kg','◆','[[icon:flower-2]] Paneer Rose — ₹150 · Only 32 Left!','◆','[[icon:flower-2]] Hibiscus Flower — ₹120','◆','[[icon:bug]] Butterfly Pea Flower — ₹180','◆','[[icon:glass-water]] Organic Rose Milk — ₹140','◆','[[icon:package]] Idiyappam Flour — ₹160/kg','◆','[[icon:dumbbell]] Health Mix Powder — ₹175/kg','◆','[[icon:truck]] Free Delivery above ₹999','◆','[[icon:gift]] First Order 10% OFF — NANSAI10'];
   const html=items.map(t=>t==='◆'?`<span style="color:#9a7520;">◆</span>`:`<span>${t}</span>`).join('');
   mobTrack.innerHTML=html+html;
+  window.nansaiApplyIcons?.(mobTrack);
 })();
 
 /* ════ COPY COUPON ════ */
 document.querySelectorAll('[data-code]').forEach(el=>{
-  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('✅ Code '+el.dataset.code+' copied!'); };
+  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('Copied: ' + el.dataset.code); };
 });
 
 /* ════ COUNTDOWN ════ */
@@ -1583,14 +1688,14 @@ setInterval(updateTimer,1000); updateTimer();
 /* ════ TOAST ════ */
 function showToast(msg){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
+  t.innerHTML=msg; t.classList.add('show');
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
 /* ════ NEWSLETTER ════ */
 function subNewsletter(e){
   e.preventDefault();
-  showToast('🌿 Subscribed! Welcome to the farm family.');
+  showToast('Subscribed! Welcome to the farm family.');
   e.target.reset();
 }
 
@@ -1614,8 +1719,42 @@ const products=[
   {id:16,name:"Country Fig Powder",                category:"other",    price:200,oldPrice:250,rating:4.7,reviews:61, badge:"new", section:"new",       image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
 ];
 
-let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]').map(x=>String(x));
-let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+function readStoredArray(key){
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(value) ? value : [];
+  } catch {
+    localStorage.removeItem(key);
+    return [];
+  }
+}
+function sameId(a,b){ return String(a) === String(b); }
+function jsArg(value){ return "'" + String(value).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/[\r\n]/g,' ') + "'"; }
+function firstImage(images){
+  const first = Array.isArray(images) ? images[0] : null;
+  if (typeof first === 'string') return first;
+  return first?.url || '';
+}
+function normalizeCategory(raw){
+  const value = (typeof raw === 'string' ? raw : (raw?.slug || raw?.name || '')).toLowerCase();
+  if (['rice','flowers','beverages','flour','other'].includes(value)) return value;
+  if (value.includes('rice')) return 'rice';
+  if (value.includes('flower') || value.includes('rose') || value.includes('hibiscus')) return 'flowers';
+  if (value.includes('beverage') || value.includes('drink') || value.includes('milk') || value.includes('sherbet')) return 'beverages';
+  if (value.includes('flour') || value.includes('powder') || value.includes('mix')) return 'flour';
+  return 'other';
+}
+function normalizeSection(raw,badge){
+  const section = String(raw || '').toLowerCase();
+  if (section === 'new' || section === 'bestseller') return section;
+  const badgeValue = String(badge || '').toLowerCase();
+  if (badgeValue === 'new') return 'new';
+  if (badgeValue === 'bestseller' || badgeValue === 'hot') return 'bestseller';
+  return 'category';
+}
+
+let wishlist=readStoredArray('wishlist').map(x=>String(x));
+let cart=readStoredArray('cart');
 
 function stars(r){return[1,2,3,4,5].map(i=>i<=Math.floor(r)?'★':i-r<1?'★':'☆').join('');}
 function disc(p){return Math.round((1-p.price/p.oldPrice)*100);}
@@ -1641,16 +1780,17 @@ const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4',
 function prodCardHTML(p,i){
   const d=disc(p);
   const isW=wishlist.includes(String(p.id));
+  const pid=jsArg(p.id);
   const badgeEl=p.badge==='hot'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">🔥 HOT</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:flame]] HOT</span>`
     :p.badge==='new'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">✨ NEW</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:sparkles]] NEW</span>`
     :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
   const fc=floatClasses[i%floatClasses.length];
-  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented&&!event.target.closest('button'))window.location.href='product.html?id=${p.id}'">
+  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented&&!event.target.closest('button'))window.location.href='product.html?id=${encodeURIComponent(p.id)}'">
     <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
       ${badgeEl}
-      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:8px;right:8px;width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);border:none;cursor:pointer;z-index:10;font-size:1.1rem;transition:transform .2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${isW?'♥':'♡'}</button>
+      <button class="wish-btn" onclick="toggleWish(${pid},this);event.preventDefault();event.stopPropagation()">${isW?'<svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>'}</button>
       <img src="${p.image}" alt="${p.name}" loading="lazy" class="prod-img"/>
     </div>
     <div class="prod-info" style="overflow:visible;">
@@ -1663,7 +1803,7 @@ function prodCardHTML(p,i){
         <span data-card-disc style="background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px;font-family:'Inter',sans-serif;">${d}% off</span>
       </div>
       <div id="cardbtn-area-${p.id}" class="prod-btn-area" style="margin-top:auto;">
-        <button id="cartbtn-${p.id}" onclick="startQtySelect(${p.id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
+        <button id="cartbtn-${p.id}" onclick="startQtySelect(${pid},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
           Add to Cart
         </button>
@@ -1673,13 +1813,13 @@ function prodCardHTML(p,i){
 }
 
 const sectionMeta={
-  new:        {icon:'✨',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
-  bestseller: {icon:'🔥',label:'Natures Favorites',     sub:'Most loved by thousands of families',           accent:'#d97706'},
-  rice:       {icon:'🌾',label:'Rice Varieties',   sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
-  flowers:    {icon:'🌸',label:'Dried Flowers',    sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
-  beverages:  {icon:'🥤',label:'Beverages',        sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
-  flour:      {icon:'🫙',label:'Flour Varieties',  sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
-  other:      {icon:'🌿',label:'Other Products',   sub:'More goodness from nature',                     accent:'#16a34a'},
+  new:        {icon:'[[icon:sparkles]]',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
+  bestseller: {icon:'[[icon:flame]]',label:'Natures Favorites',     sub:'Most loved by thousands of families',           accent:'#d97706'},
+  rice:       {icon:'[[icon:wheat]]',label:'Rice Varieties',   sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
+  flowers:    {icon:'[[icon:flower-2]]',label:'Dried Flowers',    sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
+  beverages:  {icon:'[[icon:glass-water]]',label:'Beverages',        sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
+  flour:      {icon:'[[icon:package]]',label:'Flour Varieties',  sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
+  other:      {icon:'[[icon:leaf]]',label:'Other Products',   sub:'More goodness from nature',                     accent:'#16a34a'},
 };
 const SECTION_ORDER=['new','bestseller','rice','flowers','beverages','flour','other'];
 
@@ -1725,7 +1865,8 @@ function renderSections(){
     const list=key==='new'?products.filter(p=>p.section==='new'):key==='bestseller'?products.filter(p=>p.section==='bestseller'):products.filter(p=>p.category===key);
     return list.length?sectionHTML(key,list):'';
   }).join('');
-  wrap.querySelectorAll('.sr').forEach(el=>srObserver.observe(el));
+  window.nansaiApplyIcons?.(wrap);
+  wrap.querySelectorAll('.sr').forEach(el=>{ el.classList.add('is-visible'); srObserver.observe(el); });
   attachCarousel3D();
   setTimeout(initScrollBtns, 100);
 }
@@ -1749,6 +1890,7 @@ function renderFlat(list,cat){
   grid.style.overflow='visible';
   grid.style.padding='12px 4px';
   grid.innerHTML=heading+list.map((p,i)=>prodCardHTML(p,i)).join('');
+  window.nansaiApplyIcons?.(grid);
   grid.querySelectorAll('.sr').forEach(el=>el.classList.add('is-visible'));
   attachCarousel3D();
 }
@@ -1771,7 +1913,7 @@ function fmtQty(v,unit){
 const cardState={};
 
 function startQtySelect(id,triggerBtn){
-  const p=products.find(x=>x.id===id); if(!p)return;
+  const p=products.find(x=>sameId(x.id,id)); if(!p)return;
   const cfg=getQtyCfg(p.category);
   cardState[id]={qty:cfg.options[0],unit:cfg.unit};
   const area=triggerBtn?triggerBtn.closest('.prod-btn-area'):document.getElementById('cardbtn-area-'+id);
@@ -1781,15 +1923,16 @@ function startQtySelect(id,triggerBtn){
     card.style.zIndex='10';
   }
   const pills=cfg.options.map((v,i)=>
-    `<button class="qty-pill${i===0?' selected':''}" onclick="selectPill(${id},${v},this);event.preventDefault();event.stopPropagation()">${fmtQty(v,cfg.unit)}</button>`
+    `<button class="qty-pill${i===0?' selected':''}" onclick="selectPill(${jsArg(id)},${v},this);event.preventDefault();event.stopPropagation()">${fmtQty(v,cfg.unit)}</button>`
   ).join('');
   area.innerHTML=`<div class="qty-selector-area" onclick="event.preventDefault();event.stopPropagation()">
     <div class="qty-grid">${pills}</div>
-    <button id="confirm-btn-${id}" class="qty-cart-btn" onclick="confirmAddToCart(${id},this);event.preventDefault();event.stopPropagation()">
+    <button id="confirm-btn-${id}" class="qty-cart-btn" onclick="confirmAddToCart(${jsArg(id)},this);event.preventDefault();event.stopPropagation()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
     </button>
   </div>
   <a href="product.html?id=${p.id}" onclick="event.stopPropagation()" style="display:block;width:100%;text-align:center;font-size:.68rem;font-weight:600;color:var(--forest-leaf);padding:5px 0 2px;text-decoration:none;letter-spacing:.03em;border-top:1px solid rgba(26,58,42,.07);margin-top:5px;transition:color .2s;" onmouseover="this.style.color='var(--forest-deep)'" onmouseout="this.style.color='var(--forest-leaf)'">View Product →</a>`;
+  window.nansaiApplyIcons?.(area);
 }
 
 function selectPill(id,val,btn){
@@ -1798,7 +1941,7 @@ function selectPill(id,val,btn){
   btn.closest('.qty-selector-area').querySelectorAll('.qty-pill').forEach(p=>p.classList.remove('selected'));
   btn.classList.add('selected');
   // update price on card dynamically
-  const p=products.find(x=>x.id===id); if(!p)return;
+  const p=products.find(x=>sameId(x.id,id)); if(!p)return;
   const {unit}=cardState[id];
   const totalPrice=unit==='ml'?Math.round(p.price*(val/1000)):Math.round(p.price*val);
   const oldTotal=unit==='ml'?Math.round(p.oldPrice*(val/1000)):Math.round(p.oldPrice*val);
@@ -1813,14 +1956,14 @@ function selectPill(id,val,btn){
 }
 
 function confirmAddToCart(id,triggerBtn){
-  const p=products.find(x=>x.id===id); if(!p)return;
+  const p=products.find(x=>sameId(x.id,id)); if(!p)return;
   const {qty,unit}=cardState[id]||{qty:1,unit:'pcs'};
   const totalPrice=unit==='ml'?Math.round(p.price*(qty/1000)):Math.round(p.price*qty);
   const label=fmtQty(qty,unit);
-  const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
+  const ex=cart.find(i=>sameId(i.id,id)&&i.qtyLabel===label);
   if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
   saveCart();
-  showToast(`🛒 ${p.name} · ${fmtQty(qty,unit)} added!`);
+  showToast(p.name + ' - ' + fmtQty(qty,unit) + ' added to cart!');
   const confirmBtn=triggerBtn||null;
   if(confirmBtn){
     confirmBtn.classList.add('done');
@@ -1839,15 +1982,16 @@ function confirmAddToCart(id,triggerBtn){
       card.style.zIndex='1';
       if(card._floatClass) card.classList.add(card._floatClass);
     }
-    area.innerHTML=`<button id="cartbtn-${id}" onclick="startQtySelect(${id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
+    area.innerHTML=`<button id="cartbtn-${id}" onclick="startQtySelect(${jsArg(id)},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
       Add to Cart
     </button>`;
+    window.nansaiApplyIcons?.(area);
   },1600);
 }
 
 function addDirectToCart(id, btn) {
-  var p = products.find(function(x){ return x.id === id; });
+  var p = products.find(function(x){ return sameId(x.id, id); });
   if (!p) return;
   var sel = document.getElementById('qty-' + id);
   var cfg = getQtyCfg(p.category);
@@ -1855,7 +1999,7 @@ function addDirectToCart(id, btn) {
   var unit = cfg.unit;
   var totalPrice = unit === 'ml' ? Math.round(p.price * (qtyVal / 1000)) : Math.round(p.price * qtyVal);
   var label = fmtQty(qtyVal, unit);
-  var ex = cart.find(function(i){ return i.id === id && i.qtyLabel === label; });
+  var ex = cart.find(function(i){ return sameId(i.id, id) && i.qtyLabel === label; });
   if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image, qty:1, qtyVal:qtyVal, qtyLabel:label}); }
   saveCart();
   showToast(p.name + ' (' + label + ') added to cart!');
@@ -1866,6 +2010,9 @@ function addDirectToCart(id, btn) {
     setTimeout(function(){ btn.innerHTML = orig; btn.style.background = ''; }, 1800);
   }
 }
+const HEART_EMPTY = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>`;
+const HEART_FILLED = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>`;
+
 function toggleWish(id,btn){
   const now = Date.now();
   if (btn._lastToggle && now - btn._lastToggle < 800) return;
@@ -1875,13 +2022,19 @@ function toggleWish(id,btn){
   const idx = wishlist.findIndex(x => String(x) === sid);
   if(idx>-1){
     wishlist.splice(idx,1);
-    if(btn){btn.style.color='';btn.textContent='♡';}
-    showToast('💔 Removed from wishlist');
+    if(btn){ btn.innerHTML=HEART_EMPTY; }
+    showToast('Removed from wishlist');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.remove(sid).catch(()=>{});
   } else {
     wishlist.push(sid);
-    if(btn){btn.style.color='#ef4444';btn.textContent='♥';}
-    showToast('💖 Added to wishlist!');
+    if(btn){
+      btn.innerHTML=HEART_FILLED;
+      btn.classList.remove('popping');
+      void btn.offsetWidth;
+      btn.classList.add('popping');
+      btn.addEventListener('animationend',()=>btn.classList.remove('popping'),{once:true});
+    }
+    showToast('Added to wishlist!');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(sid).catch(()=>{});
   }
   localStorage.setItem('wishlist',JSON.stringify(wishlist));
@@ -1912,9 +2065,35 @@ function doSearch(){
   renderFlat(list,null);
 }
 
+/* ════ SLIDE 0 SOUND TOGGLE ════ */
+function toggleSlide0Sound(){
+  const vid = document.getElementById('slide0-video');
+  const btn = document.getElementById('slide0-sound-btn');
+  const icon = document.getElementById('slide0-sound-icon');
+  if(!vid) return;
+  vid.muted = !vid.muted;
+  // Try to play if it was blocked by autoplay policy
+  if(!vid.muted && vid.paused) vid.play().catch(()=>{ vid.muted=true; });
+  icon.innerHTML = vid.muted
+    ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+    : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+}
+
+// Start muted (browser autoplay policy), show muted icon initially
+document.addEventListener('DOMContentLoaded', function(){
+  const vid = document.getElementById('slide0-video');
+  if(!vid) return;
+  // Attempt unmuted play; if blocked, fall back to muted
+  vid.muted = false;
+  vid.play().catch(() => {
+    vid.muted = true;
+    // icon already shows muted X by default
+  });
+});
+
 /* ════ HERO SLIDER — 3D CAROUSEL ════ */
 (function(){
-  const TOTAL=4, DUR=5000;
+  const TOTAL=5, DUR=5000;
   let cur=0, pct=0, rafId=null, lastTS=null;
   const slides=document.querySelectorAll('#heroSection .slide');
   const dots=document.querySelectorAll('#dotList .dot');
@@ -1939,15 +2118,54 @@ function doSearch(){
   function goTo(i){
     cur=((i%TOTAL)+TOTAL)%TOTAL;
     setClasses();
+    // Manage loop on video slides
+    const v0 = document.getElementById('slide0-video');
+    const v1 = document.getElementById('slide1-video');
+    if(v0) v0.loop = (cur === 0);
+    if(v1) { v1.loop = (cur === 1); if(cur === 1){ v1.currentTime=0; v1.play(); } }
     resetTimer();
   }
 
-  function resetTimer(){ cancelAnimationFrame(rafId); pct=0; lastTS=null; fill.style.transition='none'; fill.style.width='0%'; rafId=requestAnimationFrame(tick); }
+  function resetTimer(){
+    cancelAnimationFrame(rafId);
+    pct=0; lastTS=null;
+    fill.style.transition='none'; fill.style.width='0%';
+    // Video slides: wait for ended event, fill tracks playback progress
+    const vidMap = { 0: document.getElementById('slide0-video'), 1: document.getElementById('slide1-video') };
+    const activeVid = vidMap[cur];
+    if(activeVid && !activeVid.ended){
+      function videoTick(){
+        if(cur !== +Object.keys(vidMap).find(k => vidMap[k] === activeVid)) return;
+        if(activeVid.duration > 0){
+          fill.style.width = Math.min((activeVid.currentTime / activeVid.duration) * 100, 100) + '%';
+        }
+        if(!activeVid.ended) rafId = requestAnimationFrame(videoTick);
+      }
+      rafId = requestAnimationFrame(videoTick);
+      return;
+    }
+    rafId=requestAnimationFrame(tick);
+  }
+
   function tick(ts){
     if(!lastTS) lastTS=ts;
     pct+=((ts-lastTS)/DUR)*100; lastTS=ts;
     fill.style.width=Math.min(pct,100)+'%';
     pct<100 ? rafId=requestAnimationFrame(tick) : goTo(cur+1);
+  }
+
+  // When slide-0 video ends, advance to next slide
+  const slide0Vid = document.getElementById('slide0-video');
+  if(slide0Vid){
+    slide0Vid.addEventListener('ended', () => { if(cur === 0) goTo(1); });
+    slide0Vid.addEventListener('error', () => { if(cur === 0) resetTimer(); });
+  }
+
+  // When slide-1 video ends, advance to next slide
+  const slide1Vid = document.getElementById('slide1-video');
+  if(slide1Vid){
+    slide1Vid.addEventListener('ended', () => { if(cur === 1) goTo(2); });
+    slide1Vid.addEventListener('error', () => { if(cur === 1) resetTimer(); });
   }
 
   document.getElementById('prevBtn').onclick=()=>goTo(cur-1);
@@ -2019,14 +2237,14 @@ setTimeout(initScrollBtns, 100);
       const apiProds = data.products.map(p => ({
         id:       p._id,
         name:     p.name,
-        category: p.category,
+        category: normalizeCategory(p.category),
         price:    p.price,
         oldPrice: p.oldPrice || Math.round(p.price * 1.25),
         rating:   p.rating || 4.5,
         reviews:  p.numReviews || 0,
         badge:    p.badge || 'new',
-        section:  p.section || 'category',
-        image:    p.images?.[0]?.url || p.image || '',
+        section:  normalizeSection(p.section, p.badge),
+        image:    firstImage(p.images) || p.image || '',
         tagline:  p.tagline || '',
         desc:     p.description || '',
       }));
@@ -2154,7 +2372,8 @@ function renderCartDrawer(){
   const footer=document.getElementById('cartFooter');
   if(!body)return;
   if(!cart.length){
-    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">🛒</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
+    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;"></div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
+    window.nansaiApplyIcons?.(body);
     if(footer)footer.style.display='none';
     return;
   }
@@ -2178,6 +2397,7 @@ function renderCartDrawer(){
       </div>
     </div>`;
   }).join('');
+  window.nansaiApplyIcons?.(body);
   if(footer){
     footer.style.display='block';
     footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">₹${total}</span></div><a href="checkoutmyorderpage.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout →</a>`;
@@ -2263,10 +2483,10 @@ function attachCarousel3D(){
 (function(){
   /* Video data — swap src with your real product videos */
   const REELS = [
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%201.mp4',       caption:'🌾 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4',          caption:'🌸 Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4',       caption:'🌿 Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4',          caption:'🌺 From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%201.mp4',       caption:'[[icon:wheat]] 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4',          caption:'[[icon:flower-2]] Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4',       caption:'[[icon:leaf]] Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4',          caption:'[[icon:flower-2]] From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
   ];
 
   let cur = 0, autoTimer = null;
@@ -2535,7 +2755,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   const greeting = 'Hi, ' + firstName;
   if (btn) btn.href = 'account.html';
   if (txt) txt.textContent = greeting;
-  if (mob) { mob.href = 'account.html'; mob.textContent = '👤 ' + greeting; }
+  if (mob) { mob.href = 'account.html'; mob.textContent = '[[icon:user]] ' + greeting; }
 })();
 </script>
 
@@ -2568,7 +2788,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
 <div id="cartDrawer" style="position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);background:#fff;z-index:1101;transform:translateX(100%);transition:transform .35s cubic-bezier(.77,0,.18,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.15);">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(26,58,42,.1);">
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--forest-deep);">Your Cart</h2>
-    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">✕</button>
+    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">[[icon:x]]</button>
   </div>
   <div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>
   <div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(26,58,42,.1);"></div>

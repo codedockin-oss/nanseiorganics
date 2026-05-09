@@ -892,6 +892,92 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
   .blog-img-wrap { height: 180px; }
 }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body class="text-gray-900">
 
@@ -1171,7 +1257,7 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
         <div id="tab-desc" class="tab-panel active p-4">
           <div id="pDescEl" class="text-gray-600 text-xs" style="line-height:1.85;"></div>
           <div class="mt-3 flex items-start gap-2 p-3 rounded-lg" style="background:#f0fdf4;border:1px solid #bbf7d0">
-            <span style="font-size:1rem">🌿</span>
+            <span style="font-size:1rem">[[icon:leaf]]</span>
             <p class="text-xs leading-relaxed" style="color:var(--forest-mid)">Sourced directly from certified organic farms across Tamil Nadu. No artificial preservatives, no chemicals — just pure nature delivered to your door.</p>
           </div>
         </div>
@@ -1184,7 +1270,7 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
         <!-- Nutrition -->
         <div id="tab-nutrients" class="tab-panel p-4">
           <div class="mb-3 flex items-center gap-2 p-2.5 rounded-lg" style="background:#fefce8;border:1px solid #fde68a">
-            <span style="font-size:.9rem">⚠️</span>
+            <span style="font-size:.9rem">[[icon:triangle-alert]]</span>
             <p class="text-[10px] font-semibold" style="color:#92400e">Approximate values per 100g. Actual values may vary by batch and season.</p>
           </div>
           <div id="nutrientsGrid" style="overflow-x:auto;"></div>
@@ -1462,7 +1548,7 @@ const products = [
    metaDesc:"Buy Karunguruvai rice online. Explore its benefits in Tamil, glycemic index, nutritional value, kanji recipe, and health uses. A traditional medicinal rice from Tamil Nadu.",
    tagline:"Traditional medicinal rice from Tamil Nadu — low glycemic, high fiber, used in Siddha medicine.",
    desc:"Karunguruvai Rice is a traditional medicinal rice variety from Tamil Nadu, widely known for its powerful health benefits and natural nutrition. Used in Siddha medicine and traditional cooking, it is known for its low glycemic index and high fiber content.\n\nKarunguruvai rice is also widely used in preparing Karunguruvai rice kanji, which is considered highly beneficial for health. Choosing a quality source ensures better taste and nutritional value.",
-   benefits:[{icon:"🛡️",title:"Boosts Immunity",desc:"Helps strengthen the immune system naturally with essential minerals and antioxidants."},{icon:"💚",title:"Supports Digestion",desc:"Improves gut health and digestion with high fiber content."},{icon:"📊",title:"Controls Blood Sugar",desc:"Low glycemic index makes it suitable for diabetic-friendly diets."},{icon:"⚖️",title:"Weight Management",desc:"Helps in weight loss due to high fiber content that keeps you full longer."},{icon:"🔋",title:"Energy Booster",desc:"Provides long-lasting natural energy throughout the day."},{icon:"✨",title:"Skin & Health Support",desc:"Improves overall health and skin condition with natural minerals."}],
+   benefits:[{icon:"[[icon:shield]]",title:"Boosts Immunity",desc:"Helps strengthen the immune system naturally with essential minerals and antioxidants."},{icon:"[[icon:heart]]",title:"Supports Digestion",desc:"Improves gut health and digestion with high fiber content."},{icon:"[[icon:chart-no-axes-column-increasing]]",title:"Controls Blood Sugar",desc:"Low glycemic index makes it suitable for diabetic-friendly diets."},{icon:"[[icon:scale]]",title:"Weight Management",desc:"Helps in weight loss due to high fiber content that keeps you full longer."},{icon:"[[icon:battery-full]]",title:"Energy Booster",desc:"Provides long-lasting natural energy throughout the day."},{icon:"[[icon:sparkles]]",title:"Skin & Health Support",desc:"Improves overall health and skin condition with natural minerals."}],
    nutrients:[{label:"Energy",value:"~350 kcal",per:"per 100g"},{label:"Carbohydrates",value:"70–75 g",per:"per 100g"},{label:"Dietary Fiber",value:"4–6 g",per:"per 100g"},{label:"Protein",value:"7–9 g",per:"per 100g"},{label:"Fat",value:"1–2 g",per:"per 100g"},{label:"Iron",value:"2–3 mg",per:"per 100g"},{label:"Calcium",value:"20–30 mg",per:"per 100g"},{label:"Magnesium",value:"60–80 mg",per:"per 100g"}],
    howToUse:["Soak rice for 6–8 hours before cooking for best results.","Use 1:2.5 ratio of rice to water for perfect texture.","Ideal for Karunguruvai rice kanji (porridge) — very popular for health.","Suitable for daily meals, sambar rice and traditional recipes.","Can be used in Karunguruvai rice recipe in Tamil for authentic cooking."],
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Heritage Short Grain","Processing":"Hand-pounded","Certification":"FSSAI"},
@@ -1475,7 +1561,7 @@ const products = [
    tagline:"Traditional black rice rich in antioxidants, fiber & nutrients — 100% natural and chemical-free.",
    desc:"Karuppu Kavuni Rice is a traditional black rice variety known for its rich nutritional value and health benefits. Sourced naturally and processed without chemicals, it is widely used in South Indian households for its medicinal properties.\n\nThis rice is rich in iron, fiber, and antioxidants, making it a healthy choice for daily consumption. It is especially beneficial for improving immunity and overall well-being.\n\nNansei Organics brings you high-quality Karuppu Kavuni Rice that is clean, natural, and farm-sourced.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Black Glutinous Rice","Processing":"Minimally processed","Certification":"FSSAI","Calories":"350–360 kcal per 100g","Protein":"7.5–9 g per 100g","Carbohydrates":"72–78 g per 100g","Dietary Fiber":"3–5 g per 100g","Fat":"2–3.5 g per 100g","Iron":"1.2–5 mg per 100g","Calcium":"~50 mg per 100g","Magnesium":"88–160 mg per 100g"},
-   nutrition:{"Heart Health":{value:"Supports heart health and reduces bad cholesterol levels",icon:"❤️"},"Weight Loss":{value:"Helps in digestion and keeps you full longer, aiding weight management",icon:"⚖️"},"Diabetes Control":{value:"Maintains stable blood sugar levels with low glycemic properties",icon:"📊"},"Anthocyanin Rich":{value:"Powerful antioxidants that fight inflammation and oxidative stress",icon:"🫐"},"High in Iron":{value:"Excellent source of plant-based iron, prevents anemia",icon:"💪"},"Gluten-Free":{value:"Naturally gluten-free grain, safe for sensitive individuals",icon:"✅"}},
+   nutrition:{"Heart Health":{value:"Supports heart health and reduces bad cholesterol levels",icon:"[[icon:heart]]"},"Weight Loss":{value:"Helps in digestion and keeps you full longer, aiding weight management",icon:"[[icon:scale]]"},"Diabetes Control":{value:"Maintains stable blood sugar levels with low glycemic properties",icon:"[[icon:chart-no-axes-column-increasing]]"},"Anthocyanin Rich":{value:"Powerful antioxidants that fight inflammation and oxidative stress",icon:"[[icon:cherry]]"},"High in Iron":{value:"Excellent source of plant-based iron, prevents anemia",icon:"[[icon:dumbbell]]"},"Gluten-Free":{value:"Naturally gluten-free grain, safe for sensitive individuals",icon:"[[icon:circle-check]]"}},
    reviewData:[{name:"Kavitha R.",rating:5,text:"Made kavuni arisi payasam — absolutely divine! The color and taste are incredible.",date:"Feb 2026",verified:true},{name:"Senthil M.",rating:5,text:"Authentic black kavuni. Hard to find this quality elsewhere.",date:"Jan 2026",verified:true}]},
 
   {id:3,  name:"Arubatham Kuruvai Rice",            category:"Rice Varieties", price:160, oldPrice:200, rating:4.5, reviews:87,  sold:189, badge:"new",
@@ -1485,7 +1571,7 @@ const products = [
    tagline:"60-day traditional short-duration rice — light and easy to digest.",
    desc:"Arubatham Kuruvai is a 60-day short-duration traditional rice variety from Tamil Nadu. Known for its light texture and easy digestibility, it is ideal for everyday cooking and is especially recommended for the elderly and children.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Short Duration Heritage Rice","Processing":"Hand-pounded","Certification":"FSSAI"},
-   nutrition:{"Easy to Digest":{value:"Light on stomach, ideal for all ages",icon:"⚡"},"Rich in Minerals":{value:"Contains zinc, magnesium and phosphorus",icon:"🌿"},"Moderate Fiber":{value:"Supports healthy bowel movement",icon:"💚"},"Low Fat":{value:"Heart-healthy grain option",icon:"❤️"},"Gluten-Free":{value:"Safe for gluten-sensitive individuals",icon:"✅"},"Natural Energy":{value:"Complex carbs for sustained energy",icon:"🔋"}},
+   nutrition:{"Easy to Digest":{value:"Light on stomach, ideal for all ages",icon:"[[icon:zap]]"},"Rich in Minerals":{value:"Contains zinc, magnesium and phosphorus",icon:"[[icon:leaf]]"},"Moderate Fiber":{value:"Supports healthy bowel movement",icon:"[[icon:heart]]"},"Low Fat":{value:"Heart-healthy grain option",icon:"[[icon:heart]]"},"Gluten-Free":{value:"Safe for gluten-sensitive individuals",icon:"[[icon:circle-check]]"},"Natural Energy":{value:"Complex carbs for sustained energy",icon:"[[icon:battery-full]]"}},
    reviewData:[{name:"Meena T.",rating:5,text:"Very light rice, perfect for daily cooking. My family loves it.",date:"Jan 2026",verified:true}]},
 
   {id:4,  name:"Poongar Rice",                      category:"Rice Varieties", price:200, oldPrice:250, rating:4.6, reviews:113, sold:247, badge:"sale",
@@ -1495,7 +1581,7 @@ const products = [
    tagline:"Traditional red rice known for natural nutrients, good digestion & women's health — 100% organic and chemical-free.",
    desc:"Poongar Rice is a traditional red rice variety known for its natural nutritional value and health benefits. This organic rice is widely used in South India and is especially valued for supporting women's health and overall well-being.\n\nSourced directly from farms, Poongar Rice is rich in fiber and essential nutrients, making it a healthy choice for daily consumption. It is easy to cook and suitable for a variety of traditional recipes. Many people prefer Poongar Rice for its natural taste, good digestion support, and balanced nutrition.\n\nIf you are looking to buy Poongar Rice online, Nansei Organics provides high-quality, chemical-free rice that maintains its authentic taste and quality.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Medicinal Heritage Rice","Color":"Pinkish-red","Certification":"FSSAI","Iron":"6.60 mg per 100g","Protein":"~11.74 g per 100g","Dietary Fiber":"4.3–15 g per 100g","Glycemic Index":"41–46 (Low)"},
-   nutrition:{"Women's Health":{value:"Aids irregular periods, improves reproductive health and helps with hormonal imbalance",icon:"🌸"},"Pregnancy & Lactation":{value:"Supports healthy pregnancy, smooth delivery and increases milk secretion for nursing mothers",icon:"🤱"},"Diabetic & Digestion Friendly":{value:"Low glycemic index and high fiber helps manage diabetes, promotes satiety and eases IBS symptoms",icon:"📊"},"Bone & Skin Health":{value:"Antioxidants improve skin and hair health; magnesium strengthens bones",icon:"✨"},"High Iron Content":{value:"Rich in iron at 6.60 mg per 100g — helps prevent anemia",icon:"💪"},"Gluten-Free":{value:"Naturally gluten-free, suitable for all age groups",icon:"✅"}},
+   nutrition:{"Women's Health":{value:"Aids irregular periods, improves reproductive health and helps with hormonal imbalance",icon:"[[icon:flower-2]]"},"Pregnancy & Lactation":{value:"Supports healthy pregnancy, smooth delivery and increases milk secretion for nursing mothers",icon:"[[icon:baby]]"},"Diabetic & Digestion Friendly":{value:"Low glycemic index and high fiber helps manage diabetes, promotes satiety and eases IBS symptoms",icon:"[[icon:chart-no-axes-column-increasing]]"},"Bone & Skin Health":{value:"Antioxidants improve skin and hair health; magnesium strengthens bones",icon:"[[icon:sparkles]]"},"High Iron Content":{value:"Rich in iron at 6.60 mg per 100g — helps prevent anemia",icon:"[[icon:dumbbell]]"},"Gluten-Free":{value:"Naturally gluten-free, suitable for all age groups",icon:"[[icon:circle-check]]"}},
    reviewData:[{name:"Lakshmi P.",rating:5,text:"Excellent quality Poongar rice. The pinkish color is beautiful and it tastes wonderful.",date:"Feb 2026",verified:true}]},
 
   {id:5,  name:"Mappillai Samba (Mani Samba) Rice", category:"Rice Varieties", price:210, oldPrice:260, rating:4.7, reviews:156, sold:334, badge:"hot",
@@ -1505,7 +1591,7 @@ const products = [
    tagline:"The bridegroom's rice — legendary strength-giving heritage variety.",
    desc:"Mappillai Samba, literally meaning 'bridegroom's rice', is a legendary Tamil Nadu heritage variety known for its strength-giving properties. Traditionally fed to bridegrooms before weddings, it is rich in iron, fiber and natural compounds that boost stamina and vitality.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Heritage Long Grain","Color":"Reddish-brown","Certification":"FSSAI"},
-   nutrition:{"Stamina Booster":{value:"Traditionally known to enhance physical strength",icon:"💪"},"High Iron":{value:"Rich source of plant-based iron",icon:"🔴"},"Fiber Rich":{value:"Excellent dietary fiber content",icon:"💚"},"Antioxidants":{value:"Natural pigments with protective properties",icon:"✨"},"Low Glycemic":{value:"Slower energy release than white rice",icon:"📊"},"Gluten-Free":{value:"Naturally gluten-free grain",icon:"✅"}},
+   nutrition:{"Stamina Booster":{value:"Traditionally known to enhance physical strength",icon:"[[icon:dumbbell]]"},"High Iron":{value:"Rich source of plant-based iron",icon:"[[icon:circle]]"},"Fiber Rich":{value:"Excellent dietary fiber content",icon:"[[icon:heart]]"},"Antioxidants":{value:"Natural pigments with protective properties",icon:"[[icon:sparkles]]"},"Low Glycemic":{value:"Slower energy release than white rice",icon:"[[icon:chart-no-axes-column-increasing]]"},"Gluten-Free":{value:"Naturally gluten-free grain",icon:"[[icon:circle-check]]"}},
    reviewData:[{name:"Arjun V.",rating:5,text:"Amazing rice! Noticed improved energy levels. Authentic Mappillai Samba.",date:"Feb 2026",verified:true}]},
 
   {id:6,  name:"Iluppai Poo Samba Rice",             category:"Rice Varieties", price:195, oldPrice:240, rating:4.5, reviews:74,  sold:158, badge:"new",
@@ -1515,7 +1601,7 @@ const products = [
    tagline:"Traditional Tamil Nadu heritage rice — naturally aromatic, easy to digest and suitable for daily meals.",
    desc:"Iluppai Poo Samba White Rice is a traditional rice variety from Tamil Nadu, known for its natural aroma and soft texture. This rice is widely used in South Indian cooking and is valued for its easy digestion and health benefits.\n\nMany people search for Iluppai Poo Samba White Rice benefits because it supports gut health and provides steady energy. It is also commonly used in traditional recipes, especially Iluppai Poo Samba White Rice recipe in Tamil, making it popular among households looking for authentic cooking.\n\nIluppai Poo Samba White Rice in Tamil is often referred to as a native variety grown in Tamil Nadu, known for its natural taste and nutritional value.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Aromatic Heritage Rice","Aroma":"Floral (Mahua)","Certification":"FSSAI","Carbohydrates":"75–78 g per 100g","Dietary Fiber":"2–4 g per 100g","Protein":"6–8 g per 100g","Fat":"0.5–1 g per 100g","Iron":"1–2 mg per 100g","Calcium":"10–20 mg per 100g","Magnesium":"40–60 mg per 100g","Energy":"~340–360 kcal per 100g"},
-   nutrition:{"Easy Digestion":{value:"Light on the stomach and suitable for daily meals for all age groups",icon:"⚡"},"Supports Gut Health":{value:"Helps maintain smooth digestion and healthy bowel movement",icon:"💚"},"Energy Booster":{value:"Provides steady energy throughout the day with complex carbohydrates",icon:"🔋"},"Traditional Nutrition":{value:"Retains natural nutrients from traditional farming methods",icon:"🌾"},"Balanced Diet Support":{value:"Suitable for all age groups as part of a balanced daily diet",icon:"✅"},"Natural Aroma":{value:"Unique floral fragrance enhances the taste of every meal",icon:"🌸"}},
+   nutrition:{"Easy Digestion":{value:"Light on the stomach and suitable for daily meals for all age groups",icon:"[[icon:zap]]"},"Supports Gut Health":{value:"Helps maintain smooth digestion and healthy bowel movement",icon:"[[icon:heart]]"},"Energy Booster":{value:"Provides steady energy throughout the day with complex carbohydrates",icon:"[[icon:battery-full]]"},"Traditional Nutrition":{value:"Retains natural nutrients from traditional farming methods",icon:"[[icon:wheat]]"},"Balanced Diet Support":{value:"Suitable for all age groups as part of a balanced daily diet",icon:"[[icon:circle-check]]"},"Natural Aroma":{value:"Unique floral fragrance enhances the taste of every meal",icon:"[[icon:flower-2]]"}},
    reviewData:[{name:"Vijaya R.",rating:5,text:"The aroma while cooking is incredible! Very unique and nutritious rice.",date:"Jan 2026",verified:true}]},
 
   {id:7,  name:"Vellai Kavuni (White Kavuni Rice)",  category:"Rice Varieties", price:190, oldPrice:235, rating:4.6, reviews:91,  sold:196, badge:"new",
@@ -1525,7 +1611,7 @@ const products = [
    tagline:"Traditional South Indian white rice — soft texture, easy digestion and a healthier alternative to polished white rice.",
    desc:"White Kavuni Rice is a traditional South Indian rice variety known for its soft texture, mild taste, and natural nutritional value. White Kavuni rice is widely used in daily cooking and is considered a healthier alternative to polished white rice.\n\nMany people search for White Kavuni rice benefits because it supports easy digestion and provides steady energy. Compared to modern rice varieties, White Kavuni rice retains more nutrients and helps maintain overall health.\n\nIf you are looking for White Kavuni rice price or planning to buy White Kavuni rice online, choosing a good quality traditional source ensures better taste and nutrition. White Kavuni rice in English is commonly referred to as a traditional white rice variety with natural health benefits.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"White Glutinous Rice","Texture":"Sticky when cooked","Certification":"FSSAI","Carbohydrates":"75–78 g per 100g","Dietary Fiber":"2–4 g per 100g","Protein":"6–8 g per 100g","Fat":"0.5–1 g per 100g","Iron":"1–2 mg per 100g","Calcium":"10–20 mg per 100g","Magnesium":"40–60 mg per 100g","Energy":"~340–360 kcal per 100g"},
-   nutrition:{"Easy Digestion":{value:"Light on the stomach and suitable for daily meals for all age groups",icon:"⚡"},"Gut Health":{value:"Supports smooth digestion and healthy metabolism",icon:"💚"},"Steady Energy":{value:"Provides long-lasting energy without heaviness throughout the day",icon:"🔋"},"Healthy Alternative":{value:"Better nutritional choice compared to polished white rice",icon:"🌿"},"Balanced Nutrition":{value:"Helps maintain overall health and wellness for the whole family",icon:"✅"},"Mineral Rich":{value:"Contains calcium, phosphorus and magnesium for strong bones",icon:"🦴"}},
+   nutrition:{"Easy Digestion":{value:"Light on the stomach and suitable for daily meals for all age groups",icon:"[[icon:zap]]"},"Gut Health":{value:"Supports smooth digestion and healthy metabolism",icon:"[[icon:heart]]"},"Steady Energy":{value:"Provides long-lasting energy without heaviness throughout the day",icon:"[[icon:battery-full]]"},"Healthy Alternative":{value:"Better nutritional choice compared to polished white rice",icon:"[[icon:leaf]]"},"Balanced Nutrition":{value:"Helps maintain overall health and wellness for the whole family",icon:"[[icon:circle-check]]"},"Mineral Rich":{value:"Contains calcium, phosphorus and magnesium for strong bones",icon:"[[icon:bone]]"}},
    reviewData:[{name:"Deepa S.",rating:5,text:"Perfect for making sweet pongal. Sticky texture is just right.",date:"Jan 2026",verified:true}]},
 
   {id:8,  name:"Paneer Rose (Fragrant Rose)",        category:"Dried Flowers",  price:150, oldPrice:190, rating:4.8, reviews:204, sold:432, badge:"hot",
@@ -1534,11 +1620,11 @@ const products = [
    variants:["50","100","200","500"],
    tagline:"Fragrant rose petals widely used for rose water, skin care, hair care and traditional herbal wellness.",
    desc:"Panneer Rose, also known as fragrant rose flower, is widely used in traditional Indian households for its natural aroma and health benefits. Panneer rose in English refers to a variety of rose known for its strong fragrance and use in rose water, skincare, and herbal preparations.\n\nPanneer rose petals are commonly used to prepare panneer rose water, which is popular for face care and cooling drinks. Many people search for panneer rose benefits because it supports skin health, hair care, and overall wellness.\n\nIf you are looking to buy panneer rose online, dried panneer rose petals and panneer rose powder are widely used for natural beauty and herbal uses.",
-   benefits:[{icon:"🌸",title:"Skin Care",desc:"Panneer rose benefits for skin include hydration, natural glow and toning."},{icon:"💇",title:"Hair Care",desc:"Helps improve hair strength and scalp health naturally."},{icon:"❄️",title:"Cooling Effect",desc:"Natural cooling properties for body and skin, especially in summer."},{icon:"✨",title:"Face Care",desc:"Panneer rose water for face helps refresh, tone and brighten skin."},{icon:"🌿",title:"Natural Wellness",desc:"Supports overall health through traditional herbal use."},{icon:"💚",title:"Anti-inflammatory",desc:"Mild antioxidants and herbal properties reduce skin inflammation."}],
+   benefits:[{icon:"[[icon:flower-2]]",title:"Skin Care",desc:"Panneer rose benefits for skin include hydration, natural glow and toning."},{icon:"[[icon:scissors]]",title:"Hair Care",desc:"Helps improve hair strength and scalp health naturally."},{icon:"[[icon:snowflake]]",title:"Cooling Effect",desc:"Natural cooling properties for body and skin, especially in summer."},{icon:"[[icon:sparkles]]",title:"Face Care",desc:"Panneer rose water for face helps refresh, tone and brighten skin."},{icon:"[[icon:leaf]]",title:"Natural Wellness",desc:"Supports overall health through traditional herbal use."},{icon:"[[icon:heart]]",title:"Anti-inflammatory",desc:"Mild antioxidants and herbal properties reduce skin inflammation."}],
    nutrients:[{label:"Antioxidants",value:"High",per:"per serving"},{label:"Flavonoids",value:"Present",per:"per serving"},{label:"Vitamin C",value:"Trace",per:"per serving"},{label:"Essential Oils",value:"Natural fragrance compounds",per:"per serving"}],
    howToUse:["Boil 10–15 dried petals in 500ml water for 5 minutes to make rose water.","Use rose water as a face toner — apply with cotton pad morning and night.","Add petals to warm bath water for a relaxing aromatic soak.","Prepare rose milk by soaking petals in warm milk with sugar.","Use dried petals in face packs mixed with sandalwood powder and rose water.","Store prepared rose water in the refrigerator for up to 7 days."],
    specs:{"Net Weight":"100 g","Origin":"Tamil Nadu, India","Shelf Life":"18 months","Type":"Sun-dried Petals","Fragrance":"Strong natural rose","Certification":"FSSAI","Properties":"Natural fragrance compounds, mild antioxidants, cooling nature","Traditional Use":"Rose water, face pack, herbal tea, skincare"},
-   nutrition:{"Skin Care":{value:"Panneer rose benefits for skin include hydration, natural glow and toning",icon:"🌸"},"Hair Care":{value:"Helps improve hair strength and scalp health naturally",icon:"💇"},"Cooling Effect":{value:"Natural cooling properties for body and skin, especially in summer",icon:"❄️"},"Face Care":{value:"Panneer rose water for face helps refresh, tone and brighten skin",icon:"✨"},"Natural Wellness":{value:"Supports overall health through traditional herbal use",icon:"🌿"},"Anti-inflammatory":{value:"Mild antioxidants and herbal properties reduce skin inflammation",icon:"💚"}},
+   nutrition:{"Skin Care":{value:"Panneer rose benefits for skin include hydration, natural glow and toning",icon:"[[icon:flower-2]]"},"Hair Care":{value:"Helps improve hair strength and scalp health naturally",icon:"[[icon:scissors]]"},"Cooling Effect":{value:"Natural cooling properties for body and skin, especially in summer",icon:"[[icon:snowflake]]"},"Face Care":{value:"Panneer rose water for face helps refresh, tone and brighten skin",icon:"[[icon:sparkles]]"},"Natural Wellness":{value:"Supports overall health through traditional herbal use",icon:"[[icon:leaf]]"},"Anti-inflammatory":{value:"Mild antioxidants and herbal properties reduce skin inflammation",icon:"[[icon:heart]]"}},
    reviewData:[{name:"Ananya M.",rating:5,text:"Beautiful fragrance! I use it for rose milk and the taste is heavenly.",date:"Feb 2026",verified:true},{name:"Preethi K.",rating:5,text:"Pure and fragrant. Makes the best rose water for my skin.",date:"Jan 2026",verified:true}]},
 
   {id:9,  name:"Hibiscus Flower",                   category:"Dried Flowers",  price:120, oldPrice:155, rating:4.6, reviews:167, sold:356, badge:"sale",
@@ -1547,11 +1633,11 @@ const products = [
    variants:["50","100","200","500"],
    tagline:"Dried hibiscus flowers for herbal tea, hair care, skin care and natural home remedies.",
    desc:"Hibiscus dried flowers are widely used in herbal drinks, skincare, and traditional remedies. Known as Hibiscus sabdariffa, these flowers are popular for making hibiscus tea, which is valued for its refreshing taste and health benefits.\n\nMany people search for hibiscus tea benefits because it supports heart health, skin glow, and overall wellness. Hibiscus flowers are also used in powder form for hair care and face packs. Dried hibiscus flowers are easy to use and can be prepared as tea or natural remedies at home.\n\nIf you are looking for hibiscus dried flowers for tea or hibiscus powder for hair and skin, choosing high-quality dried flowers ensures better results.",
-   benefits:[{icon:"💇",title:"Hair Growth Support",desc:"Hibiscus powder helps strengthen hair and reduce hair fall naturally."},{icon:"✨",title:"Skin Care",desc:"Improves skin glow and acts as a natural cleanser and face pack."},{icon:"❤️",title:"Heart Health",desc:"Hibiscus tea supports healthy blood pressure levels."},{icon:"❄️",title:"Cooling Effect",desc:"Helps reduce body heat naturally, ideal for summer use."},{icon:"🌸",title:"Women's Health",desc:"Hibiscus tea benefits for women include hormonal balance support."},{icon:"💚",title:"Rich in Antioxidants",desc:"Natural antioxidants support detox and overall wellness."}],
+   benefits:[{icon:"[[icon:scissors]]",title:"Hair Growth Support",desc:"Hibiscus powder helps strengthen hair and reduce hair fall naturally."},{icon:"[[icon:sparkles]]",title:"Skin Care",desc:"Improves skin glow and acts as a natural cleanser and face pack."},{icon:"[[icon:heart]]",title:"Heart Health",desc:"Hibiscus tea supports healthy blood pressure levels."},{icon:"[[icon:snowflake]]",title:"Cooling Effect",desc:"Helps reduce body heat naturally, ideal for summer use."},{icon:"[[icon:flower-2]]",title:"Women's Health",desc:"Hibiscus tea benefits for women include hormonal balance support."},{icon:"[[icon:heart]]",title:"Rich in Antioxidants",desc:"Natural antioxidants support detox and overall wellness."}],
    nutrients:[{label:"Vitamin C",value:"High",per:"per serving"},{label:"Anthocyanins",value:"Rich",per:"per serving"},{label:"Organic Acids",value:"Present",per:"per serving"},{label:"Flavonoids",value:"Present",per:"per serving"}],
    howToUse:["Boil 5–10 dried hibiscus flowers in 300ml water for 5 minutes to make hibiscus tea.","Strain and add honey or jaggery to taste. Serve hot or cold.","For hair mask: grind dried flowers into powder, mix with coconut oil, apply to scalp for 30 minutes.","For face pack: mix hibiscus powder with yogurt and apply for 15 minutes.","Prepare hibiscus sherbet by boiling flowers with sugar and cooling spices.","Store dried flowers in an airtight container away from moisture."],
    specs:{"Net Weight":"100 g","Origin":"Tamil Nadu, India","Shelf Life":"18 months","Type":"Dried Hibiscus Flowers","Color":"Deep Red","Certification":"FSSAI","Properties":"Rich in antioxidants, natural cooling, herbal compounds for hair & skin, detox support","Traditional Use":"Hibiscus tea, hair mask, face pack, herbal drinks, detox tea"},
-   nutrition:{"Hair Growth Support":{value:"Hibiscus powder helps strengthen hair and reduce hair fall naturally",icon:"💇"},"Skin Care":{value:"Improves skin glow and acts as a natural cleanser and face pack",icon:"✨"},"Heart Health":{value:"Hibiscus tea supports healthy blood pressure levels",icon:"❤️"},"Cooling Effect":{value:"Helps reduce body heat naturally, ideal for summer use",icon:"❄️"},"Women's Health":{value:"Hibiscus tea benefits for women include hormonal balance support",icon:"🌸"},"Rich in Antioxidants":{value:"Natural antioxidants support detox and overall wellness",icon:"💚"}},
+   nutrition:{"Hair Growth Support":{value:"Hibiscus powder helps strengthen hair and reduce hair fall naturally",icon:"[[icon:scissors]]"},"Skin Care":{value:"Improves skin glow and acts as a natural cleanser and face pack",icon:"[[icon:sparkles]]"},"Heart Health":{value:"Hibiscus tea supports healthy blood pressure levels",icon:"[[icon:heart]]"},"Cooling Effect":{value:"Helps reduce body heat naturally, ideal for summer use",icon:"[[icon:snowflake]]"},"Women's Health":{value:"Hibiscus tea benefits for women include hormonal balance support",icon:"[[icon:flower-2]]"},"Rich in Antioxidants":{value:"Natural antioxidants support detox and overall wellness",icon:"[[icon:heart]]"}},
    reviewData:[{name:"Sridevi M.",rating:5,text:"Perfect for making hibiscus sherbet. Deep red color and wonderful tart taste.",date:"Feb 2026",verified:true}]},
 
   {id:10, name:"Aavaram Flower",                    category:"Dried Flowers",  price:110, oldPrice:145, rating:4.5, reviews:88,  sold:187, badge:"new",
@@ -1560,11 +1646,11 @@ const products = [
    variants:["50","100","200"],
    tagline:"Traditional Tanner's Cassia flower — cooling herbal tea, skin care and Ayurvedic wellness from Tamil Nadu.",
    desc:"Avarampoo, also known as Avaram Poo, is a traditional herbal flower widely used in Tamil Nadu for its natural health and skincare benefits. Avaram poo in English is commonly known as Tanner's Cassia flower, valued for its cooling and medicinal properties.\n\nMany people search for Avarampoo benefits in Tamil because it helps manage body heat, supports digestion, and improves skin health. Avarampoo tea is especially popular for its natural cooling effect and is often used as a daily herbal drink.\n\nAvarampoo powder and dried flowers are widely used for face packs, hair care, and traditional remedies. If you are looking to buy Avarampoo online, choosing quality dried flowers ensures better results.",
-   benefits:[{icon:"📊",title:"Diabetes Support",desc:"Avarampoo tea helps manage blood sugar levels naturally."},{icon:"✨",title:"Skin Care",desc:"Improves skin glow, reduces acne and cleans pores with natural compounds."},{icon:"❄️",title:"Body Cooling",desc:"Acts as a natural body coolant, especially beneficial in summer."},{icon:"💇",title:"Hair Health",desc:"Helps reduce dandruff and supports healthy hair growth."},{icon:"💚",title:"Digestive Health",desc:"Improves digestion and supports gut health naturally."},{icon:"🌿",title:"Herbal Detox",desc:"Antibacterial and anti-inflammatory compounds support body detox."}],
+   benefits:[{icon:"[[icon:chart-no-axes-column-increasing]]",title:"Diabetes Support",desc:"Avarampoo tea helps manage blood sugar levels naturally."},{icon:"[[icon:sparkles]]",title:"Skin Care",desc:"Improves skin glow, reduces acne and cleans pores with natural compounds."},{icon:"[[icon:snowflake]]",title:"Body Cooling",desc:"Acts as a natural body coolant, especially beneficial in summer."},{icon:"[[icon:scissors]]",title:"Hair Health",desc:"Helps reduce dandruff and supports healthy hair growth."},{icon:"[[icon:heart]]",title:"Digestive Health",desc:"Improves digestion and supports gut health naturally."},{icon:"[[icon:leaf]]",title:"Herbal Detox",desc:"Antibacterial and anti-inflammatory compounds support body detox."}],
    nutrients:[{label:"Flavonoids",value:"Rich",per:"per serving"},{label:"Tannins",value:"Present",per:"per serving"},{label:"Antioxidants",value:"High",per:"per serving"},{label:"Alkaloids",value:"Trace",per:"per serving"}],
    howToUse:["Boil 5–10 dried Avarampoo flowers in 300ml water for 5–7 minutes.","Strain and drink as herbal tea — best consumed in the morning on an empty stomach.","For face pack: grind dried flowers into powder, mix with turmeric and rose water, apply for 15 minutes.","For hair care: mix Avarampoo powder with coconut oil and apply to scalp.","Can be combined with other herbs like neem or tulsi for enhanced benefits.","Store in an airtight container in a cool, dry place."],
    specs:{"Net Weight":"100 g","Origin":"Tamil Nadu, India","Shelf Life":"18 months","Type":"Dried Medicinal Flowers","Traditional Use":"Siddha Medicine","Certification":"FSSAI","Properties":"Natural cooling, antibacterial, anti-inflammatory, herbal detox support","Usage":"Avarampoo tea, face pack, hair care, herbal drink, traditional Tamil remedies"},
-   nutrition:{"Diabetes Support":{value:"Avarampoo tea helps manage blood sugar levels naturally",icon:"📊"},"Skin Care":{value:"Improves skin glow, reduces acne and cleans pores with natural compounds",icon:"✨"},"Body Cooling":{value:"Acts as a natural body coolant, especially beneficial in summer",icon:"❄️"},"Hair Health":{value:"Helps reduce dandruff and supports healthy hair growth",icon:"💇"},"Digestive Health":{value:"Improves digestion and supports gut health naturally",icon:"💚"},"Herbal Detox":{value:"Antibacterial and anti-inflammatory compounds support body detox",icon:"🌿"}},
+   nutrition:{"Diabetes Support":{value:"Avarampoo tea helps manage blood sugar levels naturally",icon:"[[icon:chart-no-axes-column-increasing]]"},"Skin Care":{value:"Improves skin glow, reduces acne and cleans pores with natural compounds",icon:"[[icon:sparkles]]"},"Body Cooling":{value:"Acts as a natural body coolant, especially beneficial in summer",icon:"[[icon:snowflake]]"},"Hair Health":{value:"Helps reduce dandruff and supports healthy hair growth",icon:"[[icon:scissors]]"},"Digestive Health":{value:"Improves digestion and supports gut health naturally",icon:"[[icon:heart]]"},"Herbal Detox":{value:"Antibacterial and anti-inflammatory compounds support body detox",icon:"[[icon:leaf]]"}},
    reviewData:[{name:"Dr. Kamala N.",rating:5,text:"Excellent quality Aavaram flowers. I recommend to my patients for blood sugar management.",date:"Jan 2026",verified:true}]},
 
   {id:11, name:"Butterfly Pea Flower",              category:"Dried Flowers",  price:180, oldPrice:220, rating:4.7, reviews:132, sold:281, badge:"hot",
@@ -1573,11 +1659,11 @@ const products = [
    variants:["25","50","100","200"],
    tagline:"Vivid blue Sangu Poo — color-changing herbal tea with memory, skin and hair benefits.",
    desc:"Butterfly Pea Flower, also known as Sangu Poo in Tamil, is a traditional herbal flower widely used for tea, skincare, and natural remedies. Known for its vibrant blue color, butterfly pea flower tea is popular for its health benefits and refreshing taste.\n\nMany people search for butterfly pea flower tea benefits because it helps improve memory, supports skin health, and provides a natural cooling effect. Butterfly pea flower is also used in powder form for face packs and hair care.\n\nIf you are looking to buy butterfly pea flower online, dried flowers and powder forms are widely used for herbal drinks and beauty routines. Lemon can be added to the tea to change its color from blue to purple.",
-   benefits:[{icon:"🧠",title:"Memory Boost",desc:"Supports brain function and focus with natural anthocyanin compounds."},{icon:"✨",title:"Skin Care",desc:"Improves skin glow and reduces dullness with antioxidant properties."},{icon:"💇",title:"Hair Health",desc:"Helps in hair growth and scalp care naturally."},{icon:"❄️",title:"Cooling Effect",desc:"Reduces body heat naturally, ideal for summer herbal drinks."},{icon:"⚖️",title:"Weight Management",desc:"Supports healthy metabolism and weight management."},{icon:"💙",title:"Anthocyanin Rich",desc:"Powerful antioxidants with anti-aging and anti-inflammatory properties."}],
+   benefits:[{icon:"[[icon:brain]]",title:"Memory Boost",desc:"Supports brain function and focus with natural anthocyanin compounds."},{icon:"[[icon:sparkles]]",title:"Skin Care",desc:"Improves skin glow and reduces dullness with antioxidant properties."},{icon:"[[icon:scissors]]",title:"Hair Health",desc:"Helps in hair growth and scalp care naturally."},{icon:"[[icon:snowflake]]",title:"Cooling Effect",desc:"Reduces body heat naturally, ideal for summer herbal drinks."},{icon:"[[icon:scale]]",title:"Weight Management",desc:"Supports healthy metabolism and weight management."},{icon:"[[icon:heart]]",title:"Anthocyanin Rich",desc:"Powerful antioxidants with anti-aging and anti-inflammatory properties."}],
    nutrients:[{label:"Anthocyanins",value:"Rich",per:"per serving"},{label:"Antioxidants",value:"High",per:"per serving"},{label:"Flavonoids",value:"Present",per:"per serving"},{label:"Tannins",value:"Trace",per:"per serving"}],
    howToUse:["Prepare butterfly pea flower tea by boiling 5–8 dried flowers in 250ml water for 3–5 minutes.","Add lemon juice to change the color from blue to purple — a natural pH reaction.","Use as natural food color in rice, drinks and desserts.","Apply as face pack in powder form mixed with rose water for skin glow.","Use in hair care routines — mix powder with coconut oil for scalp massage.","Suitable for herbal drinks, detox water and iced teas."],
    specs:{"Net Weight":"50 g","Origin":"Tamil Nadu, India","Shelf Life":"18 months","Type":"Dried Butterfly Pea","Color":"Deep Blue","Certification":"FSSAI","Properties":"Rich in antioxidants, natural blue anthocyanins, cooling and detox properties","Usage":"Butterfly pea flower tea, natural food color, face pack, hair care, herbal detox drinks"},
-   nutrition:{"Memory Boost":{value:"Supports brain function and focus with natural anthocyanin compounds",icon:"🧠"},"Skin Care":{value:"Improves skin glow and reduces dullness with antioxidant properties",icon:"✨"},"Hair Health":{value:"Helps in hair growth and scalp care naturally",icon:"💇"},"Cooling Effect":{value:"Reduces body heat naturally, ideal for summer herbal drinks",icon:"❄️"},"Weight Management":{value:"Supports healthy metabolism and weight management",icon:"⚖️"},"Anthocyanin Rich":{value:"Powerful antioxidants with anti-aging and anti-inflammatory properties",icon:"💙"}},
+   nutrition:{"Memory Boost":{value:"Supports brain function and focus with natural anthocyanin compounds",icon:"[[icon:brain]]"},"Skin Care":{value:"Improves skin glow and reduces dullness with antioxidant properties",icon:"[[icon:sparkles]]"},"Hair Health":{value:"Helps in hair growth and scalp care naturally",icon:"[[icon:scissors]]"},"Cooling Effect":{value:"Reduces body heat naturally, ideal for summer herbal drinks",icon:"[[icon:snowflake]]"},"Weight Management":{value:"Supports healthy metabolism and weight management",icon:"[[icon:scale]]"},"Anthocyanin Rich":{value:"Powerful antioxidants with anti-aging and anti-inflammatory properties",icon:"[[icon:heart]]"}},
    reviewData:[{name:"Nisha R.",rating:5,text:"The color change is magical! Makes the most beautiful blue lemonade.",date:"Feb 2026",verified:true},{name:"Chef Arun B.",rating:5,text:"Using this in my restaurant for color-changing cocktails. Customers love it!",date:"Jan 2026",verified:true}]},
 
   {id:12, name:"Organic Real Rose Milk",            category:"Beverages",      price:140, oldPrice:175, rating:4.7, reviews:219, sold:467, badge:"hot",
@@ -1587,7 +1673,7 @@ const products = [
    tagline:"Pure rose milk mix — made from real Paneer Rose petals and natural sweeteners.",
    desc:"Our Organic Real Rose Milk mix is made from genuine Paneer Rose (Rosa damascena) petals, natural sugar and a touch of cardamom. No artificial colors, no synthetic rose essence — just the pure, authentic taste of real rose milk as it should be.",
    specs:{"Net Weight":"200 g","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Rose Milk Mix","Sweetener":"Natural cane sugar","Certification":"FSSAI"},
-   nutrition:{"Natural Rose":{value:"Made from real rose petals, not artificial essence",icon:"🌹"},"Antioxidant Rich":{value:"Rose petals contain natural antioxidants",icon:"✨"},"Cooling Effect":{value:"Natural body-cooling properties",icon:"❄️"},"Digestive Aid":{value:"Rose and cardamom aid digestion",icon:"💚"},"Mood Lifting":{value:"Natural aromatherapy benefits",icon:"😊"},"No Artificial Colors":{value:"Pure natural pink color from rose petals",icon:"✅"}},
+   nutrition:{"Natural Rose":{value:"Made from real rose petals, not artificial essence",icon:"[[icon:flower]]"},"Antioxidant Rich":{value:"Rose petals contain natural antioxidants",icon:"[[icon:sparkles]]"},"Cooling Effect":{value:"Natural body-cooling properties",icon:"[[icon:snowflake]]"},"Digestive Aid":{value:"Rose and cardamom aid digestion",icon:"[[icon:heart]]"},"Mood Lifting":{value:"Natural aromatherapy benefits",icon:"[[icon:smile]]"},"No Artificial Colors":{value:"Pure natural pink color from rose petals",icon:"[[icon:circle-check]]"}},
    reviewData:[{name:"Kavitha S.",rating:5,text:"Finally a rose milk that tastes like the real thing! No artificial taste at all.",date:"Feb 2026",verified:true},{name:"Priya M.",rating:5,text:"My kids love this. So happy it's made from real roses.",date:"Jan 2026",verified:true}]},
 
   {id:13, name:"Hibiscus Sherbet",                  category:"Beverages",      price:130, oldPrice:165, rating:4.6, reviews:143, sold:304, badge:"sale",
@@ -1597,7 +1683,7 @@ const products = [
    tagline:"Traditional hibiscus sherbet mix — refreshing, tangy and naturally red.",
    desc:"Made from sun-dried Hibiscus sabdariffa flowers, natural sugar and a blend of cooling spices. This traditional sherbet mix makes a refreshing summer drink that is naturally rich in vitamin C and antioxidants. Just mix with cold water or milk.",
    specs:{"Net Weight":"200 g","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Sherbet Mix","Color":"Natural deep red","Certification":"FSSAI"},
-   nutrition:{"Vitamin C Rich":{value:"High natural vitamin C content",icon:"🍊"},"Cooling Effect":{value:"Traditional body-cooling summer drink",icon:"❄️"},"Heart Health":{value:"Anthocyanins support cardiovascular health",icon:"❤️"},"Antioxidant":{value:"Rich in natural antioxidants",icon:"✨"},"Digestive":{value:"Organic acids aid digestion",icon:"💚"},"No Artificial Color":{value:"Natural deep red from hibiscus",icon:"✅"}},
+   nutrition:{"Vitamin C Rich":{value:"High natural vitamin C content",icon:"[[icon:circle]]"},"Cooling Effect":{value:"Traditional body-cooling summer drink",icon:"[[icon:snowflake]]"},"Heart Health":{value:"Anthocyanins support cardiovascular health",icon:"[[icon:heart]]"},"Antioxidant":{value:"Rich in natural antioxidants",icon:"[[icon:sparkles]]"},"Digestive":{value:"Organic acids aid digestion",icon:"[[icon:heart]]"},"No Artificial Color":{value:"Natural deep red from hibiscus",icon:"[[icon:circle-check]]"}},
    reviewData:[{name:"Radha V.",rating:5,text:"Perfect summer drink! The natural red color is beautiful and the taste is amazing.",date:"Feb 2026",verified:true}]},
 
   {id:14, name:"Hand-pounded Rice Idiyappam Flour", category:"Flour Varieties", price:160, oldPrice:200, rating:4.8, reviews:178, sold:378, badge:"hot",
@@ -1607,7 +1693,7 @@ const products = [
    tagline:"Traditional hand-pounded rice flour — for soft, silky idiyappam.",
    desc:"Made from premium raw rice that is soaked, dried and hand-pounded using traditional methods. This idiyappam flour produces the softest, most silky string hoppers with a natural rice flavor that machine-milled flour cannot replicate.",
    specs:{"Net Weight":"1 kg","Origin":"Tamil Nadu, India","Shelf Life":"6 months","Type":"Hand-pounded Rice Flour","Processing":"Traditional stone-ground","Certification":"FSSAI"},
-   nutrition:{"Easy to Digest":{value:"Hand-pounding preserves natural digestive enzymes",icon:"⚡"},"Gluten-Free":{value:"100% rice-based, naturally gluten-free",icon:"✅"},"Natural Fiber":{value:"Retains natural rice bran fiber",icon:"💚"},"Low Fat":{value:"Naturally low in fat",icon:"❤️"},"Complex Carbs":{value:"Sustained energy release",icon:"🔋"},"Mineral Rich":{value:"Contains iron, zinc and magnesium",icon:"🌿"}},
+   nutrition:{"Easy to Digest":{value:"Hand-pounding preserves natural digestive enzymes",icon:"[[icon:zap]]"},"Gluten-Free":{value:"100% rice-based, naturally gluten-free",icon:"[[icon:circle-check]]"},"Natural Fiber":{value:"Retains natural rice bran fiber",icon:"[[icon:heart]]"},"Low Fat":{value:"Naturally low in fat",icon:"[[icon:heart]]"},"Complex Carbs":{value:"Sustained energy release",icon:"[[icon:battery-full]]"},"Mineral Rich":{value:"Contains iron, zinc and magnesium",icon:"[[icon:leaf]]"}},
    reviewData:[{name:"Meena S.",rating:5,text:"The idiyappam comes out so soft and silky! Much better than store-bought flour.",date:"Feb 2026",verified:true},{name:"Lakshmi R.",rating:5,text:"Authentic hand-pounded quality. My family can taste the difference.",date:"Jan 2026",verified:true}]},
 
   {id:15, name:"Black Urad Dal Health Mix Powder",  category:"Flour Varieties", price:175, oldPrice:215, rating:4.6, reviews:94,  sold:198, badge:"new",
@@ -1617,7 +1703,7 @@ const products = [
    tagline:"Protein-rich black urad dal health mix — for energy and strength.",
    desc:"A nutritious health mix made from roasted black urad dal (whole black gram) ground with traditional spices. Rich in protein, iron and B-vitamins, this mix can be consumed as a porridge, added to dosa batter or mixed with warm milk for a nutritious drink.",
    specs:{"Net Weight":"500 g","Origin":"Tamil Nadu, India","Shelf Life":"6 months","Type":"Health Mix Powder","Base":"Black Urad Dal","Certification":"FSSAI"},
-   nutrition:{"High Protein":{value:"Black urad dal is rich in plant protein",icon:"💪"},"Iron Rich":{value:"Excellent source of plant-based iron",icon:"🔴"},"B-Vitamins":{value:"Rich in B1, B2, B3 for metabolism",icon:"🧠"},"Bone Health":{value:"Calcium and phosphorus for strong bones",icon:"🦴"},"Energy Boost":{value:"Complex carbs and protein for sustained energy",icon:"🔋"},"Gluten-Free":{value:"Naturally gluten-free health mix",icon:"✅"}},
+   nutrition:{"High Protein":{value:"Black urad dal is rich in plant protein",icon:"[[icon:dumbbell]]"},"Iron Rich":{value:"Excellent source of plant-based iron",icon:"[[icon:circle]]"},"B-Vitamins":{value:"Rich in B1, B2, B3 for metabolism",icon:"[[icon:brain]]"},"Bone Health":{value:"Calcium and phosphorus for strong bones",icon:"[[icon:bone]]"},"Energy Boost":{value:"Complex carbs and protein for sustained energy",icon:"[[icon:battery-full]]"},"Gluten-Free":{value:"Naturally gluten-free health mix",icon:"[[icon:circle-check]]"}},
    reviewData:[{name:"Sunita K.",rating:5,text:"My children love this as a morning porridge. Very nutritious and filling.",date:"Jan 2026",verified:true}]},
 
   {id:16, name:"Country Fig Powder",               category:"Other Products",  price:200, oldPrice:250, rating:4.7, reviews:61,  sold:129, badge:"new",
@@ -1627,7 +1713,7 @@ const products = [
    tagline:"Sun-dried country fig powder — a natural digestive and energy tonic.",
    desc:"Made from sun-dried country figs (Ficus carica) ground into a fine powder. Country figs are known for their exceptional fiber content, natural digestive enzymes and high iron content. Used as a natural remedy for constipation, anemia and as an energy supplement.",
    specs:{"Net Weight":"250 g","Origin":"Tamil Nadu, India","Shelf Life":"12 months","Type":"Sun-dried Fig Powder","Processing":"Stone-ground","Certification":"FSSAI"},
-   nutrition:{"High Fiber":{value:"Excellent natural remedy for constipation",icon:"💚"},"Iron Rich":{value:"High iron content prevents anemia",icon:"💪"},"Calcium":{value:"Good source of plant-based calcium",icon:"🦴"},"Natural Enzymes":{value:"Digestive enzymes support gut health",icon:"⚡"},"Antioxidants":{value:"Rich in polyphenols and flavonoids",icon:"✨"},"Natural Sweetness":{value:"Natural sugars provide quick energy",icon:"🍯"}},
+   nutrition:{"High Fiber":{value:"Excellent natural remedy for constipation",icon:"[[icon:heart]]"},"Iron Rich":{value:"High iron content prevents anemia",icon:"[[icon:dumbbell]]"},"Calcium":{value:"Good source of plant-based calcium",icon:"[[icon:bone]]"},"Natural Enzymes":{value:"Digestive enzymes support gut health",icon:"[[icon:zap]]"},"Antioxidants":{value:"Rich in polyphenols and flavonoids",icon:"[[icon:sparkles]]"},"Natural Sweetness":{value:"Natural sugars provide quick energy",icon:"[[icon:package]]"}},
    reviewData:[{name:"Dr. Anand R.",rating:5,text:"Excellent quality fig powder. I recommend to patients with digestive issues.",date:"Feb 2026",verified:true},{name:"Priya N.",rating:4,text:"Good quality and very effective for digestion. Will buy again.",date:"Jan 2026",verified:true}]},
 ];
 
@@ -1843,7 +1929,7 @@ function render() {
     // fallback: render nutrition as benefits
     benefitsGrid.innerHTML = Object.entries(p.nutrition).map(([key, val], i) => `
       <div style="display:flex;align-items:flex-start;gap:.85rem;padding:.85rem;border-radius:12px;background:${i%2===0?'#f8faf8':'#fff'};border:1px solid #e8f5e9;">
-        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--forest-deep),var(--forest-mid));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;">${val.icon||'🌿'}</div>
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--forest-deep),var(--forest-mid));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;">${val.icon||'[[icon:leaf]]'}</div>
         <div style="flex:1;min-width:0;">
           <p style="font-size:.78rem;font-weight:800;color:var(--forest-deep);margin-bottom:.2rem;">${key}</p>
           <p style="font-size:.72rem;color:#6b7280;line-height:1.65;">${val.value}</p>
@@ -1878,7 +1964,7 @@ function render() {
     nutrientsGrid.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;">` +
       Object.entries(p.nutrition).map(([key, val], i) => `
         <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem;border-radius:10px;background:${i%2===0?'#f0fdf4':'#fff'};border:1px solid #bbf7d0;">
-          <span style="font-size:1.3rem;flex-shrink:0;">${val.icon||'🌿'}</span>
+          <span style="font-size:1.3rem;flex-shrink:0;">${val.icon||'[[icon:leaf]]'}</span>
           <div>
             <p style="font-size:.7rem;font-weight:800;color:var(--forest-deep);margin-bottom:.1rem;">${key}</p>
             <p style="font-size:.65rem;color:#6b7280;line-height:1.5;">${val.value}</p>
@@ -1981,6 +2067,7 @@ function render() {
     }
   });
   initReviewForm();
+  window.nansaiApplyIcons?.(document.body);
   // Check for a review pre-saved from the orders page
   const user = (function(){ try { return JSON.parse(localStorage.getItem('nansai_user')||'null'); } catch { return null; } })();
   if (user) {
@@ -1999,6 +2086,7 @@ function render() {
         card.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity .35s ease,transform .35s ease;';
         card.innerHTML = `<div class="rev-card-head"><div class="rev-avatar">${r.name[0]}</div><div class="rev-meta"><div class="rev-name">${r.name}</div><div class="rev-stars-row">${renderStars(r.rating)}</div></div><span class="rev-date">${r.date}</span></div><p class="rev-text">${r.text}</p><span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>`;
         listEl.insertBefore(card, listEl.firstChild);
+        window.nansaiApplyIcons?.(card);
         requestAnimationFrame(() => requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }));
         // Mark as submitted (store '1' so form shows already-reviewed message)
         localStorage.setItem(revKey, '1');
@@ -2155,7 +2243,7 @@ function addToCartFn() {
   localStorage.setItem('cart', JSON.stringify(existing));
   Cart.add(cartItem, 0).catch(() => {});
   updateCounters();
-  showToast('🛒 ' + p.name + ' (' + label + ') added!');
+  showToast('[[icon:shopping-cart]] ' + p.name + ' (' + label + ') added!');
   // Bounce animation on ATC button
   const btn = document.getElementById('atcBtn');
   btn.classList.add('added', 'btn-bounce');
@@ -2212,7 +2300,7 @@ function toggleWishlistFn() {
       btn.querySelector('svg').setAttribute('fill','#ef4444');
       btn.querySelector('svg').setAttribute('stroke','#ef4444');
       btn.style.background = '#fff5f5';
-      showToast('❤️ Added to wishlist!');
+      showToast('[[icon:heart]] Added to wishlist!');
     } else {
       btn.classList.remove('liked');
       btn.querySelector('svg').setAttribute('fill','none');
@@ -2303,6 +2391,7 @@ function renderBlog() {
 
   // Store posts for modal
   window._blogPosts = posts;
+  window.nansaiApplyIcons?.(document.getElementById('blogCards'));
 }
 
 /* --- RELATED - 3 horizontal scroll rows like wishlist page --- */
@@ -2360,6 +2449,7 @@ function renderRelated() {
   document.getElementById('relScroll3').innerHTML = best.length  ? best.map((p,i)=>relCardHTML(p,i)).join('')  : '<p style="color:var(--forest-sage);font-size:.8rem;padding:.5rem">No bestsellers found.</p>';
   document.getElementById('relRow1Eyebrow').textContent = 'More in ' + curCat;
   document.getElementById('relRow1Title').textContent   = 'You May Also Like';
+  window.nansaiApplyIcons?.(document.getElementById('relatedSection'));
 
   // Sync all rel wish buttons with actual wishlist state
   const allRelIds = [...row1, ...newArr, ...best].map(p => p.id);
@@ -2396,7 +2486,7 @@ function relToggleWish(id, btn) {
     if (added) {
       btn.classList.add('liked');
       svg.setAttribute('fill','#ef4444'); svg.setAttribute('stroke','#ef4444');
-      showToast('❤️ Added to wishlist!');
+      showToast('[[icon:heart]] Added to wishlist!');
     } else {
       btn.classList.remove('liked');
       svg.setAttribute('fill','none'); svg.setAttribute('stroke','#9ca3af');
@@ -2465,7 +2555,7 @@ function confirmRelCart(id){
   if(ex) ex.qty+=1; else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
   localStorage.setItem('cart',JSON.stringify(cart));
   updateCounters();
-  showToast('🛒 '+p.name+' · '+label+' added!');
+  showToast('[[icon:shopping-cart]] '+p.name+' · '+label+' added!');
   const confirmBtn=document.getElementById('relconfirm-'+id);
   if(confirmBtn){
     confirmBtn.classList.add('done','btn-bounce');
@@ -2558,6 +2648,7 @@ function openBlogModal(i) {
   document.getElementById('blogModalDate').textContent = b.date;
   document.getElementById('blogModalRead').textContent = b.read + ' read';
   document.getElementById('blogModalText').innerHTML = (b.body || '<p>' + b.excerpt + '</p><p>This article explores the rich tradition of organic farming in Tamil Nadu and how heritage products like these have been part of daily life for centuries. From farm to table, every step is guided by natural practices passed down through generations.</p><p>Our farmers use no synthetic chemicals or pesticides. The result is a product that is not only healthier for you but also better for the environment and local farming communities.</p><p>Whether you are new to organic living or a long-time enthusiast, incorporating these traditional products into your daily routine is one of the best decisions you can make for your health and wellbeing.</p>');
+  window.nansaiApplyIcons?.(document.getElementById('blogModalText'));
   const modal = document.getElementById('blogModal');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -2638,10 +2729,11 @@ function submitReview() {
   card.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity .35s ease,transform .35s ease;';
   card.innerHTML = `<div class="rev-card-head"><div class="rev-avatar">${newRev.name[0]}</div><div class="rev-meta"><div class="rev-name">${newRev.name}</div><div class="rev-stars-row">${renderStars(newRev.rating)}</div></div><span class="rev-date">${newRev.date}</span></div><p class="rev-text">${newRev.text}</p><span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>`;
   listEl.insertBefore(card, listEl.firstChild);
+  window.nansaiApplyIcons?.(card);
   requestAnimationFrame(() => requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }));
   // Hide form, show thank you
   document.getElementById('revForm').innerHTML = '<p style="font-size:.85rem;font-weight:700;color:var(--forest-leaf);padding:.5rem 0;">&#127881; Thank you for your review!</p>';
-  showToast('⭐ Review submitted!');
+  showToast('[[icon:star]] Review submitted!');
 }
 
 /* --- EXPAND REVIEWS --- */
@@ -2661,6 +2753,7 @@ function expandReviews() {
     div.style.transition = 'opacity .35s ease, transform .35s ease';
     div.innerHTML = `<div class="rev-card-head"><div class="rev-avatar">${r.name[0]}</div><div class="rev-meta"><div class="rev-name">${r.name}</div><div class="rev-stars-row">${renderStars(r.rating)}</div></div><span class="rev-date">${r.date}</span></div><p class="rev-text">${r.text}</p>${r.verified ? '<span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>' : ''}`;
     listEl.appendChild(div);
+    window.nansaiApplyIcons?.(div);
     requestAnimationFrame(() => requestAnimationFrame(() => { div.style.opacity = '1'; div.style.transform = 'translateY(0)'; }));
   });
 }

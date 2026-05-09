@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NANSEI Organics — Checkout</title>
+<title>NANSEI Organics Checkout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="../js/config.js"></script>
@@ -169,7 +169,8 @@ textarea.inp{resize:none;line-height:1.65}
   border:1px solid #FFA41C;border-radius:8px;cursor:pointer;
   transition:background .15s,border-color .15s;
   box-shadow:0 2px 5px rgba(213,217,217,.5);
-  display:flex;align-items:center;justify-content:center;gap:10px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  letter-spacing:0;
 }
 .btn-pay-now:hover{background:#F7CA00;border-color:#F2A200;}
 .btn-pay-now:active{background:#F0B800;box-shadow:none}
@@ -316,7 +317,7 @@ textarea.inp{resize:none;line-height:1.65}
   #toast{font-size:.78rem;padding:9px 18px;white-space:normal;text-align:center;max-width:90vw}
   /* Step 3 mobile: add bottom padding for sticky button */
   #step3{padding-bottom:80px}
-  /* Hide inline Pay Now on mobile — sticky bar handles it */
+  /* Hide inline Pay Now on mobile â€” sticky bar handles it */
   #btnPayNow{display:none!important}
   .rzp-section{border-radius:16px}
 }
@@ -334,6 +335,92 @@ textarea.inp{resize:none;line-height:1.65}
   .btn-pay-now{font-size:.9rem;padding:15px}
 }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -500,7 +587,7 @@ textarea.inp{resize:none;line-height:1.65}
                   <input type="text" class="co-inp" id="coPin" maxlength="6" autocomplete="postal-code"
                     placeholder="6-digit PIN"
                     oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);coPinLookup(this.value)"/>
-                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking up�</span>
+                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking upï¿½</span>
                 </div>
                 <p class="co-err-msg" id="coPin-err"></p>
               </div>
@@ -509,9 +596,9 @@ textarea.inp{resize:none;line-height:1.65}
               <div style="display:flex;flex-direction:column;justify-content:flex-end">
                 <label class="field-label">Address Type</label>
                 <div style="display:flex;gap:6px">
-                  <button onclick="coSetType('Home',this)" id="coTypeHome" class="co-atype-btn co-atype-active">?? Home</button>
-                  <button onclick="coSetType('Work',this)" id="coTypeWork" class="co-atype-btn">?? Work</button>
-                  <button onclick="coSetType('Other',this)" id="coTypeOther" class="co-atype-btn">?? Other</button>
+                  <button onclick="coSetType('Home',this)" id="coTypeHome" class="co-atype-btn co-atype-active"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+                  <button onclick="coSetType('Work',this)" id="coTypeWork" class="co-atype-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Work</button>
+                  <button onclick="coSetType('Other',this)" id="coTypeOther" class="co-atype-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Other</button>
                 </div>
               </div>
 
@@ -675,29 +762,6 @@ textarea.inp{resize:none;line-height:1.65}
                 </div>
               </div>
 
-              <!-- PayU Option -->
-              <div class="gateway-card" id="gwPayU" onclick="selectGateway('payu')">
-                <div style="display:flex;align-items:flex-start;gap:14px">
-                  <div class="gw-radio" id="grPayU"><div class="gw-radio-dot"></div></div>
-                  <div style="flex:1">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                      <div style="width:28px;height:28px;border-radius:8px;background:#f59e0b;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 20 20"><path d="M4 4h12v12H4z" fill="#fff" fill-opacity=".9" rx="2"/></svg>
-                      </div>
-                      <span style="font-size:.92rem;font-weight:800;color:#1e293b">PayU</span>
-                      <span style="font-weight:400;color:#64748b">Money</span>
-                    </div>
-                    <p style="font-size:.8rem;color:#475569;margin-bottom:10px;line-height:1.55">Alternative payment gateway supporting all major UPI apps, cards, and wallets.</p>
-                    <div class="pay-icon-strip">
-                      <div class="pay-icon-placeholder" style="background:linear-gradient(135deg,#5f259f,#7c3aed);color:#fff;border:none;font-size:.52rem;font-weight:900">UPI</div>
-                      <div class="pay-icon-placeholder" style="background:#1a1f71;color:#fff;border:none;font-size:.58rem;font-weight:900;font-style:italic">VISA</div>
-                      <div style="height:22px;width:36px;border-radius:5px;border:1px solid rgba(0,0,0,.08);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:2px 4px"><svg viewBox="0 0 48 30" height="18" fill="none"><circle cx="18" cy="15" r="12" fill="#eb001b"/><circle cx="30" cy="15" r="12" fill="#f79e1b"/><path d="M24 6.5a12 12 0 0 1 0 17A12 12 0 0 1 24 6.5z" fill="#ff5f00"/></svg></div>
-                      <div class="pay-icon-placeholder" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;font-size:.5rem;font-weight:900">RuPay</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <!-- COD Option -->
               <div class="gateway-card" id="gwCod" onclick="selectGateway('cod')">
                 <div style="display:flex;align-items:flex-start;gap:14px">
@@ -809,7 +873,7 @@ textarea.inp{resize:none;line-height:1.65}
               </div>
             </div>
 
-            <!-- Pay Now Button — hidden on mobile (sticky bar handles it) -->
+            <!-- Pay Now Button â€” hidden on mobile (sticky bar handles it) -->
             <button class="btn-pay-now" id="btnPayNow" onclick="initiateRazorpay()" style="border-radius:8px">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#555"/></svg>
               <span id="payNowLabel">Pay Now</span>
@@ -897,7 +961,7 @@ textarea.inp{resize:none;line-height:1.65}
 <div class="sticky-pay-wrap" id="stickyPayWrap" style="display:none">
   <button class="btn-pay-now" onclick="initiateRazorpay()" style="border-radius:14px">
     <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg>
-    <span id="stickyPayLabel">Pay Now  &#8377;</span>
+    <span id="stickyPayLabel">Pay Now &#8377;</span>
   </button>
   <p style="text-align:center;font-size:.65rem;color:#94a3b8;margin-top:6px">&#128274; Secured by Razorpay</p>
 </div>
@@ -1104,7 +1168,7 @@ window.API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://nansei-backen
 // -- RAZORPAY CONFIGURATION --
 const RZP_MERCHANT_NAME = 'NANSEI Organics';
 const RZP_MERCHANT_LOGO = '';
-let _rzpKeyId = ''; // set from backend response � leave empty until you add real keys
+let _rzpKeyId = ''; // set from backend response ï¿½ leave empty until you add real keys
 
 // -- AUTH TOKEN HELPERS --
 function _getTok() {
@@ -1180,7 +1244,7 @@ function _saveLC(c) { localStorage.setItem('cart', JSON.stringify(c)); }
 document.addEventListener('DOMContentLoaded', () => {
   cart = _lcCart();
   addresses = _loadAddresses();
-  // Clear localStorage orders if user is logged in — API is the source of truth
+  // Clear localStorage orders if user is logged in â€” API is the source of truth
   if (_getTok()) localStorage.removeItem('mkOrders');
   renderCartStep();
   loadAndRenderAddrGrid();
@@ -1339,9 +1403,9 @@ function updateSummary() {
 
   // Step 3 pay now label
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = 'Pay Now  ₹' + total.toLocaleString();
+  if (pnl) pnl.textContent = 'Pay Now ₹' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = 'Pay Now  ₹' + total.toLocaleString();
+  if (spl) spl.textContent = 'Pay Now ₹' + total.toLocaleString();
   const pa = document.getElementById('payableAmount');
   if (pa) pa.innerHTML = '&#8377;' + total.toLocaleString();
 
@@ -1499,7 +1563,7 @@ function toggleNewAddr() {
 }
 // -- CHECKOUT ADDRESS: validation rules --
 const _coRules = {
-  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3�50 letters)' },
+  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3ï¿½50 letters)' },
   coMobile:{ test: v => /^[6-9]\d{9}$/.test(v),                  msg: 'Enter a valid 10-digit Indian mobile number' },
   coPin:   { test: v => /^[1-9]\d{5}$/.test(v),                  msg: 'Enter a valid 6-digit PIN code' },
   coAddr1: { test: v => v.trim().length >= 5,                     msg: 'Enter at least 5 characters for address' },
@@ -1581,7 +1645,7 @@ async function saveNewAddr() {
   if (!valid) {
     const firstErr = document.querySelector('#newAddrForm .co-err');
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    showToast('?? Please fix the errors before saving');
+    showToast('&#9888; Please fix the errors before saving');
     return;
   }
   const name = document.getElementById('coName').value.trim();
@@ -1608,7 +1672,7 @@ async function saveNewAddr() {
   coSetType('Home', document.getElementById('coTypeHome'));
   document.getElementById('newAddrForm').style.display = 'none';
   document.getElementById('addAddrIcon').textContent = '+';
-  showToast('? Address saved!');
+  showToast('&#9989; Address saved!');
 }
 
 // ----------------------------------------------
@@ -1616,7 +1680,7 @@ async function saveNewAddr() {
 // ----------------------------------------------
 function selectGateway(id) {
   selectedGateway = id;
-  ['razorpay', 'payu', 'cod'].forEach(g => {
+  ['razorpay', 'cod'].forEach(g => {
     const key = g.charAt(0).toUpperCase() + g.slice(1);
     const card = document.getElementById('gw' + key);
     const radio = document.getElementById('gr' + key);
@@ -1636,9 +1700,9 @@ function selectGateway(id) {
   // Update Pay Now button label
   const { total } = calcTotal();
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now  ₹' + total.toLocaleString();
+  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now ₹' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now  ₹' + total.toLocaleString();
+  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now ₹' + total.toLocaleString();
 }
 
 function selectBilling(type) {
@@ -1674,11 +1738,11 @@ function toggleMobileSummary() {
 //  RAZORPAY INTEGRATION
 // ----------------------------------------------
 async function initiateRazorpay() {
-  if (!cart.length) { showToast('?? Your cart is empty.'); return; }
-  if (!addresses.length) { showToast('?? Please add a delivery address.'); return; }
-  if (!_getTok()) { showToast('?? Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
+  if (!cart.length) { showToast('&#128722; Your cart is empty.'); return; }
+  if (!addresses.length) { showToast('&#128205; Please add a delivery address.'); return; }
+  if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
 
-  // COD � place order directly, no payment gateway
+  // COD ï¿½ place order directly, no payment gateway
   if (selectedGateway === 'cod') {
     _showProcessingOverlay('Placing Order', 'Confirming your Cash on Delivery order');
     return;
@@ -1699,8 +1763,16 @@ async function initiateRazorpay() {
     return;
   }
 
+  if (selectedGateway === 'payu') {
+    setTimeout(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
+      showToast('PayU gateway - configure your PayU merchant key.');
+    }, 800);
+    return;
+  }
+
   // Step 1: Create Razorpay order on backend to get order_id
-  // NOTE: send amount in rupees — backend converts to paise
+  // NOTE: send amount in rupees â€” backend converts to paise
   let rzpOrderId = null;
   try {
     const rzpRes = await fetch(window.API_BASE + '/orders/razorpay/create', {
@@ -1722,7 +1794,7 @@ async function initiateRazorpay() {
   // Step 2: Open Razorpay checkout
   const options = {
     key: _rzpKeyId,
-    amount: total * 100, // paise — must match what backend created
+    amount: total * 100, // paise â€” must match what backend created
     currency: 'INR',
     name: RZP_MERCHANT_NAME,
     description: 'Order from NANSEI Organics - ' + cart.length + ' item' + (cart.length > 1 ? 's' : ''),
@@ -1764,7 +1836,7 @@ async function initiateRazorpay() {
     });
     rzp.open();
   } catch (err) {
-    // Razorpay not loaded or invalid key — show processing simulation
+    // Razorpay not loaded or invalid key â€” show processing simulation
     console.warn('Razorpay load error:', err);
     if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
     // Simulate success for demo
@@ -1942,32 +2014,32 @@ function sendWhatsAppOrder() {
   const waNumber = customerPhone ? '91' + customerPhone : '';
 
   const itemLines = cart.length
-    ? cart.map((c, i) => `  ${i+1}. ${c.name} x${c.qty} � ?${(c.price * c.qty).toLocaleString()}`).join('%0A')
+    ? cart.map((c, i) => `  ${i+1}. ${c.name} x${c.qty} - Rs.${(c.price * c.qty).toLocaleString()}`).join('%0A')
     : '  (items cleared after order)';
 
   const msg = [
-    '?? *NANSEI Organics*',
-    '? *Your Order is Confirmed!*',
+    '*NANSEI Organics*',
+    '*Your Order is Confirmed!*',
     '',
-    `?? *Order ID:* #${orderId}`,
-    `?? *Date:* ${new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })}`,
-    `?? *Expected Delivery:* ${delivDate}`,
+    `*Order ID:* #${orderId}`,
+    `*Date:* ${new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })}`,
+    `*Expected Delivery:* ${delivDate}`,
     '',
-    '*?? Items Ordered:*',
+    '*Items Ordered:*',
     itemLines,
     '',
-    `?? *Subtotal:* ?${sub.toLocaleString()}`,
-    disc > 0 ? `??? *Discount:* -?${disc.toLocaleString()}` : '',
-    `?? *GST (5%):* ?${gst.toLocaleString()}`,
-    `? *Total Paid:* ?${total.toLocaleString()}`,
+    `*Subtotal:* Rs.${sub.toLocaleString()}`,
+    disc > 0 ? `*Discount:* -Rs.${disc.toLocaleString()}` : '',
+    `*GST (5%):* Rs.${gst.toLocaleString()}`,
+    `*Total Paid:* Rs.${total.toLocaleString()}`,
     '',
-    '*?? Delivery Address:*',
+    '*Delivery Address:*',
     addr ? `  ${addr.name}%0A  ${(addr.line || '').replace(/\n/g,'%0A  ')}%0A  ${addr.phone}` : '  Not available',
     '',
-    '?? Thank you for shopping with NANSEI Organics!',
-    '?? Pure. Organic. Farm-Direct.',
+    'Thank you for shopping with NANSEI Organics!',
+    'Pure. Organic. Farm-Direct.',
     '',
-    '?? Need help? Call us: +91 63821 42578',
+    'Need help? Call us: +91 63821 42578',
   ].filter(Boolean).join('%0A');
 
   // Open WhatsApp on customer's own number (they save it as their receipt)
@@ -2017,7 +2089,7 @@ function renderOrders() {
           ]
         };
       });
-      // When logged in — show ONLY API orders, ignore localStorage junk
+      // When logged in â€” show ONLY API orders, ignore localStorage junk
       _renderOrderList(apiOrders);
     }).catch(() => _renderOrderList(getOrders()));
   } else {
@@ -2216,7 +2288,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.que
 let _toastTimer;
 function showToast(msg, dur = 2800) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.innerHTML = msg; t.classList.add('show');
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => t.classList.remove('show'), dur);
 }

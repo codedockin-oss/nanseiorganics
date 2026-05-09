@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -830,6 +830,92 @@ video.slide-bg { transform:none!important; transition:none!important; }
                    radial-gradient(ellipse at 85% 20%,rgba(201,168,76,.04) 0%,transparent 60%);
 }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -883,17 +969,17 @@ video.slide-bg { transform:none!important; transition:none!important; }
     </div>
     <div class="flex-1 overflow-hidden">
       <div id="offerTrack" class="flex items-center gap-8 whitespace-nowrap text-[13px] text-[#4a3510] font-medium animate-marquee hover:[animation-play-state:paused]" style="width:max-content;">
-        <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">🎁 First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">[[icon:gift]] First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
         <span class="text-amber-400">◆</span>
-        <span>🚚 Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
+        <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
         <span class="text-amber-400">◆</span>
-        <span>🌾 Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹221</mark></span>
+        <span>[[icon:wheat]] Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹221</mark></span>
         <span class="text-amber-400">◆</span>
-        <span>🌹 Paneer Rose <b class="text-rose-600">Only 32 Left</b></span>
+        <span>[[icon:flower]] Paneer Rose <b class="text-rose-600">Only 32 Left</b></span>
         <span class="text-amber-400">◆</span>
-        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">💊 Buy 2 Supplements Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
+        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Supplements Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
         <span class="text-amber-400">◆</span>
-        <span>👨‍🌾 Farm Direct · Lab Tested · Organic Certified</span>
+        <span>[[icon:tractor]] Farm Direct · Lab Tested · Organic Certified</span>
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
@@ -985,16 +1071,16 @@ video.slide-bg { transform:none!important; transition:none!important; }
 <!-- Mobile Drawer -->
 <div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
   <nav style="display:flex;flex-direction:column;gap:.25rem;">
-    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🛒 Shop</a>
-    <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🌿 Our Promise</a>
-    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📖 Blogs</a>
-    <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📰 News</a>
-    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🏡 About</a>
+    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
+    <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
+    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
+    <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
+    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
     <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">👤 Sign In</a>
-    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">📦 My Orders</a>
-    <a href="wishlist.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">💖 Wishlist</a>
-    <a href="#" onclick="toggleMobDrawer();openCart();return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">🛍️ Cart</a>
+    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
+    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
+    <a href="wishlist.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
+    <a href="#" onclick="toggleMobDrawer();openCart();return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-bag]] Cart</a>
   </nav>
 </div>
 
@@ -1036,6 +1122,16 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
     <div id="track">
       <div class="slide active" id="slide-0">
+        <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/slide%20video.mp4?updatedAt=1772621168744"></video>
+        <div class="slide-overlay"></div><div class="slide-accent"></div>
+        <div class="slide-content">
+          <p class="eyebrow"><span></span>With Nansai</p>
+          <h2 class="slide-title">Experience the Root of <em>Nature</em></h2>
+          <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
+        </div>
+      </div>
+      <div class="slide" id="slide-1">
         <video class="slide-bg" autoplay muted loop playsinline src="https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"></video>
         <div class="slide-overlay"></div><div class="slide-accent"></div>
         <div class="slide-content">
@@ -1088,10 +1184,11 @@ video.slide-bg { transform:none!important; transition:none!important; }
         <button class="dot" data-i="1"></button>
         <button class="dot" data-i="2"></button>
         <button class="dot" data-i="3"></button>
+        <button class="dot" data-i="4"></button>
       </div>
       <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       <span style="font-size:.6rem;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.38);white-space:nowrap;">
-        <strong id="currIdx" style="font-family:'Cormorant Garamond',serif;font-size:.88rem;color:rgba(255,255,255,.72);">01</strong> / 04
+        <strong id="currIdx" style="font-family:'Cormorant Garamond',serif;font-size:.88rem;color:rgba(255,255,255,.72);">01</strong> / 05
       </span>
     </div>
 
@@ -1121,7 +1218,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:2.5rem;" class="sr" id="sr-prod-hdr">
-      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">🌾 Explore the Fields ↓</button>
+      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">[[icon:wheat]] Explore the Fields ↓</button>
       <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#1a2416;margin-bottom:.35rem;"> Bringing Nature's Best To  <em style="color:#166534;">Your Family .</em></h1>
       <p style="color:#7a9980;font-size:.85rem;">16 farm-fresh, certified products · Direct from Organic Farmers</p>
     </div>
@@ -1130,13 +1227,13 @@ video.slide-bg { transform:none!important; transition:none!important; }
     <div id="filterTabs" style="margin-bottom:2.5rem;">
       <div class="filter-bar sr sd-1" id="sr-filters">
         <button class="fpill active" data-cat="all"   onclick="deskCatClick(this,'all')">All</button>
-        <button class="fpill"        data-cat="new"   onclick="deskCatClick(this,'new')">✨ New</button>
-        <button class="fpill"        data-cat="bestseller" onclick="deskCatClick(this,'bestseller')">🔥 Best Sellers</button>
-        <button class="fpill"        data-cat="rice"  onclick="deskCatClick(this,'rice')">🌾 Rice</button>
-        <button class="fpill"        data-cat="flowers" onclick="deskCatClick(this,'flowers')">🌸 Flowers</button>
-        <button class="fpill"        data-cat="beverages" onclick="deskCatClick(this,'beverages')">🥤 Beverages</button>
-        <button class="fpill"        data-cat="flour" onclick="deskCatClick(this,'flour')">🫙 Flour</button>
-        <button class="fpill"        data-cat="other" onclick="deskCatClick(this,'other')">🌿 Other</button>
+        <button class="fpill"        data-cat="new"   onclick="deskCatClick(this,'new')">[[icon:sparkles]] New</button>
+        <button class="fpill"        data-cat="bestseller" onclick="deskCatClick(this,'bestseller')">[[icon:flame]] Best Sellers</button>
+        <button class="fpill"        data-cat="rice"  onclick="deskCatClick(this,'rice')">[[icon:wheat]] Rice</button>
+        <button class="fpill"        data-cat="flowers" onclick="deskCatClick(this,'flowers')">[[icon:flower-2]] Flowers</button>
+        <button class="fpill"        data-cat="beverages" onclick="deskCatClick(this,'beverages')">[[icon:glass-water]] Beverages</button>
+        <button class="fpill"        data-cat="flour" onclick="deskCatClick(this,'flour')">[[icon:package]] Flour</button>
+        <button class="fpill"        data-cat="other" onclick="deskCatClick(this,'other')">[[icon:leaf]] Other</button>
       </div>
     </div>
     <style>
@@ -1179,7 +1276,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
     <div id="productSections" class="prod-section" style="overflow:visible;"></div>
     <!-- Filtered flat grid -->
     <div id="productGrid" style="display:none;flex-wrap:wrap;gap:20px;overflow:visible;"></div>
-    <div id="emptyState" style="display:none;text-align:center;padding:5rem 0;"><div style="font-size:3.5rem;margin-bottom:.75rem;">🌿</div><p style="color:#9ca3af;font-weight:600;">No products found.</p></div>
+    <div id="emptyState" style="display:none;text-align:center;padding:5rem 0;"><div style="font-size:3.5rem;margin-bottom:.75rem;">[[icon:leaf]]</div><p style="color:#9ca3af;font-weight:600;">No products found.</p></div>
   </div>
 </section>
 
@@ -1245,22 +1342,22 @@ video.slide-bg { transform:none!important; transition:none!important; }
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-1" id="sr-why-1">
-        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🌱</div>
+        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:sprout]]</div>
         <h3 class="font-bold text-base mb-2">100% Organic</h3>
         <p class="text-gray-500 text-xs leading-relaxed">9 active certifications including USDA Organic, Non-GMO & Halal.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-2" id="sr-why-2">
-        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🚚</div>
+        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:truck]]</div>
         <h3 class="font-bold text-base mb-2">Fast Delivery</h3>
         <p class="text-gray-500 text-xs leading-relaxed">Quick & reliable delivery across all regions. Free above ₹999.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-3" id="sr-why-3">
-        <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">💰</div>
+        <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:circle-dollar-sign]]</div>
         <h3 class="font-bold text-base mb-2">Best Prices</h3>
         <p class="text-gray-500 text-xs leading-relaxed">Farm-direct — no middlemen. Save up to 30% versus retail.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-4" id="sr-why-4">
-        <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📞</div>
+        <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:phone]]</div>
         <h3 class="font-bold text-base mb-2">24/7 Support</h3>
         <p class="text-gray-500 text-xs leading-relaxed">Dedicated support team available round the clock.</p>
       </div>
@@ -1350,7 +1447,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
 ═══════════════════════════════════════ -->
 <div id="blog-modal" onclick="if(event.target===this)closeBlogModal()" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0);transition:background .3s,backdrop-filter .3s;align-items:center;justify-content:center;padding:1rem;">
   <div id="blog-modal-box" style="background:#fdfaf5;border-radius:24px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;transform:scale(.92) translateY(20px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;position:relative;scrollbar-width:thin;">
-    <button onclick="closeBlogModal()" style="position:fixed;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:2001;backdrop-filter:blur(4px);">✕</button>
+    <button onclick="closeBlogModal()" style="position:fixed;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:2001;backdrop-filter:blur(4px);">[[icon:x]]</button>
     <img id="blog-modal-hero" src="" alt="" style="width:100%;height:280px;object-fit:cover;border-radius:24px 24px 0 0;display:block;"/>
     <div style="padding:2rem 2.5rem 2.5rem;">
       <div id="blog-modal-meta" style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;flex-wrap:wrap;"></div>
@@ -1406,7 +1503,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
       </form>
     </div>
   </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with 💚 for farmers.</div>
+  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
 </footer>
 
 <!-- ═══════════════════════════════════════
@@ -1423,14 +1520,14 @@ if(cs) cs.innerHTML+=cs.innerHTML;
 (function(){
   const mobTrack=document.getElementById('mobMarqueeTrack');
   if(!mobTrack)return;
-  const items=['🎁 First Order 10% OFF — NANSAI10','◆','🚚 Free Delivery above ₹999','◆','🌾 Heritage Rice Varieties — Farm Direct','◆','🌹 Paneer Rose — Only 32 Left','◆','💚 Buy 2 Flowers Get 1 FREE — HEALTH3','◆','🌿 Organic · Lab Tested · 9 Certifications'];
+  const items=['[[icon:gift]] First Order 10% OFF — NANSAI10','◆','[[icon:truck]] Free Delivery above ₹999','◆','[[icon:wheat]] Heritage Rice Varieties — Farm Direct','◆','[[icon:flower]] Paneer Rose — Only 32 Left','◆','[[icon:heart]] Buy 2 Flowers Get 1 FREE — HEALTH3','◆','[[icon:leaf]] Organic · Lab Tested · 9 Certifications'];
   const html=items.map(t=>t==='◆'?`<span style="color:#9a7520;">◆</span>`:`<span>${t}</span>`).join('');
   mobTrack.innerHTML=html+html;
 })();
 
 /* ════ COPY COUPON ════ */
 document.querySelectorAll('[data-code]').forEach(el=>{
-  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('✅ Code '+el.dataset.code+' copied!'); };
+  el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('[[icon:circle-check]] Code '+el.dataset.code+' copied!'); };
 });
 
 /* ════ COUNTDOWN ════ */
@@ -1454,7 +1551,7 @@ function showToast(msg){
 /* ════ NEWSLETTER ════ */
 function subNewsletter(e){
   e.preventDefault();
-  showToast('🌿 Subscribed! Welcome to the farm family.');
+  showToast('[[icon:leaf]] Subscribed! Welcome to the farm family.');
   e.target.reset();
 }
 
@@ -1506,15 +1603,15 @@ function prodCardHTML(p,i){
   const d=disc(p);
   const isW=wishlist.includes(p.id);
   const badgeEl=p.badge==='hot'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">🔥 HOT</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:flame]] HOT</span>`
     :p.badge==='new'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">✨ NEW</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:sparkles]] NEW</span>`
     :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
   const fc=floatClasses[i%floatClasses.length];
   return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
     <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
       ${badgeEl}
-      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);border:none;cursor:pointer;z-index:10;font-size:.85rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${isW?'♥':'♡'}</button>
+      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);border:none;cursor:pointer;z-index:10;font-size:.85rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${isW?'[[icon:heart]]':'[[icon:heart]]'}</button>
       <img src="${p.image}" alt="${p.name}" loading="lazy" class="prod-img"/>
     </div>
     <div class="prod-info" style="overflow:visible;">
@@ -1537,13 +1634,13 @@ function prodCardHTML(p,i){
 }
 
 const sectionMeta={
-  new:        {icon:'✨',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
-  bestseller: {icon:'🔥',label:'Natures Favorites',     sub:'Most loved by thousands of families',           accent:'#d97706'},
-  rice:       {icon:'🌾',label:'Rice Varieties',   sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
-  flowers:    {icon:'🌸',label:'Dried Flowers',    sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
-  beverages:  {icon:'🥤',label:'Beverages',        sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
-  flour:      {icon:'🫙',label:'Flour Varieties',  sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
-  other:      {icon:'🌿',label:'Other Products',   sub:'More goodness from nature',                     accent:'#16a34a'},
+  new:        {icon:'[[icon:sparkles]]',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
+  bestseller: {icon:'[[icon:flame]]',label:'Natures Favorites',     sub:'Most loved by thousands of families',           accent:'#d97706'},
+  rice:       {icon:'[[icon:wheat]]',label:'Rice Varieties',   sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
+  flowers:    {icon:'[[icon:flower-2]]',label:'Dried Flowers',    sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
+  beverages:  {icon:'[[icon:glass-water]]',label:'Beverages',        sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
+  flour:      {icon:'[[icon:package]]',label:'Flour Varieties',  sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
+  other:      {icon:'[[icon:leaf]]',label:'Other Products',   sub:'More goodness from nature',                     accent:'#16a34a'},
 };
 const SECTION_ORDER=['new','bestseller','rice','flowers','beverages','flour','other'];
 
@@ -1684,7 +1781,7 @@ function confirmAddToCart(id,triggerBtn){
   const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
   if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
   saveCart();
-  showToast(`🛒 ${p.name} · ${fmtQty(qty,unit)} added!`);
+  showToast(`[[icon:shopping-cart]] ${p.name} · ${fmtQty(qty,unit)} added!`);
   const confirmBtn=triggerBtn||null;
   if(confirmBtn){
     confirmBtn.classList.add('done');
@@ -1734,13 +1831,13 @@ function toggleWish(id,btn){
   const idx=wishlist.indexOf(id);
   if(idx>-1){
     wishlist.splice(idx,1);
-    if(btn){btn.style.color='';btn.textContent='♡';}
-    showToast('💔 Removed from wishlist');
+    if(btn){btn.style.color='';btn.textContent='[[icon:heart]]';}
+    showToast('[[icon:heart-crack]] Removed from wishlist');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.remove(String(id)).catch(()=>{});
   } else {
     wishlist.push(id);
-    if(btn){btn.style.color='#ef4444';btn.textContent='♥';}
-    showToast('💖 Added to wishlist!');
+    if(btn){btn.style.color='#ef4444';btn.textContent='[[icon:heart]]';}
+    showToast('[[icon:heart]] Added to wishlist!');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(String(id)).catch(()=>{});
   }
   localStorage.setItem('wishlist',JSON.stringify(wishlist));syncCounters();
@@ -1772,7 +1869,7 @@ function doSearch(){
 
 /* ════ HERO SLIDER — 3D CAROUSEL ════ */
 (function(){
-  const TOTAL=4, DUR=5000;
+  const TOTAL=5, DUR=5000;
   let cur=0, pct=0, rafId=null, lastTS=null;
   const slides=document.querySelectorAll('#heroSection .slide');
   const dots=document.querySelectorAll('#dotList .dot');
@@ -1990,7 +2087,7 @@ function renderCartDrawer(){
   const footer=document.getElementById('cartFooter');
   if(!body)return;
   if(!cart.length){
-    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">🛒</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
+    body.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3rem;margin-bottom:.75rem;">[[icon:shopping-cart]]</div><p style="color:#9ca3af;font-weight:600;">Your cart is empty</p><button onclick="closeCart();document.getElementById(\'products\').scrollIntoView({behavior:\'smooth\'})" style="margin-top:1rem;background:var(--forest-deep);color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;">Shop Now</button></div>';
     if(footer)footer.style.display='none';
     return;
   }
@@ -2114,10 +2211,10 @@ function attachCarousel3D(){
 (function(){
   /* Video data — swap src with your real product videos */
   const REELS = [
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%201.mp4',       caption:'🌾 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4',          caption:'🌸 Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4',       caption:'🌿 Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
-    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4',          caption:'🌺 From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%201.mp4',       caption:'[[icon:wheat]] 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4',          caption:'[[icon:flower-2]] Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4',       caption:'[[icon:leaf]] Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
+    { src:'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4',          caption:'[[icon:flower-2]] From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
   ];
 
   let cur = 0, autoTimer = null;
@@ -2382,7 +2479,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   const greeting = 'Hi, ' + firstName;
   if (btn) btn.href = 'account.html';
   if (txt) txt.textContent = greeting;
-  if (mob) { mob.href = 'account.html'; mob.textContent = '👤 ' + greeting; }
+  if (mob) { mob.href = 'account.html'; mob.textContent = '[[icon:user]] ' + greeting; }
 })();
 </script>
 
@@ -2415,7 +2512,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
 <div id="cartDrawer" style="position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);background:#fff;z-index:1101;transform:translateX(100%);transition:transform .35s cubic-bezier(.77,0,.18,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.15);">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(26,58,42,.1);">
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--forest-deep);">Your Cart</h2>
-    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">✕</button>
+    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">[[icon:x]]</button>
   </div>
   <div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>
   <div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(26,58,42,.1);"></div>

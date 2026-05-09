@@ -19,7 +19,7 @@ function addToCartWithQty(id) {
   else cart.push({ id: p.id, name: p.name, basePrice: p.price, price: totalPrice, image: p.image, qty: 1, qtyVal, unit, qtyLabel: label });
   localStorage.setItem('cart', JSON.stringify(cart));
   syncCounters();
-  showToast(`🛒 ${p.name} (${label}) added!`);
+  showToast(`[[icon:shopping-cart]] ${p.name} (${label}) added!`);
   if (typeof ActivityAPI !== 'undefined') ActivityAPI.log('add_to_cart', `Added "${p.name}" to cart`, { productId: p.id, productName: p.name, price: totalPrice });
   const btn = document.getElementById('cartbtn-' + id);
   if (btn) {
@@ -41,7 +41,7 @@ function toggleWishlist(id, btn) {
       btn.querySelector('svg').setAttribute('fill', 'none');
       btn.querySelector('svg').setAttribute('stroke', '#6b7280');
     }
-    showToast('💔 Removed from wishlist');
+    showToast('[[icon:heart-crack]] Removed from wishlist');
     const p = products.find(x => x.id === id);
     if (p && typeof ActivityAPI !== 'undefined') ActivityAPI.log('wishlist_remove', `Removed "${p.name}" from wishlist`, { productId: p.id, productName: p.name });
   } else {
@@ -51,7 +51,7 @@ function toggleWishlist(id, btn) {
       btn.querySelector('svg').setAttribute('fill', '#ef4444');
       btn.querySelector('svg').setAttribute('stroke', '#ef4444');
     }
-    showToast('💖 Added to wishlist!');
+    showToast('[[icon:heart]] Added to wishlist!');
     const p = products.find(x => x.id === id);
     if (p && typeof ActivityAPI !== 'undefined') ActivityAPI.log('wishlist_add', `Added "${p.name}" to wishlist`, { productId: p.id, productName: p.name });
   }
@@ -67,9 +67,9 @@ function prodCardHTML(p, i) {
   const d = disc(p);
   const isW = wishlist.includes(p.id);
   const badgeEl = p.badge === 'hot'
-    ? `<span class="absolute top-2.5 left-2.5 bg-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full z-10">🔥 HOT</span>`
+    ? `<span class="absolute top-2.5 left-2.5 bg-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full z-10">[[icon:flame]] HOT</span>`
     : p.badge === 'new'
-      ? `<span class="absolute top-2.5 left-2.5 bg-green-700 text-white text-[10px] font-black px-2 py-0.5 rounded-full z-10">✨ NEW</span>`
+      ? `<span class="absolute top-2.5 left-2.5 bg-green-700 text-white text-[10px] font-black px-2 py-0.5 rounded-full z-10">[[icon:sparkles]] NEW</span>`
       : `<span class="absolute top-2.5 left-2.5 bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full z-10">${d}% OFF</span>`;
   
   return `<div class="prod-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col cursor-pointer transition-all duration-300 hover:-translate-y-1 animate-fadeUp" style="animation-delay:${i * .05}s" onclick="window.location.href='product.html?id=${p.id}'">
@@ -102,13 +102,13 @@ function prodCardHTML(p, i) {
    SECTION RENDERING
 ════════════════════════════════ */
 const sectionMeta = {
-  new:        { icon: '✨', label: 'New Arrivals',    sub: 'Just landed — fresh from the farm',           accent: '#059669' },
-  bestseller: { icon: '🔥', label: 'Best Sellers',    sub: 'Most loved by thousands of families',          accent: '#d97706' },
-  rice:       { icon: '🌾', label: 'Rice Varieties',  sub: 'Heritage & traditional rice from Tamil Nadu',  accent: '#65a30d' },
-  flowers:    { icon: '🌸', label: 'Dried Flowers',   sub: 'Sun-dried, aromatic & medicinal flowers',      accent: '#db2777' },
-  beverages:  { icon: '🥤', label: 'Beverages',       sub: 'Natural drinks crafted with pure ingredients', accent: '#0891b2' },
-  flour:      { icon: '🍚', label: 'Flour Varieties', sub: 'Hand-pounded & stone-ground flours',           accent: '#ca8a04' },
-  other:      { icon: '🌿', label: 'Other Products',  sub: 'More goodness from nature',                    accent: '#16a34a' },
+  new:        { icon: '[[icon:sparkles]]', label: 'New Arrivals',    sub: 'Just landed — fresh from the farm',           accent: '#059669' },
+  bestseller: { icon: '[[icon:flame]]', label: 'Best Sellers',    sub: 'Most loved by thousands of families',          accent: '#d97706' },
+  rice:       { icon: '[[icon:wheat]]', label: 'Rice Varieties',  sub: 'Heritage & traditional rice from Tamil Nadu',  accent: '#65a30d' },
+  flowers:    { icon: '[[icon:flower-2]]', label: 'Dried Flowers',   sub: 'Sun-dried, aromatic & medicinal flowers',      accent: '#db2777' },
+  beverages:  { icon: '[[icon:glass-water]]', label: 'Beverages',       sub: 'Natural drinks crafted with pure ingredients', accent: '#0891b2' },
+  flour:      { icon: '[[icon:bowl]]', label: 'Flour Varieties', sub: 'Hand-pounded & stone-ground flours',           accent: '#ca8a04' },
+  other:      { icon: '[[icon:leaf]]', label: 'Other Products',  sub: 'More goodness from nature',                    accent: '#16a34a' },
 };
 
 function sectionHTML(key, list) {
@@ -205,7 +205,7 @@ function renderMobProducts(list) {
   grid.innerHTML = list.map((p, i) => {
     const d = disc(p);
     const isW = wishlist.includes(p.id);
-    const badge = p.badge === 'hot' ? `<span style="position:absolute;top:6px;left:6px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:20px;z-index:10;">🔥 HOT</span>` : p.badge === 'new' ? `<span style="position:absolute;top:6px;left:6px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:20px;z-index:10;">✨ NEW</span>` : `<span style="position:absolute;top:6px;left:6px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
+    const badge = p.badge === 'hot' ? `<span style="position:absolute;top:6px;left:6px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:20px;z-index:10;">[[icon:flame]] HOT</span>` : p.badge === 'new' ? `<span style="position:absolute;top:6px;left:6px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:20px;z-index:10;">[[icon:sparkles]] NEW</span>` : `<span style="position:absolute;top:6px;left:6px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
     
     return `<div style="background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;display:flex;flex-direction:column;cursor:pointer;" onclick="window.location.href='product.html?id=${p.id}'">
       <div style="position:relative;overflow:hidden;background:#f0fdf4;aspect-ratio:1;">

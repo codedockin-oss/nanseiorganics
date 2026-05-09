@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -331,6 +331,92 @@ textarea.inp{resize:none;line-height:1.65}
   .btn-pay-now{font-size:.9rem;padding:15px}
 }
 </style>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  function applyIcons(root){
+    root = root || document.body;
+    if(!root) return;
+
+    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+      ['placeholder','title','aria-label','alt'].forEach(attr => {
+        const value = el.getAttribute(attr);
+        if(value && markerRe.test(value)){
+          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
+          markerRe.lastIndex = 0;
+        }
+      });
+    });
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        markerRe.lastIndex = 0;
+        const tag = node.parentElement?.tagName;
+        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      node.nodeValue.replace(markerRe, (match, name, offset) => {
+        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', name);
+        icon.setAttribute('aria-hidden', 'true');
+        icon.className = 'nansai-icon';
+        frag.append(icon);
+        last = offset + match.length;
+      });
+      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    root.querySelectorAll?.('option').forEach(option => {
+      if(markerRe.test(option.textContent)){
+        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+        markerRe.lastIndex = 0;
+      }
+    });
+
+    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+  }
+
+  window.nansaiApplyIcons = applyIcons;
+  document.addEventListener('DOMContentLoaded', () => {
+    applyIcons(document.body);
+  });
+})();
+</script>
+<style>
+.nansai-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.16em;
+  margin-right: 0.35em;
+  color: currentColor;
+  flex-shrink: 0;
+}
+button .nansai-icon,
+a .nansai-icon,
+.nav-link .nansai-icon,
+.mob-drawer-link .nansai-icon {
+  vertical-align: -0.18em;
+}
+.wishlist-btn .nansai-icon,
+.modal-close .nansai-icon,
+.btn-sm .nansai-icon {
+  margin-right: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -506,9 +592,9 @@ textarea.inp{resize:none;line-height:1.65}
               <div style="display:flex;flex-direction:column;justify-content:flex-end">
                 <label class="field-label">Address Type</label>
                 <div style="display:flex;gap:6px">
-                  <button onclick="coSetType('Home',this)" id="coTypeHome" class="co-atype-btn co-atype-active">🏠 Home</button>
-                  <button onclick="coSetType('Work',this)" id="coTypeWork" class="co-atype-btn">🏢 Work</button>
-                  <button onclick="coSetType('Other',this)" id="coTypeOther" class="co-atype-btn">📍 Other</button>
+                  <button onclick="coSetType('Home',this)" id="coTypeHome" class="co-atype-btn co-atype-active">[[icon:house]] Home</button>
+                  <button onclick="coSetType('Work',this)" id="coTypeWork" class="co-atype-btn">[[icon:building-2]] Work</button>
+                  <button onclick="coSetType('Other',this)" id="coTypeOther" class="co-atype-btn">[[icon:map-pin]] Other</button>
                 </div>
               </div>
 
@@ -1599,7 +1685,7 @@ async function saveNewAddr() {
   if (!valid) {
     const firstErr = document.querySelector('#newAddrForm .co-err');
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    showToast('⚠️ Please fix the errors before saving');
+    showToast('[[icon:triangle-alert]] Please fix the errors before saving');
     return;
   }
   const name = document.getElementById('coName').value.trim();
@@ -1626,7 +1712,7 @@ async function saveNewAddr() {
   coSetType('Home', document.getElementById('coTypeHome'));
   document.getElementById('newAddrForm').style.display = 'none';
   document.getElementById('addAddrIcon').textContent = '+';
-  showToast('✅ Address saved!');
+  showToast('[[icon:circle-check]] Address saved!');
 }
 
 // ----------------------------------------------
@@ -1692,9 +1778,9 @@ function toggleMobileSummary() {
 //  RAZORPAY INTEGRATION
 // ----------------------------------------------
 async function initiateRazorpay() {
-  if (!cart.length) { showToast('🛒 Your cart is empty.'); return; }
-  if (!addresses.length) { showToast('📍 Please add a delivery address.'); return; }
-  if (!_getTok()) { showToast('🔒 Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
+  if (!cart.length) { showToast('[[icon:shopping-cart]] Your cart is empty.'); return; }
+  if (!addresses.length) { showToast('[[icon:map-pin]] Please add a delivery address.'); return; }
+  if (!_getTok()) { showToast('[[icon:lock]] Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
 
   // COD — place order directly, no payment gateway
   if (selectedGateway === 'cod') {
@@ -1964,28 +2050,28 @@ function sendWhatsAppOrder() {
     : '  (items cleared after order)';
 
   const msg = [
-    '🌿 *NANSEI Organics*',
-    '✅ *Your Order is Confirmed!*',
+    '*NANSEI Organics*',
+    '*Your Order is Confirmed!*',
     '',
-    `📦 *Order ID:* #${orderId}`,
-    `📅 *Date:* ${new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })}`,
-    `🚚 *Expected Delivery:* ${delivDate}`,
+    `*Order ID:* #${orderId}`,
+    `*Date:* ${new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })}`,
+    `*Expected Delivery:* ${delivDate}`,
     '',
-    '*🛒 Items Ordered:*',
+    '*Items Ordered:*',
     itemLines,
     '',
-    `💰 *Subtotal:* ₹${sub.toLocaleString()}`,
-    disc > 0 ? `🏷️ *Discount:* -₹${disc.toLocaleString()}` : '',
-    `🧾 *GST (5%):* ₹${gst.toLocaleString()}`,
-    `✅ *Total Paid:* ₹${total.toLocaleString()}`,
+    `*Subtotal:* ₹${sub.toLocaleString()}`,
+    disc > 0 ? `*Discount:* -₹${disc.toLocaleString()}` : '',
+    `*GST (5%):* ₹${gst.toLocaleString()}`,
+    `*Total Paid:* ₹${total.toLocaleString()}`,
     '',
-    '*📍 Delivery Address:*',
+    '*Delivery Address:*',
     addr ? `  ${addr.name}%0A  ${(addr.line || '').replace(/\n/g,'%0A  ')}%0A  ${addr.phone}` : '  Not available',
     '',
-    '💚 Thank you for shopping with NANSEI Organics!',
-    '🌾 Pure. Organic. Farm-Direct.',
+    'Thank you for shopping with NANSEI Organics!',
+    'Pure. Organic. Farm-Direct.',
     '',
-    '📞 Need help? Call us: +91 63821 42578',
+    'Need help? Call us: +91 63821 42578',
   ].filter(Boolean).join('%0A');
 
   // Open WhatsApp on customer's own number (they save it as their receipt)
