@@ -1973,5 +1973,92 @@ window.onload = async () => {
   }
 };
 </script>
+
+<!-- ═══════════════════════════════════════
+     FIREBASE FCM — ADMIN PUSH NOTIFICATIONS
+═══════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js';
+
+const firebaseConfig = {
+  apiKey:            'YOUR_API_KEY',
+  authDomain:        'nansei-ddbf6.firebaseapp.com',
+  projectId:         'nansei-ddbf6',
+  storageBucket:     'nansei-ddbf6.appspot.com',
+  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+  appId:             'YOUR_APP_ID',
+};
+
+const app       = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/pages/firebase-messaging-sw.js')
+    .then(reg => console.log('SW registered:', reg.scope))
+    .catch(err => console.error('SW registration failed:', err));
+}
+
+// Request notification permission + get FCM token
+async function initFCM() {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      console.warn('Notification permission denied');
+      return;
+    }
+
+    const token = await getToken(messaging, {
+      vapidKey: 'YOUR_VAPID_KEY',  // Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+    });
+
+    if (token) {
+      console.log('FCM Token:', token);
+      // Subscribe this device to admin-orders topic via backend
+      const authToken = localStorage.getItem('nansai_token');
+      if (authToken) {
+        await fetch((window.API_BASE || 'http://localhost:5000/api') + '/orders/subscribe-fcm', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+          body:    JSON.stringify({ token }),
+        });
+        console.log('✅ Subscribed to admin-orders topic');
+      }
+    }
+  } catch (err) {
+    console.error('FCM init error:', err);
+  }
+}
+
+// Handle foreground push notifications
+onMessage(messaging, (payload) => {
+  console.log('📦 New order notification:', payload);
+  const { title, body } = payload.notification;
+
+  // Show toast in admin panel
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed; top:20px; right:20px; z-index:99999;
+    background:#0f2218; color:#fff;
+    padding:14px 20px; border-radius:12px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    font-family:Inter,sans-serif; font-size:14px;
+    border-left:4px solid #c9a84c;
+    max-width:320px; animation:slideIn .3s ease;
+  `;
+  toast.innerHTML = `<strong>🛒 ${title}</strong><br><span style="opacity:.8;font-size:12px;">${body}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 5000);
+
+  // Play notification sound
+  try { new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3').play(); } catch(e) {}
+});
+
+// Auto-init when admin is logged in
+const user = JSON.parse(localStorage.getItem('nansai_user') || 'null');
+if (user?.role === 'admin') initFCM();
+</script>
+
 </body>
 </html>

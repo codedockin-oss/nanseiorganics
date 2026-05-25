@@ -2676,6 +2676,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
 
 /* ════ REEL WIDGET DRAG ════ */
 (function(){
+  // Drag disabled on mobile
+  if(window.innerWidth <= 768) return;
   const el = document.getElementById('reel-widget');
   if (!el) return;
   let dragging = false, ox = 0, oy = 0;

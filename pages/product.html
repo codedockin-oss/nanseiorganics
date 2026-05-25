@@ -77,8 +77,23 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
 
 /* -- Gallery -- */
 .main-img-zone { cursor: zoom-in; }
-.main-img-zone:hover .main-product-img { transform: scale(1.04); }
-.main-product-img { transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+@keyframes mainImgFloat {
+  0%,100% { transform: translateY(0px) scale(1); }
+  40%     { transform: translateY(-12px) scale(1.012); }
+  70%     { transform: translateY(-5px) scale(1.006); }
+}
+@keyframes mainImgShadow {
+  0%,100% { filter: drop-shadow(0 8px 24px rgba(15,34,24,.12)); }
+  50%     { filter: drop-shadow(0 24px 48px rgba(15,34,24,.22)); }
+}
+.main-product-img {
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  animation: mainImgFloat 5s ease-in-out infinite, mainImgShadow 5s ease-in-out infinite;
+}
+.main-img-zone:hover .main-product-img {
+  animation-play-state: paused;
+  transform: scale(1.04);
+}
 
 /* -- Thumb active -- */
 .thumb-img.active { border-color: var(--forest) !important; box-shadow: 0 0 0 2px rgba(26,58,42,0.2); }
@@ -254,7 +269,9 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
   .max-w-7xl.px-4.py-3 { padding-top: .5rem !important; padding-bottom: .5rem !important; }
 
   /* ── MAIN LAYOUT — stack gallery above info ── */
-  .grid.grid-cols-1.md\:grid-cols-2 { gap: 0 !important; }
+  .grid.grid-cols-1.md\:grid-cols-2 { gap: 0 !important; display: block !important; }
+  #galleryCol { width: 100% !important; }
+  #infoCol { width: 100% !important; padding: .85rem !important; }
 
   /* ── GALLERY ── */
   #galleryCol { padding-top: 0; }
@@ -270,8 +287,8 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
 
   .main-img-zone {
     max-width: 100% !important;
-    aspect-ratio: unset !important;
-    height: min(72vw, 340px) !important;
+    aspect-ratio: 1 / 1 !important;
+    height: unset !important;
     border-radius: 18px !important;
   }
   .main-product-img { height: 100%; object-fit: cover; }
@@ -285,7 +302,8 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
   #thumbsRow button { width: 52px !important; height: 52px !important; border-radius: 10px !important; }
 
   /* ── INFO COLUMN ── */
-  #infoCol { gap: .85rem !important; padding-top: 1rem; }
+  #infoCol { gap: .85rem !important; padding-top: 1rem; width: 100% !important; box-sizing: border-box !important; }
+  #reviewsSection, #relatedSection, #blogSection { width: 100% !important; }
 
   /* title */
   #pTitle { font-size: 1.35rem !important; line-height: 1.25 !important; }
@@ -1008,7 +1026,7 @@ a .nansai-icon,
   <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
     <!-- Logo -->
     <a href="index.html" class="flex-shrink-0">
-      <img src="nansei organics.png" alt="Nansei Organics" style="height:45px;width:auto;"/>
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;"/>
     </a>
 
     <!-- Search bar -->
@@ -1547,7 +1565,7 @@ function millResetP(card) {
 <footer style="background:#111827;color:#d1d5db;">
   <div style="max-width:1400px;margin:0 auto;padding:3rem 1.75rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2.5rem;">
     <div>
-      <img src="nansei organics.png" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
+      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
       <p style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-bottom:1rem;">100% organic & high-quality agricultural products. Trusted by farmers and families.</p>
       <div style="display:flex;gap:.5rem;">
         <a href="#" style="width:32px;height:32px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9ca3af;text-decoration:none;font-size:.7rem;transition:background .2s;" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='rgba(255,255,255,.07)'">tw</a>

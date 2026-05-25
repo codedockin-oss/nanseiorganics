@@ -2,8 +2,10 @@ const express  = require('express');
 const crypto   = require('crypto');
 const jwt      = require('jsonwebtoken');
 const Razorpay = require('razorpay');
-const sendEmail = require('../utils/sendEmail');
-const { orderConfirmation, adminOrderNotification } = require('../utils/emailTemplates');
+const sendEmail          = require('../utils/sendEmail');
+const generateInvoicePDF = require('../utils/generatePDF');
+const { sendAdminPushNotification } = require('../utils/fcm');
+const { orderConfirmation } = require('../utils/emailTemplates');
 
 const router             = express.Router();
 const { protect, authorize } = require('../middleware/auth');
@@ -51,10 +53,10 @@ function escapeRegex(str) {
 }
 
 // ─────────────────────────────────────────────────────────
-//  ADMIN EMAIL HELPER
+//  ORDER NOTIFICATIONS HELPER
 // ─────────────────────────────────────────────────────────
-async function sendOrderEmails(order, user) {
-  // Customer confirmation
+async function sendOrderNotifications(order, user) {
+  // 1. Customer confirmation email
   try {
     const email = user?.email || order.shippingAddress?.email;
     if (email) {
@@ -68,19 +70,12 @@ async function sendOrderEmails(order, user) {
   } catch (err) {
     console.warn('⚠️  Customer confirmation email failed:', err.message);
   }
-  // Admin notification
+
+  // 2. Admin push notification (Firebase FCM)
   try {
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (adminEmail) {
-      await sendEmail({
-        email: adminEmail,
-        subject: `🛒 New Order #${order.orderNumber || order._id} — ₹${order.totalPrice?.toLocaleString('en-IN')}`,
-        html: adminOrderNotification(order),
-      });
-      console.log('✅ Admin order notification sent to', adminEmail);
-    }
+    await sendAdminPushNotification(order);
   } catch (err) {
-    console.warn('⚠️  Admin email notification failed:', err.message);
+    console.warn('⚠️  Admin push notification failed:', err.message);
   }
 }
 
@@ -161,7 +156,7 @@ router.post('/razorpay/verify', optionalAuth, async (req, res) => {
       // fetch user for email
       const User = require('../models/User');
       const userDoc = await User.findById(req.user.id).select('name email').lean();
-      sendOrderEmails(order, userDoc); // fire-and-forget
+      sendOrderNotifications(order, userDoc); // fire-and-forget
       return res.json({ success: true, verified: true, data: order });
     }
 
@@ -307,11 +302,54 @@ router.post('/', protect, async (req, res) => {
     await Cart.findOneAndDelete({ user: req.user.id });
     const User = require('../models/User');
     const userDoc = await User.findById(req.user.id).select('name email').lean();
-    sendOrderEmails(order, userDoc); // fire-and-forget
+    sendOrderNotifications(order, userDoc); // fire-and-forget
     res.status(201).json({ success: true, data: order });
   } catch (err) {
     console.error('[Orders] POST / error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+/** POST /api/orders/subscribe-fcm — subscribe admin device to FCM topic */
+router.post('/subscribe-fcm', protect, authorize('admin'), async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ success: false, message: 'FCM token required' });
+    const admin = require('firebase-admin');
+    await admin.messaging().subscribeToTopic([token], 'admin-orders');
+    console.log('✅ Admin device subscribed to admin-orders topic');
+    res.json({ success: true, message: 'Subscribed to admin-orders topic' });
+  } catch (err) {
+    console.error('[FCM] subscribe error:', err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+/** GET /api/orders/invoice/:orderNumber — download PDF invoice */
+router.get('/invoice/:orderNumber', protect, async (req, res) => {
+  try {
+    const order = await Order.findOne({ orderNumber: req.params.orderNumber })
+      .populate('user', 'name email')
+      .lean();
+    if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+
+    // Only the owner or admin can download
+    if (order.user?._id?.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const pdfBuffer = await generateInvoicePDF(order);
+    const filename  = `${order.invoiceNumber || order.orderNumber}.pdf`;
+
+    res.set({
+      'Content-Type':        'application/pdf',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Length':      pdfBuffer.length,
+    });
+    res.send(pdfBuffer);
+  } catch (err) {
+    console.error('[Orders] GET /invoice error:', err.message);
+    res.status(500).json({ success: false, message: 'Could not generate invoice' });
   }
 });
 

@@ -28,6 +28,11 @@ const orderSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
+  invoiceNumber: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
   items: [orderItemSchema],
   shippingAddress: {
     fullName: { type: String, required: true },
@@ -105,11 +110,13 @@ orderSchema.index({ user: 1, createdAt: -1 });          // my-orders
 orderSchema.index({ orderStatus: 1, createdAt: -1 });   // admin filter by status
 orderSchema.index({ createdAt: -1 });                   // admin list
 
-// Generate order number before saving
+// Generate order number and invoice number before saving
 orderSchema.pre('save', async function(next) {
   if (!this.orderNumber) {
+    const ts = Date.now();
     const count = await mongoose.model('Order').countDocuments();
-    this.orderNumber = `ORD${Date.now()}${String(count + 1).padStart(4, '0')}`;
+    this.orderNumber   = `ORD-${ts}`;
+    this.invoiceNumber = `INV-${ts}`;
   }
   next();
 });
