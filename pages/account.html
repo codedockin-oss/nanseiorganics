@@ -133,66 +133,125 @@
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  const skipTags = new Set(['SCRIPT','STYLE','TEXTAREA','OPTION']);
+  let applying = false;
+  let scheduled = false;
+
+  function hasMarker(value){
+    markerRe.lastIndex = 0;
+    return !!value && markerRe.test(value);
+  }
+
+  function cleanMarkers(value){
+    markerRe.lastIndex = 0;
+    return value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+  }
+
+  function iconNode(name){
+    const icon = document.createElement('i');
+    icon.setAttribute('data-lucide', name);
+    icon.setAttribute('aria-hidden', 'true');
+    icon.className = 'nansai-icon';
+    return icon;
+  }
+
+  function replaceTextNode(node){
+    if(!node || !hasMarker(node.nodeValue)) return;
+    const parentTag = node.parentElement?.tagName;
+    if(skipTags.has(parentTag)) return;
+
+    const text = node.nodeValue;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    markerRe.lastIndex = 0;
+    text.replace(markerRe, (match, name, offset) => {
+      if(offset > last) frag.append(document.createTextNode(text.slice(last, offset)));
+      frag.append(iconNode(name));
+      last = offset + match.length;
+    });
+    if(last < text.length) frag.append(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+
   function applyIcons(root){
     root = root || document.body;
-    if(!root) return;
+    if(!root || applying) return;
+    applying = true;
 
-    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
-      ['placeholder','title','aria-label','alt'].forEach(attr => {
-        const value = el.getAttribute(attr);
-        if(value && markerRe.test(value)){
-          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
-          markerRe.lastIndex = 0;
-        }
-      });
-    });
-
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode(node){
-        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
-        markerRe.lastIndex = 0;
-        const tag = node.parentElement?.tagName;
-        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
+    try {
+      const scope = root.nodeType === Node.TEXT_NODE ? root.parentElement : root;
+      if(scope?.querySelectorAll){
+        scope.querySelectorAll('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+          ['placeholder','title','aria-label','alt'].forEach(attr => {
+            const value = el.getAttribute(attr);
+            if(hasMarker(value)) el.setAttribute(attr, cleanMarkers(value));
+          });
+        });
       }
-    });
-    const nodes = [];
-    while(walker.nextNode()) nodes.push(walker.currentNode);
 
-    nodes.forEach(node => {
-      const frag = document.createDocumentFragment();
-      let last = 0;
-      node.nodeValue.replace(markerRe, (match, name, offset) => {
-        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
-        const icon = document.createElement('i');
-        icon.setAttribute('data-lucide', name);
-        icon.setAttribute('aria-hidden', 'true');
-        icon.className = 'nansai-icon';
-        frag.append(icon);
-        last = offset + match.length;
-      });
-      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
-      node.parentNode.replaceChild(frag, node);
-    });
+      if(root.nodeType === Node.TEXT_NODE){
+        replaceTextNode(root);
+      } else if(root.nodeType === Node.ELEMENT_NODE || root.nodeType === Node.DOCUMENT_NODE || root.nodeType === Node.DOCUMENT_FRAGMENT_NODE){
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node){
+            return hasMarker(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const nodes = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(replaceTextNode);
 
-    root.querySelectorAll?.('option').forEach(option => {
-      if(markerRe.test(option.textContent)){
-        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
-        markerRe.lastIndex = 0;
+        root.querySelectorAll?.('option').forEach(option => {
+          if(hasMarker(option.textContent)) option.textContent = cleanMarkers(option.textContent);
+        });
       }
-    });
 
-    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+      if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+    } finally {
+      applying = false;
+    }
+  }
+
+  function nodeHasMarker(node){
+    if(!node) return false;
+    if(node.nodeType === Node.TEXT_NODE) return hasMarker(node.nodeValue);
+    if(node.nodeType === Node.ELEMENT_NODE) return !skipTags.has(node.tagName) && hasMarker(node.textContent);
+    return false;
+  }
+
+  function scheduleApply(root){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyIcons(root || document.body);
+    });
   }
 
   window.nansaiApplyIcons = applyIcons;
   document.addEventListener('DOMContentLoaded', () => {
     applyIcons(document.body);
+    const observer = new MutationObserver(mutations => {
+      for(const mutation of mutations){
+        if(mutation.type === 'characterData' && nodeHasMarker(mutation.target)){
+          scheduleApply(mutation.target.parentElement || document.body);
+          return;
+        }
+        for(const node of mutation.addedNodes){
+          if(nodeHasMarker(node)){
+            scheduleApply(node.nodeType === Node.TEXT_NODE ? node.parentElement : node);
+            return;
+          }
+        }
+      }
+    });
+    observer.observe(document.body, { childList:true, characterData:true, subtree:true });
   });
 })();
 </script>
 <style>
-.nansai-icon {
+.nansai-icon,
+svg.nansai-icon {
   width: 1em;
   height: 1em;
   display: inline-block;
@@ -935,6 +994,8 @@ a .nansai-icon,
   JAVASCRIPT (unchanged logic)
 ══════════════════════════════ -->
 <script>
+function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
+
 const API=window.API_BASE||'http://localhost:5000/api';
 const getTok=()=>localStorage.getItem('nansai_token');
 const aH=()=>({'Content-Type':'application/json',...(getTok()?{Authorization:'Bearer '+getTok()}:{})});
@@ -1262,40 +1323,92 @@ function _addrClearErr(id){
   if(errEl)errEl.classList.add('hidden');
 }
 
-// ── PIN code → city/state auto-fill (India Post API) ──
+// ── PIN code → city/state auto-fill ──
+// Static PIN prefix → state map (works 100% offline)
+const PIN_STATE={
+  11:'Delhi',12:'Haryana',13:'Haryana',14:'Punjab',15:'Punjab',16:'Punjab',
+  17:'Himachal Pradesh',18:'Jammu & Kashmir',19:'Jammu & Kashmir',
+  20:'Uttar Pradesh',21:'Uttar Pradesh',22:'Uttar Pradesh',23:'Uttar Pradesh',
+  24:'Uttar Pradesh',25:'Uttar Pradesh',26:'Uttar Pradesh',27:'Uttar Pradesh',28:'Uttar Pradesh',
+  30:'Rajasthan',31:'Rajasthan',32:'Rajasthan',33:'Rajasthan',34:'Rajasthan',
+  36:'Gujarat',37:'Gujarat',38:'Gujarat',39:'Gujarat',
+  40:'Maharashtra',41:'Maharashtra',42:'Maharashtra',43:'Maharashtra',44:'Maharashtra',
+  45:'Madhya Pradesh',46:'Madhya Pradesh',47:'Madhya Pradesh',48:'Madhya Pradesh',
+  49:'Chhattisgarh',
+  50:'Telangana',51:'Telangana',52:'Telangana',53:'Andhra Pradesh',54:'Andhra Pradesh',
+  56:'Karnataka',57:'Karnataka',58:'Karnataka',59:'Karnataka',
+  60:'Tamil Nadu',61:'Tamil Nadu',62:'Tamil Nadu',63:'Tamil Nadu',64:'Tamil Nadu',
+  67:'Kerala',68:'Kerala',69:'Kerala',
+  70:'West Bengal',71:'West Bengal',72:'West Bengal',73:'West Bengal',74:'West Bengal',
+  75:'Odisha',76:'Odisha',77:'Odisha',
+  78:'Assam',79:'Assam',
+  80:'Bihar',81:'Bihar',82:'Jharkhand',83:'Jharkhand',84:'Bihar',85:'Bihar',
+  90:'Assam',91:'Manipur',92:'Meghalaya',93:'Nagaland',94:'Tripura',
+  95:'Sikkim',96:'Arunachal Pradesh',97:'Mizoram',
+};
+const PIN_STATE={11:'Delhi',12:'Haryana',13:'Haryana',14:'Punjab',15:'Punjab',16:'Punjab',17:'Himachal Pradesh',18:'Jammu & Kashmir',19:'Jammu & Kashmir',20:'Uttar Pradesh',21:'Uttar Pradesh',22:'Uttar Pradesh',23:'Uttar Pradesh',24:'Uttar Pradesh',25:'Uttar Pradesh',26:'Uttar Pradesh',27:'Uttar Pradesh',28:'Uttar Pradesh',30:'Rajasthan',31:'Rajasthan',32:'Rajasthan',33:'Rajasthan',34:'Rajasthan',36:'Gujarat',37:'Gujarat',38:'Gujarat',39:'Gujarat',40:'Maharashtra',41:'Maharashtra',42:'Maharashtra',43:'Maharashtra',44:'Maharashtra',45:'Madhya Pradesh',46:'Madhya Pradesh',47:'Madhya Pradesh',48:'Madhya Pradesh',49:'Chhattisgarh',50:'Telangana',51:'Telangana',52:'Telangana',53:'Andhra Pradesh',54:'Andhra Pradesh',56:'Karnataka',57:'Karnataka',58:'Karnataka',59:'Karnataka',60:'Tamil Nadu',61:'Tamil Nadu',62:'Tamil Nadu',63:'Tamil Nadu',64:'Tamil Nadu',67:'Kerala',68:'Kerala',69:'Kerala',70:'West Bengal',71:'West Bengal',72:'West Bengal',73:'West Bengal',74:'West Bengal',75:'Odisha',76:'Odisha',77:'Odisha',78:'Assam',79:'Assam',80:'Bihar',81:'Bihar',82:'Jharkhand',83:'Jharkhand',84:'Bihar',85:'Bihar',90:'Assam',91:'Manipur',92:'Meghalaya',93:'Nagaland',94:'Tripura',95:'Sikkim',96:'Arunachal Pradesh',97:'Mizoram'};
 let _pinTimer=null;
 function onPinInput(val){
-  const errEl=document.getElementById('aPincode-err');
+  const stateEl=document.getElementById('aState');
+  const cityEl=document.getElementById('aCity');
+  const spinner=document.getElementById('aPinSpinner');
+  if(val.length===0){if(stateEl){stateEl.value='';stateEl.classList.remove('inp-ok');}return;}
+  if(val.length<6){addrValidate('aPincode');return;}
+  if(!/^[1-9]\d{5}$/.test(val)){_addrShowErr('aPincode','Enter a valid 6-digit PIN code');return;}
+  // Instant static lookup
+  const state=PIN_STATE[parseInt(val.slice(0,2))]||'';
+  if(state&&stateEl){stateEl.value=state;stateEl.classList.add('inp-ok');_addrClearErr('aPincode');}
+  // Also try live API in background for city
+  clearTimeout(_pinTimer);
+  _pinTimer=setTimeout(async()=>{
+    try{
+      const ctrl=new AbortController();
+      setTimeout(()=>ctrl.abort(),4000);
+      const res=await fetch('https://api.postalpincode.in/pincode/'+val,{signal:ctrl.signal});
+      const data=await res.json();
+      if(data[0]?.Status==='Success'&&data[0].PostOffice?.length){
+        const po=data[0].PostOffice[0];
+        if(cityEl&&!cityEl.value){cityEl.value=po.District;addrValidate('aCity');}
+        if(stateEl){stateEl.value=po.State;stateEl.classList.add('inp-ok');}
+      }
+    }catch(e){}
+  },500);
+}
   const spinner=document.getElementById('aPinSpinner');
   const cityEl=document.getElementById('aCity');
   const stateEl=document.getElementById('aState');
+  if(val.length===0){if(stateEl){stateEl.value='';stateEl.classList.remove('inp-ok');}return;}
   if(val.length<6){addrValidate('aPincode');return;}
-  if(!/^[1-9]\d{5}$/.test(val)){
-    _addrShowErr('aPincode','Enter a valid 6-digit PIN code');
-    return;
-  }
+  if(!/^[1-9]\d{5}$/.test(val)){_addrShowErr('aPincode','Enter a valid 6-digit PIN code');return;}
   clearTimeout(_pinTimer);
   if(spinner)spinner.classList.remove('hidden');
   _pinTimer=setTimeout(async()=>{
+    // 1. Try live API with 4s timeout
     try{
-      const res=await fetch('https://api.postalpincode.in/pincode/'+val);
+      const ctrl=new AbortController();
+      const tid=setTimeout(()=>ctrl.abort(),4000);
+      const res=await fetch('https://api.postalpincode.in/pincode/'+val,{signal:ctrl.signal});
+      clearTimeout(tid);
       const data=await res.json();
-      if(data[0]?.Status==='Success'){
+      if(data[0]?.Status==='Success'&&data[0].PostOffice?.length){
         const po=data[0].PostOffice[0];
         if(cityEl){cityEl.value=po.District;addrValidate('aCity');}
         if(stateEl){stateEl.value=po.State;stateEl.classList.add('inp-ok');}
         _addrClearErr('aPincode');
-      } else {
-        _addrShowErr('aPincode','PIN code not found. Please check and re-enter.');
-        if(cityEl){cityEl.value='';cityEl.classList.remove('inp-ok','inp-error');}
-        if(stateEl){stateEl.value='';stateEl.classList.remove('inp-ok');}
+        if(spinner)spinner.classList.add('hidden');
+        return;
       }
-    }catch{
-      _addrClearErr('aPincode'); // offline — don't block
-    } finally{
-      if(spinner)spinner.classList.add('hidden');
+    }catch(e){ /* API unreachable — fall through to static */ }
+    // 2. Static fallback — always works
+    const prefix=parseInt(val.slice(0,2));
+    const state=PIN_STATE[prefix]||'';
+    if(state&&stateEl){
+      stateEl.value=state;
+      stateEl.classList.add('inp-ok');
+      _addrClearErr('aPincode');
     }
-  },600);
+    if(spinner)spinner.classList.add('hidden');
+  },300);
 }
 
 async function loadAddresses(){
@@ -1310,7 +1423,7 @@ function renderAddresses(){
   const wrap=document.getElementById('addrGrid');if(!wrap)return;
   const def=addrs.find(a=>a.isDefault);
   const tf=document.getElementById('tileFoot4');
-  if(tf)tf.textContent=def?def.name+', '+def.city+' '+def.pincode+' →':'Manage saved addresses →';
+  if(tf)tf.textContent=def?def.fullName+', '+def.city+' '+def.pincode+' →':'Manage saved addresses →';
   if(!addrs.length){
     wrap.innerHTML='<div class="col-span-full text-center py-8 text-text-light text-[0.85rem]">No saved addresses. Add one below.</div>';
     return;
@@ -1318,8 +1431,8 @@ function renderAddresses(){
   wrap.innerHTML=addrs.map(a=>`
     <div class="border-[1.5px] ${a.isDefault?'border-forest-light bg-forest-light/[0.025]':'border-forest-dark/10'} rounded-nansai px-4 py-[0.9rem] bg-white relative transition-all hover:border-forest-light/35 hover:shadow-nansai-md">
       ${a.isDefault?'<div class="absolute top-[0.65rem] right-3 text-[0.58rem] font-black bg-forest-light text-white px-[9px] py-[2px] rounded-full uppercase tracking-[0.05em]">Default</div>':''}
-      <div class="text-[0.86rem] font-bold text-text-dark mb-[0.35rem]">${a.name}</div>
-      <div class="text-[0.76rem] text-text-light leading-relaxed">${a.line1}${a.line2?'<br/>'+a.line2:''}<br/>${a.city}, ${a.state} ${a.pincode}<br/>India<br/>Phone: ${a.phone}</div>
+      <div class="text-[0.86rem] font-bold text-text-dark mb-[0.35rem]">${a.fullName}</div>
+      <div class="text-[0.76rem] text-text-light leading-relaxed">${a.addressLine1}${a.addressLine2?'<br/>'+a.addressLine2:''}<br/>${a.city}, ${a.state} ${a.pincode}<br/>India<br/>Phone: ${a.phone}</div>
       <div class="flex items-center gap-2 flex-wrap mt-[0.7rem]">
         <a class="text-[0.73rem] text-forest-light cursor-pointer font-semibold hover:text-gold-dark transition-colors" onclick="showAddrForm('${a._id}')">Edit</a>
         <span class="text-forest-dark/18 text-[0.73rem]">|</span>
@@ -1346,7 +1459,7 @@ function showAddrForm(id){
     const a=addrs.find(x=>x._id===id);
     if(a){
       const sv=(elId,v)=>{const el=document.getElementById(elId);if(el&&v){el.value=v;el.classList.add('inp-ok');}}
-      sv('aName',a.name);sv('aPhone',a.phone);sv('aLine1',a.line1);sv('aLine2',a.line2);
+      sv('aName',a.fullName);sv('aPhone',a.phone);sv('aLine1',a.addressLine1);sv('aLine2',a.addressLine2);
       sv('aCity',a.city);sv('aState',a.state);sv('aPincode',a.pincode);
       document.getElementById('aDefault').checked=!!a.isDefault;
       _addrType=a.addressType||'Home';
@@ -1381,10 +1494,10 @@ async function submitAddr(e){
     return;
   }
   const body={
-    name:document.getElementById('aName').value.trim(),
+    fullName:document.getElementById('aName').value.trim(),
     phone:document.getElementById('aPhone').value.trim(),
-    line1:document.getElementById('aLine1').value.trim(),
-    line2:document.getElementById('aLine2').value.trim(),
+    addressLine1:document.getElementById('aLine1').value.trim(),
+    addressLine2:document.getElementById('aLine2').value.trim(),
     city:document.getElementById('aCity').value.trim(),
     state:stateEl.value.trim(),
     pincode:document.getElementById('aPincode').value.trim(),
@@ -1493,7 +1606,7 @@ function renderWish(){
 
 function doSearch(){const q=(document.getElementById('navQ')?.value||document.getElementById('mobQ')?.value||'').trim();window.location.href='index.html'+(q?'?q='+encodeURIComponent(q):'');}
 function copyRef(){const el=document.getElementById('refInput');if(el)navigator.clipboard.writeText(el.value).then(()=>showToast('[[icon:gift]] Referral code copied!'));}
-function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
+function logout(){['nansai_token','nansai_user','admin_token','admin_user','nansai_admin_token'].forEach(k=>{localStorage.removeItem(k);sessionStorage.removeItem(k);});showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
 
 // Auth guard — redirect to login if not signed in
 (function(){
