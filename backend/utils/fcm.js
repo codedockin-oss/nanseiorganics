@@ -1,6 +1,5 @@
-// FCM removed — push notifications not in use
+// Push notifications disabled
 async function sendAdminPushNotification() {}
 async function sendCustomerPushNotification() {}
 async function subscribeAdminDevice() {}
-
 module.exports = { sendAdminPushNotification, sendCustomerPushNotification, subscribeAdminDevice };
