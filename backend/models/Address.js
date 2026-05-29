@@ -14,7 +14,12 @@ const addressSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, 'Please provide phone number'],
-    match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
+    match: [/^[6-9][0-9]{9}$/, 'Please provide a valid 10-digit Indian mobile number']
+  },
+  alternateMobileNumber: {
+    type: String,
+    default: '',
+    match: [/^$|^[6-9][0-9]{9}$/, 'Please provide a valid alternate mobile number']
   },
   addressLine1: {
     type: String,

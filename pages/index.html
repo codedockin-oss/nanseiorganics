@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -894,66 +894,125 @@ video.slide-bg { transform:none!important; transition:none!important; }
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  const skipTags = new Set(['SCRIPT','STYLE','TEXTAREA','OPTION']);
+  let applying = false;
+  let scheduled = false;
+
+  function hasMarker(value){
+    markerRe.lastIndex = 0;
+    return !!value && markerRe.test(value);
+  }
+
+  function cleanMarkers(value){
+    markerRe.lastIndex = 0;
+    return value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+  }
+
+  function iconNode(name){
+    const icon = document.createElement('i');
+    icon.setAttribute('data-lucide', name);
+    icon.setAttribute('aria-hidden', 'true');
+    icon.className = 'nansai-icon';
+    return icon;
+  }
+
+  function replaceTextNode(node){
+    if(!node || !hasMarker(node.nodeValue)) return;
+    const parentTag = node.parentElement?.tagName;
+    if(skipTags.has(parentTag)) return;
+
+    const text = node.nodeValue;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    markerRe.lastIndex = 0;
+    text.replace(markerRe, (match, name, offset) => {
+      if(offset > last) frag.append(document.createTextNode(text.slice(last, offset)));
+      frag.append(iconNode(name));
+      last = offset + match.length;
+    });
+    if(last < text.length) frag.append(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+
   function applyIcons(root){
     root = root || document.body;
-    if(!root) return;
+    if(!root || applying) return;
+    applying = true;
 
-    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
-      ['placeholder','title','aria-label','alt'].forEach(attr => {
-        const value = el.getAttribute(attr);
-        if(value && markerRe.test(value)){
-          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
-          markerRe.lastIndex = 0;
-        }
-      });
-    });
-
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode(node){
-        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
-        markerRe.lastIndex = 0;
-        const tag = node.parentElement?.tagName;
-        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
+    try {
+      const scope = root.nodeType === Node.TEXT_NODE ? root.parentElement : root;
+      if(scope?.querySelectorAll){
+        scope.querySelectorAll('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+          ['placeholder','title','aria-label','alt'].forEach(attr => {
+            const value = el.getAttribute(attr);
+            if(hasMarker(value)) el.setAttribute(attr, cleanMarkers(value));
+          });
+        });
       }
-    });
-    const nodes = [];
-    while(walker.nextNode()) nodes.push(walker.currentNode);
 
-    nodes.forEach(node => {
-      const frag = document.createDocumentFragment();
-      let last = 0;
-      node.nodeValue.replace(markerRe, (match, name, offset) => {
-        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
-        const icon = document.createElement('i');
-        icon.setAttribute('data-lucide', name);
-        icon.setAttribute('aria-hidden', 'true');
-        icon.className = 'nansai-icon';
-        frag.append(icon);
-        last = offset + match.length;
-      });
-      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
-      node.parentNode.replaceChild(frag, node);
-    });
+      if(root.nodeType === Node.TEXT_NODE){
+        replaceTextNode(root);
+      } else if(root.nodeType === Node.ELEMENT_NODE || root.nodeType === Node.DOCUMENT_NODE || root.nodeType === Node.DOCUMENT_FRAGMENT_NODE){
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node){
+            return hasMarker(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const nodes = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(replaceTextNode);
 
-    root.querySelectorAll?.('option').forEach(option => {
-      if(markerRe.test(option.textContent)){
-        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
-        markerRe.lastIndex = 0;
+        root.querySelectorAll?.('option').forEach(option => {
+          if(hasMarker(option.textContent)) option.textContent = cleanMarkers(option.textContent);
+        });
       }
-    });
 
-    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+      if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+    } finally {
+      applying = false;
+    }
+  }
+
+  function nodeHasMarker(node){
+    if(!node) return false;
+    if(node.nodeType === Node.TEXT_NODE) return hasMarker(node.nodeValue);
+    if(node.nodeType === Node.ELEMENT_NODE) return !skipTags.has(node.tagName) && hasMarker(node.textContent);
+    return false;
+  }
+
+  function scheduleApply(root){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyIcons(root || document.body);
+    });
   }
 
   window.nansaiApplyIcons = applyIcons;
   document.addEventListener('DOMContentLoaded', () => {
     applyIcons(document.body);
+    const observer = new MutationObserver(mutations => {
+      for(const mutation of mutations){
+        if(mutation.type === 'characterData' && nodeHasMarker(mutation.target)){
+          scheduleApply(mutation.target.parentElement || document.body);
+          return;
+        }
+        for(const node of mutation.addedNodes){
+          if(nodeHasMarker(node)){
+            scheduleApply(node.nodeType === Node.TEXT_NODE ? node.parentElement : node);
+            return;
+          }
+        }
+      }
+    });
+    observer.observe(document.body, { childList:true, characterData:true, subtree:true });
   });
 })();
 </script>
 <style>
-.nansai-icon {
+.nansai-icon,
+svg.nansai-icon {
   width: 1em;
   height: 1em;
   display: inline-block;
@@ -1633,10 +1692,11 @@ function millResetIdx(card) {
       <h3 class="font-bold text-white text-base mb-5">Customer Service</h3>
       <ul class="space-y-3 text-sm">
         <li><a href="#" class="text-gray-400 hover:text-green-400 transition">FAQ</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Returns Policy</a></li>
+        <li><a href="refund-policy.html" class="text-gray-400 hover:text-green-400 transition">Returns &amp; Refunds</a></li>
         <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Shipping Info</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Track Order</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Certifications</a></li>
+        <li><a href="checkoutmyorderpage.html?page=orders" class="text-gray-400 hover:text-green-400 transition">Track Order</a></li>
+        <li><a href="privacy-policy.html" class="text-gray-400 hover:text-green-400 transition">Privacy Policy</a></li>
+        <li><a href="terms-and-conditions.html" class="text-gray-400 hover:text-green-400 transition">Terms &amp; Conditions</a></li>
       </ul>
     </div>
     <div>
@@ -1648,7 +1708,16 @@ function millResetIdx(card) {
       </ul>
     </div>
   </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved.</div>
+  <div class="border-t border-gray-800 py-5 px-4">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <span class="text-gray-500 text-xs">&copy; 2026 NANSEI Organics. All Rights Reserved.</span>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <a href="privacy-policy.html" class="text-gray-500 hover:text-green-400 text-xs transition">Privacy Policy</a>
+        <a href="terms-and-conditions.html" class="text-gray-500 hover:text-green-400 text-xs transition">Terms &amp; Conditions</a>
+        <a href="refund-policy.html" class="text-gray-500 hover:text-green-400 text-xs transition">Refund Policy</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <!-- ═══════════════════════════════════════
@@ -1731,7 +1800,10 @@ function saveCart(){
   syncCounters();
   // Sync to backend if logged in
   if(typeof CartAPI!=='undefined'&&localStorage.getItem('nansai_token')){
-    cart.forEach(i=>CartAPI.add(String(i.id),i.qty||1,i.price).catch(()=>{}));
+    cart.forEach(i=>{
+      if(CartAPI.set) CartAPI.set(String(i.id),i.qty||1).catch(()=>{});
+      else CartAPI.add(String(i.id),i.qty||1,i.price).catch(()=>{});
+    });
   }
 }
 function syncCounters(){
@@ -1748,15 +1820,17 @@ function prodCardHTML(p,i){
   const d=disc(p);
   const isW=wishlist.includes(p.id);
   const badgeEl=p.badge==='hot'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:flame]] HOT</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">🔥 HOT</span>`
     :p.badge==='new'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">[[icon:sparkles]] NEW</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">✦ NEW</span>`
     :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
   const fc=floatClasses[i%floatClasses.length];
   return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
     <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
       ${badgeEl}
-      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);border:none;cursor:pointer;z-index:10;font-size:.85rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${isW?'[[icon:heart]]':'[[icon:heart]]'}</button>
+      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);border:none;cursor:pointer;z-index:10;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="${isW?'#ef4444':'none'}" stroke="${isW?'#ef4444':'#9ca3af'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:fill .2s,stroke .2s;"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+      </button>
       <img src="${p.image}" alt="${p.name}" loading="lazy" class="prod-img"/>
     </div>
     <div class="prod-info" style="overflow:visible;">
@@ -1779,13 +1853,13 @@ function prodCardHTML(p,i){
 }
 
 const sectionMeta={
-  new:        {icon:'[[icon:sparkles]]',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
-  bestseller: {icon:'[[icon:flame]]',label:'Natures Favorites',     sub:'Most loved by thousands of families',           accent:'#d97706'},
-  rice:       {icon:'[[icon:wheat]]',label:'Rice Varieties',   sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
-  flowers:    {icon:'[[icon:flower-2]]',label:'Dried Flowers',    sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
-  beverages:  {icon:'[[icon:glass-water]]',label:'Beverages',        sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
-  flour:      {icon:'[[icon:package]]',label:'Flour Varieties',  sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
-  other:      {icon:'[[icon:leaf]]',label:'Other Products',   sub:'More goodness from nature',                     accent:'#16a34a'},
+  new:        {icon:'✦',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
+  bestseller: {icon:'🔥',label:'Natures Favorites',    sub:'Most loved by thousands of families',           accent:'#d97706'},
+  rice:       {icon:'🌾',label:'Rice Varieties',        sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
+  flowers:    {icon:'🌸',label:'Dried Flowers',         sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
+  beverages:  {icon:'🥤',label:'Beverages',             sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
+  flour:      {icon:'📦',label:'Flour Varieties',       sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
+  other:      {icon:'🌿',label:'Other Products',        sub:'More goodness from nature',                     accent:'#16a34a'},
 };
 const SECTION_ORDER=['new','bestseller','rice','flowers','beverages','flour','other'];
 
@@ -1974,15 +2048,18 @@ function addDirectToCart(id, btn) {
 }
 function toggleWish(id,btn){
   const idx=wishlist.indexOf(id);
+  const svg=btn?.querySelector('svg');
   if(idx>-1){
     wishlist.splice(idx,1);
-    if(btn){btn.style.color='';btn.textContent='[[icon:heart]]';}
-    showToast('[[icon:heart-crack]] Removed from wishlist');
+    if(svg){ svg.setAttribute('fill','none'); svg.setAttribute('stroke','#9ca3af'); }
+    if(btn){ btn.style.transform='scale(1.3)'; setTimeout(()=>btn.style.transform='scale(1)',200); }
+    showToast('Removed from wishlist');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.remove(String(id)).catch(()=>{});
   } else {
     wishlist.push(id);
-    if(btn){btn.style.color='#ef4444';btn.textContent='[[icon:heart]]';}
-    showToast('[[icon:heart]] Added to wishlist!');
+    if(svg){ svg.setAttribute('fill','#ef4444'); svg.setAttribute('stroke','#ef4444'); }
+    if(btn){ btn.style.transform='scale(1.4)'; setTimeout(()=>btn.style.transform='scale(1)',250); }
+    showToast('❤️ Added to wishlist!');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(String(id)).catch(()=>{});
   }
   localStorage.setItem('wishlist',JSON.stringify(wishlist));syncCounters();

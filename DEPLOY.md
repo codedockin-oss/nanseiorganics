@@ -21,7 +21,7 @@ agri store/
    ```
    Paste the output into Render's env vars (not in `.env` committed to Git).
 
-2. **Rotate Twilio credentials** — go to [console.twilio.com](https://console.twilio.com) → regenerate Auth Token.
+2. **Configure MSG91 OTP** — create/approve your MSG91 OTP sender/template and keep the auth key in Render only.
 
 3. **Confirm `.env` is gitignored** — run `git status` and make sure `backend/.env` does NOT appear.
 
@@ -57,18 +57,37 @@ git push -u origin main
 | `FRONTEND_URL` | your Netlify URL (fill in after Step 3) |
 | `RAZORPAY_KEY_ID` | from Razorpay dashboard |
 | `RAZORPAY_KEY_SECRET` | from Razorpay dashboard |
-| `TWILIO_ACCOUNT_SID` | from Twilio console |
-| `TWILIO_AUTH_TOKEN` | new rotated token |
-| `TWILIO_PHONE_NUMBER` | your Twilio number |
+| `MSG91_AUTH_KEY` | from MSG91 dashboard |
+| `MSG91_SENDER_ID` | approved MSG91 sender ID, optional fallback is `NANSEI` |
+| `MSG91_OTP_MESSAGE` | approved OTP message text using `##OTP##`, optional |
 | `EMAIL_HOST` | `smtp.gmail.com` |
 | `EMAIL_PORT` | `587` |
 | `EMAIL_USER` | your Gmail address |
 | `EMAIL_PASSWORD` | 16-char Gmail App Password |
 | `EMAIL_FROM` | `Nansai Organics <your-gmail@gmail.com>` |
 | `ADMIN_EMAIL` | `admin@nansaiorganics.com` |
+| `SHIPROCKET_EMAIL` | Shiprocket API login email |
+| `SHIPROCKET_PASSWORD` | Shiprocket API password |
+| `SHIPROCKET_PICKUP_LOCATION` | Pickup name exactly as saved in Shiprocket |
+| `SHIPROCKET_CHANNEL_ID` | Optional Shiprocket channel id |
+| `SHIPROCKET_WEBHOOK_SECRET` | Secret value configured as Shiprocket webhook `x-api-key` |
+| `SHIPROCKET_DEFAULT_LENGTH_CM` | Optional default parcel length, e.g. `15` |
+| `SHIPROCKET_DEFAULT_BREADTH_CM` | Optional default parcel breadth, e.g. `15` |
+| `SHIPROCKET_DEFAULT_HEIGHT_CM` | Optional default parcel height, e.g. `10` |
+| `SHIPROCKET_DEFAULT_WEIGHT_KG` | Optional default parcel weight, e.g. `0.5` |
 
 7. Click **Deploy** — your API will be live at `https://nansei-backend.onrender.com`
 8. Test it: `https://nansei-backend.onrender.com/api/health`
+
+### Shiprocket webhook setup
+
+In Shiprocket dashboard, add this tracking webhook URL:
+
+```text
+https://<your-render-backend>/api/webhooks/shiprocket
+```
+
+Set the webhook security token/header to the same value as `SHIPROCKET_WEBHOOK_SECRET`. The backend accepts Shiprocket tracking payloads by AWB or shipment id and automatically updates MongoDB shipping status, courier, AWB, tracking URL, live tracking text, and estimated delivery date.
 
 ---
 
@@ -130,8 +149,18 @@ npm run dev            # starts on port 5000
 
 - [ ] `.env` is NOT committed to Git
 - [ ] `JWT_SECRET` is a fresh 64-char hex
-- [ ] Twilio Auth Token has been rotated
+- [ ] MSG91 auth key and OTP sender/template are configured in Render
 - [ ] MongoDB Atlas Network Access allows `0.0.0.0/0`
 - [ ] `FRONTEND_URL` is set to your actual Netlify domain on Render
 - [ ] Gmail App Password is used (not your real Gmail password)
 - [ ] Razorpay keys are live keys (not test) for production
+- [ ] Shiprocket webhook is configured with `SHIPROCKET_WEBHOOK_SECRET`
+- [ ] Admins use only `Create Shipment`, `Track Shipment`, and the Shiprocket dashboard for labels/packing slips
+
+## Cleanup Notes
+
+Manual invoice/QR invoice helpers are no longer part of the automated shipping flow. Files already removed or safe to keep out of future commits include:
+
+- `backend/utils/generatePDF.js`
+- root duplicate HTML pages when `pages/` is the Netlify publish directory: `index.html`, `account.html`, `admin-panel.html`, `checkoutmyorderpage.html`, `blog.html`
+- one-off repair scripts such as `fix_invoice*.py`, `fix_shiprocket_modal.py`, and `fix_timeline.py` after you confirm they are not needed for local recovery

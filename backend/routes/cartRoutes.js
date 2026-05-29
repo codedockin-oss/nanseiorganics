@@ -24,7 +24,7 @@ router.post('/add', protect, async (req, res) => {
     const Product = require('../models/Product');
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
-    if (product.stock < 1) return res.status(400).json({ success: false, message: 'Product is out of stock' });
+    if (product.stock < qty) return res.status(400).json({ success: false, message: `Only ${product.stock} item(s) available` });
 
     let cart = await Cart.findOne({ user: req.user.id });
     if (!cart) {
@@ -56,6 +56,41 @@ router.delete('/remove/:productId', protect, async (req, res) => {
     res.json({ success: true, data: cart });
   } catch (error) {
     console.error('[Cart] DELETE /remove error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+router.put('/set/:productId', protect, async (req, res) => {
+  try {
+    const { quantity } = req.body;
+    const qty = parseInt(quantity, 10);
+    if (isNaN(qty) || qty < 0) {
+      return res.status(400).json({ success: false, message: 'Quantity must be zero or more' });
+    }
+
+    const Product = require('../models/Product');
+    const product = await Product.findById(req.params.productId);
+    if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
+    if (qty > product.stock) return res.status(400).json({ success: false, message: `Only ${product.stock} item(s) available` });
+
+    let cart = await Cart.findOne({ user: req.user.id });
+    if (!cart) cart = await Cart.create({ user: req.user.id, items: [] });
+
+    const itemIndex = cart.items.findIndex(item => item.product.toString() === req.params.productId);
+    if (qty === 0) {
+      cart.items = cart.items.filter(item => item.product.toString() !== req.params.productId);
+    } else if (itemIndex > -1) {
+      cart.items[itemIndex].quantity = qty;
+      cart.items[itemIndex].price = product.price;
+    } else {
+      cart.items.push({ product: req.params.productId, quantity: qty, price: product.price });
+    }
+
+    await cart.save();
+    await cart.populate('items.product');
+    res.json({ success: true, data: cart });
+  } catch (error) {
+    console.error('[Cart] PUT /set error:', error.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });

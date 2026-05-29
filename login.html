@@ -251,6 +251,19 @@ a .nansai-icon,
         <button id="resend-btn" class="resend-btn" onclick="doResend()" disabled>Resend OTP</button>
       </div>
       <button class="btn-primary" id="btn-verify" onclick="doVerify()" style="margin-top:20px;">Verify & Continue</button>
+      <div id="admin-mode" style="display:none">
+        <div class="step-title">Admin Login</div>
+        <div class="step-sub">Enter your admin password to continue</div>
+        <div class="phone-display">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Signing in as <strong>Admin</strong></span>
+        </div>
+        <label class="fl">Password</label>
+        <div class="inp-wrap">
+          <input id="admin-pass" class="inp" type="password" placeholder="Enter admin password" autocomplete="current-password"/>
+        </div>
+        <button class="btn-primary" id="btn-admin-login" onclick="doAdminLogin()">Sign In</button>
+      </div>
     </div>
 
     <!-- STEP 4: Success -->
@@ -279,8 +292,10 @@ a .nansai-icon,
 
 <script>
 const API = window.API_BASE || 'http://localhost:5000/api';
+const ADMIN_PHONE = '6382142578';
 let _timer = null;
 let _isNewUser = false;
+let _isAdmin = false;
 
 function toast(msg, dur) {
   dur = dur || 2600;
@@ -317,7 +332,22 @@ async function doCheckPhone() {
       return;
     }
 
-    if (data.exists === true) {
+    if (phone === ADMIN_PHONE) {
+      _isNewUser = false;
+      _isAdmin = true;
+      if (_timer) clearInterval(_timer);
+      document.getElementById('admin-mode').style.display = 'block';
+      document.getElementById('admin-pass').value = '';
+      document.getElementById('otp-phone-display').closest('.phone-display').style.display = 'none';
+      document.getElementById('otp-box').closest('.inp-wrap').style.display = 'none';
+      document.getElementById('timer-display').closest('.timer-row').style.display = 'none';
+      document.getElementById('btn-verify').style.display = 'none';
+      document.getElementById('otp-back-label').textContent = 'Change number';
+      document.getElementById('otp-back-btn').onclick = function(){ goStep(1); };
+      goStep(3);
+      setTimeout(function(){ document.getElementById('admin-pass').focus(); }, 80);
+
+    } else if (data.exists === true) {
       /* ── Existing user: send OTP now ── */
       _isNewUser = false;
       const otpRes  = await fetch(API + '/auth/login-otp-send', {
@@ -382,6 +412,35 @@ async function doRegisterOtpSend() {
     toast(err.message || 'Network error. Please try again.');
   } finally {
     btn.textContent = 'Send OTP'; btn.disabled = false;
+  }
+}
+
+/* ── Admin password login ── */
+async function doAdminLogin() {
+  const phone = document.getElementById('inp-phone').value.trim();
+  const pass  = document.getElementById('admin-pass').value;
+  if (!pass) { toast('Enter your admin password'); return; }
+  const btn = document.getElementById('btn-admin-login');
+  btn.textContent = 'Signing in...'; btn.disabled = true;
+  try {
+    const res  = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Invalid password');
+    if (_timer) clearInterval(_timer);
+    localStorage.setItem('nansai_token', data.token);
+    localStorage.setItem('nansai_user', JSON.stringify(data.user));
+    localStorage.setItem('admin_token', data.token);
+    localStorage.setItem('admin_user', JSON.stringify({ name: data.user.name, email: data.user.email }));
+    showSuccess(data.user);
+  } catch (err) {
+    const inp = document.getElementById('admin-pass');
+    inp.classList.add('err'); setTimeout(function(){ inp.classList.remove('err'); }, 400);
+    toast(err.message);
+    btn.textContent = 'Sign In'; btn.disabled = false;
   }
 }
 
@@ -474,7 +533,12 @@ async function doResend() {
   try {
     const endpoint = _isNewUser ? '/auth/register-otp-send' : '/auth/login-otp-send';
     const body = _isNewUser
-      ? { phone: phone, name: document.getElementById('inp-name').value.trim(), email: document.getElementById('inp-email').value.trim() }
+      ? {
+          phone: phone,
+          name: document.getElementById('inp-name').value.trim(),
+          email: document.getElementById('inp-email').value.trim(),
+          password: document.getElementById('inp-pass').value
+        }
       : { phone: phone };
     const res  = await fetch(API + endpoint, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -496,6 +560,7 @@ document.getElementById('otp-box').addEventListener('input', function() {
 /* Enter key support */
 document.getElementById('inp-phone').addEventListener('keydown', function(e){ if (e.key === 'Enter') doCheckPhone(); });
 document.getElementById('inp-pass') .addEventListener('keydown', function(e){ if (e.key === 'Enter') doRegisterOtpSend(); });
+document.getElementById('admin-pass').addEventListener('keydown', function(e){ if (e.key === 'Enter') doAdminLogin(); });
 
 /* Skip if already logged in */
 document.addEventListener('DOMContentLoaded', async function() {

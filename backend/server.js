@@ -7,7 +7,15 @@ const compression = require('compression');
 const morgan      = require('morgan');
 const rateLimit   = require('express-rate-limit');
 const jwt         = require('jsonwebtoken');
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '.env') });
+
+// ── Required env guard ──
+const _REQUIRED_ENV = ['JWT_SECRET', 'MONGODB_URI', 'ADMIN_PASSWORD', 'ADMIN_PHONE'];
+const _missingEnv = _REQUIRED_ENV.filter(k => !process.env[k]);
+if (_missingEnv.length) {
+  console.error('❌ Missing required environment variables:', _missingEnv.join(', '));
+  process.exit(1);
+}
 
 dns.setDefaultResultOrder('ipv4first');
 dns.setServers(['1.1.1.1', '8.8.8.8']);
@@ -25,8 +33,10 @@ const comboRoutes    = require('./routes/comboRoutes');
 const addressRoutes  = require('./routes/addressRoutes');
 const couponRoutes   = require('./routes/couponRoutes');
 const paymentRoutes  = require('./routes/paymentRoutes');
-const blogRoutes     = require('./routes/blogRoutes');
-const newsRoutes     = require('./routes/newsRoutes');
+const blogRoutes        = require('./routes/blogRoutes');
+const newsRoutes        = require('./routes/newsRoutes');
+const shiprocketRoutes  = require('./routes/shiprocketRoutes');
+const webhookRoutes     = require('./routes/webhookRoutes');
 
 const User         = require('./models/User');
 const errorHandler = require('./middleware/errorHandler');
@@ -70,13 +80,13 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5000',
   'http://127.0.0.1:5000',
   'http://localhost:5173',
-  'null',           // file:// protocol sends origin: null
+  ...(process.env.NODE_ENV === 'production' ? [] : ['null']),
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);          // same-origin / curl
-    if (origin === 'null') return cb(null, true); // file://
+    if (origin === 'null' && process.env.NODE_ENV !== 'production') return cb(null, true); // file://
     if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
     if (process.env.NODE_ENV !== 'production') return cb(null, true);
     cb(new Error('Not allowed by CORS'));
@@ -146,8 +156,10 @@ app.use('/api/users',     adminLimiter,   userRoutes);
 app.use('/api/addresses', writeLimiter,   addressRoutes);
 app.use('/api/coupons',   publicLimiter,  couponRoutes);
 app.use('/api/payment',   paymentLimiter, paymentRoutes);
-app.use('/api/blogs',     publicLimiter,  blogRoutes);
-app.use('/api/news',      publicLimiter,  newsRoutes);
+app.use('/api/blogs',       publicLimiter,  blogRoutes);
+app.use('/api/news',        publicLimiter,  newsRoutes);
+app.use('/api/shiprocket',  adminLimiter,   shiprocketRoutes);
+app.use('/api/webhooks',                   webhookRoutes);
 
 // ── 404 for unknown API routes ──
 app.use('/api/*', (_req, res) => {

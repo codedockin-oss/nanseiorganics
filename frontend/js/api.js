@@ -112,6 +112,10 @@ const CartAPI = {
     return request('DELETE', `/cart/remove/${productId}`);
   },
 
+  async set(productId, quantity = 1) {
+    return request('PUT', `/cart/set/${productId}`, { quantity });
+  },
+
   async clear() {
     return request('DELETE', '/cart/clear');
   }

@@ -234,4 +234,29 @@ function otpEmail(otp, purpose = 'verify your account') {
   return base(content);
 }
 
-module.exports = { orderConfirmation, adminOrderNotification, otpEmail };
+function orderStatusUpdate(order) {
+  const addr = order.shippingAddress || {};
+  const status = order.orderStatus || 'Processing';
+  const tracking = order.awbCode
+    ? `<p style="margin:10px 0 0;font-size:14px;color:#4a6a4a;">AWB: <strong>${order.awbCode}</strong>${order.courierName ? ` via ${order.courierName}` : ''}</p>`
+    : '';
+
+  return base(`
+    <p style="margin:0 0 6px;font-size:22px;font-weight:700;color:#0f2218;">Order status updated</p>
+    <p style="margin:0 0 22px;font-size:15px;color:#4a6a4a;line-height:1.6;">
+      Hi ${addr.fullName || 'there'}, your order <strong>#${order.orderNumber || order._id}</strong> is now <strong>${status}</strong>.
+    </p>
+    <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:16px 20px;margin-bottom:22px;">
+      <p style="margin:0;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a8c5c;">Current Status</p>
+      <p style="margin:6px 0 0;font-size:20px;font-weight:900;color:#0f2218;">${status}</p>
+      ${tracking}
+    </div>
+    <div style="text-align:center;">
+      <a href="${BRAND.url}/pages/account.html" style="display:inline-block;background:${BRAND.color};color:#fff;font-size:14px;font-weight:700;padding:14px 36px;border-radius:10px;text-decoration:none;">
+        View Order
+      </a>
+    </div>
+  `);
+}
+
+module.exports = { orderConfirmation, adminOrderNotification, otpEmail, orderStatusUpdate };

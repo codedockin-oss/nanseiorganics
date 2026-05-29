@@ -5,6 +5,9 @@ const sendSms = require('../utils/sendSms');
 const sendEmail = require('../utils/sendEmail');
 const { otpEmail } = require('../utils/emailTemplates');
 
+const ADMIN_PHONE = process.env.ADMIN_PHONE;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
 function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
@@ -77,10 +80,33 @@ exports.login = async (req, res, next) => {
     }
 
     const query = email ? { email: email.toLowerCase() } : { phone };
-    const user = await User.findOne(query).select('+password');
+    let user = await User.findOne(query).select('+password');
+
+    const isConfiguredAdminLogin = ADMIN_PHONE && ADMIN_PASSWORD && phone === ADMIN_PHONE && password === ADMIN_PASSWORD;
+    if (isConfiguredAdminLogin) {
+      if (!user) {
+        user = new User({
+          name: 'Admin',
+          email: process.env.ADMIN_EMAIL || `admin-${ADMIN_PHONE}@nanseiorg.in`,
+          phone: ADMIN_PHONE,
+          role: 'admin',
+          emailVerified: true,
+          phoneVerified: true,
+        });
+        user.password = ADMIN_PASSWORD;
+        await user.save({ validateBeforeSave: false });
+      } else if (user.role !== 'admin' || !user.phoneVerified) {
+        user.role = 'admin';
+        user.phoneVerified = true;
+        await user.save({ validateBeforeSave: false });
+      }
+    }
+
     if (!user) return res.status(401).json({ success: false, message: 'Invalid credentials' });
 
-    const isMatch = await user.comparePassword(password);
+    const isMatch = isConfiguredAdminLogin
+      ? true
+      : await user.comparePassword(password);
     if (!isMatch) return res.status(401).json({ success: false, message: 'Invalid credentials' });
 
     await User.findByIdAndUpdate(user._id, {
@@ -224,6 +250,10 @@ exports.registerOtpSend = async (req, res, next) => {
       await sendSms(phone, otp);
     } catch (e) {
       console.error('[SMS] registerOtpSend failed:', e.message);
+      if (process.env.NODE_ENV === 'production') {
+        pendingRegistrations.delete(phone);
+        return res.status(502).json({ success: false, message: 'Could not send OTP. Please try again shortly.' });
+      }
     }
     res.status(200).json({ success: true, message: `OTP sent to +91${phone}` });
   } catch (error) { next(error); }
@@ -259,6 +289,14 @@ exports.loginOtpSend = async (req, res, next) => {
       await sendSms(phone, otp);
     } catch (e) {
       console.error('[SMS] loginOtpSend failed:', e.message);
+      if (process.env.NODE_ENV === 'production') {
+        user.phoneOtp = undefined;
+        user.phoneOtpExpire = undefined;
+        user.otpAttempts = 0;
+        user.otpAttemptsExpire = undefined;
+        await user.save({ validateBeforeSave: false });
+        return res.status(502).json({ success: false, message: 'Could not send OTP. Please try again shortly.' });
+      }
     }
     res.status(200).json({ success: true, message: `OTP sent to +91${phone}` });
   } catch (error) { next(error); }

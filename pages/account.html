@@ -987,14 +987,23 @@ a .nansai-icon,
       </ul>
     </div>
   </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+  <div class="border-t border-gray-800 py-5 px-4">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <span class="text-gray-500 text-xs">&copy; 2026 NANSEI Organics. All Rights Reserved.</span>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <a href="privacy-policy.html" class="text-gray-500 hover:text-green-400 text-xs transition">Privacy Policy</a>
+        <a href="terms-and-conditions.html" class="text-gray-500 hover:text-green-400 text-xs transition">Terms &amp; Conditions</a>
+        <a href="refund-policy.html" class="text-gray-500 hover:text-green-400 text-xs transition">Refund Policy</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <!-- ══════════════════════════════
   JAVASCRIPT (unchanged logic)
 ══════════════════════════════ -->
 <script>
-function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
+function logout(){['nansai_token','nansai_user','admin_token','admin_user','nansai_admin_token'].forEach(k=>{localStorage.removeItem(k);sessionStorage.removeItem(k);});showToast('Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
 
 const API=window.API_BASE||'http://localhost:5000/api';
 const getTok=()=>localStorage.getItem('nansai_token');
@@ -1121,13 +1130,15 @@ function mapStatus(s) {
   if (!s) return 'processing';
   const m = s.toLowerCase();
   if (m === 'delivered') return 'delivered';
+  if (m === 'out for delivery') return 'out_for_delivery';
   if (m === 'shipped')   return 'shipped';
+  if (m === 'confirmed') return 'confirmed';
   if (m === 'cancelled' || m === 'refunded') return 'cancelled';
   return 'processing';
 }
 // Map status → tracking step index (1-5)
 function mapStep(s) {
-  const steps = { pending:1, processing:2, shipped:3, delivered:5, cancelled:0 };
+  const steps = { pending:1, processing:1, confirmed:2, shipped:3, out_for_delivery:4, delivered:5, cancelled:0 };
   return steps[mapStatus(s)] ?? 1;
 }
 // Format date nicely
@@ -1145,7 +1156,8 @@ async function loadOrders() {
       _id:     o._id,
       placed:  fmtDate(o.createdAt),
       date:    fmtDate(o.deliveredAt || o.createdAt),
-      status:  mapStatus(o.orderStatus),
+      status:  mapStatus(o.shippingStatus || o.orderStatus),
+      shippingStatus: o.shippingStatus || o.orderStatus || 'Pending',
       items:   (o.items || []).map(it => ({
         name:  it.name || it.product?.name || 'Product',
         qty:   it.quantity,
@@ -1154,20 +1166,27 @@ async function loadOrders() {
       })),
       total:    o.totalPrice,
       addr:     o.shippingAddress
-        ? [o.shippingAddress.fullName, o.shippingAddress.addressLine1, o.shippingAddress.city].filter(Boolean).join(', ')
+        ? [o.shippingAddress.fullName, o.shippingAddress.addressLine1, o.shippingAddress.addressLine2, o.shippingAddress.city, o.shippingAddress.state, o.shippingAddress.pincode, o.shippingAddress.country].filter(Boolean).join(', ')
         : '—',
-      tracking: o.trackingNumber || '—',
-      step:     mapStep(o.orderStatus)
+      mobile:   o.shippingAddress?.mobileNumber || o.shippingAddress?.phone || '',
+      courier:  o.courierName || '',
+      awb:      o.awbCode || '',
+      trackingUrl: o.trackingUrl || '',
+      eta:      o.estimatedDeliveryDate ? fmtDate(o.estimatedDeliveryDate) : (o.estimatedDelivery ? fmtDate(o.estimatedDelivery) : ''),
+      tracking: o.awbCode || '-',
+      step:     mapStep(o.shippingStatus || o.orderStatus)
     }));
   } catch { ORDERS = []; }
   // Update dashboard tile
   const tf = document.getElementById('tileFoot1');
-  if (tf) tf.textContent = 'View all ' + ORDERS.length + ' order' + (ORDERS.length !== 1 ? 's' : '') + ' →';
+  if (tf) tf.textContent = 'View all ' + ORDERS.length + ' order' + (ORDERS.length !== 1 ? 's' : '') + ' +';
   renderOrders();
 }
 const SC={
   delivered:{label:'Delivered',badge:'bg-green-50 text-green-800 border border-green-200',dot:'bg-green-700'},
   shipped:{label:'Shipped',badge:'bg-blue-50 text-blue-800 border border-blue-200',dot:'bg-blue-600'},
+  out_for_delivery:{label:'Out For Delivery',badge:'bg-orange-50 text-orange-800 border border-orange-200',dot:'bg-orange-600'},
+  confirmed:{label:'Confirmed',badge:'bg-blue-50 text-blue-800 border border-blue-200',dot:'bg-blue-600'},
   processing:{label:'Processing',badge:'bg-amber-50 text-amber-800 border border-amber-200',dot:'bg-amber-500'},
   cancelled:{label:'Cancelled',badge:'bg-red-50 text-red-700 border border-red-200',dot:'bg-red-500'},
 };
@@ -1182,6 +1201,22 @@ function trackHTML(step){
       +'<div class="text-[0.57rem] font-semibold mt-1.5 text-center leading-tight '+(done?'text-text-mid font-bold':active?'text-forest-light font-black':'text-text-light')+'">'+s+'</div>'
       +'</div>';
   }).join('')+'</div>';
+}
+
+function shippingMessage(status){
+  return {
+    processing: 'Waiting for shipment confirmation.',
+    confirmed: 'Shipment confirmed and preparing for dispatch.',
+    shipped: 'Your order has been shipped.',
+    out_for_delivery: 'Your order is out for delivery.',
+    delivered: 'Order delivered successfully.',
+    cancelled: 'Order has been cancelled.'
+  }[status] || 'Waiting for shipment confirmation.';
+}
+
+function trackShipment(url){
+  if(url) window.open(url, '_blank', 'noopener');
+  else showToast('[[icon:truck]] Tracking link will appear after AWB generation');
 }
 
 function orderCardHTML(o){
@@ -1210,19 +1245,20 @@ function orderCardHTML(o){
       <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="inline-flex items-center gap-1 text-[0.68rem] font-bold px-[10px] py-[3px] rounded-full ${s.badge}"><span class="w-[5px] h-[5px] rounded-full ${s.dot} inline-block flex-shrink-0"></span>${s.label}</span>
-          ${o.status==='shipped'?`<span class="text-[0.72rem] text-text-light">Tracking: <strong class="text-forest-light">${o.tracking}</strong></span>`:''}
+          ${o.awb?`<span class="text-[0.72rem] text-text-light">AWB: <strong class="text-forest-light">${o.awb}</strong>${o.courier ? ' via ' + o.courier : ''}</span>`:''}
           ${o.status==='delivered'?`<span class="text-[0.72rem] text-green-700 font-semibold">Delivered on ${o.date}</span>`:''}
           ${o.status==='processing'?`<span class="text-[0.72rem] text-text-light">Estimated delivery in 3–5 days</span>`:''}
         </div>
         <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="openDetail('${o.id}')">View order details</button>
       </div>
+      <p class="text-[0.76rem] text-text-mid font-semibold mb-2">${shippingMessage(o.status)}</p>
       ${o.status!=='cancelled'?trackHTML(o.step):''}
       ${items}
     </div>
     <div class="border-t border-forest-dark/[0.07] px-4 py-[0.65rem] flex gap-[0.4rem] flex-wrap bg-cream/35">
       ${o.status==='delivered'?`<button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('Return/refund request submitted for ${o.id}')">Return items</button>`:''}
       ${o.status==='processing'?`<button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-red-600 border-[1.5px] border-red-200/60 rounded-nansai-sm cursor-pointer hover:border-red-500 hover:bg-red-50 transition-all" onclick="showToast('Cancel request submitted for ${o.id}')">Cancel order</button>`:''}
-      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:receipt-text]] Invoice for ${o.id} downloading...')">Download invoice</button>
+      <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="trackShipment('${o.trackingUrl || ''}')">Track Shipment</button>
       <button class="px-[0.85rem] py-[0.32rem] text-[0.73rem] font-bold bg-white text-text-mid border-[1.5px] border-forest-dark/20 rounded-nansai-sm cursor-pointer hover:border-forest-light hover:text-forest-dark transition-all" onclick="showToast('[[icon:phone]] Connecting to support...')">Get help</button>
     </div>
   </div>`;
@@ -1260,13 +1296,16 @@ function openDetail(id){
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-[0.85rem] mt-4">
       <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai">
         <div class="px-[1.15rem] py-[0.8rem] border-b border-forest-dark/[0.07] bg-bg/50"><h2 class="font-serif text-[1.1rem] font-bold text-forest-dark">Delivery address</h2></div>
-        <div class="px-4 py-[0.9rem] text-[0.81rem] text-text-dark leading-[1.75]">${o.addr.split(',').join('<br/>')}<br/>India</div>
+        <div class="px-4 py-[0.9rem] text-[0.81rem] text-text-dark leading-[1.75]">${o.addr.split(',').join('<br/>')}<br/>Mobile: ${o.mobile || '-'}</div>
       </div>
       <div class="bg-white border border-forest-dark/[0.09] rounded-nansai overflow-hidden shadow-nansai">
         <div class="px-[1.15rem] py-[0.8rem] border-b border-forest-dark/[0.07] bg-bg/50"><h2 class="font-serif text-[1.1rem] font-bold text-forest-dark">Order summary</h2></div>
         <div class="px-4 py-[0.9rem]">
           ${o.items.map(it=>`<div class="flex justify-between text-[0.8rem] text-text-dark py-[0.28rem] border-b border-forest-dark/[0.06]"><span>${it.name} × ${it.qty}</span><span>₹${(it.price*it.qty).toLocaleString()}</span></div>`).join('')}
           <div class="flex justify-between text-[0.78rem] text-text-light py-[0.3rem]"><span>Delivery</span><span class="text-green-700 font-bold">FREE</span></div>
+          <div class="flex justify-between text-[0.78rem] text-text-light py-[0.3rem]"><span>Courier</span><span>${o.courier || '-'}</span></div>
+          <div class="flex justify-between text-[0.78rem] text-text-light py-[0.3rem]"><span>AWB</span><span>${o.awb || '-'}</span></div>
+          <div class="flex justify-between text-[0.78rem] text-text-light py-[0.3rem]"><span>Estimated delivery</span><span>${o.eta || '-'}</span></div>
           <div class="flex justify-between text-[0.9rem] font-black text-forest-dark py-[0.38rem] border-t-2 border-forest-dark/12 mt-0.5"><span>Order total</span><span>₹${o.total.toLocaleString()}</span></div>
         </div>
       </div>
@@ -1346,7 +1385,6 @@ const PIN_STATE={
   90:'Assam',91:'Manipur',92:'Meghalaya',93:'Nagaland',94:'Tripura',
   95:'Sikkim',96:'Arunachal Pradesh',97:'Mizoram',
 };
-const PIN_STATE={11:'Delhi',12:'Haryana',13:'Haryana',14:'Punjab',15:'Punjab',16:'Punjab',17:'Himachal Pradesh',18:'Jammu & Kashmir',19:'Jammu & Kashmir',20:'Uttar Pradesh',21:'Uttar Pradesh',22:'Uttar Pradesh',23:'Uttar Pradesh',24:'Uttar Pradesh',25:'Uttar Pradesh',26:'Uttar Pradesh',27:'Uttar Pradesh',28:'Uttar Pradesh',30:'Rajasthan',31:'Rajasthan',32:'Rajasthan',33:'Rajasthan',34:'Rajasthan',36:'Gujarat',37:'Gujarat',38:'Gujarat',39:'Gujarat',40:'Maharashtra',41:'Maharashtra',42:'Maharashtra',43:'Maharashtra',44:'Maharashtra',45:'Madhya Pradesh',46:'Madhya Pradesh',47:'Madhya Pradesh',48:'Madhya Pradesh',49:'Chhattisgarh',50:'Telangana',51:'Telangana',52:'Telangana',53:'Andhra Pradesh',54:'Andhra Pradesh',56:'Karnataka',57:'Karnataka',58:'Karnataka',59:'Karnataka',60:'Tamil Nadu',61:'Tamil Nadu',62:'Tamil Nadu',63:'Tamil Nadu',64:'Tamil Nadu',67:'Kerala',68:'Kerala',69:'Kerala',70:'West Bengal',71:'West Bengal',72:'West Bengal',73:'West Bengal',74:'West Bengal',75:'Odisha',76:'Odisha',77:'Odisha',78:'Assam',79:'Assam',80:'Bihar',81:'Bihar',82:'Jharkhand',83:'Jharkhand',84:'Bihar',85:'Bihar',90:'Assam',91:'Manipur',92:'Meghalaya',93:'Nagaland',94:'Tripura',95:'Sikkim',96:'Arunachal Pradesh',97:'Mizoram'};
 let _pinTimer=null;
 function onPinInput(val){
   const stateEl=document.getElementById('aState');
@@ -1373,42 +1411,6 @@ function onPinInput(val){
       }
     }catch(e){}
   },500);
-}
-  const spinner=document.getElementById('aPinSpinner');
-  const cityEl=document.getElementById('aCity');
-  const stateEl=document.getElementById('aState');
-  if(val.length===0){if(stateEl){stateEl.value='';stateEl.classList.remove('inp-ok');}return;}
-  if(val.length<6){addrValidate('aPincode');return;}
-  if(!/^[1-9]\d{5}$/.test(val)){_addrShowErr('aPincode','Enter a valid 6-digit PIN code');return;}
-  clearTimeout(_pinTimer);
-  if(spinner)spinner.classList.remove('hidden');
-  _pinTimer=setTimeout(async()=>{
-    // 1. Try live API with 4s timeout
-    try{
-      const ctrl=new AbortController();
-      const tid=setTimeout(()=>ctrl.abort(),4000);
-      const res=await fetch('https://api.postalpincode.in/pincode/'+val,{signal:ctrl.signal});
-      clearTimeout(tid);
-      const data=await res.json();
-      if(data[0]?.Status==='Success'&&data[0].PostOffice?.length){
-        const po=data[0].PostOffice[0];
-        if(cityEl){cityEl.value=po.District;addrValidate('aCity');}
-        if(stateEl){stateEl.value=po.State;stateEl.classList.add('inp-ok');}
-        _addrClearErr('aPincode');
-        if(spinner)spinner.classList.add('hidden');
-        return;
-      }
-    }catch(e){ /* API unreachable — fall through to static */ }
-    // 2. Static fallback — always works
-    const prefix=parseInt(val.slice(0,2));
-    const state=PIN_STATE[prefix]||'';
-    if(state&&stateEl){
-      stateEl.value=state;
-      stateEl.classList.add('inp-ok');
-      _addrClearErr('aPincode');
-    }
-    if(spinner)spinner.classList.add('hidden');
-  },300);
 }
 
 async function loadAddresses(){
@@ -1606,8 +1608,6 @@ function renderWish(){
 
 function doSearch(){const q=(document.getElementById('navQ')?.value||document.getElementById('mobQ')?.value||'').trim();window.location.href='index.html'+(q?'?q='+encodeURIComponent(q):'');}
 function copyRef(){const el=document.getElementById('refInput');if(el)navigator.clipboard.writeText(el.value).then(()=>showToast('[[icon:gift]] Referral code copied!'));}
-function logout(){['nansai_token','nansai_user','admin_token','admin_user','nansai_admin_token'].forEach(k=>{localStorage.removeItem(k);sessionStorage.removeItem(k);});showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
-
 // Auth guard — redirect to login if not signed in
 (function(){
   if(!localStorage.getItem('nansai_token')){

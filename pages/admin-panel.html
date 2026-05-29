@@ -24,7 +24,7 @@
     --c-sidebar-active-text: #2563EB;
   }
   * { font-family: 'DM Sans', sans-serif; box-sizing: border-box; }
-  body { background: #F8FAFC; margin: 0; }
+  body { background: #F8FAFC; margin: 0; color:#0F172A; }
   .mono { font-family: 'DM Mono', monospace; }
 
   /* Sidebar */
@@ -42,21 +42,44 @@
   .badge-pending  { background: #FEF9C3; color: #854D0E; }
   .badge-confirmed{ background: #DBEAFE; color: #1E40AF; }
   .badge-packed   { background: #F3E8FF; color: #6B21A8; }
-  .badge-shipped  { background: #FFEDD5; color: #9A3412; }
+  .badge-shipped  { background: #F3E8FF; color: #6B21A8; }
   .badge-delivered{ background: #DCFCE7; color: #166534; }
   .badge-cancelled{ background: #FEE2E2; color: #991B1B; }
+  .badge-ss-pending   { background: #FEF9C3; color: #854D0E; }
+  .badge-ss-confirmed { background: #DBEAFE; color: #1E40AF; }
+  .badge-ss-shipped   { background: #F3E8FF; color: #6B21A8; }
+  .badge-ss-out-for-delivery { background: #FFEDD5; color: #C2410C; }
+  .badge-ss-delivered { background: #DCFCE7; color: #166534; }
+  .badge-ss-cancelled { background: #FEE2E2; color: #991B1B; }
   .badge-paid     { background: #DCFCE7; color: #166534; }
   .badge-unpaid   { background: #FEE2E2; color: #991B1B; }
   .badge-cod      { background: #FEF9C3; color: #854D0E; }
   
   /* Cards */
-  .stat-card { background: #fff; border-radius: 12px; border: 1px solid #E2E8F0; padding: 20px; }
+  .stat-card { background: #fff; border-radius: 12px; border: 1px solid #E2E8F0; padding: 20px; box-shadow:0 1px 2px rgba(15,23,42,.04); }
+  .metric-card { background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:18px; box-shadow:0 1px 2px rgba(15,23,42,.04); transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .metric-card:hover { transform:translateY(-2px); box-shadow:0 14px 32px rgba(15,23,42,.08); border-color:#CBD5E1; }
+  .metric-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .metric-label { font-size:11px; font-weight:800; color:#64748B; text-transform:uppercase; letter-spacing:.07em; }
+  .metric-value { font-size:26px; line-height:1.1; font-weight:800; color:#0F172A; letter-spacing:0; margin:8px 0 0; }
+  .panel-card { background:#fff; border:1px solid #E2E8F0; border-radius:14px; box-shadow:0 1px 2px rgba(15,23,42,.04); }
+  .panel-header { padding:18px 20px; border-bottom:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .panel-title { font-size:15px; font-weight:800; color:#0F172A; margin:0; }
   
   /* Table */
-  .data-table { width: 100%; border-collapse: collapse; }
-  .data-table th { background: #F8FAFC; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748B; padding: 10px 14px; text-align: left; border-bottom: 1px solid #E2E8F0; }
-  .data-table td { padding: 12px 14px; font-size: 13.5px; color: #334155; border-bottom: 1px solid #F1F5F9; vertical-align: middle; }
+  .data-table { width: 100%; border-collapse: separate; border-spacing:0; }
+  .data-table th { background: #F8FAFC; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #64748B; padding: 12px 14px; text-align: left; border-bottom: 1px solid #E2E8F0; white-space:nowrap; }
+  .data-table thead.sticky-head th { position:sticky; top:0; z-index:2; }
+  .data-table td { padding: 14px; font-size: 13.5px; color: #334155; border-bottom: 1px solid #F1F5F9; vertical-align: middle; }
   .data-table tr:hover td { background: #FAFBFF; }
+  .table-scroll { overflow:auto; max-height:68vh; }
+  .toolbar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .orders-mobile-list { display:none; }
+  .tracking-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-items:start; margin-top:10px; }
+  .tracking-step { position:relative; text-align:center; font-size:10px; font-weight:700; color:#94A3B8; }
+  .tracking-dot { width:22px; height:22px; border-radius:999px; margin:0 auto 6px; display:flex; align-items:center; justify-content:center; background:#F1F5F9; color:#94A3B8; border:2px solid #E2E8F0; transition:all .25s ease; }
+  .tracking-step.done, .tracking-step.active { color:#2563EB; }
+  .tracking-step.done .tracking-dot, .tracking-step.active .tracking-dot { background:#2563EB; border-color:#2563EB; color:#fff; box-shadow:0 0 0 4px rgba(37,99,235,.10); }
   
   /* Forms */
   .form-input { width: 100%; padding: 9px 12px; border: 1.5px solid #E2E8F0; border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.15s; background: #fff; color: #0F172A; }
@@ -74,6 +97,7 @@
   .btn-sm { padding: 5px 10px; font-size: 12px; }
   .btn-ghost { background: transparent; color: #64748B; padding: 6px 8px; }
   .btn-ghost:hover { background: #F1F5F9; color: #0F172A; }
+  .btn[disabled] { opacity:.55; cursor:not-allowed; box-shadow:none; transform:none; }
   
   /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
@@ -121,6 +145,13 @@
     .modal-box { padding:18px; }
     #page-dashboard > div:first-child { grid-template-columns:1fr 1fr !important; gap:10px !important; }
     #page-dashboard > div:nth-child(2) { grid-template-columns:1fr !important; }
+  }
+  @media (max-width: 920px) {
+    .orders-table-wrap { display:none; }
+    .orders-mobile-list { display:grid; gap:12px; }
+    .toolbar .form-input { width:100% !important; }
+    .toolbar { display:grid; grid-template-columns:1fr 1fr; }
+    .toolbar #order-search { grid-column:1 / -1; }
   }
   @media (max-width:480px) {
     #page-dashboard > div:first-child { grid-template-columns:1fr !important; }
@@ -318,7 +349,15 @@ a .nansai-icon,
 
       <!-- ===== DASHBOARD PAGE ===== -->
       <div id="page-dashboard" class="page active">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:24px;">
+          <div class="metric-card"><div style="display:flex;justify-content:space-between;gap:12px;"><div><div class="metric-label">Total Orders</div><p class="metric-value" id="stat-orders-new">0</p></div><div class="metric-icon" style="background:#EFF6FF;color:#2563EB;">[[icon:shopping-bag]]</div></div></div>
+          <div class="metric-card"><div style="display:flex;justify-content:space-between;gap:12px;"><div><div class="metric-label">Pending Orders</div><p class="metric-value" id="stat-pending-new">0</p></div><div class="metric-icon" style="background:#FEF9C3;color:#854D0E;">[[icon:clock-3]]</div></div></div>
+          <div class="metric-card"><div style="display:flex;justify-content:space-between;gap:12px;"><div><div class="metric-label">Shipped Orders</div><p class="metric-value" id="stat-shipped">0</p></div><div class="metric-icon" style="background:#F3E8FF;color:#6B21A8;">[[icon:truck]]</div></div></div>
+          <div class="metric-card"><div style="display:flex;justify-content:space-between;gap:12px;"><div><div class="metric-label">Delivered Orders</div><p class="metric-value" id="stat-delivered">0</p></div><div class="metric-icon" style="background:#DCFCE7;color:#166534;">[[icon:badge-check]]</div></div></div>
+          <div class="metric-card"><div style="display:flex;justify-content:space-between;gap:12px;"><div><div class="metric-label">Total Revenue</div><p class="metric-value" id="stat-sales-new">₹0</p></div><div class="metric-icon" style="background:#ECFEFF;color:#0E7490;">[[icon:indian-rupee]]</div></div></div>
+          <div class="metric-card"><div style="display:flex;justify-content:space-between;gap:12px;"><div><div class="metric-label">Total Customers</div><p class="metric-value" id="stat-customers-new">0</p></div><div class="metric-icon" style="background:#F0FDFA;color:#0F766E;">[[icon:users]]</div></div></div>
+        </div>
+        <div style="display:none;">
           <div class="stat-card">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
               <span style="font-size:12px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:0.04em;">Total Sales</span>
@@ -428,23 +467,53 @@ a .nansai-icon,
 
       <!-- ===== ORDERS PAGE ===== -->
       <div id="page-orders" class="page">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-          <input class="form-input" style="width:220px;font-size:13px;" placeholder="Search orders..." id="order-search" oninput="renderOrders()">
-          <select class="form-input" style="width:160px;font-size:13px;" id="order-filter" onchange="renderOrders()">
-            <option value="">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="packed">Packed</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-          </select>
+        <div class="panel-card" style="margin-bottom:12px;">
+          <div class="panel-header" style="padding:12px 16px;">
+            <div><h2 class="panel-title">Orders</h2></div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <input class="form-input" style="width:200px;font-size:12px;" placeholder="Search order, customer, mobile..." id="order-search" oninput="setOrderPage(1);renderOrders()">
+              <select class="form-input" style="width:140px;font-size:12px;" id="order-filter" onchange="setOrderPage(1);renderOrders()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="shipped">Shipped</option>
+                <option value="out for delivery">Out For Delivery</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <select class="form-input" style="width:120px;font-size:12px;" id="order-sort" onchange="setOrderPage(1);renderOrders()">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="high">High Amount</option>
+                <option value="low">Low Amount</option>
+              </select>
+              <select class="form-input" style="width:90px;font-size:12px;" id="order-page-size" onchange="setOrderPage(1);renderOrders()">
+                <option value="10">10/page</option>
+                <option value="25">25/page</option>
+                <option value="50">50/page</option>
+              </select>
+              <button class="btn btn-secondary btn-sm" onclick="renderOrders(true)" title="Refresh">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="stat-card" style="padding:0;overflow:hidden;">
-          <div style="overflow-x:auto;">
+        <div class="panel-card orders-table-wrap" style="overflow:hidden;">
+          <div class="table-scroll">
             <table class="data-table">
-              <thead><tr><th>Order ID</th><th>Customer</th><th>Products</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead class="sticky-head"><tr>
+                <th>Order ID</th><th>Customer</th><th>Payment</th><th>Shipping</th><th>Amount</th><th>Date</th><th>Actions</th>
+              </tr></thead>
               <tbody id="orders-body"></tbody>
             </table>
+          </div>
+        </div>
+        <div id="orders-mobile-list" class="orders-mobile-list"></div>
+        <div style="padding:10px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <span id="orders-page-info" style="font-size:12px;color:#64748B;">Showing 0 orders</span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" id="orders-prev" onclick="changeOrderPage(-1)">← Prev</button>
+            <button class="btn btn-secondary btn-sm" id="orders-next" onclick="changeOrderPage(1)">Next →</button>
           </div>
         </div>
       </div>
@@ -598,7 +667,7 @@ a .nansai-icon,
   <div class="modal-box" style="width:580px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="news-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Post News</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeNewsModal()">[[icon:x]]</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeNewsModal()"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <input type="hidden" id="news-id">
     <div style="display:grid;gap:14px;">
@@ -649,7 +718,7 @@ a .nansai-icon,
 <!-- News Preview Modal -->
 <div id="news-preview-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeNewsPreview()">
   <div class="modal-box" style="width:680px;">
-    <button class="btn btn-ghost btn-sm" style="position:absolute;top:12px;right:12px;" onclick="closeNewsPreview()">[[icon:x]]</button>
+    <button class="btn btn-ghost btn-sm" style="position:absolute;top:12px;right:12px;" onclick="closeNewsPreview()"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <img id="np-hero" src="" style="width:100%;height:220px;object-fit:cover;border-radius:10px 10px 0 0;display:block;"/>
     <div style="padding:1.5rem;">
       <div id="np-meta" style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;"></div>
@@ -663,7 +732,7 @@ a .nansai-icon,
   <div class="modal-box" style="width:600px;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="product-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Add Product</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeProductModal()">[[icon:x]]</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeProductModal()"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <input type="hidden" id="product-id">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -779,43 +848,39 @@ a .nansai-icon,
   <div class="modal-box" style="width:600px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 id="order-modal-title" style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Order Details</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeOrderModal()">[[icon:x]]</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeOrderModal()"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div id="order-modal-content"></div>
   </div>
 </div>
 
-<!-- Ship Order Modal -->
-<div id="ship-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeShipModal()">
-  <div class="modal-box" style="width:420px;">
+
+<!-- Mark Shipped Modal -->
+<div id="ship-track-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeShipTrackModal()">
+  <div class="modal-box" style="width:440px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Ship Order</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeShipModal()">[[icon:x]]</button>
+      <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Mark Shipped — <span id="ship-track-order-id" style="color:#2563EB;"></span></h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeShipTrackModal()"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <input type="hidden" id="ship-order-id">
-    <div style="margin-bottom:14px;">
-      <label class="form-label">Select Courier</label>
-      <select class="form-input" id="ship-courier">
-        <option value="Delhivery">Delhivery</option>
-        <option value="Blue Dart">Blue Dart</option>
-        <option value="DTDC">DTDC</option>
-        <option value="Ekart">Ekart</option>
-        <option value="Amazon Logistics">Amazon Logistics</option>
-      </select>
-    </div>
-    <div style="margin-bottom:20px;">
-      <label class="form-label">Tracking ID</label>
-      <div style="display:flex;gap:8px;">
-        <input class="form-input" id="ship-tracking" placeholder="DL1234567890IN" style="flex:1;">
-        <button class="btn btn-secondary btn-sm" onclick="generateTracking()" style="white-space:nowrap;padding:8px 12px;">Auto-Generate</button>
+    <input type="hidden" id="ship-track-mongo-id">
+    <p style="font-size:12px;color:#64748B;margin-bottom:16px;">Paste the tracking details from Shiprocket dashboard (optional but recommended).</p>
+    <div style="display:grid;gap:12px;">
+      <div>
+        <label class="form-label">AWB Number</label>
+        <input class="form-input" id="ship-track-awb" placeholder="e.g. 1234567890"/>
+      </div>
+      <div>
+        <label class="form-label">Courier Name</label>
+        <input class="form-input" id="ship-track-courier" placeholder="e.g. Delhivery, Blue Dart"/>
+      </div>
+      <div>
+        <label class="form-label">Tracking URL</label>
+        <input class="form-input" id="ship-track-url" placeholder="https://shiprocket.co/tracking/..."/>
       </div>
     </div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;">
-      <button class="btn btn-secondary" onclick="closeShipModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="confirmShip()">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Mark Shipped
-      </button>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeShipTrackModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmMarkShipped()">&#128666; Confirm Shipped</button>
     </div>
   </div>
 </div>
@@ -825,7 +890,7 @@ a .nansai-icon,
   <div class="modal-box" style="width:580px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-size:16px;font-weight:600;color:#0F172A;margin:0;">Customer Profile</h2>
-      <button class="btn btn-ghost btn-sm" onclick="closeCustomerModal()">[[icon:x]]</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeCustomerModal()"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div id="customer-modal-content"></div>
   </div>
@@ -839,6 +904,8 @@ const Store = {
   products: [],
   orders: [],
   customers: [],
+  orderPage: 1,
+  orderLoadingId: null,
   nextProductId: 1,
   nextOrderId: 1001,
   nextCustomerId: 1,
@@ -850,9 +917,12 @@ const Store = {
 const API = {
   base: window.API_BASE || 'http://localhost:5000/api',
   async get(endpoint) {
-    const r = await fetch(this.base + endpoint, { headers: { Authorization: `Bearer ${getToken()}` } });
-    if (r.status === 401) { doLogout(); return { success: false }; }
-    return r.json();
+    try {
+      const r = await fetch(this.base + endpoint, { headers: { Authorization: `Bearer ${getToken()}` } });
+      if (r.status === 401) { doLogout(); return { success: false }; }
+      if (!r.ok) { const e = await r.json().catch(() => ({})); return { success: false, message: e.message || `HTTP ${r.status}` }; }
+      return r.json();
+    } catch(err) { console.error("[API] GET", endpoint, err.message); return { success: false, message: err.message }; }
   },
   async post(endpoint, data) {
     const r = await fetch(this.base + endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }, body: JSON.stringify(data) });
@@ -893,22 +963,29 @@ async function loadData() {
     }));
   }
 
+  if (!orderRes.success) console.warn('[Admin] Orders load failed:', orderRes.message);
   if (orderRes.success) {
     Store.orders = (orderRes.data || []).map(o => ({
       ...o,
       id:            o.orderNumber || o._id,
       _id:           o._id,
       status:        normalizeStatus(o.orderStatus),
+      shippingStatus: (o.shippingStatus || 'Pending').toLowerCase(),
       total:         o.totalPrice || 0,
       payment:       o.isPaid ? 'paid' : (o.paymentMethod === 'COD' ? 'cod' : 'unpaid'),
       customerName:  o.user?.name  || 'Guest',
       customerEmail: o.user?.email || '',
+      mobileNumber:  o.shippingAddress?.mobileNumber || o.shippingAddress?.phone || o.user?.phone || '',
       customerId:    o.user?._id   || o.user || '',
+      addressObject:  o.shippingAddress || {},
       address:       o.shippingAddress
-        ? [o.shippingAddress.addressLine1, o.shippingAddress.city, o.shippingAddress.pincode].filter(Boolean).join(', ')
+        ? [o.shippingAddress.addressLine1, o.shippingAddress.addressLine2, o.shippingAddress.city, o.shippingAddress.state, o.shippingAddress.pincode, o.shippingAddress.country].filter(Boolean).join(', ')
         : '',
-      courier:   o.courierService  || '',
-      tracking:  o.trackingNumber  || '',
+      courier:   o.courierName  || '',
+      tracking:  o.awbCode  || '',
+      trackingUrl: o.trackingUrl || '',
+      eta: o.estimatedDeliveryDate || o.estimatedDelivery || '',
+      currentTrackingStatus: o.currentTrackingStatus || '',
       products:  (o.items || []).map(i => ({
         name:  i.name  || i.product?.name  || 'Product',
         qty:   i.quantity || 1,
@@ -985,14 +1062,14 @@ async function initApp() {
 // BLOGS
 // ============================================================
 const BLOG_CAT_META = {
-  rice:           { label:'Rice Varieties',  icon:'[[icon:wheat]]', color:'#166534', bg:'#dcfce7' },
-  flowers:        { label:'Dried Flowers',   icon:'[[icon:flower-2]]', color:'#9d174d', bg:'#fce7f3' },
-  beverages:      { label:'Beverages',       icon:'[[icon:glass-water]]', color:'#0891b2', bg:'#e0f2fe' },
-  flour:          { label:'Flour & Mixes',   icon:'[[icon:sprout]]', color:'#b45309', bg:'#fef3c7' },
-  wellness:       { label:'Wellness',        icon:'[[icon:heart]]', color:'#166534', bg:'#dcfce7' },
-  recipes:        { label:'Recipes',         icon:'[[icon:chef-hat]]', color:'#c2410c', bg:'#fff7ed' },
-  sustainability: { label:'Sustainability',  icon:'[[icon:recycle]]', color:'#1d4ed8', bg:'#eff6ff' },
-  other:          { label:'Other',           icon:'[[icon:leaf]]', color:'#16a34a', bg:'#f0fdf4' },
+  rice:           { label:'Rice Varieties',  icon:'&#127807;', color:'#166534', bg:'#dcfce7' },
+  flowers:        { label:'Dried Flowers',   icon:'&#127804;', color:'#9d174d', bg:'#fce7f3' },
+  beverages:      { label:'Beverages',       icon:'&#129380;', color:'#0891b2', bg:'#e0f2fe' },
+  flour:          { label:'Flour & Mixes',   icon:'&#127807;', color:'#b45309', bg:'#fef3c7' },
+  wellness:       { label:'Wellness',        icon:'&#10084;', color:'#166534', bg:'#dcfce7' },
+  recipes:        { label:'Recipes',         icon:'&#128116;', color:'#c2410c', bg:'#fff7ed' },
+  sustainability: { label:'Sustainability',  icon:'&#9851;', color:'#1d4ed8', bg:'#eff6ff' },
+  other:          { label:'Other',           icon:'&#127810;', color:'#16a34a', bg:'#f0fdf4' },
 };
 function getBlogStore() { try { return JSON.parse(localStorage.getItem('nansai_blogs') || '[]'); } catch { return []; } }
 function saveBlogStore(arr) { localStorage.setItem('nansai_blogs', JSON.stringify(arr)); }
@@ -1018,7 +1095,7 @@ async function renderBlogs() {
           <img src="${b.image||''}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid #E2E8F0;flex-shrink:0;" onerror="this.style.display='none'">
           <div>
             <p style="font-weight:600;margin:0;font-size:13px;">${b.title}</p>
-            ${b.featured ? '<span style="font-size:10px;background:#f0fdf4;color:#166534;padding:1px 7px;border-radius:20px;font-weight:700;">[[icon:star]] Featured</span>' : ''}
+            ${b.featured ? '<span style="font-size:10px;background:#f0fdf4;color:#166534;padding:1px 7px;border-radius:20px;font-weight:700;">&#11088; Featured</span>' : ''}
           </div>
         </div>
       </td>
@@ -1116,7 +1193,7 @@ function previewBlog(id) {
     document.getElementById('bp-meta').innerHTML = `
       <span style="font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;color:${b.catColor};background:${b.catBg};">${m.icon||''} ${b.catLabel}</span>
       <span style="font-size:12px;color:#64748B;">${b.author} &middot; ${new Date(b.createdAt).toLocaleDateString('en-IN')} &middot; ${b.readTime} read</span>
-      ${b.featured ? '<span style="font-size:11px;background:#f0fdf4;color:#166534;padding:2px 8px;border-radius:20px;font-weight:700;">[[icon:star]] Featured</span>' : ''}`;
+      ${b.featured ? '<span style="font-size:11px;background:#f0fdf4;color:#166534;padding:2px 8px;border-radius:20px;font-weight:700;">&#11088; Featured</span>' : ''}`;
     document.getElementById('blog-preview-modal').style.display = 'flex';
   });
 }
@@ -1246,7 +1323,7 @@ function closeNewsPreview() { document.getElementById('news-preview-modal').styl
 
 // ============================================================
 function updatePendingBadge() {
-  const count = Store.orders.filter(o => o.status === 'pending').length;
+  const count = Store.orders.filter(o => o.shippingStatus === 'pending' || o.status === 'pending').length;
   const el = document.getElementById('pending-badge');
   el.textContent = count > 0 ? count : '';
 }
@@ -1271,6 +1348,13 @@ function renderDashboard() {
   document.getElementById('stat-orders').textContent = Store.orders.length;
   document.getElementById('stat-customers').textContent = Store.customers.length;
   document.getElementById('stat-pending').textContent = Store.orders.filter(o => o.status === 'pending').length;
+  const setMetric = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  setMetric('stat-sales-new', '₹' + totalSales.toLocaleString('en-IN'));
+  setMetric('stat-orders-new', Store.orders.length);
+  setMetric('stat-customers-new', Store.customers.length);
+  setMetric('stat-pending-new', Store.orders.filter(o => o.shippingStatus === 'pending').length);
+  setMetric('stat-shipped', Store.orders.filter(o => ['shipped','out for delivery'].includes(o.shippingStatus)).length);
+  setMetric('stat-delivered', Store.orders.filter(o => o.shippingStatus === 'delivered').length);
 
   // Recent orders
   const recent = [...Store.orders].sort((a,b) => new Date(b.createdAt)-new Date(a.createdAt)).slice(0,5);
@@ -1280,7 +1364,7 @@ function renderDashboard() {
       <td>${o.customerName}</td>
       <td>₹${o.total.toLocaleString('en-IN')}</td>
       <td>${payBadge(o.payment)}</td>
-      <td>${statusBadge(o.status)}</td>
+      <td>${shippingBadge(o.shippingStatus)}</td>
     </tr>
   `).join('');
 
@@ -1372,8 +1456,11 @@ function renderCharts() {
   });
 
   const statusCounts = {};
-  Store.orders.forEach(o => { statusCounts[o.status] = (statusCounts[o.status]||0)+1; });
-  const statusColors = { pending:'#F59E0B', confirmed:'#2563EB', packed:'#8B5CF6', shipped:'#D97706', delivered:'#16a34a' };
+  Store.orders.forEach(o => {
+    const key = o.shippingStatus || o.status;
+    statusCounts[key] = (statusCounts[key] || 0) + 1;
+  });
+  const statusColors = { pending:'#F59E0B', confirmed:'#2563EB', packed:'#8B5CF6', shipped:'#7C3AED', 'out for delivery':'#EA580C', delivered:'#16a34a', cancelled:'#DC2626' };
 
   const ctx2 = document.getElementById('status-chart').getContext('2d');
   if (statusChartInst) statusChartInst.destroy();
@@ -1595,35 +1682,32 @@ async function deleteProduct(id) {
 // ORDERS
 // ============================================================
 // Frontend display flow  →  backend status value
-const ORDER_FLOW = ['pending','confirmed','packed','shipped','delivered'];
+const ORDER_FLOW = ['Pending','Packed','Shipped','Delivered'];
 const FLOW_TO_BACKEND = {
-  pending:   'Pending',
-  confirmed: 'Processing',
-  packed:    'Packed',
-  shipped:   'Shipped',
-  delivered: 'Delivered',
+  Pending:   'Pending',
+  Packed:    'Packed',
+  Shipped:   'Shipped',
+  Delivered: 'Delivered',
 };
 function normalizeStatus(s) {
-  if (!s) return 'pending';
+  if (!s) return 'Pending';
   const map = {
-    pending:    'pending',
-    processing: 'confirmed',
-    packed:     'packed',
-    shipped:    'shipped',
-    delivered:  'delivered',
-    cancelled:  'cancelled',
-    refunded:   'cancelled',
+    pending:   'Pending',
+    packed:    'Packed',
+    shipped:   'Shipped',
+    delivered: 'Delivered',
+    cancelled: 'Cancelled',
   };
-  return map[s.toLowerCase()] || 'pending';
+  return map[s.toLowerCase()] || 'Pending';
 }
 
 const STATUS_LABEL = {
-  pending:   '[[icon:hourglass]] Pending',
-  confirmed: '✓ Confirmed',
-  packed:    '[[icon:package]] Packed',
-  shipped:   '[[icon:truck]] Shipped',
-  delivered: '[[icon:circle-check]] Delivered',
-  cancelled: '[[icon:x]] Cancelled',
+  pending:   '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Pending',
+  confirmed: '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Confirmed',
+  packed:    '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> Packed',
+  shipped:   '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Shipped',
+  delivered: '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Delivered',
+  cancelled: '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Cancelled',
 };
 
 function statusBadge(status) {
@@ -1631,27 +1715,43 @@ function statusBadge(status) {
   return `<span class="badge badge-${status}">${label}</span>`;
 }
 function payBadge(pay) {
-  const label = { paid:'✓ Paid', unpaid:'✗ Unpaid', cod:'[[icon:banknote]] COD' }[pay] || pay;
-  return `<span class="badge badge-${pay}">${label}</span>`;
+  const normalized = pay === 'cod' || pay === 'unpaid' ? 'pending' : (pay || 'pending');
+  const label = { paid:'Paid', pending:'Pending', failed:'Failed' }[normalized] || normalized;
+  const cls = normalized === 'pending' ? 'cod' : normalized === 'failed' ? 'cancelled' : normalized;
+  return `<span class="badge badge-${cls}">${label}</span>`;
+}
+function shippingBadge(ss) {
+  const raw = String(ss || 'pending').toLowerCase();
+  const labels = { pending:'Pending', confirmed:'Confirmed', shipped:'Shipped', 'out for delivery':'Out For Delivery', delivered:'Delivered', cancelled:'Cancelled' };
+  const cls = raw.replace(/\s+/g, '-');
+  return `<span class="badge badge-ss-${cls}">${labels[raw] || ss || 'Pending'}</span>`;
 }
 
 async function renderOrders() {
+  const tbody = document.getElementById('orders-body');
   const res = await API.get('/orders');
+  if (!res.success) {
+    if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#EF4444;font-weight:600;">&#9888; Could not load orders: ${res.message || 'Server error'}<br><small style="color:#94A3B8;font-weight:400;">Check backend is running and you are logged in as admin.</small></td></tr>`;
+    return;
+  }
   if (res.success) Store.orders = (res.data || []).map(o => ({
     ...o,
     id:            o.orderNumber || o._id,
     _id:           o._id,
     status:        normalizeStatus(o.orderStatus),
+    shippingStatus:(o.shippingStatus || 'Pending').toLowerCase(),
     total:         o.totalPrice || 0,
     payment:       o.isPaid ? 'paid' : (o.paymentMethod === 'COD' ? 'cod' : 'unpaid'),
     customerName:  o.user?.name  || 'Guest',
     customerEmail: o.user?.email || '',
+    mobileNumber:  o.shippingAddress?.mobileNumber || o.shippingAddress?.phone || o.user?.phone || '',
     customerId:    o.user?._id   || o.user || '',
     address:       o.shippingAddress
       ? [o.shippingAddress.addressLine1, o.shippingAddress.city, o.shippingAddress.pincode].filter(Boolean).join(', ')
       : '',
-    courier:  o.courierService || '',
-    tracking: o.trackingNumber || '',
+    courier:  o.courierName || '',
+    tracking: o.awbCode || '',
+    trackingUrl: o.trackingUrl || '',
     products: (o.items || []).map(i => ({
       name:  i.name  || i.product?.name  || 'Product',
       qty:   i.quantity || 1,
@@ -1664,7 +1764,7 @@ async function renderOrders() {
   const filter = document.getElementById('order-filter')?.value||'';
   let filtered = Store.orders.filter(o => {
     const matchQ = !query || (o.id||'').toLowerCase().includes(query) || (o.customerName||'').toLowerCase().includes(query);
-    const matchF = !filter || o.status === filter;
+    const matchF = !filter || o.shippingStatus === filter.toLowerCase() || o.status === filter.toLowerCase();
     return matchQ && matchF;
   }).sort((a,b) => new Date(b.createdAt)-new Date(a.createdAt));
 
@@ -1674,19 +1774,20 @@ async function renderOrders() {
     let actionBtn = '';
     if (o.status === 'cancelled') {
       actionBtn = `<span style="font-size:11px;color:#94A3B8;">Cancelled</span>`;
-    } else if (next === 'confirmed') {
-      actionBtn = `<button class="btn btn-sm" style="background:#DBEAFE;color:#1E40AF;border:1.5px solid #BFDBFE;" onclick="advanceOrder('${o.id}','confirmed')">✓ Confirm</button>`;
-    } else if (next === 'packed') {
-      actionBtn = `<button class="btn btn-sm" style="background:#F3E8FF;color:#6B21A8;border:1.5px solid #E9D5FF;" onclick="advanceOrder('${o.id}','packed')">[[icon:package]] Pack</button>`;
+    } else if (next === 'Packed') {
+      actionBtn = `<button class="btn btn-sm" style="background:#DBEAFE;color:#1E40AF;border:1.5px solid #BFDBFE;" onclick="advanceOrder('${o.id}','Packed')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Confirm</button>`;
+    } else if (next === 'Packed') {
+      actionBtn = `<button class="btn btn-sm" style="background:#F3E8FF;color:#6B21A8;border:1.5px solid #E9D5FF;" onclick="advanceOrder('${o.id}','Packed')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> Pack</button>`;
     } else if (next === 'shipped') {
       actionBtn = `<button class="btn btn-sm" style="background:#FFEDD5;color:#9A3412;border:1.5px solid #FED7AA;" onclick="openShipModal('${o.id}')">
-        [[icon:truck]] Ship</button>`;
-    } else if (next === 'delivered') {
-      actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','delivered')">[[icon:circle-check]] Deliver</button>`;
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Ship</button>`;
+    } else if (next === 'Delivered') {
+      actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','Delivered')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Deliver</button>`;
     }
     const prodNames = o.products.map(p => `${p.name} ×${p.qty}`).join(', ');
     return `
-      <tr>
+      <tr id="order-row-${o.id}">
+        <td style="text-align:center;"><input type="checkbox" class="order-chk" data-id="${o._id}" data-num="${o.id}" onchange="onOrderCheck()" style="width:15px;height:15px;cursor:pointer;"></td>
         <td><span class="mono" style="font-size:12px;color:#2563EB;cursor:pointer;" onclick="openOrderModal('${o.id}')">${o.id}</span></td>
         <td>
           <p style="margin:0;font-weight:500;font-size:13px;">${o.customerName}</p>
@@ -1696,60 +1797,56 @@ async function renderOrders() {
         <td style="font-weight:500;">₹${o.total.toLocaleString('en-IN')}</td>
         <td>${payBadge(o.payment)}</td>
         <td>${statusBadge(o.status)}</td>
+        <td>${shippingBadge(o.shippingStatus)}</td>
         <td>
-          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
             ${actionBtn}
-            <button class="btn btn-ghost btn-sm" onclick="openOrderModal('${o.id}')">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+
+            <button class="btn btn-ghost btn-sm" onclick="openOrderModal('${o.id}')" title="View Order" style="padding:4px 7px;">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
             </button>
+            <a href="https://app.shiprocket.in" target="_blank" class="btn btn-ghost btn-sm" title="Open Shiprocket" style="padding:4px 7px;text-decoration:none;">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </a>
+            ${o.shippingStatus !== 'Cancelled' && o.shippingStatus !== 'Delivered' ? `<button class="btn btn-danger btn-sm" onclick="cancelOrder('${o._id}','${o.id}')" title="Cancel Order" style="padding:4px 7px;font-size:11px;">Cancel</button>` : ''}
           </div>
         </td>
       </tr>
     `;
-  }).join('') || '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">No orders found</td></tr>';
+  }).join('') || '<tr><td colspan="8" style="text-align:center;padding:32px;color:#94A3B8;">No orders found</td></tr>';
+}
+
+// \u2500\u2500 Checkbox selection helpers \u2500\u2500
+function getCheckedIds() {
+  return [...document.querySelectorAll('.order-chk:checked')].map(c => c.dataset.id);
+}
+function getCheckedNums() {
+  return [...document.querySelectorAll('.order-chk:checked')].map(c => c.dataset.num);
+}
+function onOrderCheck() {
+  const ids = getCheckedIds();
+  const n = ids.length;
+
+
+  const all = document.querySelectorAll('.order-chk');
+  const chkAll = document.getElementById('chk-all');
+  if (chkAll) { chkAll.indeterminate = n > 0 && n < all.length; chkAll.checked = n === all.length && all.length > 0; }
+}
+function toggleSelectAll(checked) {
+  document.querySelectorAll('.order-chk').forEach(c => c.checked = checked);
+  onOrderCheck();
 }
 
 async function advanceOrder(id, nextStatus) {
   const o = Store.orders.find(x => x.id === id);
   const mongoId = o?._id || id;
-  const backendStatus = FLOW_TO_BACKEND[nextStatus] || 'Processing';
-  const res = await API.put('/orders/' + mongoId + '/status', { status: backendStatus });
+  const res = await API.put('/orders/' + mongoId + '/status', { status: nextStatus });
   if (!res.success) { toast(res.message || 'Failed to update order', 'error'); return; }
-  toast(STATUS_LABEL[nextStatus] + ' — status updated', 'success');
+  toast(nextStatus + ' — status updated', 'success');
   renderOrders();
   updatePendingBadge();
 }
 
-function openShipModal(orderId) {
-  document.getElementById('ship-order-id').value = orderId;
-  document.getElementById('ship-tracking').value = '';
-  generateTracking();
-  document.getElementById('ship-modal').style.display = 'flex';
-}
-function closeShipModal() { document.getElementById('ship-modal').style.display = 'none'; }
-
-function generateTracking() {
-  const courier = document.getElementById('ship-courier').value;
-  const prefixes = { 'Delhivery':'DL','Blue Dart':'BD','DTDC':'DT','Ekart':'EK','Amazon Logistics':'AZ' };
-  const prefix = prefixes[courier] || 'TK';
-  const id = prefix + Math.random().toString(36).substr(2,10).toUpperCase() + 'IN';
-  document.getElementById('ship-tracking').value = id;
-}
-
-async function confirmShip() {
-  const orderId = document.getElementById('ship-order-id').value;
-  const courier = document.getElementById('ship-courier').value;
-  const tracking = document.getElementById('ship-tracking').value.trim();
-  if (!tracking) { toast('Please enter or generate a tracking ID', 'error'); return; }
-  const o = Store.orders.find(x => x.id === orderId);
-  const mongoId = o?._id || orderId;
-  const res = await API.put('/orders/' + mongoId + '/status', { status: 'Shipped', trackingNumber: tracking, courierService: courier });
-  if (!res.success) { toast(res.message || 'Failed to ship order', 'error'); return; }
-  toast('Order shipped via ' + courier + '. Tracking: ' + tracking, 'success');
-  closeShipModal();
-  renderOrders();
-  updatePendingBadge();
-}
 
 function openOrderModal(orderId) {
   const o = Store.orders.find(x => x.id === orderId);
@@ -1757,7 +1854,7 @@ function openOrderModal(orderId) {
   document.getElementById('order-modal-title').textContent = `Order ${o.id}`;
 
   const idx = ORDER_FLOW.indexOf(o.status);
-  const tlIcons = { pending:'[[icon:hourglass]]', confirmed:'✓', packed:'[[icon:package]]', shipped:'[[icon:truck]]', delivered:'[[icon:circle-check]]' };
+  const tlIcons = { pending:'<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>', confirmed:'✓', packed:'<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>', shipped:'<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>', delivered:'<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' };
   const tlLabels = { pending:'Pending', confirmed:'Confirmed', packed:'Packed', shipped:'Shipped', delivered:'Delivered' };
   const timelineHtml = ORDER_FLOW.map((s, i) => {
     const cls = i < idx ? 'done' : i === idx ? 'active' : 'pending';
@@ -1794,8 +1891,10 @@ function openOrderModal(orderId) {
       </div>
       <div style="background:#F8FAFC;border-radius:9px;padding:12px;">
         <p style="font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 6px;">Payment & Shipping</p>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">${payBadge(o.payment)}<span style="font-size:12px;color:#64748B;">₹${o.total.toLocaleString('en-IN')}</span></div>
-        ${o.courier ? `<p style="margin:0;font-size:12px;color:#64748B;">Courier: <b>${o.courier}</b></p><p style="margin:0;font-size:12px;color:#64748B;" class="mono">Track: ${o.tracking}</p>` : '<p style="margin:0;font-size:12px;color:#94A3B8;">Not shipped yet</p>'}
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">${payBadge(o.payment)}<span style="font-size:12px;color:#64748B;">₹${o.total.toLocaleString('en-IN')}</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">${shippingBadge(o.shippingStatus)}</div>
+        ${o.awbNumber ? `<p style="margin:0;font-size:12px;color:#64748B;">AWB: <b>${o.awbNumber}</b>${o.courierName ? ' · ' + o.courierName : ''}</p>` : ''}
+        ${o.trackingUrl ? `<a href="${o.trackingUrl}" target="_blank" style="font-size:12px;color:#2563EB;font-weight:600;">Track Shipment ↗</a>` : ''}
       </div>
     </div>
     <p style="font-size:12px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 4px;">Items Ordered</p>
@@ -1809,7 +1908,316 @@ function openOrderModal(orderId) {
   `;
   document.getElementById('order-modal').style.display = 'flex';
 }
+async function updateShippingStatus(mongoId, shippingStatus) {
+  const res = await API.put('/orders/' + mongoId + '/shipping-status', { shippingStatus });
+  if (!res.success) { toast(res.message || 'Failed to update shipping status', 'error'); return; }
+  toast('Shipping status updated to ' + shippingStatus, 'success');
+  renderOrders();
+  updatePendingBadge();
+}
+
+function openShipTrackModal(mongoId, orderId) {
+  document.getElementById('ship-track-mongo-id').value = mongoId;
+  document.getElementById('ship-track-order-id').textContent = orderId;
+  document.getElementById('ship-track-awb').value = '';
+  document.getElementById('ship-track-courier').value = '';
+  document.getElementById('ship-track-url').value = '';
+  document.getElementById('ship-track-modal').style.display = 'flex';
+}
+function closeShipTrackModal() { document.getElementById('ship-track-modal').style.display = 'none'; }
+
+async function confirmMarkShipped() {
+  const mongoId     = document.getElementById('ship-track-mongo-id').value;
+  const awbNumber   = document.getElementById('ship-track-awb').value.trim();
+  const courierName = document.getElementById('ship-track-courier').value.trim();
+  const trackingUrl = document.getElementById('ship-track-url').value.trim();
+  const res = await API.put('/orders/' + mongoId + '/shipping-status', {
+    shippingStatus: 'Shipped', awbNumber, courierName, trackingUrl
+  });
+  if (!res.success) { toast(res.message || 'Failed', 'error'); return; }
+  toast('Order marked as Shipped', 'success');
+  closeShipTrackModal();
+  renderOrders();
+  updatePendingBadge();
+}
+
+async function cancelOrder(mongoId, orderId) {
+  if (!confirm('Cancel order ' + orderId + '? This cannot be undone.')) return;
+  const res = await API.put('/orders/' + mongoId + '/shipping-status', { shippingStatus: 'Cancelled' });
+  if (!res.success) { toast(res.message || 'Failed to cancel order', 'error'); return; }
+  toast('Order ' + orderId + ' cancelled', 'info');
+  renderOrders();
+  updatePendingBadge();
+}
 function closeOrderModal() { document.getElementById('order-modal').style.display = 'none'; }
+
+async function renderOrders() {
+  const tbody = document.getElementById('orders-body');
+  const res = await API.get('/orders');
+  if (!res.success) {
+    if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#EF4444;font-weight:600;">Could not load orders: ${res.message || 'Server error'}</td></tr>`;
+    return;
+  }
+
+  Store.orders = (res.data || []).map(o => ({
+    ...o,
+    id: o.orderNumber || o._id,
+    _id: o._id,
+    status: normalizeStatus(o.orderStatus),
+    shippingStatus: (o.shippingStatus || 'Pending').toLowerCase(),
+    total: o.totalPrice || 0,
+    payment: o.isPaid ? 'paid' : (o.paymentMethod === 'COD' ? 'cod' : 'unpaid'),
+    customerName: o.shippingAddress?.fullName || o.user?.name || 'Guest',
+    customerEmail: o.user?.email || '',
+    mobileNumber: o.shippingAddress?.mobileNumber || o.shippingAddress?.phone || o.user?.phone || '',
+    customerId: o.user?._id || o.user || '',
+    address: o.shippingAddress ? [o.shippingAddress.addressLine1, o.shippingAddress.city, o.shippingAddress.pincode].filter(Boolean).join(', ') : '',
+    courier: o.courierName || '',
+    tracking: o.awbCode || '',
+    trackingUrl: o.trackingUrl || '',
+    products: (o.items || []).map(i => ({
+      name: i.name || i.product?.name || 'Product',
+      qty: i.quantity || 1,
+      price: i.price || i.product?.price || 0,
+      image: i.image || i.product?.images?.[0]?.url || '',
+    })),
+    createdAt: o.createdAt,
+  }));
+
+  const query = (document.getElementById('order-search')?.value || '').toLowerCase();
+  const filter = (document.getElementById('order-filter')?.value || '').toLowerCase();
+  const filtered = Store.orders.filter(o => {
+    const matchQ = !query || (o.id || '').toLowerCase().includes(query) || (o.customerName || '').toLowerCase().includes(query) || (o.mobileNumber || '').includes(query);
+    const matchF = !filter || o.shippingStatus === filter || o.status === filter;
+    return matchQ && matchF;
+  }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  tbody.innerHTML = filtered.map(o => {
+    const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN') : '-';
+    return `<tr id="order-row-${o.id}">
+      <td style="text-align:center;"><input type="checkbox" class="order-chk" data-id="${o._id}" data-num="${o.id}" onchange="onOrderCheck()" style="width:15px;height:15px;cursor:pointer;"></td>
+      <td><span class="mono" style="font-size:12px;color:#2563EB;cursor:pointer;" onclick="openOrderModal('${o.id}')">${o.id}</span></td>
+      <td><p style="margin:0;font-weight:500;font-size:13px;">${o.customerName}</p><p style="margin:0;font-size:11px;color:#94A3B8;">${o.customerEmail}</p></td>
+      <td>${o.mobileNumber || '-'}</td>
+      <td>${payBadge(o.payment)}</td>
+      <td>${shippingBadge(o.shippingStatus)}</td>
+      <td>${o.courier || '-'}</td>
+      <td><span class="mono" style="font-size:12px;">${o.tracking || '-'}</span></td>
+      <td style="font-weight:500;">&#8377;${o.total.toLocaleString('en-IN')}</td>
+      <td>${date}</td>
+      <td><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-ghost btn-sm" onclick="openOrderModal('${o.id}')">View Order</button>
+        <button class="btn btn-sm" onclick="createShipment('${o._id}')" ${o.shippingStatus === 'delivered' || o.shippingStatus === 'cancelled' || o.tracking ? 'disabled' : ''}>Create Shipment</button>
+        <button class="btn btn-ghost btn-sm" onclick="trackShipment('${o.id}')">Track Shipment</button>
+        <button class="btn btn-ghost btn-sm" onclick="window.open('https://app.shiprocket.in','_blank','noopener')">Open Shiprocket Dashboard</button>
+      </div></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="11" style="text-align:center;padding:32px;color:#94A3B8;">No orders found</td></tr>';
+}
+
+async function createShipment(mongoId) {
+  toast('Creating Shiprocket shipment...', 'info');
+  const res = await API.post('/shiprocket/shipments', { orderId: mongoId });
+  if (!res.success) { toast(res.message || 'Shipment failed', 'error'); return; }
+  toast(res.message || 'Shipment created and tracking updated', 'success');
+  renderOrders();
+}
+
+async function trackShipment(orderId) {
+  const o = Store.orders.find(x => x.id === orderId);
+  if (!o) return;
+  if (o._id && o.tracking) {
+    const res = await API.post('/shiprocket/shipments/' + o._id + '/sync', {});
+    if (res.success) {
+      toast('Tracking synced', 'success');
+      await renderOrders();
+    }
+  }
+  if (o.trackingUrl) { window.open(o.trackingUrl, '_blank', 'noopener'); return; }
+  if (!o.tracking) { toast('AWB is not available yet', 'error'); return; }
+  window.open('https://shiprocket.co/tracking/' + encodeURIComponent(o.tracking), '_blank', 'noopener');
+}
+
+async function markDelivered(mongoId) {
+  const res = await API.put('/orders/' + mongoId + '/shipping-status', { shippingStatus: 'Delivered' });
+  if (!res.success) { toast(res.message || 'Failed to update order', 'error'); return; }
+  toast('Order marked delivered', 'success');
+  renderOrders();
+}
+
+function setOrderPage(page) {
+  Store.orderPage = Math.max(1, Number(page) || 1);
+}
+
+function changeOrderPage(delta) {
+  setOrderPage((Store.orderPage || 1) + delta);
+  renderOrders();
+}
+
+function orderProgress(status) {
+  return { pending:1, confirmed:2, shipped:3, 'out for delivery':4, delivered:5, cancelled:0 }[String(status || '').toLowerCase()] || 1;
+}
+
+function trackingHTML(o) {
+  const steps = ['Placed', 'Confirmed', 'Shipped', 'Out For Delivery', 'Delivered'];
+  const active = orderProgress(o.shippingStatus);
+  if (active === 0) return '<p style="font-size:12px;color:#991B1B;margin:8px 0 0;font-weight:700;">Shipment cancelled</p>';
+  return `<div class="tracking-strip">${steps.map((label, idx) => {
+    const n = idx + 1;
+    return `<div class="tracking-step ${n < active ? 'done' : n === active ? 'active' : ''}">
+      <div class="tracking-dot">${n <= active ? '✓' : n}</div><span>${label}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function getFilteredOrders() {
+  const query = (document.getElementById('order-search')?.value || '').toLowerCase().trim();
+  const filter = (document.getElementById('order-filter')?.value || '').toLowerCase();
+  const sort = document.getElementById('order-sort')?.value || 'newest';
+  const list = Store.orders.filter(o => {
+    const hay = [o.id, o.customerName, o.customerEmail, o.mobileNumber, o.tracking, o.courier].join(' ').toLowerCase();
+    const matchQ = !query || hay.includes(query);
+    const matchF = !filter || o.shippingStatus === filter || o.status === filter;
+    return matchQ && matchF;
+  });
+  return list.sort((a, b) => {
+    if (sort === 'oldest') return new Date(a.createdAt) - new Date(b.createdAt);
+    if (sort === 'high') return b.total - a.total;
+    if (sort === 'low') return a.total - b.total;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+}
+
+function orderActionsHTML(o) {
+  const loading = Store.orderLoadingId === o._id;
+  const canShip = !loading && o.shippingStatus !== 'delivered' && o.shippingStatus !== 'cancelled' && !o.tracking;
+  return `<div style="display:flex;gap:4px;align-items:center;">
+    <button class="btn btn-ghost btn-sm" onclick="openOrderModal('${o.id}')" title="View Details" style="padding:4px 6px;">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <button class="btn btn-sm" onclick="createShipment('${o._id}')" ${canShip ? '' : 'disabled'} title="Create Shipment" style="padding:4px 6px;background:${canShip?'#EFF6FF':'#F1F5F9'};color:${canShip?'#2563EB':'#94A3B8'};border:1.5px solid ${canShip?'#BFDBFE':'#E2E8F0'};">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="trackShipment('${o.id}')" title="Track Shipment" style="padding:4px 6px;">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="window.open('https://app.shiprocket.in','_blank','noopener')" title="Open Shiprocket" style="padding:4px 6px;">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </button>
+  </div>`;
+}
+
+renderOrders = async function(forceFetch = false) {
+  const tbody = document.getElementById('orders-body');
+  if (!tbody) return;
+  if (forceFetch || !Store.orders.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:#64748B;">Loading orders...</td></tr>';
+    const res = await API.get('/orders');
+    if (!res.success) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:40px;color:#EF4444;font-weight:600;">Could not load orders: ${res.message || 'Server error'}</td></tr>`;
+      return;
+    }
+    Store.orders = (res.data || []).map(o => ({
+      ...o,
+      id: o.orderNumber || o._id,
+      _id: o._id,
+      status: normalizeStatus(o.orderStatus),
+      shippingStatus: (o.shippingStatus || 'Pending').toLowerCase(),
+      total: o.totalPrice || 0,
+      payment: o.isPaid ? 'paid' : ((o.paymentInfo?.status || '').toLowerCase() === 'failed' ? 'failed' : 'pending'),
+      customerName: o.shippingAddress?.fullName || o.user?.name || 'Guest',
+      customerEmail: o.user?.email || '',
+      mobileNumber: o.shippingAddress?.mobileNumber || o.shippingAddress?.phone || o.user?.phone || '',
+      customerId: o.user?._id || o.user || '',
+      addressObject: o.shippingAddress || {},
+      address: o.shippingAddress ? [o.shippingAddress.addressLine1, o.shippingAddress.addressLine2, o.shippingAddress.city, o.shippingAddress.state, o.shippingAddress.pincode, o.shippingAddress.country].filter(Boolean).join(', ') : '',
+      courier: o.courierName || '',
+      tracking: o.awbCode || '',
+      trackingUrl: o.trackingUrl || '',
+      eta: o.estimatedDeliveryDate || o.estimatedDelivery || '',
+      currentTrackingStatus: o.currentTrackingStatus || '',
+      products: (o.items || []).map(i => ({ name: i.name || i.product?.name || 'Product', qty: i.quantity || 1, price: i.price || i.product?.price || 0, image: i.image || i.product?.images?.[0]?.url || '' })),
+      createdAt: o.createdAt,
+    }));
+  }
+
+  const filtered = getFilteredOrders();
+  const pageSize = Math.max(1, Number(document.getElementById('order-page-size')?.value || 10));
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  Store.orderPage = Math.min(Math.max(Store.orderPage || 1, 1), pages);
+  const start = (Store.orderPage - 1) * pageSize;
+  const pageRows = filtered.slice(start, start + pageSize);
+
+  tbody.innerHTML = pageRows.map(o => {
+    const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN', {day:'2-digit',month:'short'}) : '-';
+    return `<tr id="order-row-${o.id}">
+      <td><span class="mono" style="font-size:12px;color:#2563EB;cursor:pointer;font-weight:700;" onclick="openOrderModal('${o.id}')">${o.id}</span></td>
+      <td><p style="margin:0;font-weight:600;font-size:13px;">${o.customerName}</p><p style="margin:1px 0 0;font-size:11px;color:#94A3B8;">${o.mobileNumber || o.customerEmail || '-'}</p></td>
+      <td>${payBadge(o.payment)}</td>
+      <td>${shippingBadge(o.shippingStatus)}</td>
+      <td style="font-weight:700;font-size:13px;">₹${o.total.toLocaleString('en-IN')}</td>
+      <td style="font-size:12px;color:#64748B;white-space:nowrap;">${date}</td>
+      <td>${orderActionsHTML(o)}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">No orders found</td></tr>';
+
+  const mobile = document.getElementById('orders-mobile-list');
+  if (mobile) mobile.innerHTML = pageRows.map(o => `
+    <div class="panel-card" style="padding:14px;">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;">
+        <div><p class="mono" style="margin:0;color:#2563EB;font-weight:800;">${o.id}</p><p style="margin:4px 0 0;font-weight:800;">${o.customerName}</p><p style="margin:2px 0 0;color:#64748B;font-size:12px;">${o.mobileNumber || '-'}</p></div>
+        <div style="text-align:right;">${shippingBadge(o.shippingStatus)}<p style="margin:8px 0 0;font-weight:800;">₹${o.total.toLocaleString('en-IN')}</p></div>
+      </div>
+      ${trackingHTML(o)}
+      <div style="margin-top:12px;color:#64748B;font-size:12px;">${o.courier || 'Courier pending'}${o.tracking ? ' · AWB ' + o.tracking : ''}</div>
+      <div style="margin-top:12px;">${orderActionsHTML(o)}</div>
+    </div>`).join('');
+
+  const info = document.getElementById('orders-page-info');
+  if (info) info.textContent = filtered.length ? `Showing ${start + 1}-${Math.min(start + pageSize, filtered.length)} of ${filtered.length} orders` : 'Showing 0 orders';
+  const prev = document.getElementById('orders-prev'), next = document.getElementById('orders-next');
+  if (prev) prev.disabled = Store.orderPage <= 1;
+  if (next) next.disabled = Store.orderPage >= pages;
+  updatePendingBadge();
+  if (window.nansaiApplyIcons) window.nansaiApplyIcons(document.getElementById('page-orders'));
+};
+
+openOrderModal = function(orderId) {
+  const o = Store.orders.find(x => x.id === orderId);
+  if (!o) return;
+  document.getElementById('order-modal-title').textContent = `Order ${o.id}`;
+  const addr = o.addressObject || {};
+  const productsHtml = o.products.map(p => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F1F5F9;">
+      <img src="${p.image || ''}" style="width:46px;height:46px;border-radius:8px;object-fit:cover;border:1px solid #E2E8F0;" onerror="this.style.visibility='hidden'">
+      <div style="flex:1;"><p style="margin:0;font-size:13px;font-weight:800;">${p.name}</p><p style="margin:2px 0 0;font-size:12px;color:#64748B;">Qty ${p.qty} x ₹${p.price.toLocaleString('en-IN')}</p></div>
+      <strong>₹${(p.price * p.qty).toLocaleString('en-IN')}</strong>
+    </div>`).join('');
+  document.getElementById('order-modal-content').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px;">
+      <div class="panel-card" style="padding:14px;"><p class="metric-label">Customer Information</p><h3 style="margin:8px 0 4px;font-size:16px;">${o.customerName}</h3><p style="margin:0;color:#64748B;font-size:13px;">${o.customerEmail || '-'}</p><p class="mono" style="margin:6px 0 0;">${o.mobileNumber || '-'}</p></div>
+      <div class="panel-card" style="padding:14px;"><p class="metric-label">Shipping Address</p><p style="margin:8px 0 0;color:#334155;font-size:13px;line-height:1.55;">${[addr.fullName, addr.addressLine1, addr.addressLine2, addr.city, addr.state, addr.pincode, addr.country].filter(Boolean).join('<br>') || o.address || '-'}</p></div>
+      <div class="panel-card" style="padding:14px;"><p class="metric-label">Payment Details</p><div style="margin-top:8px;">${payBadge(o.payment)}</div><p style="margin:10px 0 0;font-size:20px;font-weight:900;">₹${o.total.toLocaleString('en-IN')}</p></div>
+      <div class="panel-card" style="padding:14px;"><p class="metric-label">Courier Information</p><p style="margin:8px 0 0;"><strong>${o.courier || 'Courier pending'}</strong></p><p class="mono" style="margin:6px 0 0;color:#64748B;">AWB: ${o.tracking || '-'}</p>${o.eta ? `<p style="margin:6px 0 0;color:#64748B;font-size:13px;">ETA: ${new Date(o.eta).toLocaleDateString('en-IN')}</p>` : ''}</div>
+    </div>
+    <div class="panel-card" style="padding:16px;margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><p class="metric-label">Shipment Tracking</p><h3 style="margin:6px 0 0;">${shippingBadge(o.shippingStatus)}</h3></div>${o.currentTrackingStatus ? `<p style="margin:0;color:#64748B;font-size:13px;">${o.currentTrackingStatus}</p>` : ''}</div>${trackingHTML(o)}</div>
+    <div class="panel-card" style="padding:16px;"><p class="metric-label">Ordered Products</p><div style="margin-top:8px;">${productsHtml}</div></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">${orderActionsHTML(o)}</div>`;
+  document.getElementById('order-modal').style.display = 'flex';
+  if (window.nansaiApplyIcons) window.nansaiApplyIcons(document.getElementById('order-modal'));
+};
+
+createShipment = async function(mongoId) {
+  if (!confirm('Create Shiprocket shipment for this order?')) return;
+  Store.orderLoadingId = mongoId;
+  renderOrders();
+  const res = await API.post('/shiprocket/shipments', { orderId: mongoId });
+  Store.orderLoadingId = null;
+  if (!res.success) { toast(res.message || 'Shipment failed', 'error'); renderOrders(); return; }
+  toast(res.message || 'Shipment created and tracking updated', 'success');
+  await renderOrders(true);
+  renderDashboard();
+};
 
 // ============================================================
 // CUSTOMERS
@@ -1847,7 +2255,7 @@ async function renderCustomers() {
         </td>
       </tr>
     `;
-  }).join('') || '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">No customers found</td></tr>';
+  }).join('') || '<tr><td colspan="8" style="text-align:center;padding:32px;color:#94A3B8;">No customers found</td></tr>';
 }
 
 function initials(name) { return name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2); }
@@ -1924,7 +2332,7 @@ function globalSearch(query) {
 // ============================================================
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    ['product-modal','order-modal','ship-modal','customer-modal','blog-modal','blog-preview-modal','news-modal','news-preview-modal'].forEach(id => {
+    ['product-modal','order-modal','ship-track-modal','customer-modal','blog-modal','blog-preview-modal','news-modal','news-preview-modal'].forEach(id => {
       document.getElementById(id).style.display = 'none';
     });
   }
@@ -1963,13 +2371,10 @@ window.onload = async () => {
       window.location.href = 'login.html';
     }
   } catch(e) {
-    const stored = localStorage.getItem('admin_user');
-    if (stored) {
-      document.getElementById('admin-shell').style.display = 'block';
-      initApp();
-    } else {
-      window.location.href = 'login.html';
-    }
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    alert('Could not verify admin session. Please login again.');
+    window.location.href = 'login.html';
   }
 };
 </script>
@@ -1989,9 +2394,11 @@ const firebaseConfig = {
   messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
   appId:             'YOUR_APP_ID',
 };
+const firebaseVapidKey = 'YOUR_VAPID_KEY';
 
-const app       = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+const FCM_CONFIGURED = !Object.values(firebaseConfig).some(v => String(v).startsWith('YOUR_')) && !firebaseVapidKey.startsWith('YOUR_');
+const app       = FCM_CONFIGURED ? initializeApp(firebaseConfig) : null;
+const messaging = FCM_CONFIGURED ? getMessaging(app) : null;
 
 // Register service worker
 if ('serviceWorker' in navigator) {
@@ -2002,6 +2409,7 @@ if ('serviceWorker' in navigator) {
 
 // Request notification permission + get FCM token
 async function initFCM() {
+  if (!FCM_CONFIGURED || !messaging) return;
   try {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
@@ -2010,7 +2418,7 @@ async function initFCM() {
     }
 
     const token = await getToken(messaging, {
-      vapidKey: 'YOUR_VAPID_KEY',  // Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+      vapidKey: firebaseVapidKey,
     });
 
     if (token) {
@@ -2032,7 +2440,7 @@ async function initFCM() {
 }
 
 // Handle foreground push notifications
-onMessage(messaging, (payload) => {
+if (messaging) onMessage(messaging, (payload) => {
   console.log('📦 New order notification:', payload);
   const { title, body } = payload.notification;
 

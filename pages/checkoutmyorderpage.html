@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -214,6 +214,8 @@ textarea.inp{resize:none;line-height:1.65}
 .sb-shipped{background:rgba(29,78,216,.1);color:#1d4ed8}
 .sb-processing{background:rgba(196,124,43,.1);color:var(--amber)}
 .sb-cancelled{background:rgba(192,57,43,.1);color:var(--red)}
+.sb-packed{background:rgba(124,58,237,.1);color:#7c3aed}
+.sb-confirmed{background:rgba(29,78,216,.1);color:#1d4ed8}
 .progress-track{height:4px;background:var(--fog-2);border-radius:99px;overflow:hidden}
 .progress-bar{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
 .order-action-row{display:flex;flex-wrap:wrap;gap:8px}
@@ -317,7 +319,7 @@ textarea.inp{resize:none;line-height:1.65}
   #toast{font-size:.78rem;padding:9px 18px;white-space:normal;text-align:center;max-width:90vw}
   /* Step 3 mobile: add bottom padding for sticky button */
   #step3{padding-bottom:80px}
-  /* Hide inline Pay Now on mobile â€” sticky bar handles it */
+  /* Hide inline Pay Now on mobile - sticky bar handles it */
   #btnPayNow{display:none!important}
   .rzp-section{border-radius:16px}
 }
@@ -340,66 +342,125 @@ textarea.inp{resize:none;line-height:1.65}
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
+  const skipTags = new Set(['SCRIPT','STYLE','TEXTAREA','OPTION']);
+  let applying = false;
+  let scheduled = false;
+
+  function hasMarker(value){
+    markerRe.lastIndex = 0;
+    return !!value && markerRe.test(value);
+  }
+
+  function cleanMarkers(value){
+    markerRe.lastIndex = 0;
+    return value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
+  }
+
+  function iconNode(name){
+    const icon = document.createElement('i');
+    icon.setAttribute('data-lucide', name);
+    icon.setAttribute('aria-hidden', 'true');
+    icon.className = 'nansai-icon';
+    return icon;
+  }
+
+  function replaceTextNode(node){
+    if(!node || !hasMarker(node.nodeValue)) return;
+    const parentTag = node.parentElement?.tagName;
+    if(skipTags.has(parentTag)) return;
+
+    const text = node.nodeValue;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    markerRe.lastIndex = 0;
+    text.replace(markerRe, (match, name, offset) => {
+      if(offset > last) frag.append(document.createTextNode(text.slice(last, offset)));
+      frag.append(iconNode(name));
+      last = offset + match.length;
+    });
+    if(last < text.length) frag.append(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+
   function applyIcons(root){
     root = root || document.body;
-    if(!root) return;
+    if(!root || applying) return;
+    applying = true;
 
-    root.querySelectorAll?.('[placeholder],[title],[aria-label],[alt]').forEach(el => {
-      ['placeholder','title','aria-label','alt'].forEach(attr => {
-        const value = el.getAttribute(attr);
-        if(value && markerRe.test(value)){
-          el.setAttribute(attr, value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim());
-          markerRe.lastIndex = 0;
-        }
-      });
-    });
-
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode(node){
-        if(!markerRe.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
-        markerRe.lastIndex = 0;
-        const tag = node.parentElement?.tagName;
-        if(['SCRIPT','STYLE','TEXTAREA','OPTION'].includes(tag)) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
+    try {
+      const scope = root.nodeType === Node.TEXT_NODE ? root.parentElement : root;
+      if(scope?.querySelectorAll){
+        scope.querySelectorAll('[placeholder],[title],[aria-label],[alt]').forEach(el => {
+          ['placeholder','title','aria-label','alt'].forEach(attr => {
+            const value = el.getAttribute(attr);
+            if(hasMarker(value)) el.setAttribute(attr, cleanMarkers(value));
+          });
+        });
       }
-    });
-    const nodes = [];
-    while(walker.nextNode()) nodes.push(walker.currentNode);
 
-    nodes.forEach(node => {
-      const frag = document.createDocumentFragment();
-      let last = 0;
-      node.nodeValue.replace(markerRe, (match, name, offset) => {
-        if(offset > last) frag.append(document.createTextNode(node.nodeValue.slice(last, offset)));
-        const icon = document.createElement('i');
-        icon.setAttribute('data-lucide', name);
-        icon.setAttribute('aria-hidden', 'true');
-        icon.className = 'nansai-icon';
-        frag.append(icon);
-        last = offset + match.length;
-      });
-      if(last < node.nodeValue.length) frag.append(document.createTextNode(node.nodeValue.slice(last)));
-      node.parentNode.replaceChild(frag, node);
-    });
+      if(root.nodeType === Node.TEXT_NODE){
+        replaceTextNode(root);
+      } else if(root.nodeType === Node.ELEMENT_NODE || root.nodeType === Node.DOCUMENT_NODE || root.nodeType === Node.DOCUMENT_FRAGMENT_NODE){
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node){
+            return hasMarker(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const nodes = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(replaceTextNode);
 
-    root.querySelectorAll?.('option').forEach(option => {
-      if(markerRe.test(option.textContent)){
-        option.textContent = option.textContent.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
-        markerRe.lastIndex = 0;
+        root.querySelectorAll?.('option').forEach(option => {
+          if(hasMarker(option.textContent)) option.textContent = cleanMarkers(option.textContent);
+        });
       }
-    });
 
-    if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+      if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
+    } finally {
+      applying = false;
+    }
+  }
+
+  function nodeHasMarker(node){
+    if(!node) return false;
+    if(node.nodeType === Node.TEXT_NODE) return hasMarker(node.nodeValue);
+    if(node.nodeType === Node.ELEMENT_NODE) return !skipTags.has(node.tagName) && hasMarker(node.textContent);
+    return false;
+  }
+
+  function scheduleApply(root){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyIcons(root || document.body);
+    });
   }
 
   window.nansaiApplyIcons = applyIcons;
   document.addEventListener('DOMContentLoaded', () => {
     applyIcons(document.body);
+    const observer = new MutationObserver(mutations => {
+      for(const mutation of mutations){
+        if(mutation.type === 'characterData' && nodeHasMarker(mutation.target)){
+          scheduleApply(mutation.target.parentElement || document.body);
+          return;
+        }
+        for(const node of mutation.addedNodes){
+          if(nodeHasMarker(node)){
+            scheduleApply(node.nodeType === Node.TEXT_NODE ? node.parentElement : node);
+            return;
+          }
+        }
+      }
+    });
+    observer.observe(document.body, { childList:true, characterData:true, subtree:true });
   });
 })();
 </script>
 <style>
-.nansai-icon {
+.nansai-icon,
+svg.nansai-icon {
   width: 1em;
   height: 1em;
   display: inline-block;
@@ -580,6 +641,17 @@ a .nansai-icon,
                 <p class="co-err-msg" id="coMobile-err"></p>
               </div>
 
+              <div style="grid-column:span 2">
+                <label class="field-label">Alternate Mobile Number <span style="font-size:.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--sage)">(optional)</span></label>
+                <div style="display:flex;gap:8px">
+                  <div style="padding:11px 14px;background:var(--white);border:1.5px solid var(--fog-2);border-radius:12px;font-size:.85rem;font-weight:700;color:var(--ink-3);flex-shrink:0;user-select:none">+91</div>
+                  <input type="tel" class="co-inp" id="coAltMobile" maxlength="10" autocomplete="tel"
+                    placeholder="Optional 10-digit mobile number"
+                    oninput="this.value=this.value.replace(/\D/g,'').slice(0,10);coValidate('coAltMobile')"/>
+                </div>
+                <p class="co-err-msg" id="coAltMobile-err"></p>
+              </div>
+
               <!-- PIN Code -->
               <div>
                 <label class="field-label">PIN Code <span style="color:#ef4444">*</span></label>
@@ -587,7 +659,7 @@ a .nansai-icon,
                   <input type="text" class="co-inp" id="coPin" maxlength="6" autocomplete="postal-code"
                     placeholder="6-digit PIN"
                     oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);coPinLookup(this.value)"/>
-                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking upï¿½</span>
+                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking up...</span>
                 </div>
                 <p class="co-err-msg" id="coPin-err"></p>
               </div>
@@ -627,13 +699,20 @@ a .nansai-icon,
                 <p class="co-err-msg" id="coCity-err"></p>
               </div>
 
-              <!-- State (read-only) -->
+              <!-- State -->
               <div>
                 <label class="field-label">State <span style="color:#ef4444">*</span></label>
-                <input type="text" class="co-inp" id="coState" readonly autocomplete="address-level1"
+                <input type="text" class="co-inp" id="coState" autocomplete="address-level1"
                   placeholder="Auto-filled from PIN"
-                  style="background:var(--fog);cursor:not-allowed"/>
-                <p style="font-size:.67rem;color:var(--sage);margin-top:3px">Filled automatically from PIN</p>
+                  oninput="coValidate('coState')"/>
+                <p style="font-size:.67rem;color:var(--sage);margin-top:3px">Auto-filled · you can edit if needed</p>
+              </div>
+
+              <div style="grid-column:span 2">
+                <label class="field-label">Country <span style="color:#ef4444">*</span></label>
+                <input type="text" class="co-inp" id="coCountry" autocomplete="country-name"
+                  value="India" oninput="coValidate('coCountry')"/>
+                <p class="co-err-msg" id="coCountry-err"></p>
               </div>
 
             </div>
@@ -792,7 +871,7 @@ a .nansai-icon,
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="var(--moss)" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="var(--moss)" stroke-width="2"/></svg>
               <div>
                 <p class="rzp-section-title">Billing Address</p>
-                <p class="rzp-section-sub">Where should we send the invoice?</p>
+                <p class="rzp-section-sub">Where should we send order updates?</p>
               </div>
             </div>
             <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
@@ -873,7 +952,7 @@ a .nansai-icon,
               </div>
             </div>
 
-            <!-- Pay Now Button â€” hidden on mobile (sticky bar handles it) -->
+            <!-- Pay Now Button - hidden on mobile (sticky bar handles it) -->
             <button class="btn-pay-now" id="btnPayNow" onclick="initiateRazorpay()" style="border-radius:8px">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#555"/></svg>
               <span id="payNowLabel">Pay Now</span>
@@ -978,6 +1057,7 @@ a .nansai-icon,
         <button class="filter-pill active" onclick="setOrderFilter(this,'all')">All Orders</button>
         <button class="filter-pill" onclick="setOrderFilter(this,'delivered')">Delivered</button>
         <button class="filter-pill" onclick="setOrderFilter(this,'shipped')">Shipped</button>
+        <button class="filter-pill" onclick="setOrderFilter(this,'confirmed')">Confirmed</button>
         <button class="filter-pill" onclick="setOrderFilter(this,'processing')">Processing</button>
         <button class="filter-pill" onclick="setOrderFilter(this,'cancelled')">Cancelled</button>
       </div>
@@ -1006,29 +1086,6 @@ a .nansai-icon,
 
 <!-- ------------------ MODALS ------------------ -->
 
-<!-- Track Modal -->
-<div class="modal-back" id="trackModal">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-head">
-      <div><h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Track Package</h2><p style="font-size:.78rem;color:var(--ink-3);margin-top:2px" id="trackOrderIdLabel"></p></div>
-      <button class="modal-close" onclick="closeModal('trackModal')">&#x2715;</button>
-    </div>
-    <div class="modal-body">
-      <div style="background:linear-gradient(135deg,var(--fog),rgba(45,90,61,.08));border-radius:16px;padding:24px;text-align:center;margin-bottom:22px">
-        <div style="font-size:2.5rem;margin-bottom:8px">&#128666;</div>
-        <p style="font-weight:700;color:var(--moss)" id="trackETA"></p>
-      </div>
-      <div id="trackTimeline" style="margin-bottom:20px"></div>
-      <div style="background:var(--fog);border-radius:14px;padding:16px 18px">
-        <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px">Tracking Number</p>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <p style="font-family:'DM Mono',monospace;font-size:.9rem;color:var(--ink)" id="trackNumber"></p>
-          <button onclick="copyTracking()" style="font-size:.78rem;font-weight:600;color:var(--moss);border:none;background:none;cursor:pointer">Copy</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Review Modal -->
 <div class="modal-back" id="reviewModal">
@@ -1084,42 +1141,6 @@ a .nansai-icon,
   </div>
 </div>
 
-<!-- Invoice Modal -->
-<div class="modal-back" id="invoiceModal">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-head">
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Invoice</h2>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button onclick="window.print()" class="btn btn-ghost" style="padding:7px 16px;border-radius:10px;font-size:.8rem">&#128424; Print</button>
-        <button class="modal-close" onclick="closeModal('invoiceModal')">&#x2715;</button>
-      </div>
-    </div>
-    <div class="modal-body" id="invoiceContent">
-      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:22px">
-        <div><p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--moss)">NANSEI</p><p style="font-size:.78rem;color:var(--ink-3)">nansei.in</p></div>
-        <div style="text-align:right">
-          <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Invoice</p>
-          <p style="font-family:'DM Mono',monospace;font-weight:600;font-size:.88rem;margin-top:2px" id="inv-id"></p>
-          <p style="font-size:.78rem;color:var(--ink-3);margin-top:2px" id="inv-date"></p>
-        </div>
-      </div>
-      <div style="background:var(--fog);border-radius:12px;padding:14px 18px;margin-bottom:20px">
-        <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px">Billed To</p>
-        <p style="font-weight:700;font-size:.9rem">Karthikeyan M.</p>
-        <p style="font-size:.82rem;color:var(--ink-3);margin-top:2px">42, Gandhi Nagar 2nd Street, Madurai  625001</p>
-      </div>
-      <div id="inv-items" class="inv-table" style="margin-bottom:20px"></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;justify-content:space-between;font-size:.85rem"><span style="color:var(--ink-3)">Subtotal</span><span id="inv-sub"></span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.85rem"><span style="color:var(--ink-3)">Delivery</span><span id="inv-del"></span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.85rem"><span style="color:var(--ink-3)">GST (5%)</span><span id="inv-tax"></span></div>
-        <div class="divider"></div>
-        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:1rem"><span>Total</span><span style="color:var(--moss)" id="inv-total"></span></div>
-      </div>
-      <p style="text-align:center;font-size:.75rem;color:var(--sage);margin-top:22px">Thank you for choosing NANSEI &#127807;</p>
-    </div>
-  </div>
-</div>
 
 <!-- Return Modal -->
 <div class="modal-back" id="returnModal">
@@ -1149,11 +1170,19 @@ a .nansai-icon,
   <div style="max-width:1100px;margin:0 auto;padding:3rem 1.75rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2.5rem">
     <div>
       <img src="nansei organics.png" class="h-16 w-auto mb-4 brightness-0 invert" alt="Nansei Organics"/>
-      <p style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-bottom:1rem">100% organic & high-quality agricultural products. Trusted by farmers and families.</p>
-    </div>
+      <p style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-bottom:1rem">100% organic &amp; high-quality agricultural products. Trusted by farmers and families.</p>
     </div>
   </div>
-  <div style="border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.75rem;text-align:center;font-size:.72rem;color:#6b7280">&copy; 2026 NANSEI Organics. All Rights Reserved. Made with &#128154;</div>
+  <div style="border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.75rem;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <span style="font-size:.72rem;color:#6b7280;">&copy; 2026 NANSEI Organics. All Rights Reserved. Made with &#128154;</span>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <a href="privacy-policy.html" style="font-size:.72rem;color:#9ca3af;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Privacy Policy</a>
+        <a href="terms-and-conditions.html" style="font-size:.72rem;color:#9ca3af;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Terms &amp; Conditions</a>
+        <a href="refund-policy.html" style="font-size:.72rem;color:#9ca3af;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Refund Policy</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <div id="toast"></div>
@@ -1168,7 +1197,7 @@ window.API_BASE = window.API_BASE || (isLocal ? 'http://localhost:5000/api' : 'h
 // -- RAZORPAY CONFIGURATION --
 const RZP_MERCHANT_NAME = 'NANSEI Organics';
 const RZP_MERCHANT_LOGO = '';
-let _rzpKeyId = ''; // set from backend response ï¿½ leave empty until you add real keys
+let _rzpKeyId = ''; // set from backend response; leave empty until you add real keys
 
 // -- AUTH TOKEN HELPERS --
 function _getTok() {
@@ -1176,6 +1205,40 @@ function _getTok() {
          localStorage.getItem('nansai_token') ||
          sessionStorage.getItem('nansai_token');
 }
+
+// -- Customer FCM push notification registration --
+(async function initCustomerFCM() {
+  if (!_getTok()) return;
+  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
+  try {
+    await navigator.serviceWorker.register('/pages/firebase-messaging-sw.js');
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js');
+    const { getMessaging, getToken, onMessage } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js');
+    const fbApp = initializeApp({
+      apiKey: 'AIzaSyExample-ReplaceWithRealKey',
+      authDomain: 'nansei-ddbf6.firebaseapp.com',
+      projectId: 'nansei-ddbf6',
+      storageBucket: 'nansei-ddbf6.appspot.com',
+      messagingSenderId: 'REPLACE_WITH_SENDER_ID',
+      appId: 'REPLACE_WITH_APP_ID',
+    }, 'customer-app');
+    const messaging = getMessaging(fbApp);
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+    const token = await getToken(messaging, { vapidKey: 'REPLACE_WITH_VAPID_KEY' });
+    if (token) {
+      fetch(window.API_BASE + '/orders/save-fcm-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _getTok() },
+        body: JSON.stringify({ token })
+      }).catch(() => {});
+    }
+    onMessage(messaging, (payload) => {
+      const n = payload.notification || {};
+      showToast('Order Update: ' + (n.title || '') + ' - ' + (n.body || ''));
+    });
+  } catch(e) { console.warn('[FCM] Customer init failed:', e.message); }
+})();
 
 let cart = [];
 let addresses = [];
@@ -1228,7 +1291,15 @@ async function _fetchDBAddresses() {
   try {
     const res = await _apiReq('GET', '/addresses');
     return (res.data || []).map(a => ({
-      _id: a._id, name: a.name, tag: a.tag || 'Home',
+      _id: a._id, name: a.name, fullName: a.fullName || a.name, tag: a.addressType || a.tag || 'Home',
+      addressLine1: a.addressLine1 || a.line1 || '',
+      addressLine2: a.addressLine2 || a.line2 || '',
+      city: a.city || '',
+      state: a.state || '',
+      pincode: a.pincode || '',
+      country: a.country || 'India',
+      mobileNumber: a.mobileNumber || a.phone || '',
+      alternateMobileNumber: a.alternateMobileNumber || '',
       line: a.line1 + (a.line2 ? '\n' + a.line2 : '') + ',\n' + a.city + '  ' + a.pincode,
       phone: a.phone ? '+91 ' + a.phone : ''
     }));
@@ -1244,7 +1315,7 @@ function _saveLC(c) { localStorage.setItem('cart', JSON.stringify(c)); }
 document.addEventListener('DOMContentLoaded', () => {
   cart = _lcCart();
   addresses = _loadAddresses();
-  // Clear localStorage orders if user is logged in â€” API is the source of truth
+  // Clear localStorage orders if user is logged in; API is the source of truth
   if (_getTok()) localStorage.removeItem('mkOrders');
   renderCartStep();
   loadAndRenderAddrGrid();
@@ -1563,11 +1634,14 @@ function toggleNewAddr() {
 }
 // -- CHECKOUT ADDRESS: validation rules --
 const _coRules = {
-  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3ï¿½50 letters)' },
+  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3-50 letters)' },
   coMobile:{ test: v => /^[6-9]\d{9}$/.test(v),                  msg: 'Enter a valid 10-digit Indian mobile number' },
+  coAltMobile:{ test: v => !v || /^[6-9]\d{9}$/.test(v),          msg: 'Enter a valid alternate mobile number' },
   coPin:   { test: v => /^[1-9]\d{5}$/.test(v),                  msg: 'Enter a valid 6-digit PIN code' },
   coAddr1: { test: v => v.trim().length >= 5,                     msg: 'Enter at least 5 characters for address' },
   coCity:  { test: v => /^[a-zA-Z\s.'-]{2,50}$/.test(v.trim()),  msg: 'Enter a valid city name' },
+  coState: { test: v => /^[a-zA-Z\s.'-]{2,50}$/.test(v.trim()),  msg: 'Enter a valid state name' },
+  coCountry:{ test: v => v.trim().length >= 2,                    msg: 'Country is required' },
 };
 function coValidate(id) {
   const el = document.getElementById(id);
@@ -1612,12 +1686,14 @@ function coPinLookup(val) {
     try {
       const res = await fetch('https://api.postalpincode.in/pincode/' + val);
       const data = await res.json();
-      if (data[0]?.Status === 'Success') {
-        const po = data[0].PostOffice[0];
+      const po = data[0]?.PostOffice?.[0];
+      console.log('PIN API response:', po);
+      if (data[0]?.Status === 'Success' && po) {
         const city = document.getElementById('coCity');
-        const state = document.getElementById('coState');
-        if (city) { city.value = po.District; coValidate('coCity'); }
-        if (state) { state.value = po.State; state.classList.add('co-ok'); }
+        const stateInp = document.getElementById('coState');
+        const stateVal = po.State || po.Circle || '';
+        if (city) { city.value = po.District || po.Block || po.Name || ''; coValidate('coCity'); }
+        if (stateInp) { stateInp.value = stateVal.trim(); coValidate('coState'); }
         _coClearErr('coPin');
       } else {
         _coShowErr('coPin', 'PIN code not found. Please check and re-enter.');
@@ -1634,14 +1710,11 @@ function setAddrType(type, btn) {
   btn.style.borderColor = 'var(--moss)'; btn.style.background = 'rgba(45,90,61,.06)'; btn.style.color = 'var(--moss)';
 }
 async function saveNewAddr() {
-  const required = ['coName','coMobile','coPin','coAddr1','coCity'];
+  const required = ['coName','coMobile','coPin','coAddr1','coCity','coCountry'];
   let valid = true;
   required.forEach(id => { if (!coValidate(id)) valid = false; });
-  const stateEl = document.getElementById('coState');
-  if (!stateEl || !stateEl.value.trim()) {
-    _coShowErr('coPin', 'Enter a valid PIN code to auto-fill state');
-    valid = false;
-  }
+  if (!coValidate('coAltMobile')) valid = false;
+  if (!coValidate('coState')) valid = false;
   if (!valid) {
     const firstErr = document.querySelector('#newAddrForm .co-err');
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1650,24 +1723,29 @@ async function saveNewAddr() {
   }
   const name = document.getElementById('coName').value.trim();
   const mob  = document.getElementById('coMobile').value.trim();
+  const altMob = document.getElementById('coAltMobile').value.trim();
   const a1   = document.getElementById('coAddr1').value.trim();
   const a2   = document.getElementById('coAddr2').value.trim();
   const city = document.getElementById('coCity').value.trim();
   const pin  = document.getElementById('coPin').value.trim();
-  const state = stateEl.value.trim();
-  const na = { name, tag: _coAddrType, line: a1 + (a2 ? ', ' + a2 : '') + ',\n' + city + '  ' + pin, phone: '+91 ' + mob };
+  const state = document.getElementById('coState').value.trim();
+  const country = document.getElementById('coCountry').value.trim() || 'India';
+
+  const na = { name, fullName: name, tag: _coAddrType, addressLine1: a1, addressLine2: a2, city, state, pincode: pin, country, alternateMobileNumber: altMob, line: a1 + (a2 ? ', ' + a2 : '') + ',\n' + city + '  ' + pin, phone: '+91 ' + mob, mobileNumber: mob };
   if (_getTok()) {
     try {
-      await _apiReq('POST', '/addresses', { name, phone: mob, line1: a1, line2: a2, city, state, pincode: pin, addressType: _coAddrType, isDefault: addresses.length === 0 });
+      await _apiReq('POST', '/addresses', { name, phone: mob, alternateMobileNumber: altMob, line1: a1, line2: a2, city, state, pincode: pin, country, addressType: _coAddrType, isDefault: addresses.length === 0 });
       const dbAddrs = await _fetchDBAddresses();
       if (dbAddrs) addresses = dbAddrs;
     } catch { addresses.push(na); _saveAddresses(addresses); }
   } else { addresses.push(na); _saveAddresses(addresses); }
   selectedAddrIdx = addresses.length - 1;
   renderAddrGrid();
-  ['coName','coMobile','coAddr1','coAddr2','coCity','coState','coPin'].forEach(id => {
+  ['coName','coMobile','coAltMobile','coAddr1','coAddr2','coCity','coState','coPin','coCountry'].forEach(id => {
     const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('co-ok','co-err'); }
   });
+  const countryEl = document.getElementById('coCountry');
+  if (countryEl) countryEl.value = 'India';
   _coAddrType = 'Home';
   coSetType('Home', document.getElementById('coTypeHome'));
   document.getElementById('newAddrForm').style.display = 'none';
@@ -1734,6 +1812,26 @@ function toggleMobileSummary() {
   if (chev) chev.style.transform = !isOpen ? 'rotate(180deg)' : 'rotate(0)';
 }
 
+function buildShippingAddress(addr) {
+  const addrLine = addr?.line || '';
+  const addrParts = addrLine.split(',\n');
+  const line1 = addr.addressLine1 || addrParts[0]?.trim() || addrLine;
+  const cityPin = (addrParts[1] || '').trim();
+  const cityMatch = cityPin.match(/^(.+?)[\s-]+(\d{6})$/);
+  const mobileNumber = (addr?.mobileNumber || addr?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+  return {
+    fullName: addr?.fullName || addr?.name || 'Customer',
+    mobileNumber,
+    alternateMobileNumber: (addr?.alternateMobileNumber || '').replace(/[^0-9]/g, '').slice(-10),
+    addressLine1: line1,
+    addressLine2: addr?.addressLine2 || '',
+    city: addr?.city || (cityMatch ? cityMatch[1].trim() : cityPin),
+    state: addr?.state || 'Tamil Nadu',
+    pincode: addr?.pincode || (cityMatch ? cityMatch[2] : ''),
+    country: addr?.country || 'India'
+  };
+}
+
 // ----------------------------------------------
 //  RAZORPAY INTEGRATION
 // ----------------------------------------------
@@ -1742,15 +1840,15 @@ async function initiateRazorpay() {
   if (!addresses.length) { showToast('&#128205; Please add a delivery address.'); return; }
   if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
 
-  // COD ï¿½ place order directly, no payment gateway
+  // COD: place order directly, no payment gateway
   if (selectedGateway === 'cod') {
-    _showProcessingOverlay('Placing Order', 'Confirming your Cash on Delivery order');
+    _showProcessingOverlay('Placing Order', 'Confirming your Cash on Delivery order', _doPlaceOrder);
     return;
   }
 
   const { total } = calcTotal();
   const addr = addresses[selectedAddrIdx];
-  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
+  const phone = buildShippingAddress(addr).mobileNumber || '9999999999';
 
   const btn = document.getElementById('btnPayNow');
   if (btn) { btn.disabled = true; btn.innerHTML = `<svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Opening Gateway...`; }
@@ -1772,21 +1870,22 @@ async function initiateRazorpay() {
   }
 
   // Step 1: Create Razorpay order on backend to get order_id
-  // NOTE: send amount in rupees â€” backend converts to paise
+  // Uses /api/payment/create-order which accepts { amount } directly
   let rzpOrderId = null;
   try {
-    const rzpRes = await fetch(window.API_BASE + '/orders/razorpay/create', {
+    const rzpRes = await fetch(window.API_BASE + '/payment/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(_getTok() ? { Authorization: 'Bearer ' + _getTok() } : {}) },
-      body: JSON.stringify({ amount: total, currency: 'INR', receipt: 'rcpt_' + Date.now() })
+      body: JSON.stringify({ amount: total, currency: 'INR' })
     });
     const rzpData = await rzpRes.json();
     if (!rzpData.success) throw new Error(rzpData.message || 'Order creation failed');
-    rzpOrderId = rzpData.data.orderId;
-    _rzpKeyId = rzpData.data.keyId || _rzpKeyId;
+    rzpOrderId = rzpData.orderId;
+    _rzpKeyId = rzpData.keyId || _rzpKeyId;
+    if (!_rzpKeyId) throw new Error('Razorpay key not received from server. Check RAZORPAY_KEY_ID in .env');
   } catch(e) {
     console.error('Razorpay order creation failed:', e.message);
-    if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
+    if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
     showToast('&#10060; ' + (e.message || 'Could not connect to payment server. Is the backend running?'));
     return;
   }
@@ -1794,12 +1893,12 @@ async function initiateRazorpay() {
   // Step 2: Open Razorpay checkout
   const options = {
     key: _rzpKeyId,
-    amount: total * 100, // paise â€” must match what backend created
+    amount: total * 100,
     currency: 'INR',
     name: RZP_MERCHANT_NAME,
     description: 'Order from NANSEI Organics - ' + cart.length + ' item' + (cart.length > 1 ? 's' : ''),
     image: RZP_MERCHANT_LOGO || '',
-    order_id: rzpOrderId, // REQUIRED for signature verification
+    order_id: rzpOrderId,
     prefill: {
       name: addr?.name || '',
       email: '',
@@ -1817,13 +1916,12 @@ async function initiateRazorpay() {
       ondismiss: function () {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
         }
-      showToast('Payment cancelled. Try again when ready.');
+        showToast('Payment cancelled. Try again when ready.');
       }
     },
     handler: function (response) {
-      // response.razorpay_payment_id, .razorpay_order_id, .razorpay_signature
       _onRazorpaySuccess(response);
     }
   };
@@ -1831,45 +1929,41 @@ async function initiateRazorpay() {
   try {
     const rzp = new Razorpay(options);
     rzp.on('payment.failed', function (response) {
-      if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      }
       showToast('&#10060; Payment failed: ' + (response.error?.description || 'Please try again.'));
     });
     rzp.open();
   } catch (err) {
-    // Razorpay not loaded or invalid key â€” show processing simulation
     console.warn('Razorpay load error:', err);
-    if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    // Simulate success for demo
-    _showProcessingOverlay('Processing Payment', 'Verifying with Razorpay');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    }
+    showToast('&#10060; Razorpay could not be loaded. Please try again.');
   }
 }
 
 async function _onRazorpaySuccess(response) {
-  _showProcessingOverlay('Verifying Payment', 'Confirming with Razorpay');
+  _showProcessingOverlay('Verifying Payment', 'Confirming with Razorpay', null);
 
   const { sub, disc, gst, total } = calcTotal();
   const addr = addresses[selectedAddrIdx];
-  const addrLine = addr?.line || '';
-  const addrParts = addrLine.split(',\n');
-  const line1 = addrParts[0]?.trim() || addrLine;
-  const cityPin = (addrParts[1] || '').trim();
-  const cityMatch = cityPin.match(/^(.+?)\s*[-]\s*(\d{6})$/);
-  const city = cityMatch ? cityMatch[1].trim() : cityPin;
-  const pincode = cityMatch ? cityMatch[2] : '000000';
-  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
   const d = new Date(); d.setDate(d.getDate() + 5);
 
   const orderPayload = {
     items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, price: c.price })),
-    shippingAddress: { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: 'Tamil Nadu', pincode, country: 'India' },
+    shippingAddress: buildShippingAddress(addr),
     paymentMethod: 'Razorpay',
     itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
 
-  // Verify signature on backend (works for both guests and logged-in users)
   try {
-    const verifyRes = await fetch(window.API_BASE + '/orders/razorpay/verify', {
+    // Single call: verifies signature AND saves order to DB
+    const res = await fetch(window.API_BASE + '/orders/razorpay/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(_getTok() ? { Authorization: 'Bearer ' + _getTok() } : {}) },
       body: JSON.stringify({
@@ -1879,19 +1973,23 @@ async function _onRazorpaySuccess(response) {
         orderPayload
       })
     });
-    const verifyData = await verifyRes.json();
-    if (!verifyData.success || !verifyData.verified) {
-      console.error('Signature verification failed:', verifyData.message);
+    const data = await res.json();
+    if (!data.success || !data.verified || !data.data) {
+      throw new Error(data.message || 'Signature verification failed');
     }
+    _completePlacedOrder(data.data);
   } catch(e) {
-    console.warn('Verify call failed, order saved locally:', e.message);
+    document.getElementById('processingOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+    showToast('&#10060; ' + (e.message || 'Payment verification failed. Contact support if money was debited.'));
+    console.warn('Razorpay verify failed:', e.message);
   }
-  // _showProcessingOverlay already schedules _doPlaceOrder after 2.8s
 }
 
-function _showProcessingOverlay(title, sub) {
+function _showProcessingOverlay(title, sub, nextFn) {
   title = title || 'Processing Payment';
   sub = sub || 'Please do not press back or refresh';
+  document.getElementById('procTitle').textContent = title;
   document.getElementById('procSub').textContent = sub;
   const bar = document.getElementById('procBar');
   bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
@@ -1899,7 +1997,20 @@ function _showProcessingOverlay(title, sub) {
   ov.classList.add('show');
   document.body.style.overflow = 'hidden';
   setTimeout(() => { document.getElementById('procTitle').textContent = 'Confirming your order'; document.getElementById('procSub').textContent = 'Almost there, hang tight!'; }, 1400);
-  setTimeout(() => { ov.classList.remove('show'); document.body.style.overflow = ''; _doPlaceOrder(); }, 2800);
+  if (nextFn !== null) {
+    setTimeout(() => { ov.classList.remove('show'); document.body.style.overflow = ''; (nextFn || _doPlaceOrder)(); }, 2800);
+  }
+}
+
+function _completePlacedOrder(order) {
+  const d = new Date(order.estimatedDelivery || Date.now() + 5 * 24 * 60 * 60 * 1000);
+  _saveLC([]); cart = [];
+  document.getElementById('processingOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+  document.getElementById('successOrderId').textContent = order.orderNumber || order.orderId || order._id;
+  document.getElementById('successDelivDate').textContent = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+  document.getElementById('successOverlay').classList.add('show');
+  spawnConfetti(); updateOrdersBadge();
 }
 
 // ----------------------------------------------
@@ -1912,24 +2023,12 @@ async function _doPlaceOrder() {
   const addr = addresses[selectedAddrIdx];
   const now = new Date().toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  const addrLine = addr?.line || '';
-  const addrParts = addrLine.split(',\n');
-  const line1 = addrParts[0]?.trim() || addrLine;
-  const cityPin = (addrParts[1] || '').trim();
-  const cityMatch = cityPin.match(/^(.+?)\s*[-]\s*(\d{6})$/);
-  const city = cityMatch ? cityMatch[1].trim() : cityPin;
-  const pincode = cityMatch ? cityMatch[2] : '000000';
-  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
-
   const isCod = selectedGateway === 'cod';
   const payMethodMap = { razorpay: 'Razorpay', payu: 'PayU', cod: 'COD' };
   const payload = {
     items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, price: c.price })),
-    shippingAddress: { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: 'Tamil Nadu', pincode, country: 'India' },
+    shippingAddress: buildShippingAddress(addr),
     paymentMethod: payMethodMap[selectedGateway] || 'Razorpay',
-    isPaid: !isCod,
-    paidAt: isCod ? undefined : new Date().toISOString(),
-    paymentInfo: isCod ? undefined : { id: 'PAY' + Date.now(), status: 'completed', paidAt: new Date().toISOString() },
     itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
@@ -1943,11 +2042,14 @@ async function _doPlaceOrder() {
       oid = o.orderNumber || o._id?.slice(-8) || oid;
       _apiReq('DELETE', '/cart/clear').catch(() => { });
     } catch (err) {
-      console.warn('Order API failed, saving locally:', err.message);
-      _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d);
+      showToast('&#10060; Could not place order: ' + err.message);
+      console.warn('Order API failed:', err.message);
+      return;
     }
   } else {
-    _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d);
+    showToast('&#128274; Please login to place an order.');
+    setTimeout(() => window.location.href = 'login.html', 900);
+    return;
   }
 
   _saveLC([]); cart = [];
@@ -2053,10 +2155,24 @@ function sendWhatsAppOrder() {
 // ----------------------------------------------
 //  ORDERS PAGE
 // ----------------------------------------------
-function statusColor(s) { return { delivered: 'var(--moss)', shipped: '#1d4ed8', processing: 'var(--amber)', cancelled: 'var(--red)' }[s] || 'var(--ink-3)'; }
-function statusProgress(s) { return { delivered: 100, shipped: 66, processing: 33, cancelled: 0 }[s] || 0; }
-function statusLabel(s) { return { delivered: 'Delivered', shipped: 'Shipped', processing: 'Processing', cancelled: 'Cancelled' }[s] || s; }
-function statusClass(s) { return { delivered: 'sb-delivered', shipped: 'sb-shipped', processing: 'sb-processing', cancelled: 'sb-cancelled' }[s] || ''; }
+function shippingMsg(ss) {
+  const msgs = {
+    Pending:   'Waiting for shipment confirmation.',
+    Confirmed: 'Shipment confirmed and preparing for dispatch.',
+    Shipped:   'Your order has been shipped.',
+    'Out For Delivery': 'Your order is out for delivery.',
+    Delivered: 'Order delivered successfully.',
+    Cancelled: 'Order has been cancelled.',
+  };
+  return msgs[ss] || 'Processing your order.';
+}
+function shippingColor(ss) {
+  return { Pending:'#b45309', Confirmed:'#1d4ed8', Shipped:'#7c3aed', 'Out For Delivery':'#ea580c', Delivered:'var(--moss)', Cancelled:'var(--red)' }[ss] || 'var(--ink-3)';
+}
+function statusColor(s) { return { delivered: 'var(--moss)', shipped: '#1d4ed8', packed: '#7c3aed', processing: 'var(--amber)', cancelled: 'var(--red)' }[s] || 'var(--ink-3)'; }
+function statusProgress(ss) { return { Pending:12, Confirmed:36, Shipped:62, 'Out For Delivery':84, Delivered:100, Cancelled:0 }[ss] || 0; }
+function statusLabel(s) { return { delivered: 'Delivered', shipped: 'Shipped', packed: 'Packed', processing: 'Processing', cancelled: 'Cancelled' }[s] || s; }
+function statusClass(s) { return { delivered: 'sb-delivered', shipped: 'sb-shipped', packed: 'sb-packed', processing: 'sb-processing', cancelled: 'sb-cancelled' }[s] || ''; }
 
 function setOrderFilter(btn, val) {
   currentOrderFilter = val;
@@ -2068,28 +2184,36 @@ function renderOrders() {
     _apiReq('GET', '/orders/my-orders').then(res => {
       const apiOrders = (res.data || []).map(o => {
         const d = new Date(o.createdAt);
-        const eta = o.estimatedDelivery ? new Date(o.estimatedDelivery).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : '';
-        const statusMap = { Pending: 'processing', Processing: 'processing', Shipped: 'shipped', Delivered: 'delivered', Cancelled: 'cancelled' };
+        const shipStatus = o.shippingStatus || o.orderStatus || 'Pending';
+        const etaDate = o.estimatedDeliveryDate || o.estimatedDelivery;
+        const eta = etaDate ? new Date(etaDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : '';
+        const statusMap = { Pending: 'processing', Confirmed: 'packed', Processing: 'processing', Packed: 'packed', Shipped: 'shipped', 'Out For Delivery': 'shipped', Delivered: 'delivered', Cancelled: 'cancelled' };
         return {
           id: o.orderNumber || o._id, _dbId: o._id,
           date: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
           dateObj: o.createdAt, total: o.totalPrice, subtotal: o.itemsPrice, discount: o.discount || 0,
           deliveryCost: o.shippingPrice || 0, codFee: 0,
-          status: statusMap[o.orderStatus] || 'processing',
-          trackingNo: o.trackingNumber || 'ORD-TR-' + o._id?.slice(-8),
+          status: statusMap[shipStatus] || 'processing',
+          shippingStatus: shipStatus,
+          trackingNo: o.awbCode || '',
+          courier: o.courierName || '',
+          trackingUrl: o.trackingUrl || '',
           payMethod: o.paymentMethod, eta,
-          address: { name: o.shippingAddress?.fullName, tag: 'Home', line: (o.shippingAddress?.addressLine1 || '') + ',\n' + (o.shippingAddress?.city || '') + '  ' + (o.shippingAddress?.pincode || ''), phone: o.shippingAddress?.phone || '' },
+          estimatedDeliveryDate: etaDate,
+          currentTrackingStatus: o.currentTrackingStatus || '',
+          address: { name: o.shippingAddress?.fullName, tag: 'Home', line: (o.shippingAddress?.addressLine1 || '') + ',\n' + (o.shippingAddress?.city || '') + '  ' + (o.shippingAddress?.pincode || ''), phone: o.shippingAddress?.mobileNumber || o.shippingAddress?.phone || '' },
           products: (o.items || []).map(i => ({ id: i.product?._id || i.product, name: i.name, image: i.image, price: i.price, qty: i.quantity, oldPrice: null })),
           timeline: [
             { label: 'Order Placed', date: d.toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }), done: true },
             { label: 'Payment Confirmed', date: o.isPaid ? new Date(o.paidAt || o.createdAt).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Pending', done: o.isPaid },
-            { label: 'Being Packed', date: '', done: ['Processing', 'Shipped', 'Delivered'].includes(o.orderStatus) },
-            { label: 'Dispatched', date: o.trackingNumber ? 'Tracking: ' + o.trackingNumber : '', done: ['Shipped', 'Delivered'].includes(o.orderStatus) },
-            { label: 'Delivered', date: o.deliveredAt ? new Date(o.deliveredAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }) : 'Exp. ' + eta, done: o.orderStatus === 'Delivered' }
+            { label: 'Shipment Confirmed', date: '', done: ['Confirmed', 'Shipped', 'Out For Delivery', 'Delivered'].includes(shipStatus) },
+            { label: 'Shipped', date: o.awbCode ? 'AWB: ' + o.awbCode : '', done: ['Shipped', 'Out For Delivery', 'Delivered'].includes(shipStatus) },
+            { label: 'Out For Delivery', date: '', done: ['Out For Delivery', 'Delivered'].includes(shipStatus) },
+            { label: 'Delivered', date: o.deliveredAt ? new Date(o.deliveredAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }) : (eta ? 'Exp. ' + eta : ''), done: shipStatus === 'Delivered' }
           ]
         };
       });
-      // When logged in â€” show ONLY API orders, ignore localStorage junk
+      // When logged in; show ONLY API orders, ignore localStorage junk
       _renderOrderList(apiOrders);
     }).catch(() => _renderOrderList(getOrders()));
   } else {
@@ -2097,7 +2221,7 @@ function renderOrders() {
   }
 }
 function _renderOrderList(list) {
-  if (currentOrderFilter !== 'all') list = list.filter(o => o.status === currentOrderFilter);
+  if (currentOrderFilter !== 'all') list = list.filter(o => o.ssClass === currentOrderFilter || o.status === currentOrderFilter);
   const q = (document.getElementById('ordersSearch')?.value || '').toLowerCase().trim();
   if (q) list = list.filter(o => o.id.toLowerCase().includes(q) || o.products.some(p => p.name.toLowerCase().includes(q)));
   const sort = document.getElementById('sortSelect')?.value || 'newest';
@@ -2110,24 +2234,70 @@ function _renderOrderList(list) {
   empty.style.display = 'none';
   label.textContent = `Showing ${list.length} order${list.length !== 1 ? 's' : ''}`;
   container.innerHTML = list.map((o, idx) => renderOrderCard(o, idx)).join('');
-  requestAnimationFrame(() => { list.forEach(o => { const bar = document.getElementById('bar-' + o.id); if (bar) setTimeout(() => { bar.style.width = statusProgress(o.status) + '%'; }, 200); }); });
+  requestAnimationFrame(() => {
+    list.forEach(o => {
+      const bar = document.getElementById('bar-' + o.id);
+      if (bar) setTimeout(() => { bar.style.width = statusProgress(o.shippingStatus || 'Pending') + '%'; }, 150 + list.indexOf(o) * 60);
+    });
+  });
+
 }
 function renderOrderCard(o, idx) {
-  const mp = o.products[0], ex = o.products.length - 1;
-  const ic = o.status === 'cancelled', id = o.status === 'delivered', is = o.status === 'shipped', ip = o.status === 'processing';
+  const mp  = o.products[0], ex = o.products.length - 1;
+  const ss  = o.shippingStatus || 'Pending';
+  const ic  = ss === 'Cancelled';
+  const id  = ss === 'Delivered';
+  const is  = ss === 'Shipped';
+  const isc = ss === 'Confirmed';
+
+  const barPct   = statusProgress(ss);
+  const barColor = shippingColor(ss);
+
+  const STEPS    = ['Order Placed', 'Shipment Confirmed', 'Shipped', 'Out For Delivery', 'Delivered'];
+  const STEP_SS  = ['Pending', 'Confirmed', 'Shipped', 'Out For Delivery', 'Delivered'];
+  const activeIdx = STEP_SS.indexOf(ss);
+  const stepsHtml = STEPS.map((s, i) => {
+    const done   = i < activeIdx;
+    const active = i === activeIdx;
+    const col    = done || active ? barColor : 'var(--ink-3)';
+    const weight = active ? '800' : done ? '700' : '600';
+    return `<span style="font-size:.65rem;font-weight:${weight};color:${col};${active ? 'text-decoration:underline;text-underline-offset:3px;' : ''}">${s}</span>`;
+  }).join('');
+
   let actions = '';
-  if (id) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReview('${o.id}')">&#11088; Review</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReturn('${o.id}')">&#128230; Return</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
-  else if (is) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track Package</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel</button>`;
-  else if (ip) actions = `<button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel Order</button>`;
-  else actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
-  const steps = ['Ordered', 'Packed', 'Shipped', 'Delivered'];
+  if (ic) {
+    actions = `<span style="font-size:.82rem;color:var(--red);font-weight:600;">&#10060; Cancelled</span>`;
+  } else if (id) {
+    actions = `
+      <button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReview('${o.id}')">&#11088; Write a Review</button>
+      <button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button>
+      <button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReturn('${o.id}')">&#128230; Return</button>
+      ${o.trackingUrl ? `<a href="${o.trackingUrl}" target="_blank" class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px;text-decoration:none;">&#128666; Track</a>` : ''}`;
+  } else if (is || ss === 'Out For Delivery') {
+    actions = `
+      ${o.trackingUrl ? `<a href="${o.trackingUrl}" target="_blank" class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px;text-decoration:none;">&#128666; Track Shipment</a>` : `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px;opacity:.65;cursor:default;">&#128666; Shipped</button>`}
+      <button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel</button>`;
+  } else if (isc) {
+    actions = `
+      <button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px;cursor:default;opacity:.7;">&#128230; Preparing Dispatch</button>
+      <button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel</button>`;
+  } else {
+    actions = `
+      <button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px;cursor:default;opacity:.7;">&#9203; Awaiting Confirmation</button>
+      <button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel Order</button>`;
+  }
+
   return `<div class="order-card" style="animation-delay:${idx * .06}s">
     <div class="order-header-bar">
       <div><div class="order-meta-label">Date</div><div class="order-meta-val">${o.date}</div></div>
       <div><div class="order-meta-label">Total</div><div class="order-meta-val">&#8377;${o.total.toLocaleString()}</div></div>
       <div><div class="order-meta-label">Order ID</div><div class="order-meta-val" style="font-family:'DM Mono',monospace;font-size:.82rem">#${o.id}</div></div>
       <div><div class="order-meta-label">Payment</div><div class="order-meta-val">${o.payMethod || ''}</div></div>
-      <div style="margin-left:auto"><span class="status-badge ${statusClass(o.status)}"><span style="width:6px;height:6px;border-radius:50%;background:${statusColor(o.status)};display:inline-block"></span>${statusLabel(o.status)}</span></div>
+      <div style="margin-left:auto">
+        <span class="status-badge" style="background:${barColor}18;color:${barColor};border:1px solid ${barColor}33;">
+          <span style="width:6px;height:6px;border-radius:50%;background:${barColor};display:inline-block;margin-right:5px;"></span>${ss}
+        </span>
+      </div>
     </div>
     <div style="padding:22px 24px;display:flex;flex-wrap:wrap;gap:24px">
       <div style="display:flex;gap:18px;flex:1;min-width:0">
@@ -2141,56 +2311,79 @@ function renderOrderCard(o, idx) {
           <p style="font-size:.78rem;color:var(--ink-3)">Qty: ${mp.qty} &nbsp;&#8377;${mp.price.toLocaleString()} each</p>
           ${!ic ? `
           <div style="margin-top:14px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">${steps.map(s => `<span style="font-size:.65rem;font-weight:600;color:var(--ink-3)">${s}</span>`).join('')}</div>
-            <div class="progress-track"><div id="bar-${o.id}" class="progress-bar" style="width:0%;background:${statusColor(o.status)}"></div></div>
-            <p style="font-size:.78rem;font-weight:700;margin-top:8px;color:${statusColor(o.status)}">&#128666; ${o.eta}</p>
-          </div>` : `<p style="font-size:.8rem;color:var(--red);font-weight:600;margin-top:12px">This order has been cancelled.</p>`}
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">${stepsHtml}</div>
+            <div class="progress-track">
+              <div id="bar-${o.id}" class="progress-bar" style="width:0%;background:linear-gradient(90deg,${barColor},${barColor}cc);"></div>
+            </div>
+            <p style="font-size:.75rem;font-weight:600;margin-top:7px;color:${barColor}">${shippingMsg(ss)}</p>
+            ${(o.courier || o.trackingNo || o.estimatedDeliveryDate || o.currentTrackingStatus) ? `<p style="font-size:.72rem;color:var(--ink-3);margin-top:5px">${o.courier ? 'Courier: <b>' + o.courier + '</b>' : ''}${o.trackingNo ? ' &nbsp; AWB: <b>' + o.trackingNo + '</b>' : ''}${o.eta ? '<br>Estimated delivery: <b>' + o.eta + '</b>' : ''}${o.currentTrackingStatus ? '<br>Live update: <b>' + o.currentTrackingStatus + '</b>' : ''}</p>` : ''}
+          </div>` : `<p style="font-size:.8rem;color:var(--red);font-weight:600;margin-top:12px">&#10060; This order has been cancelled.</p>`}
         </div>
       </div>
       <div class="order-action-row" style="flex-direction:column;align-items:flex-start;gap:8px;min-width:160px">${actions}</div>
     </div>
+    ${id ? `<div style="margin:0 24px 18px;padding:12px 16px;background:linear-gradient(135deg,rgba(45,90,61,.07),rgba(45,90,61,.03));border:1px solid rgba(45,90,61,.2);border-radius:12px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.3rem;">&#127807;</span>
+      <div style="flex:1;">
+        <p style="font-size:.82rem;font-weight:700;color:var(--moss);margin:0;">Order Delivered!</p>
+        <p style="font-size:.75rem;color:var(--ink-3);margin:0;">Share a review to help other customers.</p>
+      </div>
+      <button onclick="openReview('${o.id}')" style="flex-shrink:0;background:var(--moss);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:.78rem;font-weight:700;cursor:pointer;">&#11088; Review</button>
+    </div>` : ''}
   </div>`;
 }
 
 // ----------------------------------------------
 //  MODALS
 // ----------------------------------------------
-function openTrack(id) {
-  currentTrackId = id;
-  const o = getOrders().find(x => x.id === id);
-  document.getElementById('trackOrderIdLabel').textContent = 'Order #' + o.id;
-  document.getElementById('trackNumber').textContent = o.trackingNo;
-  document.getElementById('trackETA').textContent = 'Estimated: ' + o.eta;
-  document.getElementById('trackTimeline').innerHTML = o.timeline.map((step, i, arr) => `
-    <div class="timeline-item">
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <div class="tl-dot" style="background:${step.done ? statusColor(o.status) : 'var(--fog-2)'}"></div>
-        ${i < arr.length - 1 ? `<div class="tl-line"></div>` : ''}
-      </div>
-      <div style="padding-bottom:${i < arr.length - 1 ? '16px' : '0'}">
-        <p style="font-size:.87rem;font-weight:${step.done ? '700' : '400'};color:${step.done ? 'var(--ink)' : 'var(--sage)'}">${step.label}</p>
-        <p style="font-size:.75rem;color:var(--sage);margin-top:2px">${step.date}</p>
-      </div>
-    </div>`).join('');
-  openModal('trackModal');
-}
-function copyTracking() {
-  const o = getOrders().find(x => x.id === currentTrackId);
-  navigator.clipboard.writeText(o.trackingNo).then(() => showToast('&#9989; Copied!')).catch(() => showToast('Tracking: ' + o.trackingNo));
-}
 let _reviewProductIdx = 0;
+let _currentReviewOrder = null;
+let _cachedApiOrders = [];
+
+function _mapApiOrders(apiData) {
+  return (apiData || []).map(o => ({
+    id:       o.orderNumber || o._id,
+    _mongoId: o._id,
+    status:   (o.orderStatus || '').toLowerCase(),
+    products: (o.items || []).map(i => ({
+      id:    String(i.product?._id || i.product || ''),
+      name:  i.name  || i.product?.name  || 'Product',
+      image: i.image || i.product?.images?.[0]?.url || '',
+      qty:   i.quantity || 1,
+      price: i.price || 0,
+    })),
+    total:    o.totalPrice || 0,
+    date:     new Date(o.createdAt).toLocaleDateString('en-IN'),
+    address:  o.shippingAddress,
+    payMethod: o.paymentMethod,
+    trackingNo: o.trackingNumber || '',
+  }));
+}
 function openReview(id) {
   currentReviewId = id; reviewStars = 0; _reviewProductIdx = 0;
-  const o = getOrders().find(x => x.id === id);
-  if (!o) return;
+  // Try localStorage first, then fall back to cached API orders
+  let o = getOrders().find(x => x.id === id) || (_cachedApiOrders || []).find(x => x.id === id);
+  if (!o) {
+    // Last resort: fetch from API
+    if (_getTok()) {
+      _apiReq('GET', '/orders/my-orders').then(res => {
+        const apiOrders = _mapApiOrders(res.data || []);
+        const found = apiOrders.find(x => x.id === id);
+        if (found) { _cachedApiOrders = apiOrders; _openReviewModal(found); }
+        else showToast('Order not found');
+      }).catch(() => showToast('Could not load order'));
+    } else showToast('Order not found');
+    return;
+  }
+  _openReviewModal(o);
+}
+function _openReviewModal(o) {
+  _currentReviewOrder = o;
   _renderReviewProduct(o, 0);
-  // If multiple products, show a selector
   const sel = document.getElementById('reviewProductSelect');
   if (o.products.length > 1) {
     sel.style.display = 'block';
-    sel.innerHTML = o.products.map((p, i) =>
-      `<option value="${i}">${p.name}</option>`
-    ).join('');
+    sel.innerHTML = o.products.map((p, i) => `<option value="${i}">${p.name}</option>`).join('');
     sel.onchange = () => { _reviewProductIdx = +sel.value; _renderReviewProduct(o, _reviewProductIdx); };
   } else {
     sel.style.display = 'none';
@@ -2209,22 +2402,36 @@ function _renderReviewProduct(o, idx) {
   document.getElementById('reviewText').value = '';
 }
 function setStars(n) { reviewStars = n; document.querySelectorAll('.star-btn').forEach(s => s.classList.toggle('lit', parseInt(s.dataset.v) <= n)); }
-function submitReview() {
+async function submitReview() {
   if (!reviewStars) { showToast('&#11088; Please select a star rating'); return; }
   const text = document.getElementById('reviewText').value.trim();
   if (!text) { showToast('&#9999; Please write your review'); return; }
-  const o = getOrders().find(x => x.id === currentReviewId);
-  const p = o?.products[_reviewProductIdx];
-  if (!p) return;
-  // Save review to localStorage so product page can display it
-  const user = (function(){ try { return JSON.parse(localStorage.getItem('nansai_user')||'null'); } catch { return null; } })();
-  const revKey = 'rev_' + p.id + '_' + (user?._id || user?.email || 'u');
-  const dateStr = new Date().toLocaleString('en-IN', { month: 'short', year: 'numeric' });
-  const review = { name: user?.name || 'Customer', rating: reviewStars, text, date: dateStr, verified: true };
-  localStorage.setItem(revKey, JSON.stringify(review));
-  closeModal('reviewModal');
-  showToast('&#9989; Review submitted! Redirecting to product...');
-  setTimeout(() => { window.location.href = 'product.html?id=' + p.id; }, 1200);
+
+  const o = getOrders().find(x => x.id === currentReviewId)
+         || _cachedApiOrders.find(x => x.id === currentReviewId)
+         || _currentReviewOrder;
+  const p = o?.products?.[_reviewProductIdx];
+  if (!p) { showToast('&#10060; Could not find product to review'); return; }
+
+  const tok = _getTok();
+  if (!tok) { showToast('&#128274; Please login to submit a review'); return; }
+
+  const productId = p.id && /^[0-9a-fA-F]{24}$/.test(p.id) ? p.id : null;
+  if (!productId) { showToast('&#10060; This product cannot be reviewed'); return; }
+
+  try {
+    const res = await fetch(window.API_BASE + '/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+      body: JSON.stringify({ product: productId, rating: reviewStars, comment: text })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Could not submit review');
+    closeModal('reviewModal');
+    showToast('&#9989; Review submitted! Thank you.');
+  } catch (err) {
+    showToast('&#10060; ' + err.message);
+  }
 }
 function openCancel(id) {
   currentCancelId = id;
@@ -2243,20 +2450,6 @@ function confirmCancel() {
   }
   saveOrders(orders); closeModal('cancelModal'); renderOrders();
   showToast('Order cancelled. Refund within 5-7 business days.');
-}
-function openInvoice(id) {
-  const o = getOrders().find(x => x.id === id);
-  document.getElementById('inv-id').textContent = '#' + o.id;
-  document.getElementById('inv-date').textContent = o.date;
-  const sub = o.subtotal || Math.round(o.total / 1.05), tax = Math.round(o.total * 0.05 / 1.05), del = o.deliveryCost || 0;
-  document.getElementById('inv-sub').innerHTML = '&#8377;' + Math.round(sub).toLocaleString();
-  document.getElementById('inv-del').innerHTML = del === 0 ? 'FREE' : '&#8377;' + del.toLocaleString();
-  document.getElementById('inv-tax').innerHTML = '&#8377;' + tax.toLocaleString();
-  document.getElementById('inv-total').innerHTML = '&#8377;' + o.total.toLocaleString();
-  document.getElementById('inv-items').innerHTML = `
-    <div class="inv-head-row"><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Item</span><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Amount</span></div>
-    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=60'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Qty: ${p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
-  openModal('invoiceModal');
 }
 function openReturn(id) { document.querySelectorAll('input[name="returnReason"]').forEach(r => r.checked = false); openModal('returnModal'); }
 function submitReturn() {
@@ -2277,6 +2470,10 @@ function buyAgain(id) {
   showToast('&#128722; Items added to cart!');
   setTimeout(() => showPage('checkout'), 700);
 }
+function trackShipmentUrl(url) {
+  if (url) window.open(url, '_blank', 'noopener');
+  else showToast('Tracking link will be available after shipment is created.');
+}
 
 // -- MODAL UTILS --
 function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -2295,4 +2492,3 @@ function showToast(msg, dur = 2800) {
 </script>
 </body>
 </html>
-

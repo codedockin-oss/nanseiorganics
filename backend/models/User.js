@@ -68,11 +68,12 @@ const userSchema = new mongoose.Schema({
     ref: 'Cart'
   },
   activityHistory: [{
-    type: { type: String, required: true },  // e.g. 'login', 'add_to_cart', 'wishlist', 'view_product'
+    type: { type: String, required: true },
     description: String,
-    meta: mongoose.Schema.Types.Mixed,       // extra data (productId, productName, etc.)
+    meta: mongoose.Schema.Types.Mixed,
     createdAt: { type: Date, default: Date.now }
-  }]
+  }],
+  fcmToken: { type: String, default: null },  // customer device push token
 }, {
   timestamps: true
 });
@@ -84,7 +85,7 @@ userSchema.index({ role: 1 });
 // Hash password before saving
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
-    next();
+    return next();
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

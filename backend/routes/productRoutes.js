@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { getProducts, getProduct, createProduct, updateProduct, deleteProduct } = require('../controllers/productController');
+const {
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getFeaturedProducts,
+  getRelatedProducts,
+} = require('../controllers/productController');
 const { protect, authorize } = require('../middleware/auth');
 const { cache } = require('../middleware/cache');
 const Product = require('../models/Product');
@@ -28,8 +36,10 @@ router.get('/admin/all', protect, authorize('admin'), async (req, res) => {
   }
 });
 
-router.get('/',    cache(30),  getProducts);   // cache 30s
-router.get('/:id', cache(60),  getProduct);    // cache 60s
+router.get('/',             cache(30), getProducts);         // cache 30s
+router.get('/featured',     cache(60), getFeaturedProducts);
+router.get('/:id/related',  cache(60), getRelatedProducts);
+router.get('/:id',          cache(60), getProduct);          // cache 60s
 router.post('/', protect, authorize('admin'), createProduct);
 router.put('/:id', protect, authorize('admin'), updateProduct);
 router.delete('/:id', protect, authorize('admin'), deleteProduct);
