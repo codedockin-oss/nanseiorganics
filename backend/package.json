@@ -4,7 +4,8 @@
   "description": "Backend API for Nansai Organics E-commerce Platform",
   "main": "server.js",
   "scripts": {
-    "start": "npm uninstall firebase-admin --save 2>/dev/null; node server.js",
+    "start": "node server.js",
+    "build": "npm install && npm uninstall firebase-admin --save || true",
     "dev": "nodemon server.js",
     "cluster": "pm2 start ecosystem.config.js --env production",
     "reload": "pm2 reload nansai-backend",

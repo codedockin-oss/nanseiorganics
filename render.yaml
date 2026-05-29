@@ -3,7 +3,7 @@ services:
     name: nansei-backend
     runtime: node
     rootDir: backend
-    buildCommand: npm install && mkdir -p logs
+    buildCommand: npm install && npm uninstall firebase-admin --save || true && mkdir -p logs
     startCommand: npm start
     envVars:
       - key: NODE_ENV
