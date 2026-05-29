@@ -4,7 +4,6 @@ const router = express.Router();
 const Order = require('../models/Order');
 const { protect, admin } = require('../middleware/auth');
 const shiprocket = require('../utils/shiprocketService');
-const { sendCustomerPushNotification } = require('../utils/fcm');
 
 function applyShippingStatus(order, status) {
   shiprocket.applyTrackingToOrder(order, { shippingStatus: status, currentTrackingStatus: status });
@@ -77,9 +76,6 @@ router.post('/shipments/:orderId/sync', protect, admin, async (req, res) => {
       shippingStatus: shiprocket.mapTrackingStatus(tracking),
     });
     await order.save();
-    if (changed && order.user?.fcmToken && ['Confirmed', 'Shipped', 'Out For Delivery', 'Delivered'].includes(order.shippingStatus)) {
-      sendCustomerPushNotification(order, order.user.fcmToken).catch(err => console.warn('[Shiprocket] sync push failed:', err.message));
-    }
 
     res.json({ success: true, data: order, tracking });
   } catch (err) {

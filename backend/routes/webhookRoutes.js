@@ -2,8 +2,6 @@ const express = require('express');
 
 const Order = require('../models/Order');
 const shiprocket = require('../utils/shiprocketService');
-const { sendCustomerPushNotification } = require('../utils/fcm');
-
 const router = express.Router();
 
 function verifyShiprocketWebhook(req) {
@@ -11,15 +9,6 @@ function verifyShiprocketWebhook(req) {
   if (!expected) return process.env.NODE_ENV !== 'production';
   const provided = req.get('x-api-key') || req.get('x-shiprocket-token') || req.get('authorization')?.replace(/^Bearer\s+/i, '');
   return provided && provided === expected;
-}
-
-async function notifyIfNeeded(order, changed) {
-  if (!changed || !['Confirmed', 'Shipped', 'Out For Delivery', 'Delivered'].includes(order.shippingStatus)) return;
-  try {
-    if (order.user?.fcmToken) await sendCustomerPushNotification(order, order.user.fcmToken);
-  } catch (err) {
-    console.warn('[Shiprocket webhook] Customer push failed:', err.message);
-  }
 }
 
 router.post('/shiprocket', async (req, res) => {
@@ -39,7 +28,7 @@ router.post('/shiprocket', async (req, res) => {
         ...(fields.awbCode ? [{ awbCode: fields.awbCode }] : []),
         ...(fields.shipmentId ? [{ shipmentId: fields.shipmentId }] : []),
       ],
-    }).populate('user', 'name email phone fcmToken');
+    }).populate('user', 'name email phone');
 
     if (!order) {
       console.warn('[Shiprocket webhook] No order found for payload:', {
@@ -51,8 +40,6 @@ router.post('/shiprocket', async (req, res) => {
 
     const changed = shiprocket.applyTrackingToOrder(order, fields);
     await order.save();
-    await notifyIfNeeded(order, changed);
-
     res.json({ success: true, data: order });
   } catch (err) {
     console.error('[Shiprocket webhook] error:', err.message);

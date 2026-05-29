@@ -4,7 +4,6 @@ const jwt      = require('jsonwebtoken');
 const Razorpay = require('razorpay');
 
 const sendEmail = require('../utils/sendEmail');
-const { sendAdminPushNotification, sendCustomerPushNotification, subscribeAdminDevice } = require('../utils/fcm');
 const { orderConfirmation, adminOrderNotification, orderStatusUpdate } = require('../utils/emailTemplates');
 
 const router = express.Router();
@@ -169,18 +168,8 @@ async function sendOrderNotifications(order, user) {
     }
   } catch (err) { console.warn('[Email] Order confirmation failed:', err.message); }
 
-  try {
-    if (process.env.ADMIN_EMAIL) {
-      await sendEmail({
-        email: process.env.ADMIN_EMAIL,
-        subject: `New order #${order.orderNumber}`,
-        html: adminOrderNotification(order),
-      });
-    }
-  } catch (err) { console.warn('[Email] Admin notification failed:', err.message); }
-
-  try { await sendAdminPushNotification(order); }
-  catch (err) { console.warn('[FCM] Admin push failed:', err.message); }
+  try { await sendEmail({ email: process.env.ADMIN_EMAIL, subject: `New order #${order.orderNumber}`, html: adminOrderNotification(order) }); }
+  catch (err) { console.warn('[Email] Admin notification failed:', err.message); }
 }
 
 // ─────────────────────────────────────────────────────────
@@ -316,12 +305,6 @@ router.put('/:id/shipping-status', protect, authorize('admin'), async (req, res)
       }).catch(err => console.warn('[Email] Shipping status email failed:', err.message));
     }
 
-    // FCM push
-    if (order.user?.fcmToken && ['Confirmed', 'Shipped', 'Delivered'].includes(shippingStatus)) {
-      sendCustomerPushNotification(order, order.user.fcmToken)
-        .catch(err => console.warn('[FCM] Customer push failed:', err.message));
-    }
-
     res.json({ success: true, data: order });
   } catch (err) {
     console.error('[Orders] PUT /:id/shipping-status error:', err.message);
@@ -356,12 +339,6 @@ router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
       }).catch(err => console.warn('[Email] Status update failed:', err.message));
     }
 
-    // FCM push to customer
-    if (order.user?.fcmToken) {
-      sendCustomerPushNotification(order, order.user.fcmToken)
-        .catch(err => console.warn('[FCM] Customer push failed:', err.message));
-    }
-
     res.json({ success: true, data: order });
   } catch (err) {
     console.error('[Orders] PUT /:id/status error:', err.message);
@@ -387,33 +364,6 @@ router.post('/bulk-status', protect, authorize('admin'), async (req, res) => {
     res.json({ success: true, updated: result.modifiedCount });
   } catch (err) {
     console.error('[Orders] POST /bulk-status error:', err.message);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
-
-// ─────────────────────────────────────────────────────────
-//  FCM TOKEN ROUTES
-// ─────────────────────────────────────────────────────────
-
-router.post('/subscribe-fcm', protect, authorize('admin'), async (req, res) => {
-  try {
-    const { token } = req.body;
-    if (!token) return res.status(400).json({ success: false, message: 'FCM token required' });
-    await subscribeAdminDevice(token);
-    res.json({ success: true, message: 'Subscribed to admin-orders topic' });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-router.post('/save-fcm-token', protect, async (req, res) => {
-  try {
-    const { token } = req.body;
-    if (!token) return res.status(400).json({ success: false, message: 'FCM token required' });
-    const User = require('../models/User');
-    await User.findByIdAndUpdate(req.user.id, { fcmToken: token });
-    res.json({ success: true, message: 'Token saved' });
-  } catch (err) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
