@@ -16,6 +16,9 @@
     location.hostname === '127.0.0.1' ||
     location.protocol === 'file:';
 
+  // Custom domain
+  window.SITE_URL = 'https://www.nanseiorg.in';
+
   window.API_BASE = isLocal ? LOCAL_API : PRODUCTION_API;
 
   // Replace with your actual Google OAuth Client ID from console.cloud.google.com
