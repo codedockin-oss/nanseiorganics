@@ -16,6 +16,9 @@ exports.protect = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ success: false, message: 'User not found' });
     }
+    if ((decoded.tokenVersion ?? 0) !== (user.tokenVersion || 0)) {
+      return res.status(401).json({ success: false, message: 'Session expired. Please login again.' });
+    }
     req.user = user; // full user object including role
     next();
   } catch (error) {

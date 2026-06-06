@@ -3,651 +3,433 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nansai — Sign In / Sign Up</title>
+<title>Sign In — Nansai Organics</title>
 <script src="../js/config.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
+<script src="../js/auth.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f0f2f0;--surface:#ffffff;--green:#1e3d2f;--green-mid:#265c42;
-  --green-pale:#eaf2ec;--green-border:#b8d4c0;--text:#111c16;--muted:#5a6b61;
-  --error:#b83232;--border:#d0ddd5;--radius:12px;
+:root{--black:#0a0a0a;--white:#fff;--off-white:#f8f6f2;--stone:#e8e4dc;--stone-2:#d4cfc6;--text:#1a1a1a;--muted:#888880;--green:#1e3d2f;--gold:#b8922a;--error:#c0392b}
+html,body{margin:0;padding:0;width:100%}
+body{font-family:'Inter',sans-serif;background:var(--off-white);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* Mobile first: simple block layout, no flex clipping */
+.page-center{width:100%;padding:40px 20px;}
+.form-wrap{width:100%;max-width:380px;margin:0 auto;background:var(--white);padding:40px 36px;border:1px solid var(--stone);}
+
+/* Desktop: vertically center */
+@media(min-width:481px){
+  .page-center{min-height:100vh;display:flex;align-items:center;justify-content:center;}
 }
-html,body{min-height:100%;background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px;}
-.bg-texture{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 80% 60% at 10% 110%,rgba(30,61,47,.09) 0%,transparent 55%),
-    radial-gradient(ellipse 60% 50% at 90% -10%,rgba(30,61,47,.07) 0%,transparent 50%),
-    linear-gradient(160deg,#eef2ee 0%,#f5f7f5 60%,#edf1ee 100%);}
-.bg-leaf{position:fixed;z-index:0;pointer-events:none;opacity:.06;font-size:7rem;line-height:1;user-select:none;}
-.bg-leaf.l1{top:8%;left:2%;transform:rotate(-20deg);}
-.bg-leaf.l2{bottom:10%;right:3%;transform:rotate(30deg);font-size:5rem;}
-.card{position:relative;z-index:10;background:var(--surface);border-radius:18px;border:1px solid var(--border);
-  box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.07),0 24px 56px rgba(0,0,0,.06);
-  width:100%;max-width:420px;overflow:hidden;animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
-@keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-.card-header{padding:22px 32px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#f8faf8 0%,#ffffff 100%);}
-.header-logo{height:56px;width:auto;display:block;}
-.card-body{padding:28px 32px 32px;}
-.step-title{font-family:'Inter',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.25;}
-.step-sub{font-size:.82rem;color:var(--muted);margin-bottom:22px;line-height:1.5;}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);cursor:pointer;
-  border:none;background:none;font-family:'Inter',sans-serif;margin-bottom:18px;padding:0;transition:color .2s;}
-.back-link:hover{color:var(--green);}
-.back-link svg{transition:transform .2s;}
-.back-link:hover svg{transform:translateX(-2px);}
-label.fl{display:block;font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:.01em;}
-.inp-wrap{position:relative;margin-bottom:14px;}
-.inp-wrap .prefix{position:absolute;left:13px;top:50%;transform:translateY(-50%);
-  font-size:.82rem;font-weight:600;color:var(--muted);pointer-events:none;display:flex;align-items:center;gap:4px;}
-.inp-wrap .prefix .sep{width:1px;height:16px;background:var(--border);margin-left:4px;}
-input.inp{width:100%;padding:.78rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);
-  font-family:'Inter',sans-serif;font-size:.9rem;color:var(--text);background:var(--surface);outline:none;
-  transition:border-color .2s,box-shadow .2s;}
-input.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(28,74,46,.1);}
-input.inp.has-prefix{padding-left:72px;}
-input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(192,57,43,.1);}
-.btn-primary{width:100%;padding:.85rem 1rem;
-  background:linear-gradient(135deg,var(--green) 0%,var(--green-mid) 100%);
-  color:#fff;border:none;border-radius:var(--radius);font-family:'Roboto',sans-serif;
-  font-size:.9rem;font-weight:700;cursor:pointer;letter-spacing:.02em;
-  transition:filter .2s,transform .15s,box-shadow .2s;margin-top:4px;
-  box-shadow:0 2px 8px rgba(30,61,47,.25);}
-.btn-primary:hover{filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 6px 20px rgba(30,61,47,.32);}
-.btn-primary:active{transform:none;filter:brightness(.96);}
-.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none;}
-.phone-display{display:flex;align-items:center;gap:8px;background:var(--green-pale);
-  border:1px solid var(--green-border);border-radius:10px;padding:.6rem .9rem;
-  font-size:.82rem;color:var(--green);font-weight:500;margin-bottom:18px;}
-.otp-input{width:100%;padding:.88rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);
-  font-family:'Inter',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:.4em;text-align:center;
-  color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;background:var(--surface);}
-.otp-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(28,74,46,.1);}
-.otp-input.err{border-color:var(--error);animation:shake .35s ease;}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-.timer-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:.76rem;color:var(--muted);}
-.timer-count{font-weight:600;color:var(--green);}
-.timer-count.expired{color:var(--error);}
-.resend-btn{background:none;border:none;font-family:'Inter',sans-serif;font-size:.76rem;color:var(--green);
-  cursor:pointer;padding:0;font-weight:500;text-decoration:underline;text-underline-offset:2px;}
-.resend-btn:disabled{color:var(--muted);text-decoration:none;cursor:not-allowed;}
-.trust-strip{display:flex;justify-content:center;gap:16px;margin-top:22px;padding-top:18px;border-top:1px solid var(--border);}
-.trust-item{display:flex;align-items:center;gap:4px;font-size:.68rem;color:var(--muted);}
-.step{display:none;}
-.step.on{display:block;animation:stepIn .35s cubic-bezier(.22,1,.36,1) both;}
-@keyframes stepIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
-.footer-note{text-align:center;font-size:.76rem;color:var(--muted);margin-top:18px;}
-.footer-note a{color:var(--green);text-decoration:none;font-weight:500;}
-#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-8px);
-  background:var(--text);color:#fff;font-size:.78rem;font-weight:500;
-  padding:.55rem 1.2rem;border-radius:30px;white-space:nowrap;
-  pointer-events:none;opacity:0;z-index:9999;
-  transition:opacity .25s,transform .25s;box-shadow:0 6px 20px rgba(0,0,0,.2);}
-#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
-.success-wrap{text-align:center;padding:1.5rem 0;}
-.success-icon{width:56px;height:56px;border-radius:50%;background:var(--green-pale);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
-.success-hi{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:6px;}
-.success-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.25rem;}
-.success-bar{height:4px;background:var(--green-pale);border-radius:99px;overflow:hidden;}
-.success-bar-fill{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width 1.5s ease;}
-</style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script>
-(function(){
-  const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
-  const skipTags = new Set(['SCRIPT','STYLE','TEXTAREA','OPTION']);
-  let applying = false;
-  let scheduled = false;
-
-  function hasMarker(value){
-    markerRe.lastIndex = 0;
-    return !!value && markerRe.test(value);
-  }
-
-  function cleanMarkers(value){
-    markerRe.lastIndex = 0;
-    return value.replace(markerRe, '').replace(/\s{2,}/g, ' ').trim();
-  }
-
-  function iconNode(name){
-    const icon = document.createElement('i');
-    icon.setAttribute('data-lucide', name);
-    icon.setAttribute('aria-hidden', 'true');
-    icon.className = 'nansai-icon';
-    return icon;
-  }
-
-  function replaceTextNode(node){
-    if(!node || !hasMarker(node.nodeValue)) return;
-    const parentTag = node.parentElement?.tagName;
-    if(skipTags.has(parentTag)) return;
-
-    const text = node.nodeValue;
-    const frag = document.createDocumentFragment();
-    let last = 0;
-    markerRe.lastIndex = 0;
-    text.replace(markerRe, (match, name, offset) => {
-      if(offset > last) frag.append(document.createTextNode(text.slice(last, offset)));
-      frag.append(iconNode(name));
-      last = offset + match.length;
-    });
-    if(last < text.length) frag.append(document.createTextNode(text.slice(last)));
-    node.parentNode.replaceChild(frag, node);
-  }
-
-  function applyIcons(root){
-    root = root || document.body;
-    if(!root || applying) return;
-    applying = true;
-
-    try {
-      const scope = root.nodeType === Node.TEXT_NODE ? root.parentElement : root;
-      if(scope?.querySelectorAll){
-        scope.querySelectorAll('[placeholder],[title],[aria-label],[alt]').forEach(el => {
-          ['placeholder','title','aria-label','alt'].forEach(attr => {
-            const value = el.getAttribute(attr);
-            if(hasMarker(value)) el.setAttribute(attr, cleanMarkers(value));
-          });
-        });
-      }
-
-      if(root.nodeType === Node.TEXT_NODE){
-        replaceTextNode(root);
-      } else if(root.nodeType === Node.ELEMENT_NODE || root.nodeType === Node.DOCUMENT_NODE || root.nodeType === Node.DOCUMENT_FRAGMENT_NODE){
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-          acceptNode(node){
-            return hasMarker(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-          }
-        });
-        const nodes = [];
-        while(walker.nextNode()) nodes.push(walker.currentNode);
-        nodes.forEach(replaceTextNode);
-
-        root.querySelectorAll?.('option').forEach(option => {
-          if(hasMarker(option.textContent)) option.textContent = cleanMarkers(option.textContent);
-        });
-      }
-
-      if(window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 2.25 } });
-    } finally {
-      applying = false;
-    }
-  }
-
-  function nodeHasMarker(node){
-    if(!node) return false;
-    if(node.nodeType === Node.TEXT_NODE) return hasMarker(node.nodeValue);
-    if(node.nodeType === Node.ELEMENT_NODE) return !skipTags.has(node.tagName) && hasMarker(node.textContent);
-    return false;
-  }
-
-  function scheduleApply(root){
-    if(scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      applyIcons(root || document.body);
-    });
-  }
-
-  window.nansaiApplyIcons = applyIcons;
-  document.addEventListener('DOMContentLoaded', () => {
-    applyIcons(document.body);
-    const observer = new MutationObserver(mutations => {
-      for(const mutation of mutations){
-        if(mutation.type === 'characterData' && nodeHasMarker(mutation.target)){
-          scheduleApply(mutation.target.parentElement || document.body);
-          return;
-        }
-        for(const node of mutation.addedNodes){
-          if(nodeHasMarker(node)){
-            scheduleApply(node.nodeType === Node.TEXT_NODE ? node.parentElement : node);
-            return;
-          }
-        }
-      }
-    });
-    observer.observe(document.body, { childList:true, characterData:true, subtree:true });
-  });
-})();
-</script>
-<style>
-.nansai-icon,
-svg.nansai-icon {
-  width: 1em;
-  height: 1em;
-  display: inline-block;
-  vertical-align: -0.16em;
-  margin-right: 0.35em;
-  color: currentColor;
-  flex-shrink: 0;
+.pg{display:none}.pg.on{display:block}
+.logo{text-align:center;margin-bottom:32px}
+.logo img{height:56px;width:auto;margin:0 auto;display:block}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;letter-spacing:-.01em;line-height:1.1;margin-bottom:6px}
+.form-sub{font-size:.78rem;font-weight:300;color:var(--muted);letter-spacing:.02em;margin-bottom:32px}
+.field{margin-bottom:20px}
+.field-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.field label{display:block;font-size:.63rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.forgot{font-size:.68rem;color:var(--muted);border:none;border-bottom:1px solid transparent;background:none;cursor:pointer;font-family:'Inter',sans-serif;padding:0;letter-spacing:.04em;transition:color .2s,border-color .2s}
+.forgot:hover{color:var(--text);border-bottom-color:var(--text)}
+.inp-wrap{position:relative}
+input{width:100%;padding:13px 0;border:none;border-bottom:1px solid var(--stone-2);background:transparent;font-family:'Inter',sans-serif;font-size:16px;font-weight:300;color:var(--text);outline:none;transition:border-color .25s;letter-spacing:.02em;-webkit-appearance:none;border-radius:0;}
+input::placeholder{color:var(--stone-2)}
+input:focus{border-color:var(--text)}
+input.err{border-color:var(--error)}
+.inp-line{position:absolute;bottom:0;left:0;height:1px;width:0;background:var(--text);transition:width .3s cubic-bezier(.4,0,.2,1)}
+input:focus~.inp-line{width:100%}
+.eye-btn{position:absolute;right:0;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--stone-2);display:flex;align-items:center;transition:color .2s;padding:10px 4px;}
+.eye-btn:hover{color:var(--text)}
+.err-msg{font-size:.68rem;color:var(--error);margin-top:6px;letter-spacing:.02em;display:none}
+.err-msg.on{display:block}
+.strength-row{display:flex;gap:4px;margin-top:10px;height:2px}
+.strength-row span{flex:1;background:var(--stone);transition:background .3s;border-radius:2px}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:17px 16px;
+  background:var(--black);color:var(--white);
+  border:none;border-radius:0;
+  font-family:'Inter',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  cursor:pointer;margin-top:28px;
+  -webkit-appearance:none;
+  transition:background .2s;
+  min-height:54px;
 }
-button .nansai-icon,
-a .nansai-icon,
-.nav-link .nansai-icon,
-.mob-drawer-link .nansai-icon {
-  vertical-align: -0.18em;
+.btn:hover{background:var(--green)}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.spin{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.switch{margin-top:24px;padding-top:20px;border-top:1px solid var(--stone);font-size:.72rem;font-weight:300;color:var(--muted);letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.switch button{background:none;border:none;border-bottom:1px solid var(--text);font-family:'Inter',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text);cursor:pointer;padding-bottom:1px;transition:color .2s,border-color .2s}
+.switch button:hover{color:var(--green);border-color:var(--green)}
+.back-btn{background:none;border:none;font-family:'Inter',sans-serif;font-size:.68rem;font-weight:400;color:var(--muted);cursor:pointer;letter-spacing:.06em;display:flex;align-items:center;gap:6px;margin-bottom:24px;padding:0;transition:color .2s}
+.back-btn:hover{color:var(--text)}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--stone-2);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--stone)}
+.g-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:15px 16px;
+  background:var(--white);color:var(--text);
+  border:1px solid var(--stone-2);border-radius:0;
+  font-family:'Inter',sans-serif;font-size:.78rem;font-weight:400;letter-spacing:.04em;
+  cursor:pointer;
+  -webkit-appearance:none;
+  transition:border-color .2s,background .2s;
+  min-height:52px;
 }
-.wishlist-btn .nansai-icon,
-.modal-close .nansai-icon,
-.btn-sm .nansai-icon {
-  margin-right: 0;
+.g-btn:hover{border-color:var(--text);background:#fafafa}
+.g-btn svg{flex-shrink:0}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--black);color:var(--white);font-size:.72rem;font-weight:400;letter-spacing:.08em;padding:12px 24px;white-space:nowrap;opacity:0;pointer-events:none;z-index:9999;transition:opacity .25s,transform .25s;max-width:90vw;text-align:center;}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.ok{background:var(--green)}
+#toast.err{background:var(--error)}
+
+@media(max-width:480px){
+  .page-center{padding:0;}
+  .form-wrap{padding:36px 20px 72px;border:none;min-height:100vh;}
+  .form-title{font-size:1.75rem}
 }
 </style>
-
 </head>
 <body>
-<div class="bg-texture"></div>
-<div class="bg-leaf l1"><svg viewBox="0 0 24 24" fill="none" stroke="#1e3d2f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="80" height="80"><path d="M12 2C6 2 3 8 3 14c0 4 2.5 7 6 8 0-4 1-8 3-10-1 3-1 7 0 10 3.5-1 6-4.5 6-8 0-6-3-12-6-12z"/></svg></div>
-<div class="bg-leaf l2"><svg viewBox="0 0 24 24" fill="none" stroke="#1e3d2f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="56" height="56"><path d="M12 22V12M12 12C12 7 16 3 21 3c0 5-3 9-9 9zM12 12C12 7 8 3 3 3c0 5 3 9 9 9z"/></svg></div>
+<div class="page-center">
+<div class="form-wrap">
+  <div class="logo">
+    <img src="nansei_org_logo.svg" alt="Nansai Organics" onerror="this.src='nansei organics.png'"/>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="pg-login" class="pg on">
+    <h2 class="form-title">Sign in</h2>
+    <p class="form-sub">Welcome back</p>
+    <form onsubmit="doLogin(event)" novalidate>
+      <div class="field">
+        <label>Email</label>
+        <div class="inp-wrap">
+          <input id="l-email" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"/>
+          <div class="inp-line"></div>
+        </div>
+        <p class="err-msg" id="l-email-err"></p>
+      </div>
+      <div class="field">
+        <div class="field-top">
+          <label>Password</label>
+          <button type="button" class="forgot" onclick="show('forgot')">Forgot password?</button>
+        </div>
+        <div class="inp-wrap">
+          <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" style="padding-right:36px"/>
+          <div class="inp-line"></div>
+          <button type="button" class="eye-btn" onclick="toggleEye('l-pass',this)">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <p class="err-msg" id="l-pass-err"></p>
+      </div>
+      <button class="btn" id="btn-login" type="submit">
+        Continue
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+    <div class="divider">or</div>
+    <button class="g-btn" onclick="googleSignIn()">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <div class="switch">New here? <button onclick="show('register')">Create account</button></div>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="pg-register" class="pg">
+    <h2 class="form-title">Create account</h2>
+    <p class="form-sub">Join Nansai Organics</p>
+    <form onsubmit="doRegister(event)" novalidate>
+      <div class="field">
+        <label>Full name</label>
+        <div class="inp-wrap">
+          <input id="r-name" type="text" placeholder="Arjun Mehta" autocomplete="name"/>
+          <div class="inp-line"></div>
+        </div>
+        <p class="err-msg" id="r-name-err"></p>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <div class="inp-wrap">
+          <input id="r-email" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"/>
+          <div class="inp-line"></div>
+        </div>
+        <p class="err-msg" id="r-email-err"></p>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="inp-wrap">
+          <input id="r-pass" type="password" placeholder="Min. 8 characters" autocomplete="new-password" style="padding-right:36px" oninput="strength(this.value)"/>
+          <div class="inp-line"></div>
+          <button type="button" class="eye-btn" onclick="toggleEye('r-pass',this)">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="strength-row"><span id="s1"></span><span id="s2"></span><span id="s3"></span></div>
+        <p class="err-msg" id="r-pass-err"></p>
+      </div>
+      <button class="btn" id="btn-reg" type="submit">
+        Create Account
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+    <div class="divider">or</div>
+    <button class="g-btn" onclick="googleSignIn()">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <div class="switch">Have an account? <button onclick="show('login')">Sign in</button></div>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div id="pg-forgot" class="pg">
+    <button class="back-btn" onclick="show('login')">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to sign in
+    </button>
+    <h2 class="form-title">Reset password</h2>
+    <p class="form-sub">We'll send a reset link to your email</p>
+    <form onsubmit="doForgot(event)" novalidate>
+      <div class="field">
+        <label>Email</label>
+        <div class="inp-wrap">
+          <input id="f-email" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"/>
+          <div class="inp-line"></div>
+        </div>
+        <p class="err-msg" id="f-email-err"></p>
+      </div>
+      <button class="btn" id="btn-forgot" type="submit">Send Reset Link</button>
+    </form>
+  </div>
+
+</div>
+</div>
 <div id="toast"></div>
-
-<div class="card">
-  <div class="card-header">
-    <img src="nansei_org_logo.svg" alt="Nansei Organics" class="header-logo"/>
-  </div>
-  <div class="card-body">
-
-    <!-- STEP 1: Enter mobile -->
-    <div id="s1" class="step on">
-      <div class="step-title">Sign in or Sign up</div>
-      <div class="step-sub">Enter your mobile number to continue</div>
-      <label class="fl">Mobile Number</label>
-      <div class="inp-wrap">
-        <div class="prefix">+91<div class="sep"></div></div>
-        <input id="inp-phone" class="inp has-prefix" type="tel" placeholder="10-digit number" maxlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')"/>
-      </div>
-      <button class="btn-primary" id="btn-continue" onclick="doCheckPhone()">Continue</button>
-    </div>
-
-    <!-- STEP 2: New user — fill details -->
-    <div id="s2" class="step">
-      <button class="back-link" onclick="goStep(1)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Change number
-      </button>
-      <div class="step-title">Create your account</div>
-      <div class="step-sub">You're new here! Fill in your details to get started.</div>
-      <div class="phone-display">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        <span>Registering with <strong id="reg-phone-display">+91 XXXXXXXXXX</strong></span>
-      </div>
-      <label class="fl">Full Name</label>
-      <div class="inp-wrap">
-        <input id="inp-name" class="inp" type="text" placeholder="e.g. Arjun Kumar" autocomplete="name"/>
-      </div>
-      <label class="fl">Email Address</label>
-      <div class="inp-wrap">
-        <input id="inp-email" class="inp" type="email" placeholder="you@example.com" autocomplete="email"/>
-      </div>
-      <label class="fl">Password</label>
-      <div class="inp-wrap">
-        <input id="inp-pass" class="inp" type="password" placeholder="Min. 8 characters" autocomplete="new-password"/>
-      </div>
-      <button class="btn-primary" id="btn-register-otp" onclick="doRegisterOtpSend()">Send OTP</button>
-    </div>
-
-    <!-- STEP 3: OTP verification / Admin password -->
-    <div id="s3" class="step">
-      <button class="back-link" id="otp-back-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        <span id="otp-back-label">Change number</span>
-      </button>
-
-      <!-- OTP mode (users) -->
-      <div id="otp-mode">
-        <div class="step-title">Verify your mobile</div>
-        <div class="step-sub">Enter the 6-digit OTP sent to your number</div>
-        <div class="phone-display">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          <span>OTP sent to <strong id="otp-phone-display">+91 XXXXXXXXXX</strong></span>
-        </div>
-        <label class="fl">Enter OTP</label>
-        <div class="inp-wrap">
-          <input id="otp-box" class="otp-input" type="text" inputmode="numeric" maxlength="6" placeholder="— — — — — —" autocomplete="one-time-code"/>
-        </div>
-        <div class="timer-row">
-          <span>Expires in <span id="timer-display" class="timer-count">5:00</span></span>
-          <button id="resend-btn" class="resend-btn" onclick="doResend()" disabled>Resend OTP</button>
-        </div>
-        <button class="btn-primary" id="btn-verify" onclick="doVerify()" style="margin-top:20px;">Verify & Continue</button>
-      </div>
-
-      <!-- Password mode (admin) -->
-      <div id="admin-mode" style="display:none">
-        <div class="step-title">Admin Login</div>
-        <div class="step-sub">Enter your admin password to continue</div>
-        <div class="phone-display">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>Signing in as <strong>Admin</strong></span>
-        </div>
-        <label class="fl">Password</label>
-        <div class="inp-wrap">
-          <input id="admin-pass" class="inp" type="password" placeholder="Enter admin password" autocomplete="current-password"/>
-        </div>
-        <button class="btn-primary" id="btn-admin-login" onclick="doAdminLogin()">Sign In</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: Success -->
-    <div id="s4" class="step">
-      <div class="success-wrap">
-        <div class="success-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="success-hi" id="success-hi">Welcome! [[icon:hand]]</div>
-        <div class="success-sub" id="success-sub">Taking you to the store…</div>
-        <div class="success-bar"><div class="success-bar-fill" id="success-bar-fill"></div></div>
-      </div>
-    </div>
-
-    <div class="trust-strip">
-      <div class="trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span>Secure</span></div>
-      <div class="trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6 2 3 8 3 14c0 4 2.5 7 6 8 0-4 1-8 3-10-1 3-1 7 0 10 3.5-1 6-4.5 6-8 0-6-3-12-6-12z"/></svg> <span>Non-GMO</span></div>
-      <div class="trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span>FSSAI</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="footer-note">
-  <a href="index.html">← Continue browsing as guest</a>
-</div>
 
 <script>
 const API = window.API_BASE || 'http://localhost:5000/api';
-const ADMIN_PHONE = '6382142578';
-let _timer = null;
-let _isNewUser = false;
-let _isAdmin = false;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function toast(msg, dur) {
-  dur = dur || 2600;
+async function apiFetch(url, options = {}) {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), 12000);
+  try {
+    const r = await fetch(url, { ...options, signal: ctrl.signal });
+    clearTimeout(tid);
+    return r;
+  } catch(err) {
+    clearTimeout(tid);
+    if (err.name === 'AbortError') throw new Error('Request timed out. Check your connection.');
+    throw new Error('Network error. Check your connection.');
+  }
+}
+
+async function apiFetch(url, options = {}) {
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 12000); // 12s timeout
+  try {
+    const r = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(tid);
+    return r;
+  } catch(err) {
+    clearTimeout(tid);
+    if (err.name === 'AbortError') throw new Error('Request timed out. Check your connection.');
+    throw new Error('Network error. Check your connection.');
+  }
+}
+
+function show(pg) {
+  ['login','register','forgot'].forEach(p =>
+    document.getElementById('pg-'+p).classList.toggle('on', p === pg)
+  );
+  clearErr();
+  window.scrollTo(0,0);
+}
+
+function toggleEye(id, btn) {
+  const inp = document.getElementById(id);
+  const isPass = inp.type === 'password';
+  inp.type = isPass ? 'text' : 'password';
+  btn.innerHTML = isPass
+    ? `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+    : `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+function strength(v) {
+  const s = !v ? 0 : v.length < 6 ? 1 : v.length < 10 ? 2 : 3;
+  const c = ['','#c0392b','#b8922a','#1e3d2f'];
+  [1,2,3].forEach(i => document.getElementById('s'+i).style.background = s >= i ? c[s] : 'var(--stone)');
+}
+
+function setErr(id, msg) {
+  const el = document.getElementById(id); if (el) el.classList.add('err');
+  const em = document.getElementById(id+'-err'); if (em) { em.textContent = msg; em.classList.add('on'); }
+}
+
+function clearErr() {
+  document.querySelectorAll('input').forEach(i => i.classList.remove('err'));
+  document.querySelectorAll('.err-msg').forEach(e => { e.classList.remove('on'); e.textContent = ''; });
+}
+
+let _tt;
+function toast(msg, type='') {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('on');
-  clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove('on'); }, dur);
+  t.textContent = msg;
+  t.className = 'on' + (type ? ' '+type : '');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('on'), 3000);
 }
 
-function goStep(n) {
-  for (var i = 1; i <= 4; i++) {
-    document.getElementById('s' + i).classList.toggle('on', i === n);
-  }
+function setLoad(id, on) {
+  const b = document.getElementById(id);
+  b.disabled = on;
+  if (on) { b.dataset.h = b.innerHTML; b.innerHTML = `<svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" stroke-opacity=".2"/><path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`; }
+  else b.innerHTML = b.dataset.h;
 }
 
-/* ── STEP 1: Check phone ── */
-async function doCheckPhone() {
-  const phone = document.getElementById('inp-phone').value.trim();
-  if (!/^\d{10}$/.test(phone)) {
-    toast('Enter a valid 10-digit mobile number'); return;
-  }
-  const btn = document.getElementById('btn-continue');
-  btn.textContent = 'Checking…'; btn.disabled = true;
-
+async function doLogin(e) {
+  e.preventDefault(); clearErr();
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  let ok = true;
+  if (!email)                     { setErr('l-email','Email is required'); ok=false; }
+  else if (!EMAIL_RE.test(email)) { setErr('l-email','Invalid email address'); ok=false; }
+  if (!pass)                      { setErr('l-pass','Password is required'); ok=false; }
+  if (!ok) return;
+  setLoad('btn-login', true);
   try {
-    const res  = await fetch(API + '/auth/check-phone', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone })
-    });
-    const data = await res.json();
+    const r = await apiFetch(API+'/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, password:pass}) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || 'Invalid credentials');
+    save(d);
+  } catch(err) { toast(err.message, 'err'); setLoad('btn-login', false); }
+}
 
-    if (!res.ok) {
-      toast(data.message || 'Something went wrong');
-      return;
-    }
+async function doRegister(e) {
+  e.preventDefault(); clearErr();
+  const name  = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const pass  = document.getElementById('r-pass').value;
+  let ok = true;
+  if (!name)                      { setErr('r-name','Name is required'); ok=false; }
+  if (!email)                     { setErr('r-email','Email is required'); ok=false; }
+  else if (!EMAIL_RE.test(email)) { setErr('r-email','Invalid email address'); ok=false; }
+  if (!pass)                      { setErr('r-pass','Password is required'); ok=false; }
+  else if (pass.length < 6)       { setErr('r-pass','Minimum 6 characters'); ok=false; }
+  if (!ok) return;
+  setLoad('btn-reg', true);
+  try {
+    const r = await apiFetch(API+'/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name, email, password:pass}) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || 'Registration failed');
+    save(d);
+  } catch(err) { toast(err.message, 'err'); setLoad('btn-reg', false); }
+}
 
-    if (data.exists === true) {
-      _isNewUser = false;
+async function doForgot(e) {
+  e.preventDefault(); clearErr();
+  const email = document.getElementById('f-email').value.trim();
+  if (!email)                     { setErr('f-email','Email is required'); return; }
+  if (!EMAIL_RE.test(email))      { setErr('f-email','Invalid email address'); return; }
+  setLoad('btn-forgot', true);
+  try {
+    const r = await apiFetch(API+'/auth/forgot-password', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email}) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || 'Something went wrong');
+    toast('Reset link sent! Check your inbox.', 'ok');
+    setTimeout(() => show('login'), 2500);
+  } catch(err) { toast(err.message, 'err'); }
+  finally { setLoad('btn-forgot', false); }
+}
 
-      /* ── Admin: show password field ── */
-      if (phone === ADMIN_PHONE) {
-        _isAdmin = true;
-        document.getElementById('otp-mode').style.display = 'none';
-        document.getElementById('admin-mode').style.display = 'block';
-        document.getElementById('admin-pass').value = '';
-        document.getElementById('otp-back-label').textContent = 'Change number';
-        document.getElementById('otp-back-btn').onclick = function(){ _isAdmin=false; document.getElementById('otp-mode').style.display='block'; document.getElementById('admin-mode').style.display='none'; goStep(1); };
-        goStep(3);
-        setTimeout(function(){ document.getElementById('admin-pass').focus(); }, 300);
-        return;
-      }
+function save(d) {
+  // 1. Set token FIRST so clearSession doesn't break the fetch
+  localStorage.setItem('nansai_token', d.token);
+  localStorage.setItem('nansai_user', JSON.stringify(d.user));
+  if (d.user?.role === 'admin') {
+    localStorage.setItem('admin_token', d.token);
+    localStorage.setItem('admin_user', JSON.stringify({name:d.user.name, email:d.user.email}));
+  }
 
-      /* ── Regular user: send OTP ── */
-      _isAdmin = false;
-      const otpRes  = await fetch(API + '/auth/login-otp-send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone })
-      });
-      const otpData = await otpRes.json();
-      if (!otpRes.ok) {
-        toast(otpData.message || 'Failed to send OTP');
-        return;
-      }
-      document.getElementById('otp-mode').style.display = 'block';
-      document.getElementById('admin-mode').style.display = 'none';
-      document.getElementById('otp-phone-display').textContent = '+91 ' + phone;
-      document.getElementById('otp-back-label').textContent = 'Change number';
-      document.getElementById('otp-back-btn').onclick = function(){ goStep(1); };
-      goStep(3);
-      startTimer();
-      toast('OTP sent to +91 ' + phone);
+  // 2. Clear only previous session keys (not cart/wishlist, not the token we just set)
+  sessionStorage.clear();
+  ['checkoutDraft','checkoutAddress','checkoutPayment','mkOrders','selectedProduct',
+   'ordersCache','profileCache','addressesCache','nansai_activity',
+   'recommendations','coupons','rewardPoints','searchHistory','recentlyViewed'].forEach(k => localStorage.removeItem(k));
 
+  // 3. Restore this user's cart + wishlist from DB
+  const api = window.API_BASE || 'http://localhost:5000/api';
+  const headers = { 'Content-Type':'application/json', Authorization:'Bearer '+d.token };
+
+  Promise.all([
+    fetch(api+'/cart',     { headers, cache:'no-store' }).then(r=>r.ok?r.json():null).catch(()=>null),
+    fetch(api+'/wishlist', { headers, cache:'no-store' }).then(r=>r.ok?r.json():null).catch(()=>null),
+  ]).then(([cartRes, wishRes]) => {
+    if (cartRes?.data?.items) {
+      const items = cartRes.data.items.map(i => ({
+        id: i.product?._id||i.product, name: i.product?.name||'',
+        price: i.product?.price||0, oldPrice: i.product?.oldPrice||0,
+        image: i.product?.images?.[0]||i.product?.image||'', qty: i.quantity
+      }));
+      localStorage.setItem('cart', JSON.stringify(items));
     } else {
-      /* ── New user: show registration form ── */
-      _isNewUser = true;
-      document.getElementById('reg-phone-display').textContent = '+91 ' + phone;
-      goStep(2);
+      localStorage.setItem('cart', '[]');
     }
-
-  } catch (err) {
-    toast(err.message || 'Network error. Please try again.');
-  } finally {
-    btn.textContent = 'Continue'; btn.disabled = false;
-  }
-}
-
-/* ── STEP 2: New user — send register OTP ── */
-async function doRegisterOtpSend() {
-  const phone = document.getElementById('inp-phone').value.trim();
-  const name  = document.getElementById('inp-name').value.trim();
-  const email = document.getElementById('inp-email').value.trim();
-  const pass  = document.getElementById('inp-pass').value;
-
-  if (!name)  { toast('Please enter your full name'); return; }
-  if (!/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email)) { toast('Enter a valid email address'); return; }
-  if (pass.length < 8) { toast('Password must be at least 8 characters'); return; }
-
-  const btn = document.getElementById('btn-register-otp');
-  btn.textContent = 'Sending…'; btn.disabled = true;
-  try {
-    const res  = await fetch(API + '/auth/register-otp-send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, name, email, password: pass })
-    });
-    const data = await res.json();
-    if (!res.ok) { toast(data.message || 'Failed to send OTP'); return; }
-    document.getElementById('otp-phone-display').textContent = '+91 ' + phone;
-    document.getElementById('otp-back-label').textContent = 'Back';
-    document.getElementById('otp-back-btn').onclick = function(){ goStep(2); };
-    goStep(3);
-    startTimer();
-    toast('OTP sent to +91 ' + phone);
-  } catch (err) {
-    toast(err.message || 'Network error. Please try again.');
-  } finally {
-    btn.textContent = 'Send OTP'; btn.disabled = false;
-  }
-}
-
-/* ── Admin password login ── */
-async function doAdminLogin() {
-  const phone = document.getElementById('inp-phone').value.trim();
-  const pass  = document.getElementById('admin-pass').value;
-  if (!pass) { toast('Enter your admin password'); return; }
-  const btn = document.getElementById('btn-admin-login');
-  btn.textContent = 'Signing in…'; btn.disabled = true;
-  try {
-    const res  = await fetch(API + '/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, password: pass })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Invalid password');
-    if (_timer) clearInterval(_timer);
-    localStorage.setItem('nansai_token', data.token);
-    localStorage.setItem('nansai_user', JSON.stringify(data.user));
-    localStorage.setItem('admin_token', data.token);
-    localStorage.setItem('admin_user', JSON.stringify({ name: data.user.name, email: data.user.email }));
-    showSuccess(data.user);
-  } catch (err) {
-    const inp = document.getElementById('admin-pass');
-    inp.classList.add('err'); setTimeout(function(){ inp.classList.remove('err'); }, 400);
-    toast(err.message);
-    btn.textContent = 'Sign In'; btn.disabled = false;
-  }
-}
-
-/* ── STEP 3: Verify OTP ── */
-async function doVerify() {
-  const phone = document.getElementById('inp-phone').value.trim();
-  const otp   = document.getElementById('otp-box').value.replace(/\s/g, '');
-  if (otp.length !== 6) {
-    const box = document.getElementById('otp-box');
-    box.classList.add('err'); setTimeout(function(){ box.classList.remove('err'); }, 400);
-    toast('Enter the 6-digit OTP'); return;
-  }
-  const btn = document.getElementById('btn-verify');
-  btn.textContent = 'Verifying…'; btn.disabled = true;
-
-  const body = { phone: phone, otp: otp };
-  if (_isNewUser) {
-    body.name     = document.getElementById('inp-name').value.trim();
-    body.email    = document.getElementById('inp-email').value.trim();
-    body.password = document.getElementById('inp-pass').value;
-  }
-
-  try {
-    const res  = await fetch(API + '/auth/login-otp-verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Verification failed');
-    if (_timer) clearInterval(_timer);
-    localStorage.setItem('nansai_token', data.token);
-    localStorage.setItem('nansai_user', JSON.stringify(data.user));
-    showSuccess(data.user);
-  } catch (err) {
-    const box = document.getElementById('otp-box');
-    box.classList.add('err'); setTimeout(function(){ box.classList.remove('err'); }, 400);
-    toast(err.message);
-    btn.textContent = 'Verify & Continue'; btn.disabled = false;
-  }
-}
-
-/* ── Success screen ── */
-function showSuccess(user) {
-  const firstName = (user.name || 'there').split(' ')[0];
-  document.getElementById('success-hi').textContent  = 'Hi, ' + firstName + '! [[icon:hand]]';
-  document.getElementById('success-sub').textContent = _isNewUser
-    ? 'Account created! Taking you to the store…'
-    : 'Welcome back! Taking you to the store…';
-  goStep(4);
-  requestAnimationFrame(function(){
-    document.getElementById('success-bar-fill').style.width = '100%';
-  });
-  // Save token with BOTH keys so admin panel finds it
-  const token = localStorage.getItem('nansai_token');
-  if (token) localStorage.setItem('admin_token', token);
-  if (user) localStorage.setItem('admin_user', JSON.stringify({ name: user.name, email: user.email }));
-
-  // Re-fetch /auth/me to get the definitive role from DB
-  fetch((window.API_BASE || 'http://localhost:5000/api') + '/auth/me', {
-    headers: { Authorization: 'Bearer ' + token }
-  }).then(r => r.json()).then(data => {
-    const u = data.data || data.user || user;
-    localStorage.setItem('nansai_user', JSON.stringify(u));
-    localStorage.setItem('admin_user', JSON.stringify({ name: u.name, email: u.email }));
-    const dest = u.role === 'admin' ? 'admin-panel.html' : 'index.html';
-    setTimeout(function(){ window.location.href = dest; }, 1600);
-  }).catch(function() {
-    const dest = user.role === 'admin' ? 'admin-panel.html' : 'index.html';
-    setTimeout(function(){ window.location.href = dest; }, 1600);
+    if (wishRes?.data) {
+      // Map MongoDB ObjectIds → frontend numeric IDs
+      const DB_IDS = [
+        '69f4273291de8325503cbd27','69f4273291de8325503cbd2b','69f4273291de8325503cbd2f',
+        '69f4273291de8325503cbd33','69f4273291de8325503cbd36','69f4273291de8325503cbd3a',
+        '69f4273291de8325503cbd3e','69f4273291de8325503cbd41','69f4273291de8325503cbd44',
+        '69f4273291de8325503cbd47','69f4273291de8325503cbd4a','69f4273291de8325503cbd4d',
+        '69f4273291de8325503cbd50','69f4273291de8325503cbd53','69f4273391de8325503cbd56',
+        '69f4273391de8325503cbd59'
+      ];
+      const ids = wishRes.data.map(p => {
+        const dbId = String(typeof p==='object' ? (p._id||p.id) : p);
+        const idx  = DB_IDS.indexOf(dbId);
+        return idx !== -1 ? String(idx+1) : null;
+      }).filter(Boolean);
+      localStorage.setItem('wishlist', JSON.stringify(ids));
+      localStorage.setItem('nansei_wishlist', JSON.stringify(ids));
+    } else {
+      localStorage.setItem('wishlist', '[]');
+    }
+  }).catch(() => {
+    localStorage.setItem('cart', '[]');
+    localStorage.setItem('wishlist', '[]');
+  }).finally(() => {
+    window.location.href = d.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
   });
 }
 
-/* ── OTP Timer ── */
-function startTimer() {
-  if (_timer) clearInterval(_timer);
-  let rem = 300;
-  const display = document.getElementById('timer-display');
-  const resend  = document.getElementById('resend-btn');
-  resend.disabled = true;
-  display.classList.remove('expired');
-  document.getElementById('otp-box').value = '';
-  setTimeout(function(){ resend.disabled = false; }, 60000);
-  _timer = setInterval(function() {
-    rem--;
-    const m = Math.floor(rem / 60), s = rem % 60;
-    display.textContent = m + ':' + String(s).padStart(2, '0');
-    if (rem <= 60) display.classList.add('expired');
-    if (rem <= 0)  { clearInterval(_timer); display.textContent = 'Expired'; resend.disabled = false; }
-  }, 1000);
-}
-
-async function doResend() {
-  const phone = document.getElementById('inp-phone').value.trim();
-  document.getElementById('resend-btn').disabled = true;
-  try {
-    const endpoint = _isNewUser ? '/auth/register-otp-send' : '/auth/login-otp-send';
-    const body = _isNewUser
-      ? { phone: phone, name: document.getElementById('inp-name').value.trim(), email: document.getElementById('inp-email').value.trim() }
-      : { phone: phone };
-    const res  = await fetch(API + endpoint, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message);
-    toast('New OTP sent!');
-  } catch (err) { toast(err.message || 'Failed to resend OTP'); }
-  startTimer();
-}
-
-/* Auto-submit on 6 digits */
-document.getElementById('otp-box').addEventListener('input', function() {
-  this.value = this.value.replace(/\D/g, '');
-  if (this.value.length === 6) doVerify();
-});
-
-/* Enter key support */
-document.getElementById('inp-phone').addEventListener('keydown', function(e){ if (e.key === 'Enter') doCheckPhone(); });
-document.getElementById('inp-pass') .addEventListener('keydown', function(e){ if (e.key === 'Enter') doRegisterOtpSend(); });
-document.getElementById('admin-pass').addEventListener('keydown', function(e){ if (e.key === 'Enter') doAdminLogin(); });
-
-/* Skip if already logged in */
-document.addEventListener('DOMContentLoaded', async function() {
-  const token = localStorage.getItem('nansai_token');
-  if (!token) return;
-  try {
-    const res = await fetch((window.API_BASE || 'http://localhost:5000/api') + '/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const user = data.data || data.user;
-    if (!user) throw new Error();
-    toast('Welcome back, ' + (user.name || 'there').split(' ')[0] + '!');
-    const dest = user.role === 'admin' ? 'admin-panel.html' : 'index.html';
-    setTimeout(function(){ window.location.href = dest; }, 900);
-  } catch(e) {
-    localStorage.removeItem('nansai_token');
-    localStorage.removeItem('nansai_user');
+function googleSignIn() {
+  if (!window.GOOGLE_CLIENT_ID || window.GOOGLE_CLIENT_ID.includes('your_google')) {
+    toast('Google Sign-In is not configured yet.', 'err'); return;
   }
-});
+  if (!window.google) { toast('Google script not loaded. Check your connection.', 'err'); return; }
+  google.accounts.id.initialize({
+    client_id: window.GOOGLE_CLIENT_ID,
+    ux_mode: 'popup',
+    callback: async ({ credential }) => {
+      try {
+        const r = await apiFetch(API+'/auth/google', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({credential}) });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.message || 'Google sign-in failed');
+        save(d);
+      } catch(err) { toast(err.message, 'err'); }
+    }
+  });
+  google.accounts.id.prompt();
+}
+
+// Note: guest-guard and auth checks are now handled synchronously on script parse by auth.js.
 </script>
 </body>
 </html>

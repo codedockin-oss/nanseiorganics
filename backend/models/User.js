@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
+    match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number'],
+    default: undefined
   },
   role: {
     type: String,
@@ -42,15 +43,6 @@ const userSchema = new mongoose.Schema({
   },
   verificationToken: String,
   emailVerified: { type: Boolean, default: false },
-  emailOtp: String,
-  emailOtpExpire: Date,
-  phoneVerified: { type: Boolean, default: false },
-  phoneOtp: String,
-  phoneOtpExpire: Date,
-  otpAttempts: { type: Number, default: 0 },
-  otpAttemptsExpire: Date,
-  otpDailyCount: { type: Number, default: 0 },
-  otpDailyReset: Date,
   googleId: String,
   facebookId: String,
   resetPasswordToken: String,
@@ -73,7 +65,9 @@ const userSchema = new mongoose.Schema({
     meta: mongoose.Schema.Types.Mixed,
     createdAt: { type: Date, default: Date.now }
   }],
-  fcmToken: { type: String, default: null },  // customer device push token
+  fcmToken: { type: String, default: null },
+  tokenVersion: { type: Number, default: 0 },
+  lastLogoutAt: Date,
 }, {
   timestamps: true
 });
@@ -99,7 +93,7 @@ userSchema.methods.comparePassword = async function(enteredPassword) {
 // Generate JWT token — include role so authorize() middleware works
 userSchema.methods.generateToken = function() {
   return jwt.sign(
-    { id: this._id, role: this.role },
+    { id: this._id, role: this.role, tokenVersion: this.tokenVersion || 0 },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE }
   );

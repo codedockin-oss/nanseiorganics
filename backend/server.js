@@ -53,6 +53,16 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api', (req, res, next) => {
+  if (req.headers.authorization) {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Vary', 'Authorization');
+  }
+  next();
+});
+
 // ── Security headers ──
 app.use(helmet({
   contentSecurityPolicy: {
@@ -172,8 +182,8 @@ app.get('/admin', async (req, res) => {
   if (!token) return res.redirect('/admin-login');
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user    = await User.findById(decoded.id).select('role').lean();
-    if (!user || user.role !== 'admin') return res.redirect('/admin-login');
+    const user    = await User.findById(decoded.id).select('role tokenVersion').lean();
+    if (!user || user.role !== 'admin' || (decoded.tokenVersion ?? 0) !== (user.tokenVersion || 0)) return res.redirect('/admin-login');
     res.sendFile(path.join(__dirname, '..', 'pages', 'admin-panel.html'));
   } catch {
     res.redirect('/admin-login');
@@ -190,6 +200,22 @@ app.use(express.static(frontendPath, {
   maxAge: process.env.NODE_ENV === 'production' ? '7d' : 0,
   etag: true,
   lastModified: true,
+  setHeaders: (res, filePath) => {
+    const normalized = filePath.replace(/\\/g, '/');
+    const noStorePages = [
+      '/pages/account.html',
+      '/pages/admin-panel.html',
+      '/pages/checkoutmyorderpage.html',
+      '/pages/login.html',
+      '/pages/reset-password.html',
+      '/pages/wishlist.html',
+    ];
+    if (noStorePages.some(page => normalized.endsWith(page))) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  },
 }));
 
 if (process.env.NODE_ENV === 'production') {

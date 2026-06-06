@@ -6,6 +6,24 @@ function updateQty(id, delta) {}
 
 function addToCart(id) { addToCartWithQty(id); }
 
+function animateCartIcon() {
+  if (!document.getElementById('cart-fly-style')) {
+    const style = document.createElement('style');
+    style.id = 'cart-fly-style';
+    style.textContent = '@keyframes cartFly{0%{transform:scale(1);opacity:1}40%{transform:scale(1.3) translateY(-6px);opacity:1}100%{transform:scale(.6) translateY(-20px);opacity:.9}}.cart-fly{animation:cartFly 500ms cubic-bezier(.34,1.56,.64,1) forwards;}';
+    document.head.appendChild(style);
+  }
+  const targets = Array.from(document.querySelectorAll(
+    '[data-cart-animation-target], button[onclick*="openCart"], a[href="checkoutmyorderpage.html"], a[href="../pages/checkoutmyorderpage.html"], a[href$="/checkoutmyorderpage.html"]'
+  )).filter(el => el.offsetParent !== null);
+  const target = targets[0];
+  if (!target) return;
+  target.classList.remove('cart-fly');
+  void target.offsetWidth;
+  target.classList.add('cart-fly');
+  target.addEventListener('animationend', () => target.classList.remove('cart-fly'), { once: true });
+}
+
 function addToCartWithQty(id) {
   const p = products.find(x => x.id === id);
   const sel = document.getElementById('qty-' + id);
@@ -21,6 +39,7 @@ function addToCartWithQty(id) {
   syncCounters();
   showToast(`[[icon:shopping-cart]] ${p.name} (${label}) added!`);
   if (typeof ActivityAPI !== 'undefined') ActivityAPI.log('add_to_cart', `Added "${p.name}" to cart`, { productId: p.id, productName: p.name, price: totalPrice });
+  animateCartIcon();
   const btn = document.getElementById('cartbtn-' + id);
   if (btn) {
     btn.classList.add('added');
@@ -89,7 +108,7 @@ function prodCardHTML(p, i) {
         <select id="qty-${p.id}" onclick="event.stopPropagation()" onchange="event.stopPropagation()" class="border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-gray-50 outline-none cursor-pointer" style="height:28px;padding:0 4px;max-width:90px;">
           ${qtyOptionsHTML(p.category)}
         </select>
-        <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id})" class="cart-btn flex-1 bg-green-800 hover:bg-green-700 text-white text-[11px] font-bold py-1.5 rounded-lg flex items-center justify-center gap-1 transition">
+        <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id});event.preventDefault();event.stopPropagation()" class="cart-btn flex-1 bg-green-800 hover:bg-green-700 text-white text-[11px] font-bold py-1.5 rounded-lg flex items-center justify-center gap-1 transition">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
           <span>Add</span>
         </button>
@@ -228,7 +247,7 @@ function renderMobProducts(list) {
           <select id="qty-${p.id}" onclick="event.stopPropagation()" onchange="event.stopPropagation()" style="height:24px;border:1px solid #d1d5db;border-radius:6px;font-size:.6rem;font-weight:700;color:#374151;background:#f3f4f6;padding:0 3px;outline:none;cursor:pointer;max-width:80px;font-family:'DM Sans',sans-serif;">
             ${qtyOptionsHTML(p.category)}
           </select>
-          <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id})" class="cart-btn" style="flex:1;background:#166534;color:#fff;font-size:.6rem;font-weight:700;padding:5px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:2px;">
+          <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id});event.preventDefault();event.stopPropagation()" class="cart-btn" style="flex:1;background:#166534;color:#fff;font-size:.6rem;font-weight:700;padding:5px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:2px;">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
             <span>Add</span>
           </button>

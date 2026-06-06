@@ -157,7 +157,58 @@ async function _updateWishBadge() {
 }
 
 /* ── auto-sync badges on load ── */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  if (_isLoggedIn()) {
+    // Sync cart from DB — restore user's saved cart
+    try {
+      const { data } = await Promise.race([
+        CartAPI.get(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 4000))
+      ]);
+      const items = (data.items || []).map(i => ({
+        id:       i.product._id || i.product,
+        name:     i.product.name || '',
+        price:    i.product.price || 0,
+        oldPrice: i.product.oldPrice || 0,
+        image:    i.product.images?.[0] || i.product.image || '',
+        qty:      i.quantity
+      }));
+      _saveLC(items);
+    } catch (_) {}
+    // Sync wishlist from DB
+    try {
+      const { data } = await Promise.race([
+        WishlistAPI.get(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 4000))
+      ]);
+      const DB_IDS = [
+        '69f4273291de8325503cbd27','69f4273291de8325503cbd2b','69f4273291de8325503cbd2f',
+        '69f4273291de8325503cbd33','69f4273291de8325503cbd36','69f4273291de8325503cbd3a',
+        '69f4273291de8325503cbd3e','69f4273291de8325503cbd41','69f4273291de8325503cbd44',
+        '69f4273291de8325503cbd47','69f4273291de8325503cbd4a','69f4273291de8325503cbd4d',
+        '69f4273291de8325503cbd50','69f4273291de8325503cbd53','69f4273391de8325503cbd56',
+        '69f4273391de8325503cbd59'
+      ];
+      const ids = (data || []).map(p => {
+        const dbId = _safeId(typeof p === 'object' ? (p._id || p.id) : p);
+        const idx  = DB_IDS.indexOf(String(p?._id || p?.id || p));
+        return idx !== -1 ? String(idx+1) : dbId;
+      });
+      _saveWish(ids);
+    } catch (_) {}
+  }
   _updateBadge();
   _updateWishBadge();
+});
+
+// On login event — re-sync badges immediately
+window.addEventListener('nansai:loggedin', async () => {
+  _updateBadge();
+  _updateWishBadge();
+});
+
+// On logout event — reset badges to 0
+window.addEventListener('nansai:session-cleared', () => {
+  document.querySelectorAll('#cartCount, #mobCartCnt, #cartBadge').forEach(el => { el.textContent = '0'; });
+  document.querySelectorAll('#wishlistCount').forEach(el => { el.textContent = '0'; });
 });

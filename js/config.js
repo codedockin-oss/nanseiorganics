@@ -11,11 +11,13 @@
   const PRODUCTION_API = 'https://nanseiorganics.onrender.com/api';
   const LOCAL_API      = 'http://localhost:5000/api';
 
-  // Auto-detect: if running on localhost/file:// → use local, else use production
   const isLocal =
     location.hostname === 'localhost' ||
     location.hostname === '127.0.0.1' ||
     location.protocol === 'file:';
 
   window.API_BASE = isLocal ? LOCAL_API : PRODUCTION_API;
+
+  // Replace with your actual Google OAuth Client ID from console.cloud.google.com
+  window.GOOGLE_CLIENT_ID = 'your_google_client_id_here.apps.googleusercontent.com';
 })();

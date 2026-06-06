@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Product Page</title>
+</head>
+<body>
+    <h1>Testing Product Page</h1>
+    <p>This page will redirect you to test the product page...</p>
+    
+    <div>
+        <h2>Test Links:</h2>
+        <ul>
+            <li><a href="product.html?id=1">Test Product ID 1 (Karunguruvai Rice)</a></li>
+            <li><a href="product.html?id=2">Test Product ID 2 (Karuppu Kavuni Rice)</a></li>
+            <li><a href="product.html?id=3">Test Product ID 3 (Arubatham Kuruvai Rice)</a></li>
+            <li><a href="product.html?id=8">Test Product ID 8 (Paneer Rose)</a></li>
+        </ul>
+    </div>
+    
+    <script>
+        // Auto redirect to product page after 3 seconds
+        setTimeout(() => {
+            window.location.href = 'product.html?id=1';
+        }, 3000);
+    </script>
+</body>
+</html>

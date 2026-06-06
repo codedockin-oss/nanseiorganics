@@ -12,8 +12,9 @@ const store = new Map(); // key → { data, expiresAt }
  */
 function cache(ttlSeconds = 60) {
   return (req, res, next) => {
-    // Only cache GET requests
+    // Only cache anonymous GET requests. User-specific responses must never be shared.
     if (req.method !== 'GET') return next();
+    if (req.headers.authorization || req.user) return next();
 
     const key = req.originalUrl;
     const hit = store.get(key);
