@@ -48,14 +48,9 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://nanseiorganics.onrender.com/api/:splat"
+  to = "https://nanseiorg.netlify.app/api/:splat"
   status = 200
   force = true
-
-[[redirects]]
-  from = "/*"
-  to = "/pages/index.html"
-  status = 200
 
 [[headers]]
   for = "/*"
