@@ -52,6 +52,11 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/*"
+  to = "/pages/index.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
