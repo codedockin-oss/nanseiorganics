@@ -1,5 +1,56 @@
 [build]
-  publish = "pages"
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/pages/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/pages/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/account"
+  to = "/pages/account.html"
+  status = 200
+
+[[redirects]]
+  from = "/product"
+  to = "/pages/product.html"
+  status = 200
+
+[[redirects]]
+  from = "/wishlist"
+  to = "/pages/wishlist.html"
+  status = 200
+
+[[redirects]]
+  from = "/orders"
+  to = "/pages/checkoutmyorderpage.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog"
+  to = "/pages/blog.html"
+  status = 200
+
+[[redirects]]
+  from = "/news"
+  to = "/pages/news.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/pages/admin-panel.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://nanseiorg.netlify.app/api/:splat"
+  status = 200
+  force = true
 
 [[headers]]
   for = "/*"
@@ -7,7 +58,6 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 [[headers]]
   for = "/js/*"
@@ -16,5 +66,10 @@
 
 [[headers]]
   for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/pages/*.html"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
