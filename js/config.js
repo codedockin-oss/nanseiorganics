@@ -8,7 +8,7 @@
  */
 
 (function () {
-  const PRODUCTION_API = 'https://nanseiorganics.onrender.com/api';
+  const PRODUCTION_API = 'https://nanseiorg.netlify.app/api';
   const LOCAL_API      = 'http://localhost:5000/api';
 
   const isLocal =
