@@ -4,16 +4,43 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Product  NANSAI</title>
-<script src="../js/config.js"></script>
+<script>
+/* ── Inline Cart / Wish / Counters (no backend required) ── */
+window.API_BASE='';
+window._updateBadge=function(){const c=JSON.parse(localStorage.getItem('cart')||'[]');const t=c.reduce((s,i)=>s+(i.qty||1),0);document.querySelectorAll('#cartCount').forEach(el=>{if(el)el.textContent=t;});};
+window._updateWishBadge=function(){const w=JSON.parse(localStorage.getItem('wishlist')||'[]');document.querySelectorAll('#wishlistCount').forEach(el=>{if(el)el.textContent=w.length;});};
+window.Cart={
+  add(item){const c=JSON.parse(localStorage.getItem('cart')||'[]');const i=c.findIndex(x=>String(x.id)===String(item.id));if(i>-1)c[i].qty=(c[i].qty||1)+1;else c.push(Object.assign({},item,{qty:item.qty||1}));localStorage.setItem('cart',JSON.stringify(c));window._updateBadge();return Promise.resolve();},
+  getItems(){return Promise.resolve(JSON.parse(localStorage.getItem('cart')||'[]'));},
+  count(){const c=JSON.parse(localStorage.getItem('cart')||'[]');return Promise.resolve(c.reduce((s,i)=>s+(i.qty||1),0));},
+  remove(id){const c=JSON.parse(localStorage.getItem('cart')||'[]').filter(x=>String(x.id)!==String(id));localStorage.setItem('cart',JSON.stringify(c));window._updateBadge();return Promise.resolve();}
+};
+window.Wish={
+  has(id){const w=JSON.parse(localStorage.getItem('wishlist')||'[]');return Promise.resolve(w.some(x=>String(x)===String(id)));},
+  toggle(id){const w=JSON.parse(localStorage.getItem('wishlist')||'[]');const idx=w.findIndex(x=>String(x)===String(id));let added;if(idx>-1){w.splice(idx,1);added=false;}else{w.push(id);added=true;}localStorage.setItem('wishlist',JSON.stringify(w));window._updateWishBadge();return Promise.resolve(added);},
+  getIds(){return Promise.resolve(JSON.parse(localStorage.getItem('wishlist')||'[]'));}
+};
+/* Auth nav */
+(function(){
+  const user=JSON.parse(localStorage.getItem('nansai_user')||'null');
+  const token=localStorage.getItem('nansai_token');
+  document.addEventListener('DOMContentLoaded',function(){
+    const link=document.getElementById('accountNavLink');
+    const label=document.getElementById('accountLabel');
+    const dropdown=document.getElementById('accountDropdown');
+    if(user&&token&&link&&label){
+      const firstName=(user.name||'User').split(' ')[0];
+      label.textContent='Hi, '+firstName;
+      link.removeAttribute('href');
+      link.style.cursor='pointer';
+      link.onclick=function(e){e.stopPropagation();if(dropdown)dropdown.style.display=dropdown.style.display==='block'?'none':'block';};
+      document.addEventListener('click',function(){if(dropdown)dropdown.style.display='none';});
+    }
+  });
+})();
+</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
-<script>
-/* Fallback stubs — defined FIRST so cart.js can safely reference them if api.js is slow */
-window.CartAPI = window.CartAPI || { get:()=>Promise.reject('no api'), add:()=>Promise.reject('no api'), remove:()=>Promise.reject('no api'), clear:()=>Promise.reject('no api') };
-window.WishlistAPI = window.WishlistAPI || { get:()=>Promise.reject('no api'), add:()=>Promise.reject('no api'), remove:()=>Promise.reject('no api') };
-</script>
-<script src="../frontend/js/api.js" onerror="console.warn('api.js not loaded')"></script>
-<script src="../frontend/js/cart.js" onerror="console.warn('cart.js not loaded')"></script>
 <script>
 /* Safety stubs in case cart.js also failed */
 if(typeof Cart==='undefined'){window.Cart={add:()=>Promise.resolve(),getItems:()=>Promise.resolve([]),count:()=>Promise.resolve(0),remove:()=>Promise.resolve()};}
@@ -237,7 +264,8 @@ body { font-family: 'Inter', sans-serif; background: #f7f3ec; }
 .var-btn.selected { border-color: var(--forest) !important; background: #e8f5e9 !important; color: var(--forest-mid) !important; }
 
 /* -- Mobile bar -- */
-#mobBar { display: none !important; }
+#mobBar { display: none; }
+@media (max-width: 767px) { #mobBar { display: flex !important; } }
 
 /* ═══════════════════════════════════════
    MOBILE UX — PRODUCT PAGE OVERHAUL
@@ -1196,54 +1224,8 @@ a .nansai-icon,
         </button>
       </div>
 
-      <!-- Highlights grid -->
-      <div class="info-5 grid grid-cols-2 gap-x-4 gap-y-2.5 py-3 border-t border-b" style="border-color:#e5e7eb">
-        <div class="flex items-center gap-2">
-          <span class="text-base leading-none">&#127807;</span>
-          <div>
-            <p class="text-[11px] font-bold" style="color:var(--forest-deep)">100% Organic</p>
-            <p class="text-[10px]" style="color:var(--forest-sage)">No chemicals</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-base leading-none">&#x1F69A;</span>
-          <div>
-            <p class="text-[11px] font-bold" style="color:var(--forest-deep)">Free Delivery</p>
-            <p class="text-[10px]" style="color:var(--forest-sage)">Orders above &#x20B9;999</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-base leading-none">&#x21A9;&#xFE0F;</span>
-          <div>
-            <p class="text-[11px] font-bold" style="color:var(--forest-deep)">7-Day Returns</p>
-            <p class="text-[10px]" style="color:var(--forest-sage)">Hassle-free</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-base leading-none">&#128274;</span>
-          <div>
-            <p class="text-[11px] font-bold" style="color:var(--forest-deep)">Secure Payments</p>
-            <p class="text-[10px]" style="color:var(--forest-sage)">UPI, Cards, COD</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-base leading-none">&#9989;</span>
-          <div>
-            <p class="text-[11px] font-bold" style="color:var(--forest-deep)">FSSAI Certified</p>
-            <p class="text-[10px]" style="color:var(--forest-sage)">Quality assured</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-base leading-none">&#127807;</span>
-          <div>
-            <p class="text-[11px] font-bold" style="color:var(--forest-deep)">Sustainably Sourced</p>
-            <p class="text-[10px]" style="color:var(--forest-sage)">Farm-direct</p>
-          </div>
-        </div>
-      </div>
-
       <!-- -- TABS -- -->
-      <div class="info-5 border rounded-xl overflow-hidden bg-white shadow-sm" style="border-color:#e5e7eb">
+      <div class="info-5 border rounded-xl mt-4 overflow-hidden bg-white shadow-sm" style="border-color:#e5e7eb" >
         <div class="flex border-b" style="border-color:#e5e7eb;">
           <button onclick="switchTab('desc',this)" class="tab-btn active-tab flex-1 py-3 text-xs font-bold border-b-2 transition text-center" style="color:var(--forest);border-bottom-color:var(--gold-dk)">Description</button>
           <button onclick="switchTab('benefits',this)" class="tab-btn flex-1 py-3 text-xs font-semibold text-gray-400 border-b-2 border-transparent transition text-center" onmouseover="this.style.color='var(--forest)'" onmouseout="if(!this.classList.contains('active-tab'))this.style.color='#9ca3af'">Benefits</button>
@@ -1747,7 +1729,7 @@ const products = [
 
   {id:11, name:"Butterfly Pea Flower",              category:"Dried Flowers",  price:180, oldPrice:220, rating:4.7, reviews:132, sold:281, badge:"hot",
    image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png",
-   thumbs:[],
+   thumbs:["https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO%20BENEFITS.png?updatedAt=1780666108858","https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO%20Properties.png?updatedAt=1780666106213"],
    variants:["25","50","100","200"],
    tagline:"Vivid blue Sangu Poo — color-changing herbal tea with memory, skin and hair benefits.",
    desc:"Butterfly Pea Flower, also known as Sangu Poo in Tamil, is a traditional herbal flower widely used for tea, skincare, and natural remedies. Known for its vibrant blue color, butterfly pea flower tea is popular for its health benefits and refreshing taste.\n\nMany people search for butterfly pea flower tea benefits because it helps improve memory, supports skin health, and provides a natural cooling effect. Butterfly pea flower is also used in powder form for face packs and hair care.\n\nIf you are looking to buy butterfly pea flower online, dried flowers and powder forms are widely used for herbal drinks and beauty routines. Lemon can be added to the tea to change its color from blue to purple.",
@@ -1849,65 +1831,16 @@ let currentProduct = null;
 let currentQtyVal = null;
 let itemQty = 1;
 
-/* --- LOAD - reads ?id= from URL --- */
-function loadProduct() {
-  const params = new URLSearchParams(window.location.search);
-  const urlId  = params.get('id');
-
-  if (!urlId) {
-    const legacy = parseInt(localStorage.getItem('selectedProduct'));
-    if (legacy) { window.location.replace('product.html?id=' + legacy); return; }
-  }
-
-  const id = urlId || '1';
-
-  // Try API first, fall back to static array
-  const base = window.API_BASE || 'http://localhost:5000/api';
-  fetch(base + '/products/' + id)
-    .then(r => r.json())
-    .then(data => {
-      if (data.success && data.product) {
-        const p = data.product;
-        currentProduct = {
-          id:       p._id,
-          name:     p.name,
-          category: p.category,
-          price:    p.price,
-          oldPrice: p.oldPrice || Math.round(p.price * 1.25),
-          rating:   p.rating || 4.5,
-          reviews:  p.numReviews || 0,
-          sold:     0,
-          badge:    p.badge || 'new',
-          image:    p.images?.[0]?.url || p.image || '',
-          thumbs:   (p.images || []).slice(1).map(i => i.url || i),
-          variants: ['Standard'],
-          tagline:  p.tagline || '',
-          desc:     p.description || '',
-          specs:    { 'Origin': 'Tamil Nadu, India', 'Certification': 'FSSAI', 'Unit': p.unit || '', 'Weight': p.weight || '' },
-          nutrition: {},
-          reviewData: [],
-        };
-      } else {
-        // Fall back to static
-        currentProduct = products.find(p => String(p.id) === String(id)) || products[0];
-      }
-      document.title = currentProduct.name + ' | NANSAI';
-      try { render(); } catch(e) { console.error('render error', e); }
-      try { renderRelated(); } catch(e) {}
-      try { renderBlog(); } catch(e) {}
-      try { updateCounters(); } catch(e) {}
-      setTimeout(() => { if (typeof observeBlogCards === 'function') observeBlogCards(); }, 150);
-    })
-    .catch(() => {
-      // API unreachable — use static
-      currentProduct = products.find(p => String(p.id) === String(id)) || products[0];
-      document.title = currentProduct.name + ' | NANSAI';
-      try { render(); } catch(e) {}
-      try { renderRelated(); } catch(e) {}
-      try { renderBlog(); } catch(e) {}
-      try { updateCounters(); } catch(e) {}
-      setTimeout(() => { if (typeof observeBlogCards === 'function') observeBlogCards(); }, 150);
-    });
+/* --- LOAD --- */
+function loadProduct(){
+  const id=new URLSearchParams(window.location.search).get('id')||'1';
+  currentProduct=products.find(p=>String(p.id)===String(id))||products[0];
+  document.title=currentProduct.name+' | NANSAI';
+  try{render();}catch(e){console.error('render error',e);}
+  try{renderRelated();}catch(e){}
+  try{renderBlog();}catch(e){}
+  try{updateCounters();}catch(e){}
+  setTimeout(()=>{if(typeof observeBlogCards==='function')observeBlogCards();},150);
 }
 
 /* --- RENDER --- */
@@ -2167,7 +2100,6 @@ function render() {
     }
   }
 
-
   // Wishlist state - use Wish.has() so it works for both guest and logged-in
   Wish.has(p.id).then(isWished => {
     if (isWished) {
@@ -2316,8 +2248,6 @@ function getVariantMultiplier(v, category) {
   return grams / base;
 }
 
-
-
 function updatePriceFromVariant(v, category) {
   if (!currentProduct) return;
   const p = currentProduct;
@@ -2331,14 +2261,6 @@ function updatePriceFromVariant(v, category) {
   document.getElementById('pDiscEl').textContent     = disc + '% OFF';
   document.getElementById('pSavingEl').textContent   = '\ud83c\udf89 You save \u20b9' + (oldTotal - total) + ' on this order!';
 }
-
-
-
-
-
-
-
-
 
 /* --- ADD TO CART --- */
 function addToCartFn() {
@@ -2371,20 +2293,6 @@ function addToCartFn() {
     btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg> Add to Cart';
   }, 2000);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* --- BUY NOW --- */
 function buyNow() {
@@ -2931,7 +2839,817 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 </html>
 
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  NANSEI ORGANICS — PREMIUM CONVERSION SECTIONS                  ║
+  ║  Insert DIRECTLY BEFORE </body> in product.html                 ║
+  ║  All colours reference existing CSS vars: --forest, --cream etc ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
 
+<!-- ─── SHARED MICRO-ANIMATION STYLES (inject once) ─────────────────────── -->
+<style>
+/* Scroll-reveal base */
+.ns-reveal { opacity:0; transform:translateY(28px); transition:opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+.ns-reveal.visible { opacity:1; transform:translateY(0); }
+.ns-reveal-left  { opacity:0; transform:translateX(-32px); transition:opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+.ns-reveal-right { opacity:0; transform:translateX(32px);  transition:opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+.ns-reveal-left.visible, .ns-reveal-right.visible { opacity:1; transform:translateX(0); }
 
+/* Stagger helpers */
+.ns-d1 { transition-delay:.06s; }
+.ns-d2 { transition-delay:.12s; }
+.ns-d3 { transition-delay:.18s; }
+.ns-d4 { transition-delay:.24s; }
+.ns-d5 { transition-delay:.30s; }
 
+/* Touch-lift */
+@media (hover:none) {
+  .ns-lift:active { transform:scale(.97); transition:transform .12s; }
+}
+
+/* Snap scroll row */
+.ns-snap-row { display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:6px; }
+.ns-snap-row::-webkit-scrollbar { display:none; }
+.ns-snap-item { scroll-snap-align:start; flex-shrink:0; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce) {
+  .ns-reveal, .ns-reveal-left, .ns-reveal-right { opacity:1 !important; transform:none !important; transition:none !important; }
+}
+
+/* Section eyebrow shared */
+.ns-eyebrow {
+  display:inline-flex; align-items:center; gap:.45rem;
+  font-size:.58rem; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--forest-leaf);
+}
+.ns-eyebrow::before { content:''; width:1.1rem; height:1.5px; background:var(--forest-leaf); flex-shrink:0; }
+
+/* Story ring animation */
+@keyframes ns-ring-fill { from { stroke-dashoffset:113; } to { stroke-dashoffset:0; } }
+.ns-ring-animate { animation:ns-ring-fill 5s linear forwards; }
+
+/* Video play pulse */
+@keyframes ns-play-pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(201,168,76,.4); } 60%{ box-shadow:0 0 0 14px rgba(201,168,76,0); } }
+.ns-play-btn { animation:ns-play-pulse 2s ease-in-out infinite; }
+
+/* Timeline line draw */
+@keyframes ns-line-grow { from{height:0} to{height:100%} }
+.ns-tl-line.drawn { animation:ns-line-grow .8s cubic-bezier(.22,1,.36,1) forwards; }
+
+/* Comparison check bounce */
+@keyframes ns-check-in { 0%{transform:scale(0) rotate(-30deg)} 60%{transform:scale(1.2) rotate(4deg)} 100%{transform:scale(1) rotate(0)} }
+.ns-check-in { animation:ns-check-in .4s cubic-bezier(.34,1.56,.64,1) both; }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 1 — BENEFIT STORY CARDS
+     Insert: after breadcrumb, before .grid.grid-cols-1 (main layout)
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsBenefitCards" aria-label="Product promises" style="background:var(--cream);border-bottom:1px solid rgba(26,58,42,.07);padding:.6rem 0 .75rem;overflow:hidden;">
+  <div class="ns-snap-row" style="padding:0 1rem 6px;" id="nsBenefitScroll">
+    <!-- Card template repeated -->
+    <div class="ns-snap-item ns-lift" style="width:148px;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:16px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;box-shadow:0 2px 12px rgba(15,34,24,.06);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;" onmouseenter="nsCardHover(this,1)" onmouseleave="nsCardHover(this,0)">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🌿</div>
+      <p style="font-size:.72rem;font-weight:800;color:var(--forest-deep);line-height:1.25;">100% Organic</p>
+      <p style="font-size:.62rem;color:var(--forest-sage);line-height:1.5;">Certified free from synthetic inputs</p>
+    </div>
+    <div class="ns-snap-item ns-lift" style="width:148px;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:16px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;box-shadow:0 2px 12px rgba(15,34,24,.06);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;" onmouseenter="nsCardHover(this,1)" onmouseleave="nsCardHover(this,0)">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#e0f2fe,#bae6fd);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🧪</div>
+      <p style="font-size:.72rem;font-weight:800;color:var(--forest-deep);line-height:1.25;">Lab Tested</p>
+      <p style="font-size:.62rem;color:var(--forest-sage);line-height:1.5;">Third-party quality verification</p>
+    </div>
+    <div class="ns-snap-item ns-lift" style="width:148px;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:16px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;box-shadow:0 2px 12px rgba(15,34,24,.06);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;" onmouseenter="nsCardHover(this,1)" onmouseleave="nsCardHover(this,0)">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🚫</div>
+      <p style="font-size:.72rem;font-weight:800;color:var(--forest-deep);line-height:1.25;">Chemical Free</p>
+      <p style="font-size:.62rem;color:var(--forest-sage);line-height:1.5;">Zero pesticides, zero additives</p>
+    </div>
+    <div class="ns-snap-item ns-lift" style="width:148px;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:16px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;box-shadow:0 2px 12px rgba(15,34,24,.06);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;" onmouseenter="nsCardHover(this,1)" onmouseleave="nsCardHover(this,0)">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">♻</div>
+      <p style="font-size:.72rem;font-weight:800;color:var(--forest-deep);line-height:1.25;">Eco Packaging</p>
+      <p style="font-size:.62rem;color:var(--forest-sage);line-height:1.5;">Sustainable, recyclable materials</p>
+    </div>
+    <div class="ns-snap-item ns-lift" style="width:148px;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:16px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;box-shadow:0 2px 12px rgba(15,34,24,.06);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;" onmouseenter="nsCardHover(this,1)" onmouseleave="nsCardHover(this,0)">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ffe4e6,#fecdd3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🇮🇳</div>
+      <p style="font-size:.72rem;font-weight:800;color:var(--forest-deep);line-height:1.25;">Made in India</p>
+      <p style="font-size:.62rem;color:var(--forest-sage);line-height:1.5;">Tamil Nadu farms since 1998</p>
+    </div>
+    <div class="ns-snap-item ns-lift" style="width:148px;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:16px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;box-shadow:0 2px 12px rgba(15,34,24,.06);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;" onmouseenter="nsCardHover(this,1)" onmouseleave="nsCardHover(this,0)">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">✅</div>
+      <p style="font-size:.72rem;font-weight:800;color:var(--forest-deep);line-height:1.25;">FSSAI Certified</p>
+      <p style="font-size:.62rem;color:var(--forest-sage);line-height:1.5;">Government quality approval</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 2 — REELS-STYLE EDUCATION STORIES
+     Insert: after mill banner, before #reviewsSection
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsStoriesSection" aria-label="Product education stories" style="background:var(--forest-deep);padding:2.5rem 0 2rem;overflow:hidden;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.25rem;">
+      <div>
+        <div class="ns-eyebrow" style="color:#8fbc9a;margin-bottom:.3rem;">
+          <span style="width:1.1rem;height:1.5px;background:#8fbc9a;display:inline-block;"></span>
+          Know Your Product
+        </div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--cream);line-height:1.1;">The Nansei Story</h2>
+      </div>
+      <p style="font-size:.68rem;color:rgba(247,243,236,.5);white-space:nowrap;">Swipe to explore →</p>
+    </div>
+
+    <div class="ns-snap-row" id="nsStoriesRow" style="gap:12px;padding-bottom:12px;">
+      <!-- Story card -->
+      <div class="ns-snap-item ns-story-card" style="width:min(220px,72vw);border-radius:20px;overflow:hidden;position:relative;flex-shrink:0;cursor:pointer;" onclick="nsOpenStory(0)">
+        <div style="height:340px;background:linear-gradient(160deg,#1a4d2e 0%,#0f2218 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;">
+          <!-- Progress bar at top -->
+          <div style="position:absolute;top:12px;left:12px;right:12px;height:3px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;background:var(--gold-lt);border-radius:3px;width:100%;"></div>
+          </div>
+          <div style="position:absolute;top:24px;left:12px;font-size:2.2rem;">🌱</div>
+          <span style="font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.35rem;">Story 1</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:.4rem;">Why Organic Matters</h3>
+          <p style="font-size:.68rem;color:rgba(247,243,236,.65);line-height:1.6;">Conventional farming strips soil of nutrients over decades. We restore it.</p>
+          <div style="margin-top:.85rem;display:flex;align-items:center;gap:.4rem;">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;margin-left:1px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+            </div>
+            <span style="font-size:.62rem;color:var(--gold-lt);font-weight:700;">Watch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ns-snap-item ns-story-card" style="width:min(220px,72vw);border-radius:20px;overflow:hidden;position:relative;flex-shrink:0;cursor:pointer;" onclick="nsOpenStory(1)">
+        <div style="height:340px;background:linear-gradient(160deg,#2d5a3d 0%,#1a3a2a 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;">
+          <div style="position:absolute;top:12px;left:12px;right:12px;height:3px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;"></div>
+          <div style="position:absolute;top:24px;left:12px;font-size:2.2rem;">🧑‍🌾</div>
+          <span style="font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.35rem;">Story 2</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:.4rem;">How We Source</h3>
+          <p style="font-size:.68rem;color:rgba(247,243,236,.65);line-height:1.6;">Direct partnerships with 140+ small farmers across Tamil Nadu.</p>
+          <div style="margin-top:.85rem;display:flex;align-items:center;gap:.4rem;">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;margin-left:1px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+            </div>
+            <span style="font-size:.62rem;color:var(--gold-lt);font-weight:700;">Watch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ns-snap-item ns-story-card" style="width:min(220px,72vw);border-radius:20px;overflow:hidden;position:relative;flex-shrink:0;cursor:pointer;" onclick="nsOpenStory(2)">
+        <div style="height:340px;background:linear-gradient(160deg,#164e63 0%,#0c2a38 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;">
+          <div style="position:absolute;top:24px;left:12px;font-size:2.2rem;">🔬</div>
+          <span style="font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.35rem;">Story 3</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:.4rem;">Quality Testing</h3>
+          <p style="font-size:.68rem;color:rgba(247,243,236,.65);line-height:1.6;">Every batch tested for 200+ contaminants before it ships.</p>
+          <div style="margin-top:.85rem;display:flex;align-items:center;gap:.4rem;">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;margin-left:1px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+            </div>
+            <span style="font-size:.62rem;color:var(--gold-lt);font-weight:700;">Watch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ns-snap-item ns-story-card" style="width:min(220px,72vw);border-radius:20px;overflow:hidden;position:relative;flex-shrink:0;cursor:pointer;" onclick="nsOpenStory(3)">
+        <div style="height:340px;background:linear-gradient(160deg,#451a03 0%,#1c0a01 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;">
+          <div style="position:absolute;top:24px;left:12px;font-size:2.2rem;">📖</div>
+          <span style="font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.35rem;">Story 4</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:.4rem;">How to Use</h3>
+          <p style="font-size:.68rem;color:rgba(247,243,236,.65);line-height:1.6;">Simple recipes and daily rituals to get the most from every product.</p>
+          <div style="margin-top:.85rem;display:flex;align-items:center;gap:.4rem;">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;margin-left:1px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+            </div>
+            <span style="font-size:.62rem;color:var(--gold-lt);font-weight:700;">Watch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ns-snap-item ns-story-card" style="width:min(220px,72vw);border-radius:20px;overflow:hidden;position:relative;flex-shrink:0;cursor:pointer;" onclick="nsOpenStory(4)">
+        <div style="height:340px;background:linear-gradient(160deg,#3d1a6e 0%,#1a0a38 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;">
+          <div style="position:absolute;top:24px;left:12px;font-size:2.2rem;">⭐</div>
+          <span style="font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.35rem;">Story 5</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:.4rem;">Success Stories</h3>
+          <p style="font-size:.68rem;color:rgba(247,243,236,.65);line-height:1.6;">12,000+ families transformed by switching to organic daily.</p>
+          <div style="margin-top:.85rem;display:flex;align-items:center;gap:.4rem;">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;margin-left:1px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+            </div>
+            <span style="font-size:.62rem;color:var(--gold-lt);font-weight:700;">Watch</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Story fullscreen modal -->
+<div id="nsStoryModal" style="display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.95);flex-direction:column;align-items:center;justify-content:center;" onclick="if(event.target===this)nsCloseStory()">
+  <button onclick="nsCloseStory()" style="position:absolute;top:16px;right:18px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.4rem;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;">×</button>
+  <!-- Progress bars -->
+  <div id="nsStoryProgressBars" style="position:absolute;top:12px;left:12px;right:50px;display:flex;gap:4px;z-index:10;"></div>
+  <!-- Content area -->
+  <div id="nsStoryContent" style="width:min(340px,90vw);display:flex;flex-direction:column;align-items:center;gap:1.25rem;text-align:center;padding:0 1rem;"></div>
+  <!-- Nav arrows -->
+  <button id="nsStoryPrev" onclick="nsNavStory(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:none;color:#fff;font-size:1.2rem;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
+  <button id="nsStoryNext" onclick="nsNavStory(1)"  style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:none;color:#fff;font-size:1.2rem;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">›</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 3 — DO'S AND DON'TS
+     Insert: after #nsStoriesSection
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsDosDonts" aria-label="Usage guidelines" style="background:var(--cream);padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
+    <div class="ns-reveal" style="text-align:center;margin-bottom:1.75rem;">
+      <div class="ns-eyebrow" style="justify-content:center;margin-bottom:.4rem;">Usage Guide</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">Do's &amp; Don'ts</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:760px;margin:0 auto;" id="nsDosDontsGrid">
+      <!-- DO's card -->
+      <div class="ns-reveal ns-d1" style="background:#fff;border:1.5px solid #bbf7d0;border-radius:18px;padding:1.25rem 1.1rem;box-shadow:0 4px 20px rgba(15,34,24,.06);">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;">
+          <div style="width:32px;height:32px;border-radius:10px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:1rem;">✅</div>
+          <h3 style="font-size:.85rem;font-weight:800;color:#166534;">Do's</h3>
+        </div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;">
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#16a34a;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✓</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Store in a cool, dry place away from moisture</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#16a34a;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✓</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Use clean, dry spoon each time</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#16a34a;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✓</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Seal container tightly after each use</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#16a34a;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✓</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Follow recommended serving size</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#16a34a;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✓</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Use within shelf-life printed on pack</span>
+          </li>
+        </ul>
+      </div>
+      <!-- DON'Ts card -->
+      <div class="ns-reveal ns-d2" style="background:#fff;border:1.5px solid #fecaca;border-radius:18px;padding:1.25rem 1.1rem;box-shadow:0 4px 20px rgba(15,34,24,.06);">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;">
+          <div style="width:32px;height:32px;border-radius:10px;background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:1rem;">❌</div>
+          <h3 style="font-size:.85rem;font-weight:800;color:#991b1b;">Don'ts</h3>
+        </div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;">
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#ef4444;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✕</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Avoid exposure to direct sunlight</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#ef4444;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✕</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Do not use a wet or moist spoon</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#ef4444;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✕</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Do not exceed the recommended dose</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#ef4444;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✕</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Do not store near heat or flames</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.65rem;">
+            <span style="color:#ef4444;font-size:.8rem;flex-shrink:0;margin-top:.1rem;font-weight:900;">✕</span>
+            <span style="font-size:.75rem;color:#374151;line-height:1.6;">Keep out of reach of children under 3</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Swipe hint mobile -->
+    <p style="text-align:center;font-size:.62rem;color:var(--forest-sage);margin-top:.85rem;display:none;" id="nsDosDontsHint">Tap any card to flip for tips</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 4 — INGREDIENT SPOTLIGHT
+     Insert: after Do's & Don'ts
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsIngredients" aria-label="Key ingredients" style="background:#fff;padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
+    <div class="ns-reveal" style="margin-bottom:1.75rem;">
+      <div class="ns-eyebrow" style="margin-bottom:.4rem;">What's Inside</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">Ingredient Spotlight</h2>
+      <p style="font-size:.75rem;color:var(--forest-sage);margin-top:.3rem;">Every ingredient chosen for potency, purity and provenance.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;" id="nsIngredientGrid">
+      <!-- Cards injected by JS nsRenderIngredients() -->
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 5 — FARM TO HOME TIMELINE
+     Insert: after Ingredient Spotlight
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsFarmTimeline" aria-label="Our farm to home journey" style="background:linear-gradient(180deg,#f0f7f2 0%,var(--cream) 100%);padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.08);">
+  <div style="max-width:960px;margin:0 auto;padding:0 1.5rem;">
+    <div class="ns-reveal" style="text-align:center;margin-bottom:2rem;">
+      <div class="ns-eyebrow" style="justify-content:center;margin-bottom:.4rem;">Traceability</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">Farm to Your Home</h2>
+      <p style="font-size:.75rem;color:var(--forest-sage);margin-top:.3rem;">Every step of the journey, transparent and verified.</p>
+    </div>
+
+    <!-- Desktop horizontal | Mobile vertical -->
+    <div id="nsTimelineWrap" style="position:relative;">
+      <!-- Steps -->
+      <div style="display:flex;flex-direction:column;gap:0;" id="nsTimelineSteps">
+        <!-- Each step injected by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 6 — PRODUCT COMPARISON
+     Insert: after Farm Timeline
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsComparison" aria-label="Why choose Nansei Organics" style="background:var(--forest-deep);padding:3rem 0 2.5rem;">
+  <div style="max-width:820px;margin:0 auto;padding:0 1.5rem;">
+    <div class="ns-reveal" style="text-align:center;margin-bottom:1.75rem;">
+      <div class="ns-eyebrow" style="justify-content:center;color:#8fbc9a;margin-bottom:.4rem;">Side by Side</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--cream);">Why Choose Nansei?</h2>
+    </div>
+
+    <div class="ns-reveal ns-d1" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+      <!-- Header row -->
+      <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08);">
+        <div style="padding:.85rem 1rem;font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,243,236,.45);">Feature</div>
+        <div style="padding:.85rem 1rem;text-align:center;">
+          <p style="font-size:.68rem;font-weight:900;color:var(--gold-lt);letter-spacing:.06em;">NANSEI</p>
+          <p style="font-size:.58rem;color:rgba(247,243,236,.45);">Organic</p>
+        </div>
+        <div style="padding:.85rem 1rem;text-align:center;">
+          <p style="font-size:.68rem;font-weight:900;color:rgba(247,243,236,.45);">REGULAR</p>
+          <p style="font-size:.58rem;color:rgba(247,243,236,.3);">Conventional</p>
+        </div>
+      </div>
+      <!-- Data rows injected by JS nsRenderComparison() -->
+      <div id="nsCompRows"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 7 — TRUST BADGES
+     Insert: after Comparison (or keep near top if preferred)
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsTrust" aria-label="Trust and guarantees" style="background:var(--cream);padding:2rem 0 1.75rem;border-top:1px solid rgba(26,58,42,.08);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;" id="nsTrustGrid">
+      <!-- Injected by JS nsRenderTrust() -->
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 8 — VIDEO SHOWCASE
+     Insert: after Trust Badges
+     ════════════════════════════════════════════════════════════════ -->
+<section id="nsVideos" aria-label="Video showcase" style="background:#fff;padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
+    <div class="ns-reveal" style="margin-bottom:1.75rem;">
+      <div class="ns-eyebrow" style="margin-bottom:.4rem;">See It Live</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">Watch &amp; Learn</h2>
+      <p style="font-size:.75rem;color:var(--forest-sage);margin-top:.3rem;">Real farm footage, honest recipes, genuine customer stories.</p>
+    </div>
+    <div class="ns-snap-row" id="nsVideoRow" style="gap:14px;">
+      <!-- Injected by JS nsRenderVideos() -->
+    </div>
+  </div>
+</section>
+
+<!-- Video modal -->
+<div id="nsVideoModal" style="display:none;position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)nsCloseVideo()">
+  <div style="position:relative;width:100%;max-width:760px;background:#000;border-radius:16px;overflow:hidden;aspect-ratio:16/9;">
+    <iframe id="nsVideoFrame" src="" allow="autoplay;fullscreen" style="width:100%;height:100%;border:none;" loading="lazy"></iframe>
+    <button onclick="nsCloseVideo()" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:1.3rem;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SECTION 9 — STICKY MOBILE STORY BAR
+     Mobile only — fixed at top below navbar
+     ════════════════════════════════════════════════════════════════ -->
+<div id="nsStoryBar" aria-hidden="true" style="display:none;position:sticky;top:54px;z-index:40;background:rgba(247,243,236,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(26,58,42,.1);padding:.5rem 0;overflow:hidden;">
+  <div class="ns-snap-row" style="padding:0 .85rem;gap:14px;">
+    <!-- Injected by JS nsRenderStoryBar() -->
+  </div>
+</div>
+<style>
+@media (max-width:767px) {
+  #nsStoryBar { display:block !important; }
+}
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ALL JAVASCRIPT
+     ════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+'use strict';
+
+/* ─────────────────────────────────────────
+   SCROLL REVEAL (Intersection Observer)
+───────────────────────────────────────── */
+const nsRevealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      nsRevealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+function nsObserveAll() {
+  document.querySelectorAll('.ns-reveal, .ns-reveal-left, .ns-reveal-right').forEach(el => {
+    nsRevealObserver.observe(el);
+  });
+}
+
+/* ─────────────────────────────────────────
+   SECTION 1 — BENEFIT CARD HOVER
+───────────────────────────────────────── */
+window.nsCardHover = function(el, on) {
+  if (window.matchMedia('(hover:none)').matches) return;
+  el.style.transform        = on ? 'translateY(-6px) scale(1.02)' : '';
+  el.style.boxShadow        = on ? '0 16px 40px rgba(15,34,24,.14)' : '';
+  el.style.borderColor      = on ? 'var(--forest-sage)' : 'rgba(26,58,42,.1)';
+};
+
+/* ─────────────────────────────────────────
+   SECTION 2 — STORIES
+───────────────────────────────────────── */
+const nsStories = [
+  {
+    emoji:'🌱', title:'Why Organic Matters',
+    body:'Conventional farming uses 300+ synthetic chemicals per season. Organic farming uses zero — relying instead on composting, crop rotation and natural pest control. The soil stays alive; so do you.',
+    cta:'Learn More'
+  },
+  {
+    emoji:'🧑‍🌾', title:'How We Source Ingredients',
+    body:'We partner directly with 140+ small-scale farmers across Tamil Nadu. No middlemen. Farmers earn 2.3× market price. Every farm is GPS-tracked and NPOP certified.',
+    cta:'Our Farmers'
+  },
+  {
+    emoji:'🔬', title:'How We Test Quality',
+    body:'Every batch goes through a 200-point quality check at our NABL-accredited partner lab. We test for pesticides, heavy metals, mycotoxins and microbial load before anything ships.',
+    cta:'See Certificate'
+  },
+  {
+    emoji:'📖', title:'How to Use This Product',
+    body:'Simple daily rituals make the biggest difference. Start with half the recommended amount, let your body adjust for 7 days, then increase to full dose. Consistency beats quantity.',
+    cta:'Full Guide'
+  },
+  {
+    emoji:'⭐', title:'Customer Success Stories',
+    body:'"After 3 months of daily kanji, my blood sugar readings improved from 210 to 148. My doctor was amazed." — Rajan K., Chennai. 12,000+ families transformed.',
+    cta:'Read Stories'
+  }
+];
+
+let nsCurrentStory = 0;
+let nsStoryTimer   = null;
+const NS_STORY_DURATION = 6000;
+
+window.nsOpenStory = function(idx) {
+  nsCurrentStory = idx;
+  const modal = document.getElementById('nsStoryModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  nsRenderStorySlide();
+  nsStartStoryTimer();
+};
+
+window.nsCloseStory = function() {
+  document.getElementById('nsStoryModal').style.display = 'none';
+  document.body.style.overflow = '';
+  clearInterval(nsStoryTimer);
+};
+
+window.nsNavStory = function(dir) {
+  clearInterval(nsStoryTimer);
+  nsCurrentStory = (nsCurrentStory + dir + nsStories.length) % nsStories.length;
+  nsRenderStorySlide();
+  nsStartStoryTimer();
+};
+
+function nsRenderStorySlide() {
+  const s = nsStories[nsCurrentStory];
+  // Progress bars
+  const barsEl = document.getElementById('nsStoryProgressBars');
+  barsEl.innerHTML = nsStories.map((_, i) =>
+    `<div style="flex:1;height:3px;background:${i < nsCurrentStory ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,.2)'};border-radius:3px;overflow:hidden;">
+       ${i === nsCurrentStory ? `<div id="nsActiveBar" style="height:100%;background:#fff;border-radius:3px;width:0%;transition:width ${NS_STORY_DURATION}ms linear;"></div>` : ''}
+     </div>`
+  ).join('');
+  // Animate active bar
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const bar = document.getElementById('nsActiveBar');
+    if (bar) bar.style.width = '100%';
+  }));
+  // Content
+  document.getElementById('nsStoryContent').innerHTML = `
+    <div style="font-size:3.5rem;line-height:1;">${s.emoji}</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.35rem,4vw,1.8rem);font-weight:700;color:#fff;line-height:1.2;">${s.title}</h2>
+    <p style="font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.8;max-width:320px;">${s.body}</p>
+    <button style="background:var(--gold);color:var(--forest-deep);font-size:.75rem;font-weight:800;padding:.55rem 1.5rem;border-radius:30px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;letter-spacing:.04em;" onclick="nsCloseStory()">${s.cta}</button>
+    <p style="font-size:.62rem;color:rgba(255,255,255,.35);">${nsCurrentStory+1} / ${nsStories.length}</p>
+  `;
+}
+
+function nsStartStoryTimer() {
+  clearInterval(nsStoryTimer);
+  nsStoryTimer = setInterval(() => {
+    if (nsCurrentStory < nsStories.length - 1) {
+      nsNavStory(1);
+    } else {
+      nsCloseStory();
+    }
+  }, NS_STORY_DURATION);
+}
+
+// Touch swipe on story modal
+(function() {
+  let sx = 0;
+  const modal = document.getElementById('nsStoryModal');
+  modal.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive:true });
+  modal.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 40) nsNavStory(dx < 0 ? 1 : -1);
+  }, { passive:true });
+})();
+
+/* ─────────────────────────────────────────
+   SECTION 4 — INGREDIENT CARDS
+───────────────────────────────────────── */
+const NS_INGREDIENTS = [
+  { emoji:'🌿', name:'Organic Turmeric',  origin:'Kerala Highlands',   desc:'Active curcumin content 3.5% — our batch exceeds FSSAI standard by 2×.', tags:['Anti-inflammatory','Liver support','Antioxidant'] },
+  { emoji:'🌱', name:'Moringa Leaf',       origin:'Thanjavur, TN',      desc:'Dried at under 40°C to protect heat-sensitive vitamin C and iron.', tags:['Iron rich','Protein','Immunity'] },
+  { emoji:'🫐', name:'Amla (Indian Gooseberry)', origin:'Kancheepuram', desc:'Sun-dried whole fruit — 20× the vitamin C of an orange, gram for gram.', tags:['Vitamin C','Hair health','Digestion'] },
+  { emoji:'🌿', name:'Neem Leaf',          origin:'Madurai, TN',        desc:'Hand-picked pre-bloom when azadirachtin content is highest.', tags:['Antibacterial','Blood purifier','Skin'] },
+];
+
+function nsRenderIngredients() {
+  const grid = document.getElementById('nsIngredientGrid');
+  if (!grid) return;
+  grid.innerHTML = NS_INGREDIENTS.map((ing, i) => `
+    <div class="ns-reveal ns-d${Math.min(i+1,5)}" style="background:var(--cream);border:1.5px solid rgba(26,58,42,.1);border-radius:18px;padding:1.25rem 1rem;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,border-color .3s;cursor:default;"
+         onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 48px rgba(15,34,24,.12)';this.style.borderColor='var(--forest-sage)'"
+         onmouseleave="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(26,58,42,.1)'">
+      <div style="font-size:2.2rem;margin-bottom:.7rem;line-height:1;">${ing.emoji}</div>
+      <h3 style="font-size:.88rem;font-weight:800;color:var(--forest-deep);margin-bottom:.2rem;">${ing.name}</h3>
+      <p style="font-size:.62rem;font-weight:700;color:var(--forest-leaf);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;">📍 ${ing.origin}</p>
+      <p style="font-size:.72rem;color:#6b7280;line-height:1.7;margin-bottom:.75rem;">${ing.desc}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.3rem;">
+        ${ing.tags.map(t=>`<span style="font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(74,140,92,.1);color:var(--forest-mid);border:1px solid rgba(74,140,92,.2);">${t}</span>`).join('')}
+      </div>
+    </div>`).join('');
+  nsObserveAll();
+}
+
+/* ─────────────────────────────────────────
+   SECTION 5 — FARM TIMELINE
+───────────────────────────────────────── */
+const NS_TIMELINE = [
+  { emoji:'🌱', label:'Organic Farm',      desc:'25-acre certified farm in Thanjavur district. NPOP certified since 2016. Zero synthetic inputs.' },
+  { emoji:'🧑‍🌾', label:'Hand Harvesting',  desc:'Harvested by hand at peak potency. No mechanical threshers that bruise grain or reduce oil content.' },
+  { emoji:'🔬', label:'Lab Testing',        desc:'200-point NABL-certified quality check. Batch number printed on every pack for full traceability.' },
+  { emoji:'📦', label:'Eco Packaging',      desc:'Kraft paper + food-grade PE liner. No plastic outer. 100% kerbside recyclable.' },
+  { emoji:'🚚', label:'Direct Delivery',   desc:'Ships within 24 hours of packing. Cold-chain for perishables. Delivered in 2–5 working days.' },
+];
+
+function nsRenderTimeline() {
+  const wrap = document.getElementById('nsTimelineSteps');
+  if (!wrap) return;
+  wrap.innerHTML = NS_TIMELINE.map((step, i) => `
+    <div class="ns-reveal" style="display:flex;gap:1.25rem;align-items:flex-start;position:relative;padding-bottom:${i < NS_TIMELINE.length-1 ? '0' : '0'};">
+      <!-- Left: icon + connector line -->
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:52px;">
+        <div style="width:52px;height:52px;border-radius:16px;background:${i===0?'var(--forest-deep)':'#fff'};border:2px solid ${i===0?'var(--forest-deep)':'rgba(26,58,42,.15)'};display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 14px rgba(15,34,24,.1);transition:transform .3s;z-index:1;"
+             onmouseenter="this.style.transform='scale(1.12)'" onmouseleave="this.style.transform=''">
+          ${step.emoji}
+        </div>
+        ${i < NS_TIMELINE.length-1 ? `<div style="width:2px;flex:1;min-height:40px;background:linear-gradient(to bottom,rgba(26,58,42,.3),rgba(26,58,42,.05));margin-top:4px;"></div>` : ''}
+      </div>
+      <!-- Right: text -->
+      <div style="padding-top:.6rem;padding-bottom:${i < NS_TIMELINE.length-1 ? '1.5rem' : '0'};">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;">
+          <span style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--forest-leaf);">Step ${i+1}</span>
+          <span style="width:1rem;height:1px;background:var(--forest-sage);"></span>
+          <h3 style="font-size:.88rem;font-weight:800;color:var(--forest-deep);">${step.label}</h3>
+        </div>
+        <p style="font-size:.75rem;color:#6b7280;line-height:1.75;max-width:480px;">${step.desc}</p>
+      </div>
+    </div>`).join('');
+  nsObserveAll();
+}
+
+/* ─────────────────────────────────────────
+   SECTION 6 — COMPARISON TABLE
+───────────────────────────────────────── */
+const NS_COMPARISON = [
+  { label:'Certified Organic',       nansei:true,  regular:false },
+  { label:'Third-party Lab Tested',  nansei:true,  regular:false },
+  { label:'Zero Synthetic Chemicals',nansei:true,  regular:false },
+  { label:'Traceable Farm Source',   nansei:true,  regular:false },
+  { label:'Eco-Friendly Packaging',  nansei:true,  regular:false },
+  { label:'Direct Farmer Partnership',nansei:true, regular:false },
+  { label:'Non-GMO',                 nansei:true,  regular:null  },
+];
+
+function nsRenderComparison() {
+  const wrap = document.getElementById('nsCompRows');
+  if (!wrap) return;
+  wrap.innerHTML = NS_COMPARISON.map((row, i) => `
+    <div class="ns-reveal ns-d${Math.min(i+1,5)}" style="display:grid;grid-template-columns:1.6fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,.06);background:${i%2===0?'rgba(255,255,255,.02)':'transparent'};">
+      <div style="padding:.75rem 1rem;font-size:.75rem;color:rgba(247,243,236,.75);">${row.label}</div>
+      <div style="padding:.75rem 1rem;text-align:center;">
+        <span class="ns-check-in" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#16a34a;animation-delay:${i*.05}s;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+      </div>
+      <div style="padding:.75rem 1rem;text-align:center;">
+        ${row.regular === null
+          ? `<span style="font-size:.68rem;color:rgba(247,243,236,.3);">Varies</span>`
+          : `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(239,68,68,.2);">
+               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+             </span>`
+        }
+      </div>
+    </div>`).join('');
+  nsObserveAll();
+}
+
+/* ─────────────────────────────────────────
+   SECTION 7 — TRUST BADGES
+───────────────────────────────────────── */
+const NS_TRUST = [
+  { emoji:'🚚', title:'Fast Delivery',     sub:'2–5 working days' },
+  { emoji:'🔒', title:'Secure Payments',   sub:'UPI · Cards · COD' },
+  { emoji:'↩',  title:'Easy Returns',      sub:'7-day hassle-free' },
+  { emoji:'📞', title:'Customer Support',  sub:'Mon–Sat 9am–6pm' },
+  { emoji:'🌿', title:'Certified Organic', sub:'NPOP & FSSAI' },
+  { emoji:'🏭', title:'Farm Direct',       sub:'Zero middlemen' },
+];
+
+function nsRenderTrust() {
+  const grid = document.getElementById('nsTrustGrid');
+  if (!grid) return;
+  grid.innerHTML = NS_TRUST.map((t, i) => `
+    <div class="ns-reveal ns-d${Math.min(i+1,5)}" style="display:flex;align-items:center;gap:.75rem;padding:.75rem .85rem;background:#fff;border:1.5px solid rgba(26,58,42,.09);border-radius:14px;box-shadow:0 2px 8px rgba(15,34,24,.05);">
+      <div style="width:36px;height:36px;border-radius:10px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">${t.emoji}</div>
+      <div>
+        <p style="font-size:.73rem;font-weight:800;color:var(--forest-deep);">${t.title}</p>
+        <p style="font-size:.62rem;color:var(--forest-sage);">${t.sub}</p>
+      </div>
+    </div>`).join('');
+  nsObserveAll();
+}
+
+/* ─────────────────────────────────────────
+   SECTION 8 — VIDEO SHOWCASE
+───────────────────────────────────────── */
+const NS_VIDEOS = [
+  { title:'Farm to Home',       duration:'2:34', thumb:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop', videoId:'dQw4w9WgXcQ', tag:'Our Story' },
+  { title:'How to Use',         duration:'1:48', thumb:'https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=400&auto=format&fit=crop', videoId:'dQw4w9WgXcQ', tag:'Tutorial' },
+  { title:'Ingredient Story',   duration:'3:12', thumb:'https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=400&auto=format&fit=crop', videoId:'dQw4w9WgXcQ', tag:'Ingredient' },
+  { title:'Customer Reviews',   duration:'2:05', thumb:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&auto=format&fit=crop', videoId:'dQw4w9WgXcQ', tag:'Reviews' },
+];
+
+function nsRenderVideos() {
+  const row = document.getElementById('nsVideoRow');
+  if (!row) return;
+  row.innerHTML = NS_VIDEOS.map((v, i) => `
+    <div class="ns-snap-item ns-reveal ns-d${Math.min(i+1,5)}" style="width:min(240px,72vw);border-radius:16px;overflow:hidden;background:#111;flex-shrink:0;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.15);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;"
+         onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 50px rgba(0,0,0,.25)'"
+         onmouseleave="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(0,0,0,.15)'"
+         onclick="nsOpenVideo('${v.videoId}')">
+      <div style="position:relative;aspect-ratio:9/14;overflow:hidden;">
+        <img src="${v.thumb}" alt="${v.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform=''"/>
+        <!-- Gradient overlay -->
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%);pointer-events:none;"></div>
+        <!-- Tag -->
+        <span style="position:absolute;top:10px;left:10px;font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--forest-deep);color:var(--cream);padding:2px 8px;border-radius:20px;">${v.tag}</span>
+        <!-- Duration -->
+        <span style="position:absolute;bottom:46px;right:10px;font-size:.62rem;font-weight:700;background:rgba(0,0,0,.6);color:#fff;padding:2px 7px;border-radius:6px;">${v.duration}</span>
+        <!-- Play button -->
+        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+          <div class="ns-play-btn" style="width:44px;height:44px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--forest-deep)" style="margin-left:2px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+          </div>
+          <span style="font-size:.62rem;font-weight:700;color:rgba(255,255,255,.9);">${v.title}</span>
+        </div>
+      </div>
+    </div>`).join('');
+  nsObserveAll();
+}
+
+window.nsOpenVideo = function(videoId) {
+  const modal = document.getElementById('nsVideoModal');
+  const frame = document.getElementById('nsVideoFrame');
+  frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
+
+window.nsCloseVideo = function() {
+  const modal = document.getElementById('nsVideoModal');
+  const frame = document.getElementById('nsVideoFrame');
+  frame.src = '';
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+};
+
+/* ─────────────────────────────────────────
+   SECTION 9 — STICKY MOBILE STORY BAR
+───────────────────────────────────────── */
+const NS_STORY_BAR_ITEMS = [
+  { emoji:'🌿', label:'Organic',     color:'#dcfce7', ring:'#16a34a' },
+  { emoji:'🧪', label:'Lab Tested',  color:'#dbeafe', ring:'#2563eb' },
+  { emoji:'🚫', label:'Chem-Free',   color:'#fef3c7', ring:'#d97706' },
+  { emoji:'🌾', label:'Farm Fresh',  color:'#d1fae5', ring:'#059669' },
+  { emoji:'✅', label:'Certified',   color:'#ede9fe', ring:'#7c3aed' },
+  { emoji:'♻', label:'Eco Pack',    color:'#e0f2fe', ring:'#0284c7' },
+];
+
+function nsRenderStoryBar() {
+  const bar = document.getElementById('nsStoryBar');
+  if (!bar) return;
+  const row = bar.querySelector('.ns-snap-row');
+  if (!row) return;
+  row.innerHTML = NS_STORY_BAR_ITEMS.map((item, i) => `
+    <div class="ns-snap-item" style="display:flex;flex-direction:column;align-items:center;gap:.3rem;cursor:pointer;" onclick="nsOpenStory(${Math.min(i, nsStories.length-1)})">
+      <!-- SVG ring with animated stroke -->
+      <div style="position:relative;width:46px;height:46px;">
+        <svg width="46" height="46" viewBox="0 0 46 46" style="position:absolute;inset:0;transform:rotate(-90deg);">
+          <circle cx="23" cy="23" r="19" fill="none" stroke="rgba(26,58,42,.1)" stroke-width="2.5"/>
+          <circle cx="23" cy="23" r="19" fill="none" stroke="${item.ring}" stroke-width="2.5"
+                  stroke-dasharray="119.4" stroke-dashoffset="119.4"
+                  style="transition:stroke-dashoffset 3s linear;"
+                  class="ns-story-ring-${i}"/>
+        </svg>
+        <div style="position:absolute;inset:4px;border-radius:50%;background:${item.color};display:flex;align-items:center;justify-content:center;font-size:1.1rem;">${item.emoji}</div>
+      </div>
+      <span style="font-size:.58rem;font-weight:700;color:var(--forest-deep);white-space:nowrap;">${item.label}</span>
+    </div>`).join('');
+
+  // Animate rings one by one as page scrolls
+  const rings = bar.querySelectorAll('[class*="ns-story-ring-"]');
+  rings.forEach((ring, i) => {
+    setTimeout(() => { ring.style.strokeDashoffset = '0'; }, i * 600 + 300);
+  });
+}
+
+/* ─────────────────────────────────────────
+   INIT on DOM ready
+───────────────────────────────────────── */
+function nsInit() {
+  nsRenderIngredients();
+  nsRenderTimeline();
+  nsRenderComparison();
+  nsRenderTrust();
+  nsRenderVideos();
+  nsRenderStoryBar();
+  nsObserveAll();
+
+  // Mobile hint for Do's & Don'ts
+  if (window.innerWidth < 640) {
+    const hint = document.getElementById('nsDosDontsHint');
+    if (hint) hint.style.display = 'block';
+  }
+
+  // Keyboard support on story modal
+  document.addEventListener('keydown', e => {
+    const modal = document.getElementById('nsStoryModal');
+    if (modal.style.display === 'flex') {
+      if (e.key === 'ArrowRight') nsNavStory(1);
+      if (e.key === 'ArrowLeft')  nsNavStory(-1);
+      if (e.key === 'Escape')     nsCloseStory();
+    }
+    if (document.getElementById('nsVideoModal').style.display === 'flex' && e.key === 'Escape') {
+      nsCloseVideo();
+    }
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', nsInit);
+} else {
+  nsInit();
+}
+
+})(); // end IIFE
+</script>
 
