@@ -48,7 +48,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://nanseiorg.netlify.app/api/:splat"
+  to = "https://nansei-backend.onrender.com/api/:splat"
   status = 200
   force = true
 

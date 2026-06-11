@@ -8,7 +8,7 @@
  */
 
 (function () {
-  const PRODUCTION_API = 'https://nanseiorg.netlify.app/api';
+  const PRODUCTION_API = '/api';
   const LOCAL_API      = 'http://localhost:5000/api';
 
   const isLocal =
@@ -22,5 +22,5 @@
   window.API_BASE = isLocal ? LOCAL_API : PRODUCTION_API;
 
   // Replace with your actual Google OAuth Client ID from console.cloud.google.com
-  window.GOOGLE_CLIENT_ID = 'your_google_client_id_here.apps.googleusercontent.com';
+  window.GOOGLE_CLIENT_ID = '678342525160-ompdqo38pr9hfnjk9vbtv49tshsd5jo8.apps.googleusercontent.com';
 })();
