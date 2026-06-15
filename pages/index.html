@@ -1,4 +1,4 @@
-﻿﻿
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -853,13 +853,15 @@ video.slide-bg { transform:none!important; transition:none!important; }
 #reel-modal.open{ background:rgba(0,0,0,.78); pointer-events:all; }
 .reel-modal-box{
   position:relative;
-  width:min(400px,95vw);
+  /* Size box to a 9/16 reel ratio, capped so it fits the screen */
+  height:min(92vh, calc(100vw * 16 / 9));
+  width:calc(min(92vh, calc(100vw * 16 / 9)) * 9 / 16);
+  max-width:95vw;
   background:#000;
   border-radius:20px; overflow:visible;
   transform:scale(.9); opacity:0;
   transition:transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
   display:flex; flex-direction:column;
-  max-height:92vh;
 }
 #reel-modal.open .reel-modal-box{ transform:scale(1); opacity:1; }
 .reel-modal-header{
@@ -1355,178 +1357,461 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      TRADITIONAL HAND MILL BANNER
 ═══════════════════════════════════════ -->
-<section style="background:#f7f3ec;padding:1.5rem 1.5rem;overflow:hidden;">
-  <div style="max-width:1400px;margin:0 auto;">
-    <div id="mill-card-idx" style="display:grid;grid-template-columns:minmax(280px,420px) 1fr;border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 20px 60px rgba(15,34,24,.1),0 4px 16px rgba(15,34,24,.06);transform:perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1);will-change:transform;" onmousemove="millTiltIdx(event,this)" onmouseleave="millResetIdx(this)">
+<!-- ═══════════════════════════════════════
+     COMBINED HERITAGE HAND MILL & VIDEO STORIES SECTION
+     (Nansei Premium Theme)
+═══════════════════════════════════════ -->
+<style>
+  #mill-heritage-section {
+    background: linear-gradient(180deg, var(--warm-white) 0%, var(--cream) 100%);
+    padding: 90px 24px 100px;
+    overflow: hidden;
+    border-top: 1px solid rgba(26,58,42,0.06);
+    border-bottom: 1px solid rgba(26,58,42,0.06);
+  }
+  .mill-grid-cols {
+    grid-template-columns: 1.15fr 1.25fr !important;
+  }
+  .mill-img-container {
+    position: relative;
+    overflow: hidden;
+    height: 380px;
+  }
+  .mill-content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 36px 32px;
+    background: #fff;
+    color: var(--text-dk);
+    position: relative;
+  }
+  
+  /* Upgraded Feature Box Styles */
+  .premium-feature-box {
+    background: rgba(26, 58, 42, 0.03);
+    border: 1px solid rgba(26, 58, 42, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  }
+  .premium-feature-box:hover {
+    background: rgba(26, 58, 42, 0.06);
+    border-color: rgba(201, 168, 76, 0.35);
+    transform: translateY(-2px);
+  }
+  .premium-feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(74, 140, 92, 0.10);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--gold-dk);
+    flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+  .premium-feature-box:hover .premium-feature-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: rgba(74, 140, 92, 0.18);
+  }
+  .premium-feature-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--forest-deep);
+    margin: 0 0 4px 0;
+    letter-spacing: 0.02em;
+  }
+  .premium-feature-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    color: var(--text-md);
+    margin: 0;
+    line-height: 1.45;
+  }
 
-      <!-- LEFT: IMAGE -->
-      <div style="position:relative;overflow:hidden;height:420px;">
-        <img src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg" alt="Traditional Hand Mill"
-          id="mill-img-idx"
-          style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s cubic-bezier(.22,1,.36,1);"/>
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.18) 0%,transparent 50%);pointer-events:none;"></div>
-        <div id="mill-shine-idx" style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.12) 0%,transparent 65%);opacity:0;transition:opacity .3s;pointer-events:none;"></div>
-      </div>
+  .premium-featured-video {
+    position: relative;
+    margin-bottom: 24px;
+    border-radius: 20px;
+    box-shadow: 0 16px 36px rgba(15,34,24,0.06);
+    border: 1px solid rgba(26,58,42,0.06);
+    height: 360px;
+  }
+  .premium-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 34, 24, 0.9) 0%, rgba(15, 34, 24, 0.3) 60%, transparent 100%);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .premium-video-overlay-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  @keyframes playPulse {
+    0% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(201, 168, 76, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0); }
+  }
+  .featured-video-wrap:hover .play-btn,
+  .play-btn {
+    animation: playPulse 2.2s infinite;
+  }
+  
+  .video-gallery-wrapper {
+    position: relative;
+  }
+  .video-grid-layout {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+  
+  @media (max-width: 1023px) {
+    .mill-grid-cols {
+      grid-template-columns: 1fr !important;
+      gap: 40px !important;
+    }
+  }
+  
+  @media (max-width: 767px) {
 
-      <!-- RIGHT: CONTENT -->
-      <div style="display:flex;flex-direction:column;justify-content:center;padding:1.25rem 1.75rem;border-left:1px solid rgba(26,58,42,.06);">
-        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem;">
-          <div style="width:1rem;height:1.5px;background:#4a8c5c;"></div>
-          <span style="font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#4a8c5c;">Traditional Process</span>
-        </div>
-        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,2.4vw,2.4rem);font-weight:700;color:#0f2218;line-height:1.15;margin-bottom:.5rem;">
-          Freshly Ground Grains from
-          <em style="font-style:italic;color:#4a8c5c;">Traditional Hand Mill</em>
-        </h2>
-        <div style="width:2.5rem;height:2px;background:linear-gradient(to right,#b8922a,transparent);margin-bottom:.75rem;"></div>
-        <p style="font-size:.95rem;color:#1a2416;line-height:1.7;margin-bottom:1.1rem;max-width:400px;">
-          Authentic, natural, and handmade process — preserving every nutrient, every flavour, every tradition.
-        </p>
-        <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:.85rem;">
-          <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:wheat]]</div>
-            <div><p style="font-size:.82rem;font-weight:700;color:#0f2218;">Stone Ground</p><p style="font-size:.72rem;color:#7a9980;">No heat damage</p></div>
-          </div>
-          <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
-          <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:hand]]</div>
-            <div><p style="font-size:.82rem;font-weight:700;color:#0f2218;">Hand Operated</p><p style="font-size:.72rem;color:#7a9980;">Zero electricity</p></div>
-          </div>
-          <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
-          <div style="display:flex;align-items:center;gap:.35rem;">
-            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">[[icon:leaf]]</div>
-            <div><p style="font-size:.82rem;font-weight:700;color:#0f2218;">Farm Direct</p><p style="font-size:.72rem;color:#7a9980;">25-acre organic farm</p></div>
-          </div>
-        </div>
+    #mill-heritage-section { padding: 40px 0 48px !important; }
+
+    #mill-heritage-section > div > .reveal {
+      padding: 0 20px !important;
+      margin-bottom: 28px !important;
+    }
+    #mill-heritage-section > div > .reveal h2 { font-size: clamp(1.65rem, 7vw, 2.2rem) !important; margin-bottom: 12px !important; }
+    #mill-heritage-section > div > .reveal p { font-size: 12.5px !important; line-height: 1.6 !important; }
+
+    .mill-grid-cols { grid-template-columns: 1fr !important; gap: 0 !important; padding: 0 20px !important; }
+
+    /* Banner: horizontal pill — image left, content right */
+    #mill-card-idx {
+      display: grid !important;
+      grid-template-columns: 38% 1fr !important;
+      border-radius: 18px !important;
+      overflow: hidden !important;
+      box-shadow: 0 12px 36px rgba(15,34,24,.12), 0 2px 8px rgba(15,34,24,.06) !important;
+      border: 1px solid rgba(26,58,42,.08) !important;
+    }
+    /* Image shrinks proportionally via aspect-ratio */
+    .mill-img-container {
+      height: auto !important;
+      min-height: 0 !important;
+      aspect-ratio: 3/4 !important;
+      border-radius: 0 !important;
+    }
+    .mill-img-container img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+    /* Content: compact, hide long body paragraph */
+    .mill-content-container {
+      padding: 14px 12px !important;
+      border-radius: 0 !important;
+      overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      gap: 8px !important;
+    }
+    .mill-content-container > p { display: none !important; }
+    .mill-content-container > div:first-child { margin-bottom: 0 !important; }
+    .mill-content-container h3 { font-size: 13px !important; line-height: 1.3 !important; margin-bottom: 0 !important; }
+    .mill-content-container > div:last-child { gap: 7px !important; }
+    .premium-feature-box {
+      padding: 7px 9px !important;
+      gap: 8px !important;
+      border-radius: 9px !important;
+      background: rgba(26,58,42,.03) !important;
+      border: 1px solid rgba(26,58,42,.07) !important;
+    }
+    .premium-feature-icon { width: 24px !important; height: 24px !important; border-radius: 6px !important; font-size: 10px !important; flex-shrink: 0 !important; }
+    .premium-feature-title { font-size: 10px !important; line-height: 1.25 !important; margin-bottom: 0 !important; }
+    .premium-feature-desc { font-size: 9px !important; line-height: 1.35 !important; }
+
+    /* Video section below banner */
+    #mill-heritage-section > div > .mill-grid-cols > div:last-child { padding: 24px 20px 0 !important; }
+
+    /* Main featured video — full width, premium */
+    .premium-featured-video {
+      height: clamp(175px, 52vw, 235px) !important;
+      margin-bottom: 12px !important;
+      border-radius: 16px !important;
+      box-shadow: 0 12px 32px rgba(15,34,24,.15) !important;
+      border: 1px solid rgba(26,58,42,.08) !important;
+      overflow: hidden !important;
+    }
+    .premium-featured-video img { width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; }
+    .premium-video-overlay {
+      padding: 14px !important;
+      border-radius: 0 0 16px 16px !important;
+      background: linear-gradient(to top, rgba(10,28,18,.92) 0%, rgba(10,28,18,.2) 65%, transparent 100%) !important;
+    }
+    .premium-video-overlay-inner { gap: 10px !important; align-items: center !important; }
+    .premium-video-overlay-inner h4 { font-size: 13px !important; line-height: 1.25 !important; }
+    .premium-video-overlay-inner p { display: none !important; }
+    .premium-video-overlay-inner .play-btn { width: 40px !important; height: 40px !important; flex-shrink: 0 !important; box-shadow: 0 4px 14px rgba(184,146,42,.45) !important; }
+    .premium-video-overlay-inner .play-btn svg { width: 13px !important; height: 13px !important; }
+
+    /* Sub-video 2-col grid — 2 per row, 2 rows */
+    .video-gallery-wrapper { position: relative !important; overflow: visible !important; }
+    .video-gallery-wrapper::after { display: none !important; }
+    .video-grid-layout,
+    .video-scroll-track {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      grid-template-rows: auto auto !important;
+      gap: 12px !important;
+      overflow: visible !important;
+      flex-direction: unset !important;
+      flex-wrap: unset !important;
+      scroll-snap-type: none !important;
+      -webkit-overflow-scrolling: unset !important;
+      padding-bottom: 0 !important;
+      scrollbar-width: unset !important;
+      width: 100% !important;
+    }
+    .video-card {
+      display: block !important;
+      flex: none !important;
+      flex-shrink: unset !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: unset !important;
+      scroll-snap-align: unset !important;
+      border-radius: 14px !important;
+      overflow: hidden !important;
+      position: relative !important;
+      box-shadow: 0 8px 22px rgba(0,0,0,.22) !important;
+    }
+    .video-card-thumb { aspect-ratio: 3/4 !important; width: 100% !important; height: auto !important; display: block !important; object-fit: cover !important; border-radius: 0 !important; }
+    .video-card-overlay { position: absolute !important; inset: 0 !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: flex-end !important; }
+    .video-card-overlay p:first-of-type { font-size: 12px !important; margin-bottom: 0 !important; line-height: 1.3 !important; }
+    .video-card-overlay p:last-of-type { display: none !important; }
+    .play-sm { width: 34px !important; height: 34px !important; margin-bottom: 8px !important; flex-shrink: 0 !important; }
+    .play-sm svg { width: 11px !important; height: 11px !important; }
+  }
+
+</style>
+<section id="mill-heritage-section">
+  <div style="max-width: 1300px; margin: 0 auto;">
+    
+    <!-- Unified Header -->
+    <div class="reveal" style="text-align: center; margin-bottom: 64px;">
+      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+        <span style="width: 20px; height: 1px; background: var(--gold-dk);"></span>
+        <span style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-dk);">Traditional Knowledge</span>
+        <span style="width: 20px; height: 1px; background: var(--gold-dk);"></span>
       </div>
+      
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 600; color: var(--forest-deep); line-height: 1.15; margin-bottom: 18px;">
+        The Traditional Hand Mill <br style="display: none;"/>
+        <span style="font-style: italic; color: var(--forest-leaf);">Discover the Story Behind</span>
+      </h2>
+      
+      <div style="width: 3rem; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto 18px;"></div>
+      
+      <p style="font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.65; color: var(--text-md); max-width: 680px; margin: 0 auto; font-weight: 400;">
+        Explore the traditions, wisdom, and natural farming practices that make our slow stone-milled grains unique. Operating at low RPM with zero friction heat, our hand-operated mill preserves every active nutrient.
+      </p>
     </div>
-  </div>
-</section>
-<!-- ═══════════════════════════════════════════
-     SECTION 1 — HAND-MILL VIDEO GALLERY
-═══════════════════════════════════════════ -->
-<section id="videos" aria-label="Hand-Mill Video Gallery" style="padding: 6px 0 80px;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-
-   <div class="reveal" style="text-align:center; margin-bottom:32px;">
-  <span class="eyebrow" style="justify-content:center; margin-bottom:12px; display:flex;">
-    Traditional Knowledge
-  </span>
-
-  <h2 class="section-heading" style="font-size:clamp(38px,5vw,60px); margin-bottom:12px; line-height:1.1;">
-    Discover the Story Behind<br>
-  </h2>
-
-  <div class="grain-divider" style="margin:0 auto 12px;"></div>
-
-  <p style="font-size:16px; line-height:1.6; color:#5A7068; max-width:520px; margin:0 auto;">
-    Explore the traditions, wisdom, and natural farming practices that make our hand-milled rice unique.
-  </p>
-</div>
-
-    <!-- Featured Video -->
-    <div class="featured-video-wrap reveal" style="margin-bottom: 28px;" role="button" tabindex="0" aria-label="Play: The Art of Traditional Hand Milling"
-      onclick="openVideoModal('https://www.youtube.com/embed/zs95Lp43Ook?si=_iouQ5YnDRxHt8xN')"
-      onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/zs95Lp43Ook?si=_iouQ5YnDRxHt8xN')">
-      <img
-        src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20153122.png"
-        alt="Traditional wooden hand mill — rice milling process"
-        loading="lazy"
-        style="width:100%;height:100%;object-fit:cover;"
-      />
-      <div class="video-glass-overlay">
-        <div style="display:flex; align-items:center; gap:20px;">
-          <div class="play-btn" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+    
+    <!-- 2-Column Split Content -->
+    <div style="display: grid; grid-template-columns: 1fr; gap: 48px; align-items: start;" class="mill-grid-cols">
+      
+      <!-- LEFT: HAND MILL DETAILS -->
+      <div>
+        <div id="mill-card-idx" style="display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 20px 50px rgba(15,34,24,0.08), 0 4px 16px rgba(15,34,24,0.04); transform: perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0); transition: transform .6s cubic-bezier(.22,1,.36,1), box-shadow .6s cubic-bezier(.22,1,.36,1); will-change: transform;" onmousemove="millTiltIdx(event, this)" onmouseleave="millResetIdx(this)">
+          
+          <!-- Image -->
+          <div class="mill-img-container">
+            <img src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg" alt="Traditional Hand Mill"
+              id="mill-img-idx"
+              style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform .6s cubic-bezier(.22,1,.36,1);"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15, 34, 24, 0.4) 0%, transparent 60%); pointer-events: none;"></div>
+            <div id="mill-shine-idx" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 65%); opacity: 0; transition: opacity .3s; pointer-events: none;"></div>
           </div>
-          <div>
-            <p style="color:rgba(255,255,255,0.65); font-size:11px; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px;">Featured</p>
-            <h3 class="font-display" style="font-size: clamp(22px, 3vw, 34px); font-weight:400; color:white; line-height:1.15;">
-              The Art of Traditional Hand Milling
+          
+          <!-- Info Details -->
+          <div class="mill-content-container">
+            <div style="position: absolute; right: 24px; bottom: 20px; opacity: 0.04; pointer-events: none; color: var(--forest-deep);">
+              <svg width="90" height="90" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="currentColor"/></svg>
+            </div>
+            
+            <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <div style="width: 12px; height: 1.5px; background: var(--gold-dk);"></div>
+              <span style="font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dk);">Thirugai Milling</span>
+            </div>
+            
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--forest-deep); margin-bottom: 16px;">
+              Authentic, Zero-Heat Stone Milling
             </h3>
-            <p style="color:rgba(255,255,255,0.7); font-size:14px; margin-top:8px; max-width:460px; line-height:1.6;">
-              Learn how our traditional wooden hand mill preserves the natural qualities of rice.
+            
+            <p style="font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.65; color: var(--text-md); margin-bottom: 28px;">
+              Traditional stone hand-milling is slow and manual. It generates no heat damage, protecting valuable enzymes, iron, calcium, and vitamin contents that are completely lost in modern high-RPM industrial mills.
             </p>
+            
+            <!-- Features Stack -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- F1 -->
+              <div class="premium-feature-box">
+                <div class="premium-feature-icon">[[icon:wheat]]</div>
+                <div>
+                  <h4 class="premium-feature-title">Stone Ground Integrity</h4>
+                  <p class="premium-feature-desc">Slow grinding ensures no heat damage and preserves original dietary fibers and minerals.</p>
+                </div>
+              </div>
+              
+              <!-- F2 -->
+              <div class="premium-feature-box">
+                <div class="premium-feature-icon">[[icon:hand]]</div>
+                <div>
+                  <h4 class="premium-feature-title">Artisanal Hand Operation</h4>
+                  <p class="premium-feature-desc">Zero electrical power is used. Every single bag represents our dedication to organic heritage.</p>
+                </div>
+              </div>
+              
+              <!-- F3 -->
+              <div class="premium-feature-box">
+                <div class="premium-feature-icon">[[icon:leaf]]</div>
+                <div>
+                  <h4 class="premium-feature-title">Direct Farm Sourcing</h4>
+                  <p class="premium-feature-desc">Directly trace your rice back to the fertile soils of our certified 25-acre organic farm.</p>
+                </div>
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- 4-card row -->
-    <div class="video-scroll-track">
-
-      <!-- Card 2 -->
-      <div class="video-card reveal reveal-delay-1" role="button" tabindex="0" aria-label="Play: Nammalvar on Our Wooden Hand Mill"
-        onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')"
-        onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')">
-        <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/namm.jfif"  />
-        <div class="video-card-overlay">
-          <div class="play-sm" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+      
+      <!-- RIGHT: VIDEO GALLERY -->
+      <div>
+        <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--forest-deep); margin: 0;">Milling in Motion</h3>
+          <span style="font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-lt); letter-spacing: 0.1em;">5 Videos</span>
+        </div>
+        
+        <!-- Featured Video -->
+        <div class="featured-video-wrap premium-featured-video reveal" role="button" tabindex="0" aria-label="Play: The Art of Traditional Hand Milling"
+          onclick="openVideoModal('https://www.youtube.com/embed/zs95Lp43Ook?si=_iouQ5YnDRxHt8xN')"
+          onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/zs95Lp43Ook?si=_iouQ5YnDRxHt8xN')">
+          <img
+            src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20153122.png"
+            alt="Traditional wooden hand mill — rice milling process"
+            loading="lazy"
+            style="width: 100%; height: 100%; object-fit: cover;"
+          />
+          <div class="video-glass-overlay premium-video-overlay">
+            <div class="premium-video-overlay-inner">
+              <div class="play-btn" aria-hidden="true" style="background: var(--gold-dk); border-color: rgba(255, 255, 255, 0.4); width: 60px; height: 60px; box-shadow: 0 8px 20px rgba(184, 146, 42, 0.45); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div>
+                <p style="color: var(--gold-lt); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Featured Story</p>
+                <h4 class="font-display" style="font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 600; color: white; line-height: 1.25; margin: 0;">
+                  The Art of Traditional Hand Milling
+                </h4>
+                <p style="color: rgba(255,255,255,0.72); font-family: 'Inter', sans-serif; font-size: 12.5px; margin-top: 6px; max-width: 440px; line-height: 1.5; font-weight: 400;">
+                  Witness how our traditional wooden stone mill gently husks grains to protect their natural nutrient profile.
+                </p>
+              </div>
+            </div>
           </div>
-          <p class="font-display" style="font-size:17px; font-weight:400; color:white; line-height:1.25; margin-bottom:6px;">
-            Nammalvar on Our Wooden Hand Mill
-          </p>
-          <p style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">
-            Insights from Nammalvar on traditional hand-milling.
-          </p>
+        </div>
+        
+        <!-- Video scroll track: 2x2 grid on desktop, scrollable row on mobile -->
+        <div class="video-gallery-wrapper">
+          <div class="video-scroll-track video-grid-layout">
+            
+            <!-- Card 2 -->
+            <div class="video-card reveal reveal-delay-1" role="button" tabindex="0" aria-label="Play: Nammalvar on Our Wooden Hand Mill"
+              onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/namm.jfif" alt="Nammalvar on our wooden mill" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Nammalvar on Wooden Mill
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  Insights on traditional grain hand-milling.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="video-card reveal reveal-delay-2" role="button" tabindex="0" aria-label="Play: Preserving Nutrition Through Hand Milling"
+              onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/thirugai2.jpeg" alt="Stone ground nutrition" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Preserving Vital Nutrition
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  Science of slow stone grinding.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="video-card reveal reveal-delay-3" role="button" tabindex="0" aria-label="Play: From Harvest to Hand-Milled Rice"
+              onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Field harvest to milled rice" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Harvest to Hand-Milled Rice
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  The journey from field to kitchen.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Card 5 -->
+            <div class="video-card reveal reveal-delay-4" role="button" tabindex="0" aria-label="Play: Seeds of Our Heritage"
+              onclick="openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20165122.png" alt="Heirloom grain seeds catalog" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Seeds of Our Heritage
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  Living library of heirloom paddy varieties.
+                </p>
+              </div>
+            </div>
+            
+          </div>
         </div>
       </div>
-
-      <!-- Card 3 -->
-      <div class="video-card reveal reveal-delay-2" role="button" tabindex="0" aria-label="Play: Preserving Nutrition Through Hand Milling"
-        onclick="openVideoModal('')"
-        onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-        <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/thirugai2.jpeg" />
-        <div class="video-card-overlay">
-          <div class="play-sm" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p class="font-display" style="font-size:17px; font-weight:400; color:white; line-height:1.25; margin-bottom:6px;">
-            Preserving Nutrition Through Hand Milling
-          </p>
-          <p style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">
-            How slow milling helps retain essential nutrients.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="video-card reveal reveal-delay-3" role="button" tabindex="0" aria-label="Play: From Harvest to Hand-Milled Rice"
-        onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')"
-        onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-        <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Paddy field harvest to hand-milled rice journey" loading="lazy" />
-        <div class="video-card-overlay">
-          <div class="play-sm" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p class="font-display" style="font-size:17px; font-weight:400; color:white; line-height:1.25; margin-bottom:6px;">
-            From Harvest to Hand-Milled Rice
-          </p>
-          <p style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">
-            The complete journey from paddy field to kitchen.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 5 — bonus -->
-      <div class="video-card reveal reveal-delay-4" role="button" tabindex="0" aria-label="Play: Seeds of Our Heritage"
-        onclick="openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')"
-        onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-        <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20165122.png" />
-        <div class="video-card-overlay">
-          <div class="play-sm" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p class="font-display" style="font-size:17px; font-weight:400; color:white; line-height:1.25; margin-bottom:6px;">
-            Seeds of Our Heritage
-          </p>
-          <p style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">
-            The living library of heirloom paddy varieties.
-          </p>
-        </div>
-      </div>
-
+      
     </div>
   </div>
 </section>
@@ -1536,7 +1821,8 @@ a .nansai-icon,
   <button id="video-modal-close" aria-label="Close video" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.12);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
   <div style="width:100%;max-width:900px;">
     <div style="position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;">
-      <iframe id="video-iframe" src="" title="Video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+      <iframe id="video-iframe" src="" title="Video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;display:none;"></iframe>
+      <video id="video-native" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;border:none;display:none;"></video>
     </div>
   </div>
 </div>
@@ -1545,17 +1831,101 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════════
      SECTION 2 — LIFE AT THE FARM GALLERY
 ═══════════════════════════════════════════ -->
-<section id="gallery" aria-label="Life at the Farm Gallery" style="padding: 6px 0 80px;">
+<style>
+#gallery {
+  background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 100%);
+  padding: 100px 0 90px;
+  position: relative;
+  overflow: hidden;
+}
+#gallery::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 8% 30%, rgba(201,168,76,.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 92% 70%, rgba(26,58,42,.05) 0%, transparent 55%);
+  pointer-events: none;
+}
+.gallery-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-dk);
+  margin-bottom: 20px;
+}
+.gallery-eyebrow span { display: block; width: 20px; height: 1.5px; background: var(--gold-dk); }
+.gallery-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  font-weight: 600;
+  color: var(--forest-deep);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin-bottom: 22px;
+}
+.gallery-title em { font-style: italic; color: var(--forest-leaf); }
+.gallery-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-md);
+  max-width: 500px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+.gallery-gold-rule {
+  width: 56px;
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 0 auto 22px;
+}
+.bento-item {
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(15,34,24,.08) !important;
+  transition: transform 0.45s cubic-bezier(.22,1,.36,1), box-shadow 0.45s cubic-bezier(.22,1,.36,1) !important;
+}
+.bento-item:hover {
+  transform: scale(1.025) translateY(-4px) !important;
+  box-shadow: 0 18px 48px rgba(15,34,24,.16) !important;
+}
+.bento-caption {
+  background: linear-gradient(to top, rgba(10,28,18,.82) 0%, rgba(10,28,18,.0) 55%) !important;
+  border-radius: 0 0 16px 16px !important;
+}
+.bento-caption-text {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em !important;
+  color: rgba(247,243,236,.95) !important;
+}
+.bento-item::after {
+  box-shadow: inset 0 0 0 1px rgba(201,168,76,.12) !important;
+  border-radius: 16px !important;
+}
+@media (max-width: 767px) {
+  #gallery { padding: 64px 0 60px !important; }
+}
+</style>
+<section id="gallery" aria-label="Life at the Farm Gallery">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
 
     <!-- Header -->
-    <div class="reveal" style="text-align:center; margin-bottom:56px;">
-      <span class="eyebrow" style="justify-content:center; margin-bottom:20px; display:flex;">Life at the Farm</span>
-      <h2 class="section-heading" style="font-size: clamp(38px, 5vw, 60px); margin-bottom:20px;">
-        Moments from Our Fields
+    <div class="reveal" style="text-align:center; margin-bottom:64px;">
+      <div class="gallery-eyebrow">
+        <span></span>Life at the Farm<span></span>
+      </div>
+      <h2 class="gallery-title">
+        Moments from <em>Our Fields</em>
       </h2>
-      <div class="grain-divider" style="margin:0 auto 20px;"></div>
-      <p style="font-size:16px; line-height:1.7; color:#5A7068; max-width:480px; margin:0 auto;">
+      <div class="gallery-gold-rule"></div>
+      <p class="gallery-subtitle">
         A glimpse into the people, traditions, and landscapes behind every harvest.
       </p>
     </div>
@@ -1619,66 +1989,167 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════════
      SECTION 3 — FOUNDER STORY
 ═══════════════════════════════════════════ -->
-<section id="founder" aria-label="Founder Story" style="padding: 96px 0 80px;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;" class="founder-grid reveal">
+<style>
+#founder {
+  background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 100%);
+  padding: 100px 0 90px;
+  position: relative;
+  overflow: hidden;
+}
+#founder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 8% 30%, rgba(201,168,76,.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 92% 70%, rgba(26,58,42,.05) 0%, transparent 55%);
+  pointer-events: none;
+}
+#founder::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,168,76,.18), transparent);
+}
+.founder-premium-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold-dk);
+  margin-bottom: 22px;
+}
+.founder-premium-eyebrow span { display: block; width: 18px; height: 1px; background: var(--gold-dk); }
+.founder-premium-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 4.5vw, 4.4rem);
+  font-weight: 600;
+  color: var(--forest-deep);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+}
+.founder-premium-title em { font-style: italic; color: var(--forest-leaf); }
+.founder-premium-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-md);
+}
+.founder-premium-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text-md);
+  font-weight: 400;
+}
+.founder-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--forest-deep);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.founder-stat-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-lt);
+  margin-top: 6px;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.founder-image-wrap {
+  border-radius: 20px !important;
+  box-shadow: 0 20px 60px rgba(15,34,24,.12), 0 0 0 1px rgba(26,58,42,.06) !important;
+}
+.founder-image-wrap::after {
+  box-shadow: inset 0 0 0 1px rgba(201,168,76,.10) !important;
+  border-radius: 20px !important;
+}
+.founder-accent-line {
+  background: linear-gradient(to bottom, var(--gold-dk), var(--gold)) !important;
+  opacity: 0.65;
+}
+@media (max-width: 767px) {
+  #founder { padding: 64px 0 60px !important; }
+  .founder-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .founder-image-wrap { height: 380px !important; }
+  .founder-premium-title { font-size: 2.4rem !important; }
+}
+</style>
+<section id="founder" aria-label="Founder Story">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;" class="founder-grid reveal">
 
       <!-- Portrait -->
-      <div class="founder-image-wrap" style="height: 600px;">
+      <div class="founder-image-wrap" style="height: 600px; position: relative;">
         <img
           src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20165122.png?updatedAt=1781176930486"
           alt="Pichai Murugan — founder and natural farmer"
           loading="lazy"
           style="width:100%;height:100%;object-fit:cover;"
         />
-        <!-- subtle green wash at base -->
-        <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top, rgba(47,93,80,0.35), transparent); border-radius: 0 0 24px 24px;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top, rgba(5,12,6,.85), transparent); border-radius: 0 0 20px 20px;"></div>
         <!-- floating label -->
-        <div style="position:absolute;bottom:28px;left:28px;right:28px;background:rgba(247,244,238,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:14px;padding:18px 22px;">
-          <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--green-mid);margin-bottom:4px;">Natural Farmer</p>
-          <p class="font-display" style="font-size:22px;font-weight:400;color:var(--ink);">Pichai Murugan</p>
+        <div style="position:absolute;bottom:24px;left:24px;right:24px;background:rgba(247,243,236,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;padding:18px 22px;border:1px solid rgba(201,168,76,.2);">
+          <p style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:6px;font-weight:700;">Natural Farmer</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--forest-deep);letter-spacing:.01em;">Pichai Murugan</p>
         </div>
+        <!-- decorative gold corner accent -->
+        <div style="position:absolute;top:20px;right:20px;width:40px;height:40px;border-top:1.5px solid rgba(201,168,76,.4);border-right:1.5px solid rgba(201,168,76,.4);border-radius:0 8px 0 0;pointer-events:none;"></div>
+        <div style="position:absolute;bottom:20px;left:20px;width:40px;height:40px;border-bottom:1.5px solid rgba(201,168,76,.4);border-left:1.5px solid rgba(201,168,76,.4);border-radius:0 0 0 8px;pointer-events:none;"></div>
       </div>
 
       <!-- Story content -->
       <div>
-        <span class="eyebrow" style="margin-bottom:24px; display:flex;">Meet the Farmer</span>
-        <h2 class="section-heading" style="font-size:clamp(36px,4vw,52px); margin-bottom:28px;">
-          Rooted in the<br>Land He Loves
+        <div class="founder-premium-eyebrow">
+          <span></span>Meet the Farmer<span></span>
+        </div>
+        <h2 class="founder-premium-title">
+          Rooted in the<br><em>Land He Loves</em>
         </h2>
 
-        <div style="display:flex; gap:20px; margin-bottom:32px;">
-          <div class="founder-accent-line"></div>
-          <p style="font-size:17px; line-height:1.8; color:#5A7068; font-style:italic; font-family:'Cormorant Garamond',serif; font-weight:300;">
-            "Farming isn't just our livelihood — it's our language, our prayer, our way of speaking to the earth."
+        <div style="display:flex; gap:20px; margin-bottom:32px; padding:24px; background:rgba(26,58,42,.04); border:1px solid rgba(201,168,76,.18); border-radius:14px;">
+          <div class="founder-accent-line" style="width:3px;min-height:56px;border-radius:2px;flex-shrink:0;"></div>
+          <p class="founder-premium-quote">
+            &ldquo;Farming isn't just our livelihood — it's our language, our prayer, our way of speaking to the earth.&rdquo;
           </p>
         </div>
 
-        <div style="display:flex;flex-direction:column;gap:18px;">
-          <p style="font-size:15px;line-height:1.8;color:#4A6660;">
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:36px;">
+          <p class="founder-premium-body">
             Pichai Murugan has tended the same fields his grandfather once walked, nurturing heirloom paddy varieties that most of the world has forgotten. Guided by the seasonal rhythms of the land, he farms without chemical inputs — choosing instead the wisdom of composting, water conservation, and deep ecological attentiveness.
           </p>
-          <p style="font-size:15px;line-height:1.8;color:#4A6660;">
-            His commitment to the wooden hand mill is not nostalgia — it is conviction. He believes that every revolution of that ancient millstone locks in something that no industrial machine can replicate: the living integrity of the grain, the warmth of unhurried craft, and the unbroken chain of knowledge passed from one generation to the next.
-          </p>
-          <p style="font-size:15px;line-height:1.8;color:#4A6660;">
-            Inspired by the teachings of agrarian philosopher Nammalvar, Pichai has become a quiet guardian of traditional rice cultivation in Tamil Nadu — growing not just food, but a legacy that can be tasted in every bowl.
+          <p class="founder-premium-body">
+            His commitment to the wooden hand mill is not nostalgia — it is conviction. He believes every revolution of that ancient millstone locks in something no industrial machine can replicate: the living integrity of the grain, the warmth of unhurried craft, and an unbroken chain of knowledge passed from one generation to the next.
           </p>
         </div>
 
-        <!-- Three values -->
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:40px; padding-top:36px; border-top:1px solid rgba(47,93,80,0.12);">
-          <div>
-            <p class="font-display" style="font-size:32px;font-weight:400;color:var(--green-deep);line-height:1;">25+</p>
-            <p style="font-size:12px;color:#6A8880;margin-top:6px;letter-spacing:0.04em;">Years of Natural<br>Farming</p>
+        <!-- Three stats -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0; padding-top:32px; border-top:1px solid rgba(26,58,42,.1);">
+          <div style="text-align:center;padding:20px 12px;border-right:1px solid rgba(26,58,42,.08);">
+            <div class="founder-stat-num">25+</div>
+            <div class="founder-stat-label">Years of Natural<br>Farming</div>
           </div>
-          <div>
-            <p class="font-display" style="font-size:32px;font-weight:400;color:var(--green-deep);line-height:1;">18</p>
-            <p style="font-size:12px;color:#6A8880;margin-top:6px;letter-spacing:0.04em;">Heirloom Paddy<br>Varieties</p>
+          <div style="text-align:center;padding:20px 12px;border-right:1px solid rgba(26,58,42,.08);">
+            <div class="founder-stat-num">18</div>
+            <div class="founder-stat-label">Heirloom Paddy<br>Varieties</div>
           </div>
-          <div>
-            <p class="font-display" style="font-size:32px;font-weight:400;color:var(--green-deep);line-height:1;">100%</p>
-            <p style="font-size:12px;color:#6A8880;margin-top:6px;letter-spacing:0.04em;">Hand-Milled,<br>Chemical-Free</p>
+          <div style="text-align:center;padding:20px 12px;">
+            <div class="founder-stat-num">100%</div>
+            <div class="founder-stat-label">Hand-Milled,<br>Chemical-Free</div>
           </div>
         </div>
       </div>
@@ -1686,17 +2157,6 @@ a .nansai-icon,
     </div>
   </div>
 </section>
-
-<!-- Founder grid responsive fix -->
-<style>
-  @media (max-width: 767px) {
-    .founder-grid {
-      grid-template-columns: 1fr !important;
-      gap: 40px !important;
-    }
-    .founder-image-wrap { height: 400px !important; }
-  }
-</style>
 
 
 <!-- ═══════════════════════════════════════════
@@ -1725,17 +2185,6 @@ a .nansai-icon,
 </section>
 
 <!-- ending of hand mill video -->
-<style>
-@media(max-width:768px){
-  #mill-card-idx { grid-template-columns:140px 1fr !important; border-radius:14px !important; transform:none !important; box-shadow:0 6px 20px rgba(15,34,24,.08) !important; }
-  #mill-card-idx > div:first-child { height:100% !important; }
-  #mill-card-idx > div:first-child img { object-fit:cover !important; width:100% !important; height:100% !important; }
-  #mill-card-idx > div:last-child { padding:.75rem 1rem !important; }
-  #mill-card-idx h2 { font-size:.95rem !important; margin-bottom:.25rem !important; }
-  #mill-card-idx p { font-size:.68rem !important; margin-bottom:.5rem !important; }
-  #mill-card-idx > div:last-child > div:last-child { display:none !important; }
-}
-</style>
 <script>
 function millTiltIdx(e, card) {
   if(window.innerWidth < 768) return;
@@ -2539,10 +2988,56 @@ function millResetIdx(card) {
   #reels-viewer-close { top: .75rem; right: .75rem; }
 }
 @media (max-width: 768px) {
-  #nansei-reels-section { padding: 2.8rem 0 3.5rem; }
-  .reels-section-header { flex-direction: column; align-items: flex-start; padding-bottom: 1.5rem; }
-  .reel-card { width: 170px; height: 300px; }
-  #reels-htrack { gap: 12px; }
+  #nansei-reels-section { padding: 2rem 0 2.8rem; }
+  .reels-section-header { flex-direction: column; align-items: flex-start; padding: 0 1rem 1.2rem; }
+  .reels-section-title { font-size: 1.55rem !important; }
+  .reels-section-sub { font-size: .75rem !important; }
+  .reels-view-all-btn { display: none !important; }
+  .reels-scroll-btn { display: none !important; }
+
+  /* ── PREMIUM 5-PIC GRID ── */
+  .reels-carousel-outer { padding: 0 1rem; }
+  .reels-carousel-nav { display: block; }
+  #reels-htrack {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    overflow: visible !important;
+    padding: 4px 0 0 !important;
+    cursor: default !important;
+  }
+  /* Show only first 5 cards, hide the rest */
+  #reels-htrack .reel-card {
+    width: 100% !important;
+    height: 0 !important;
+    padding-bottom: 148% !important;
+    position: relative !important;
+    flex-shrink: unset !important;
+    scroll-snap-align: unset !important;
+    border-radius: 16px !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,.45), 0 0 0 1px rgba(201,168,76,.12) !important;
+  }
+  #reels-htrack .reel-card video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 16px !important;
+  }
+  #reels-htrack .reel-card-overlay { border-radius: 16px !important; }
+  /* 5th card spans full width */
+  #reels-htrack .reel-card:nth-child(5) {
+    grid-column: 1 / -1 !important;
+    padding-bottom: 56% !important;
+  }
+  /* Hide cards beyond 5th */
+  #reels-htrack .reel-card:nth-child(n+6) { display: none !important; }
+
+  /* View More button */
+  #reels-mob-viewmore {
+    display: flex !important;
+  }
+
   .viewer-mobile-bottom { padding: .85rem .85rem 1rem; }
   .viewer-mobile-actions { bottom: 150px; }
 }
@@ -2550,6 +3045,30 @@ function millResetIdx(card) {
   .viewer-desktop { display: grid !important; }
   .viewer-mobile  { display: none !important; }
 }
+
+/* ── VIEW MORE BTN (mobile only) ── */
+#reels-mob-viewmore {
+  display: none;
+  margin: 1rem auto 0;
+  max-width: calc(100% - 2rem);
+  width: 100%;
+  padding: .78rem 1rem;
+  border-radius: 14px;
+  border: 1.5px solid rgba(26,58,42,.18);
+  background: #fff;
+  color: var(--forest-deep);
+  font-size: .8rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: .04em;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  box-shadow: 0 4px 16px rgba(15,34,24,.1);
+  transition: background .2s, box-shadow .2s;
+}
+#reels-mob-viewmore:active { background: rgba(26,58,42,.05); }
 
 /* ── DRAG CURSOR ── */
 #reels-htrack.dragging { cursor: grabbing; scroll-behavior: auto; }
@@ -2696,6 +3215,18 @@ function millResetIdx(card) {
       }
       .video-scroll-track::-webkit-scrollbar { display: none; }
     }
+    @media (max-width: 767px) {
+      .video-scroll-track {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        flex-direction: unset !important;
+        overflow-x: unset !important;
+        scroll-snap-type: none !important;
+        gap: 12px !important;
+        padding-bottom: 0 !important;
+        scrollbar-width: unset !important;
+      }
+    }
 
     .video-card {
       position: relative;
@@ -2742,8 +3273,14 @@ function millResetIdx(card) {
     }
     .video-card:hover .play-sm { background: rgba(255,255,255,0.26); transform: scale(1.12); }
 
-    /* ── FARM GALLERY ── */
-    #gallery { background: var(--beige); }
+    /* ── FARM GALLERY ── (overridden by premium styles) */
+    .bento-item {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: var(--green-deep);
+    }
 
     /* Bento grid — unified responsive, no separate mobile version */
     .bento-grid {
@@ -2878,30 +3415,8 @@ function millResetIdx(card) {
       letter-spacing: 0.04em;
     }
 
-    /* ── FOUNDER STORY ── */
-    #founder { background: var(--white); }
-
-    .founder-image-wrap {
-      position: relative;
-      border-radius: 24px;
-      overflow: hidden;
-    }
-    .founder-image-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 24px;
-      box-shadow: inset 0 0 0 1px rgba(47,93,80,0.12);
-    }
+    /* ── FOUNDER STORY ── (overridden by premium styles) */
     .founder-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .founder-accent-line {
-      width: 3px;
-      height: 56px;
-      background: linear-gradient(to bottom, var(--green-deep), var(--green-light));
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
 
     /* ── QUOTE ── */
     #quote { background: var(--beige); }
@@ -3353,6 +3868,17 @@ function subNewsletter(e){
   showToast('[[icon:leaf]] Subscribed! Welcome to the farm family.');
   e.target.reset();
 }
+
+/* ════ REELS MOBILE VIEW MORE BUTTON INJECT ════ */
+document.addEventListener('DOMContentLoaded', function(){
+  const sec = document.getElementById('nansei-reels-section');
+  if(!sec) return;
+  const btn = document.createElement('button');
+  btn.id = 'reels-mob-viewmore';
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M5 12h14M12 5l7 7-7 7"/></svg> View More Reels';
+  btn.onclick = function(){ if(typeof openReelsViewer === 'function') openReelsViewer(0); };
+  sec.appendChild(btn);
+});
 
 /* ════ PRODUCTS DATA ════ */
 const products=[
@@ -4425,7 +4951,22 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   /* ── Video Modal ── */
   function openVideoModal(src) {
     const modal = document.getElementById('video-modal');
-    document.getElementById('video-iframe').src = src + '?autoplay=1';
+    const iframe = document.getElementById('video-iframe');
+    const video = document.getElementById('video-native');
+    
+    if (src.includes('.mp4')) {
+      iframe.style.display = 'none';
+      iframe.src = '';
+      video.src = src;
+      video.style.display = 'block';
+    } else {
+      video.style.display = 'none';
+      video.src = '';
+      const urlSeparator = src.includes('?') ? '&' : '?';
+      iframe.src = src + urlSeparator + 'autoplay=1';
+      iframe.style.display = 'block';
+    }
+    
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
@@ -4436,7 +4977,16 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   function closeVideoModal() {
     const modal = document.getElementById('video-modal');
     modal.style.display = 'none';
-    document.getElementById('video-iframe').src = '';
+    
+    const iframe = document.getElementById('video-iframe');
+    iframe.src = '';
+    iframe.style.display = 'none';
+    
+    const video = document.getElementById('video-native');
+    video.src = '';
+    video.pause();
+    video.style.display = 'none';
+    
     document.body.style.overflow = '';
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeVideoModal(); closeLightbox(); }});

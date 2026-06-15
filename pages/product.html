@@ -40,7 +40,8 @@
       });
     })();
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script>window.tailwind = window.tailwind || {}; window.tailwind.config = {};</script>
+  <script src="https://cdn.tailwindcss.com?v=3"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap"
     rel="stylesheet" />
@@ -4059,407 +4060,8 @@
     </div><!-- /grid -->
   </div><!-- /main product layout -->
 
-  <!-- ----------------------------------------------------------
-     PRODUCT INFO TABS — PREMIUM REDESIGN
------------------------------------------------------------ -->
-<section id="prodInfoTabs">
-<style>
-/* -- SECTION SHELL -- */
-#prodInfoTabs {
-  background: #F5F0E8;
-  padding: 0;
-  border-top: 1px solid #D6C4A6;
-  width: 100%;
-  overflow: hidden;
-}
-.pit-wrap {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem 3rem;
-}
-/* -- SECTION EYEBROW -- */
-.pit-eyebrow {
-  display:flex;align-items:center;gap:.5rem;
-  font-size:.58rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-  color:#169A3F;margin-bottom:.5rem;
-}
-.pit-eyebrow::before{content:'';width:1.2rem;height:1.5px;background:#169A3F;flex-shrink:0;}
-.pit-section-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.6rem,2.8vw,2.4rem);
-  font-weight:700;color:#0f2218;line-height:1.1;
-  margin-bottom:1.5rem;
-}
-.pit-section-title em{font-style:italic;color:#169A3F;}
-/* -- TAB BAR -- */
-.pit-tabbar {
-  display:flex;gap:.5rem;
-  overflow-x:auto;scrollbar-width:none;
-  padding-bottom:1px;
-  border-bottom:2px solid #D6C4A6;
-  margin-bottom:1.75rem;
-}
-.pit-tabbar::-webkit-scrollbar{display:none;}
-.pit-tab2 {
-  flex-shrink:0;
-  padding:.65rem 1.4rem;
-  border-radius:10px 10px 0 0;
-  border:none;
-  background:transparent;
-  color:#8a7a65;
-  font-size:.8rem;font-weight:700;
-  font-family:'Inter',sans-serif;
-  cursor:pointer;
-  white-space:nowrap;
-  position:relative;
-  transition:color .2s,background .2s;
-  letter-spacing:.02em;
-}
-.pit-tab2::after {
-  content:'';
-  position:absolute;bottom:-2px;left:0;right:0;
-  height:2.5px;background:transparent;
-  border-radius:2px 2px 0 0;
-  transition:background .2s;
-}
-.pit-tab2:hover{color:#169A3F;background:rgba(22,154,63,.05);}
-.pit-tab2.pit2-active{color:#169A3F;background:rgba(22,154,63,.07);}
-.pit-tab2.pit2-active::after{background:#169A3F;}
-/* -- PANELS -- */
-.pit-panel2{display:none;animation:pitFade .32s ease;}
-.pit-panel2.pit2-show{display:block;}
-@keyframes pitFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.pit-info-image-card {
-    width: 100%;
-}
-
-.pit-info-image-card img {
-    width: 100%;
-    max-width: 100%;
-    height: 450px; /* Desktop */
-    object-fit: cover;
-    border-radius: 20px;
-    display: block;
-}
-
-@media (max-width: 768px) {
-    .pit-info-image-card img {
-        height: 280px;
-    }
-}
-
-/* ---- HOW TO USE ---- */
-.pit-how-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1.25rem;
-  align-items:stretch;
-}
-.pit-how-visual {
-  border-radius:20px;
-  overflow:hidden;
-  position:relative;
-  min-height:320px;
-  background:linear-gradient(135deg,#0f7a2e,#169A3F);
-}
-.pit-how-visual img{
-  width:100%;height:100%;object-fit:cover;opacity:.75;
-  position:absolute;inset:0;
-}
-.pit-how-visual-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(22,154,63,.82) 0%,rgba(15,34,24,.55) 100%);
-}
-.pit-how-visual-content{
-  position:relative;z-index:1;
-  padding:2rem 1.75rem;
-  height:100%;
-  display:flex;flex-direction:column;justify-content:space-between;
-}
-.pit-how-badge{
-  display:inline-flex;align-items:center;gap:.4rem;
-  background:rgba(255,255,255,.15);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:20px;padding:.3rem .85rem;
-  font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
-  color:#fff;width:fit-content;margin-bottom:1rem;
-}
-.pit-how-heading{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.5rem,2.5vw,2rem);
-  font-weight:700;color:#fff;line-height:1.15;
-  margin-bottom:.5rem;
-}
-.pit-how-sub{font-size:.75rem;color:rgba(255,255,255,.65);line-height:1.6;}
-.pit-how-steps{
-  background:#fff;
-  border:1.5px solid #D6C4A6;
-  border-radius:20px;
-  overflow:hidden;
-  display:flex;flex-direction:column;
-}
-.pit-step{
-  display:flex;align-items:flex-start;gap:1rem;
-  padding:1.25rem 1.5rem;
-  border-bottom:1px solid #EDE8DF;
-  transition:background .2s;
-}
-.pit-step:last-of-type{border-bottom:none;}
-.pit-step:hover{background:#F9F6F0;}
-.pit-step-icon{
-  width:44px;height:44px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;flex-shrink:0;
-}
-.pit-step-num{
-  width:24px;height:24px;border-radius:50%;
-  background:#169A3F;color:#fff;
-  font-size:.6rem;font-weight:900;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-top:.2rem;
-}
-.pit-step-label{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8fbc9a;margin-bottom:.15rem;}
-.pit-step-val{font-size:.88rem;font-weight:700;color:#0f2218;line-height:1.4;}
-.pit-notice{
-  display:flex;align-items:flex-start;gap:.75rem;
-  background:linear-gradient(135deg,#fefce8,#fef9c3);
-  border:1.5px solid #fde047;
-  border-radius:0 0 18px 18px;
-  padding:1rem 1.5rem;
-}
-.pit-notice p{font-size:.72rem;color:#713f12;line-height:1.65;}
-.pit-notice strong{color:#92400e;}
-
-/* ---- BENEFITS ---- */
-.pit-ben-layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1.25rem;
-}
-.pit-ben-left{
-  background:linear-gradient(145deg,#0f2218 0%,#1a3a2a 100%);
-  border-radius:20px;
-  padding:2rem 1.75rem;
-  position:relative;
-  overflow:hidden;
-}
-.pit-ben-left::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop');
-  background-size:cover;background-position:center;
-  opacity:.12;
-}
-.pit-ben-left-inner{position:relative;z-index:1;}
-.pit-ben-eyebrow{font-size:.55rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem;}
-.pit-ben-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1.15;margin-bottom:1.25rem;}
-.pit-ben-list{list-style:none;display:flex;flex-direction:column;gap:.75rem;}
-.pit-ben-list li{display:flex;align-items:center;gap:.75rem;}
-.pit-ben-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;box-shadow:0 0 8px rgba(74,222,128,.5);}
-.pit-ben-text{font-size:.83rem;color:rgba(255,255,255,.88);line-height:1.5;}
-.pit-ben-right{
-  display:flex;flex-direction:column;gap:1rem;
-}
-.pit-ben-highlight{
-  flex:1;
-  border-radius:16px;
-  padding:1.25rem 1.5rem;
-  display:flex;flex-direction:column;justify-content:space-between;
-  position:relative;overflow:hidden;
-}
-.pit-ben-hl-1{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1.5px solid #6ee7b7;}
-.pit-ben-hl-2{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fcd34d;}
-.pit-ben-hl-3{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;}
-.pit-ben-hl-icon{font-size:1.8rem;margin-bottom:.5rem;}
-.pit-ben-hl-title{font-size:.88rem;font-weight:800;color:#0f2218;margin-bottom:.25rem;}
-.pit-ben-hl-sub{font-size:.7rem;color:#5a7060;line-height:1.5;}
-.pit-ben-prod-img{
-  width:100%;aspect-ratio:1/1;
-  object-fit:contain;
-  border-radius:16px;
-  background:#fff;
-  padding:.75rem;
-  border:1.5px solid #D6C4A6;
-  box-shadow:0 4px 20px rgba(26,58,42,.08);
-}
-
-/* ---- INGREDIENTS ---- */
-.pit-ing-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem;
-}
-.pit-ing-count{
-  background:#169A3F;color:#fff;
-  font-size:.62rem;font-weight:800;
-  padding:.3rem .85rem;border-radius:20px;
-  letter-spacing:.08em;
-}
-.pit-ing-grid2{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1rem;
-  margin-bottom:1rem;
-}
-.pit-ing-card{
-  background:#fff;
-  border:1.5px solid #D6C4A6;
-  border-radius:16px;
-  padding:1.1rem 1rem;
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;
-  cursor:default;
-}
-.pit-ing-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 14px 36px rgba(15,34,24,.1);
-  border-color:#6ee7b7;
-}
-.pit-ing-emoji{font-size:1.6rem;margin-bottom:.5rem;display:block;}
-.pit-ing-name{font-size:.82rem;font-weight:800;color:#0f2218;margin-bottom:.2rem;}
-.pit-ing-origin{font-size:.58rem;font-weight:700;color:#169A3F;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;}
-.pit-ing-desc{font-size:.7rem;color:#5a7060;line-height:1.6;}
-.pit-ing-footer{
-  display:flex;align-items:center;gap:.65rem;
-  background:linear-gradient(135deg,#f0fdf4,#dcfce7);
-  border:1.5px solid #86efac;
-  border-radius:12px;
-  padding:.85rem 1.25rem;
-}
-.pit-ing-footer p{font-size:.72rem;color:#14532d;font-weight:700;line-height:1.5;}
-
-/* ---- MANUFACTURER ---- */
-.pit-mfg-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:1.25rem;}
-.pit-mfg-left{
-  background:linear-gradient(145deg,#0f2218,#2d5a3d);
-  border-radius:20px;
-  padding:1.75rem;
-  display:flex;flex-direction:column;gap:1.25rem;
-}
-.pit-mfg-logo{
-  width:56px;height:56px;border-radius:16px;
-  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);
-  display:flex;align-items:center;justify-content:center;font-size:1.6rem;
-}
-.pit-mfg-brand{font-size:1.1rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:.15rem;}
-.pit-mfg-since{font-size:.62rem;color:rgba(255,255,255,.45);letter-spacing:.08em;}
-.pit-mfg-divider{height:1px;background:rgba(255,255,255,.1);}
-.pit-mfg-cert-row{display:flex;flex-wrap:wrap;gap:.4rem;}
-.pit-mfg-cert-pill{
-  background:rgba(22,154,63,.25);border:1px solid rgba(74,222,128,.3);
-  color:#4ade80;font-size:.58rem;font-weight:700;
-  padding:.25rem .65rem;border-radius:20px;
-  letter-spacing:.06em;text-transform:uppercase;
-}
-.pit-mfg-cta{
-  display:block;text-align:center;
-  background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);
-  border-radius:10px;padding:.7rem;
-  color:#fff;font-size:.72rem;font-weight:700;
-  text-decoration:none;transition:background .2s;
-}
-.pit-mfg-cta:hover{background:rgba(255,255,255,.18);}
-.pit-mfg-right{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.75rem;
-}
-.pit-mfg-field{
-  background:#fff;
-  border:1.5px solid #D6C4A6;
-  border-radius:14px;
-  padding:.9rem 1rem;
-  display:flex;align-items:flex-start;gap:.65rem;
-  transition:border-color .2s,box-shadow .2s;
-}
-.pit-mfg-field:hover{border-color:#6ee7b7;box-shadow:0 4px 14px rgba(26,58,42,.07);}
-.pit-mfg-field-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
-.pit-mfg-field-label{font-size:.58rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:.2rem;}
-.pit-mfg-field-val{font-size:.75rem;font-weight:600;color:#0f2218;line-height:1.5;}
-
-/* -- RESPONSIVE -- */
-@media(max-width:900px){
-  .pit-how-grid{grid-template-columns:1fr;}
-  .pit-how-visual{min-height:180px;}
-  .pit-ben-layout{grid-template-columns:1fr;}
-  .pit-ben-right{flex-direction:row;flex-wrap:wrap;}
-  .pit-ben-highlight{flex:1;min-width:calc(50% - .5rem);}
-  .pit-ben-prod-img{display:none;}
-  .pit-ing-grid2{grid-template-columns:1fr 1fr;}
-  .pit-mfg-layout{grid-template-columns:1fr;}
-}
-@media(max-width:560px){
-  .pit-wrap{padding:1.5rem 1rem 2rem;}
-  .pit-tab2{padding:.55rem .9rem;font-size:.72rem;}
-  .pit-how-visual{min-height:150px;}
-  .pit-how-visual-content{padding:1.25rem 1.1rem;}
-  .pit-how-heading{font-size:1.25rem;}
-  .pit-step{padding:1rem 1.1rem;}
-  .pit-step-icon{width:36px;height:36px;font-size:1rem;border-radius:10px;}
-  .pit-step-val{font-size:.8rem;}
-  .pit-ben-left{padding:1.5rem 1.25rem;}
-  .pit-ben-right{flex-direction:column;}
-  .pit-ben-highlight{min-width:unset;}
-  .pit-ing-grid2{grid-template-columns:1fr;}
-  .pit-mfg-right{grid-template-columns:1fr;}
-}
-</style>
-
-<div class="pit-wrap">
-
-  <!-- eyebrow + title -->
-  <div class="pit-eyebrow">Product Information</div>
-  <h2 class="pit-section-title">Everything You Need to <em>Know</em></h2>
-
-  <!-- tab bar -->
-  <div class="pit-tabbar">
-    <button class="pit-tab2 pit2-active" onclick="pit2Switch('howtouse',this)">How to Use</button>
-    <button class="pit-tab2" onclick="pit2Switch('benefits',this)">Benefits</button>
-    <button class="pit-tab2" onclick="pit2Switch('ingredients',this)">Ingredients</button>
-    <button class="pit-tab2" onclick="pit2Switch('manufacturer',this)">Manufacturer Info</button>
-  </div>
-
-  <!-- -- HOW TO USE -- -->
-  <div id="pit2-howtouse" class="pit-panel2 pit2-show">
-    <div class="pit-info-image-card">
-      <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1400&auto=format&fit=crop" alt="How to use product information image" />
-    </div>
-  </div>
-
-  <!-- -- BENEFITS -- -->
-  <div id="pit2-benefits" class="pit-panel2">
-    <div class="pit-info-image-card">
-      <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&auto=format&fit=crop" alt="Benefits product information image" />
-    </div>
-  </div>
-
-  <!-- -- INGREDIENTS -- -->
-  <div id="pit2-ingredients" class="pit-panel2">
-    <div class="pit-info-image-card">
-      <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1400&auto=format&fit=crop" alt="Ingredients product information image" />
-    </div>
-  </div>
-
-  <!-- -- MANUFACTURER INFO -- -->
-  <div id="pit2-manufacturer" class="pit-panel2">
-    <div class="pit-info-image-card">
-      <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1400&auto=format&fit=crop" alt="Manufacturer product information image" />
-    </div>
-  </div>
-
-</div><!-- /pit-wrap -->
-</section>
-
-<script>
-function pit2Switch(tab, btn) {
-  document.querySelectorAll('.pit-panel2').forEach(p => p.classList.remove('pit2-show'));
-  document.querySelectorAll('.pit-tab2').forEach(b => b.classList.remove('pit2-active'));
-  const el = document.getElementById('pit2-' + tab);
-  if (el) el.classList.add('pit2-show');
-  btn.classList.add('pit2-active');
-}
-</script>
-
   <!-- NANSEI STORY SECTION START -->
-  <section id="nanseiStory" aria-labelledby="nanseiStoryTitle">
+  <section id="nanseiStory" aria-labelledby="nanseiStoryTitle" style="display:none">
     <div class="story-inner-container">
 
       <!-- HEADER ZONE -->
@@ -4601,21 +4203,251 @@ function pit2Switch(tab, btn) {
     </div>
   </section>
 
-  <!-- --- STORY FULLSCREEN MODAL ---------------------------- -->
-  <div id="nsStoryModal" role="dialog" aria-modal="true" aria-label="Story viewer"
-    style="display:none;position:fixed;inset:0;z-index:9990;background:#F6F3EC;flex-direction:column;align-items:center;justify-content:center;"
-    onclick="if(event.target===this)nsCloseStory()">
-    <button onclick="nsCloseStory()" aria-label="Close story"
-      style="position:absolute;top:16px;right:18px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.4rem;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;">×</button>
-    <div id="nsStoryProgressBars"
-      style="position:absolute;top:12px;left:12px;right:50px;display:flex;gap:4px;z-index:10;"></div>
-    <div id="nsStoryContent"
-      style="width:min(340px,90vw);display:flex;flex-direction:column;align-items:center;gap:1.25rem;text-align:center;padding:0 1rem;">
+  <!-- --- STORY FULLSCREEN MODAL (Cinematic Video Feel) -->
+  <style>
+    #nsStoryModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9990;
+      background: rgba(0,0,0,.85);
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #nsStoryModal.ns-story-open { display: flex; }
+    /* Reel-ratio inner container */
+    #nsStoryInner {
+      position: relative;
+      height: min(92vh, calc(100vw * 16 / 9));
+      width: calc(min(92vh, calc(100vw * 16 / 9)) * 9 / 16);
+      max-width: 95vw;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    /* Full-bleed bg image */
+    #nsStoryBg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: opacity .45s ease;
+      z-index: 0;
+      transform: scale(1.04);
+      animation: nsStoryZoom 8s ease forwards;
+    }
+    @keyframes nsStoryZoom {
+      from { transform: scale(1.08); }
+      to   { transform: scale(1.0); }
+    }
+    /* Multi-layer cinematic gradient */
+    #nsStoryBg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 30%, transparent 50%, rgba(0,0,0,.75) 80%, rgba(0,0,0,.95) 100%),
+        linear-gradient(to right, rgba(0,0,0,.2) 0%, transparent 30%);
+    }
+    /* Progress bars */
+    #nsStoryProgressBars {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 56px;
+      display: flex;
+      gap: 5px;
+      z-index: 10;
+    }
+    .ns-prog-track {
+      flex: 1;
+      height: 2.5px;
+      background: rgba(255,255,255,.28);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ns-prog-fill {
+      height: 100%;
+      background: #fff;
+      border-radius: 3px;
+      width: 0%;
+    }
+    .ns-prog-fill.done  { width: 100%; }
+    .ns-prog-fill.active { animation: nsProgAnim var(--dur, 6000ms) linear forwards; }
+    @keyframes nsProgAnim { from { width: 0% } to { width: 100% } }
+    /* Close btn */
+    #nsStoryClose {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      font-size: 1.1rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background .2s;
+    }
+    #nsStoryClose:hover { background: rgba(255,255,255,.28); }
+    /* Tap zones */
+    .ns-story-tap {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 38%;
+      z-index: 8;
+      cursor: pointer;
+    }
+    #nsStoryTapL { left: 0; }
+    #nsStoryTapR { right: 0; }
+    /* Content block */
+    #nsStoryContent {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem 1.75rem 2.5rem;
+      z-index: 9;
+      animation: nsSlideUp .38s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes nsSlideUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .ns-story-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.22);
+      color: var(--gold-lt);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .28rem .8rem;
+      border-radius: 20px;
+      margin-bottom: .75rem;
+    }
+    .ns-story-big-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: .65rem;
+      letter-spacing: -.01em;
+      text-shadow: 0 2px 20px rgba(0,0,0,.4);
+    }
+    .ns-story-desc {
+      font-size: .82rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+      max-width: 480px;
+    }
+    .ns-story-actions {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .ns-story-cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--gold);
+      color: var(--forest-deep);
+      font-size: .75rem;
+      font-weight: 800;
+      padding: .6rem 1.4rem;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      transition: filter .2s, transform .18s;
+      letter-spacing: .02em;
+    }
+    .ns-story-cta-pill:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .ns-story-counter {
+      font-size: .62rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .08em;
+    }
+    /* Story number badge (top-left of bg) */
+    #nsStoryNumBadge {
+      position: absolute;
+      top: 52px;
+      left: 14px;
+      background: rgba(15,34,24,.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(201,168,76,.3);
+      border-radius: 8px;
+      padding: .25rem .6rem;
+      font-size: .58rem;
+      font-weight: 900;
+      color: var(--gold-lt);
+      letter-spacing: .06em;
+      z-index: 10;
+    }
+    /* Nav arrow buttons */
+    .ns-story-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.18);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      font-size: 1.2rem;
+      transition: background .2s, transform .2s;
+    }
+    .ns-story-nav-btn:hover { background: rgba(255,255,255,.25); transform: translateY(-50%) scale(1.08); }
+    #nsStoryPrev { left: 14px; }
+    #nsStoryNext { right: 14px; }
+    @media (max-width: 480px) {
+      .ns-story-nav-btn { display: none; }
+      #nsStoryContent { padding: 1.5rem 1.25rem 2rem; }
+      .ns-story-big-title { font-size: 1.5rem; }
+    }
+  </style>
+
+  <div id="nsStoryModal" role="dialog" aria-modal="true" aria-label="Story viewer" onclick="if(event.target===this)nsCloseStory()">
+    <div id="nsStoryInner">
+    <!-- BG image -->
+    <div id="nsStoryBg"></div>
+    <!-- Progress bars -->
+    <div id="nsStoryProgressBars"></div>
+    <!-- Story number -->
+    <div id="nsStoryNumBadge">01</div>
+    <!-- Close -->
+    <button id="nsStoryClose" onclick="nsCloseStory()" aria-label="Close story">&#x2715;</button>
+    <!-- Tap zones -->
+    <div id="nsStoryTapL" class="ns-story-tap" onclick="nsNavStory(-1)"></div>
+    <div id="nsStoryTapR" class="ns-story-tap" onclick="nsNavStory(1)"></div>
+    <!-- Nav arrows -->
+    <button id="nsStoryPrev" class="ns-story-nav-btn" onclick="nsNavStory(-1)" aria-label="Previous">&#8249;</button>
+    <button id="nsStoryNext" class="ns-story-nav-btn" onclick="nsNavStory(1)" aria-label="Next">&#8250;</button>
+    <!-- Content -->
+    <div id="nsStoryContent"></div>
     </div>
-    <button id="nsStoryPrev" onclick="nsNavStory(-1)" aria-label="Previous story"
-      style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:none;color:#fff;font-size:1.2rem;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
-    <button id="nsStoryNext" onclick="nsNavStory(1)" aria-label="Next story"
-      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:none;color:#fff;font-size:1.2rem;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">›</button>
   </div>
 
   <!-- HAND MILL BANNER — above reviews, rice only -->
@@ -4722,76 +4554,6 @@ function pit2Switch(tab, btn) {
   </style>
 
 
-
-  <!-- HAND MILL BANNER -->
-  <section style="background:var(--cream);padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
-    <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
-      <div class="ns-reveal" style="text-align:center;margin-bottom:1.75rem;">
-        <div class="ns-eyebrow" style="justify-content:center;margin-bottom:.4rem;">Usage Guide</div>
-        <h2
-          style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">
-          Do's &amp; Don'ts</h2>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:760px;margin:0 auto;">
-        <div class="ns-reveal ns-d1"
-          style="background:#fff;border:1.5px solid #bbf7d0;border-radius:18px;padding:1.25rem 1.1rem;box-shadow:0 4px 20px rgba(15,34,24,.06);">
-          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;">
-            <div
-              style="width:32px;height:32px;border-radius:10px;background:#dcfce7;display:flex;align-items:center;justify-content:center;">
-              ?</div>
-            <h3 style="font-size:.85rem;font-weight:800;color:#166534;">Do's</h3>
-          </div>
-          <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;">
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#16a34a;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Store in a cool, dry place away from
-                moisture</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#16a34a;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Use clean, dry spoon each time</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#16a34a;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Seal container tightly after each use</span>
-            </li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#16a34a;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Follow recommended serving size</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#16a34a;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Use within shelf-life printed on pack</span>
-            </li>
-          </ul>
-        </div>
-        <div class="ns-reveal ns-d2"
-          style="background:#fff;border:1.5px solid #fecaca;border-radius:18px;padding:1.25rem 1.1rem;box-shadow:0 4px 20px rgba(15,34,24,.06);">
-          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;">
-            <div
-              style="width:32px;height:32px;border-radius:10px;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
-              ?</div>
-            <h3 style="font-size:.85rem;font-weight:800;color:#991b1b;">Don'ts</h3>
-          </div>
-          <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;">
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#ef4444;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Avoid exposure to direct sunlight</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#ef4444;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Do not use a wet or moist spoon</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#ef4444;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Do not exceed the recommended dose</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#ef4444;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Do not store near heat or flames</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;"><span
-                style="color:#ef4444;font-size:.8rem;flex-shrink:0;font-weight:900;margin-top:.1rem;">?</span><span
-                style="font-size:.75rem;color:#374151;line-height:1.6;">Keep out of reach of children under 3</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ----------------------------------------------------------
      SCROLL STORYTELLING (UPGRADE 8)
@@ -5316,46 +5078,368 @@ function pit2Switch(tab, btn) {
 
 
 
-  <!-- ----------------------------------------------------------
-     TRUST BADGES
------------------------------------------------------------ -->
-  <section id="nsTrust" aria-label="Trust and guarantees"
-    style="background:var(--cream);padding:2rem 0 1.75rem;border-top:1px solid rgba(26,58,42,.08);">
-    <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;" id="nsTrustGrid">
-      </div>
-    </div>
-  </section>
+
 
 
   <!-- ----------------------------------------------------------
-     VIDEO SHOWCASE (UPGRADE 2)
+     WATCH & LEARN — PREMIUM REDESIGN
 ----------------------------------------------------------- -->
-  <section id="nsVideos" aria-label="Video showcase"
-    style="background:#fff;padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
-    <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
-      <div class="ns-reveal" style="margin-bottom:1.75rem;">
-        <div class="ns-eyebrow" style="margin-bottom:.4rem;">See It Live</div>
-        <h2
-          style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">
-          Watch &amp; Learn</h2>
-        <p style="font-size:.75rem;color:var(--forest-sage);margin-top:.3rem;">Real farm footage, honest recipes,
-          genuine customer stories.</p>
+  <style>
+    #nsVideos {
+      background: #fff;
+      padding: 5rem 0 4.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #nsVideos::before { display: none; }
+    #nsVideos::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(26,58,42,.1), transparent);
+    }
+    .vw-inner { max-width: 1280px; margin: 0 auto; padding: 0 1.75rem; position: relative; }
+
+    /* ---- HEADER ---- */
+    .vw-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .vw-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--forest-leaf);
+      margin-bottom: .5rem;
+    }
+    .vw-eyebrow::before {
+      content: '';
+      width: 1.4rem;
+      height: 1.5px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    .vw-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      color: var(--forest-deep);
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+    .vw-title em { font-style: italic; color: var(--forest-leaf); }
+    .vw-sub { font-size: .78rem; color: var(--forest-sage); margin-top: .4rem; }
+    .vw-count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(26,58,42,.06);
+      border: 1px solid rgba(26,58,42,.14);
+      border-radius: 30px;
+      padding: .4rem 1rem;
+      font-size: .68rem;
+      font-weight: 700;
+      color: var(--forest-mid);
+      white-space: nowrap;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+
+    /* ---- LAYOUT: HERO + SIDE STACK ---- */
+    .vw-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    /* ---- HERO CARD ---- */
+    .vw-hero {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 16/10;
+      background: #000;
+      border: 1px solid rgba(26,58,42,.1);
+      transition: transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .vw-hero:hover {
+      transform: translateY(-4px);
+    }
+    .vw-hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .7s cubic-bezier(.22,1,.36,1), filter .7s;
+      filter: brightness(.7);
+    }
+    .vw-hero:hover .vw-hero-img { transform: scale(1.05); filter: brightness(.85); }
+    .vw-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.3) 45%, transparent 70%);
+    }
+    /* Gold top shimmer */
+    .vw-hero-shimmer {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .vw-hero:hover .vw-hero-shimmer { opacity: 1; }
+    /* FEATURED badge */
+    .vw-featured-badge {
+      position: absolute; top: 16px; left: 16px;
+      background: var(--gold);
+      color: var(--forest-deep);
+      font-size: .55rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 20px;
+      z-index: 4;
+    }
+    /* Big play button */
+    .vw-play-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,.35);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s, transform .35s cubic-bezier(.34,1.56,.64,1), border-color .25s;
+      z-index: 4;
+    }
+    .vw-hero:hover .vw-play-center {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: translate(-50%, -50%) scale(1.12);
+    }
+    .vw-play-center svg { margin-left: 3px; }
+    .vw-hero:hover .vw-play-center svg path { fill: var(--forest-deep); }
+    /* Hero bottom info */
+    .vw-hero-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.75rem;
+      z-index: 4;
+    }
+    .vw-hero-tag {
+      display: inline-block;
+      font-size: .56rem; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold-lt); opacity: .85;
+      margin-bottom: .45rem;
+    }
+    .vw-hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+      font-weight: 700; color: #fff;
+      line-height: 1.2; margin-bottom: .5rem;
+      text-shadow: 0 2px 16px rgba(0,0,0,.5);
+    }
+    .vw-hero-meta {
+      display: flex; align-items: center; gap: .75rem;
+      font-size: .68rem; color: rgba(255,255,255,.55);
+    }
+    .vw-hero-dur {
+      display: inline-flex; align-items: center; gap: .35rem;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px; padding: .2rem .65rem;
+      font-size: .62rem; font-weight: 700; color: #fff;
+    }
+
+    /* ---- SIDE STACK ---- */
+    .vw-stack {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .vw-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid rgba(26,58,42,.1);
+      transition: border-color .3s, transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s;
+      display: flex;
+      height: 110px;
+    }
+    .vw-card:hover {
+      border-color: rgba(74,140,92,.35);
+      transform: translateX(6px);
+      box-shadow: 0 12px 36px rgba(15,34,24,.1);
+    }
+    .vw-card-img-wrap {
+      flex-shrink: 0;
+      width: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+    .vw-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s cubic-bezier(.22,1,.36,1), filter .5s;
+      filter: brightness(.65);
+    }
+    .vw-card:hover .vw-card-img { transform: scale(1.07); filter: brightness(.8); }
+    .vw-card-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255,255,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s, transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .vw-card:hover .vw-card-play {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+    .vw-card:hover .vw-card-play svg path { fill: var(--forest-deep); }
+    .vw-card-body {
+      flex: 1; padding: .85rem 1rem;
+      display: flex; flex-direction: column; justify-content: center;
+      background: #fff;
+    }
+    .vw-card-tag {
+      font-size: .52rem; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--forest-leaf); margin-bottom: .3rem;
+    }
+    .vw-card-title {
+      font-size: .85rem; font-weight: 700;
+      color: var(--forest-deep); line-height: 1.3;
+      margin-bottom: .35rem;
+    }
+    .vw-card-dur {
+      font-size: .6rem; color: var(--forest-sage);
+      font-weight: 600;
+    }
+    /* active indicator */
+    .vw-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--forest-leaf);
+      border-radius: 0 3px 3px 0;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .vw-card:hover::before { opacity: 1; }
+
+    /* ---- MOBILE: stack hero then horizontal scroll ---- */
+    @media (max-width: 900px) {
+      .vw-layout { grid-template-columns: 1fr; }
+      .vw-hero { aspect-ratio: 16/9; }
+      .vw-stack {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: 1rem;
+        padding-bottom: 4px;
+      }
+      .vw-stack::-webkit-scrollbar { display: none; }
+      .vw-card {
+        flex-shrink: 0;
+        flex-direction: column;
+        width: clamp(180px, 42vw, 220px);
+        height: auto;
+        transform: none !important;
+      }
+      .vw-card:hover { transform: translateY(-4px) !important; box-shadow: 0 10px 28px rgba(15,34,24,.1); }
+      .vw-card-img-wrap { width: 100%; height: 140px; flex-shrink: 0; }
+      .vw-card-body { background: #fff; }
+    }
+    @media (max-width: 480px) {
+      .vw-card { width: clamp(160px, 48vw, 200px); }
+      .vw-card-img-wrap { height: 120px; }
+      .vw-card-title { font-size: .78rem; }
+      #nsVideos { padding: 3.5rem 0 3rem; }
+      .vw-inner { padding: 0 1rem; }
+      .vw-play-center { width: 56px; height: 56px; }
+    }
+  </style>
+
+  <section id="nsVideos" aria-label="Video showcase">
+    <div class="vw-inner">
+
+      <!-- Header -->
+      <div class="vw-header ns-reveal">
+        <div>
+          <div class="vw-eyebrow">See It Live</div>
+          <h2 class="vw-title">Watch &amp; <em>Learn</em></h2>
+          <p class="vw-sub">Real farm footage · Honest recipes · Genuine customer stories</p>
+        </div>
+        <div class="vw-count-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          5 Videos
+        </div>
       </div>
-      <div class="ns-snap-row" id="nsVideoRow" style="gap:14px;"></div>
+
+      <!-- Grid: hero + side stack -->
+      <div class="vw-layout">
+
+        <!-- Hero video card -->
+        <div class="vw-hero ns-reveal" id="vwHero" onclick="nsOpenVideo('dQw4w9WgXcQ')" role="button" aria-label="Play Farm Harvesting">
+          <div class="vw-hero-shimmer"></div>
+          <img class="vw-hero-img" id="vwHeroImg"
+            src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&auto=format&fit=crop"
+            alt="Farm Harvesting" />
+          <div class="vw-hero-overlay"></div>
+          <div class="vw-featured-badge">Featured</div>
+          <div class="vw-play-center" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z" fill="#fff"/></svg>
+          </div>
+          <div class="vw-hero-info">
+            <span class="vw-hero-tag" id="vwHeroTag">Our Farm</span>
+            <h3 class="vw-hero-title" id="vwHeroTitle">Farm Harvesting</h3>
+            <div class="vw-hero-meta">
+              <span class="vw-hero-dur" id="vwHeroDur">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                2:34
+              </span>
+              <span>Click to play</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side stack -->
+        <div class="vw-stack" id="nsVideoRow"></div>
+
+      </div>
     </div>
   </section>
 
   <!-- Video modal -->
   <div id="nsVideoModal" role="dialog" aria-modal="true" aria-label="Video player"
-    style="display:none;position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:1rem;"
+    style="display:none;position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem;"
     onclick="if(event.target===this)nsCloseVideo()">
-    <div
-      style="position:relative;width:100%;max-width:760px;background:#000;border-radius:16px;overflow:hidden;aspect-ratio:16/9;">
+    <div style="position:relative;width:100%;max-width:900px;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 40px 100px rgba(0,0,0,.8);">
       <iframe id="nsVideoFrame" src="" allow="autoplay;fullscreen" style="width:100%;height:100%;border:none;"
         loading="lazy" title="Product video"></iframe>
       <button onclick="nsCloseVideo()" aria-label="Close video"
-        style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:1.3rem;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+        style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1.2rem;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;"
+        onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">&#x2715;</button>
     </div>
   </div>
 
@@ -5407,70 +5491,103 @@ function pit2Switch(tab, btn) {
 
 
   <!-- ----------------------------------------------------------
-     REVIEWS SECTION
+     REVIEWS SECTION — corrected IDs
 ----------------------------------------------------------- -->
   <section id="reviewsSection" aria-label="Customer reviews"
-    style="background:#fff;padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
+    style="background:linear-gradient(180deg,#f0f7f2 0%,var(--cream) 100%);padding:3.5rem 0 3rem;border-top:1px solid rgba(26,58,42,.08);border-bottom:1px solid rgba(26,58,42,.08);">
     <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
-      <div class="ns-reveal" style="margin-bottom:1.5rem;">
+
+      <!-- Header -->
+      <div class="ns-reveal" style="margin-bottom:1.75rem;">
         <div class="ns-eyebrow" style="margin-bottom:.4rem;">What People Say</div>
-        <h2
-          style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">
-          Customer Reviews</h2>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">Customer Reviews</h2>
       </div>
-      <!-- Review summary -->
-      <div class="ns-reveal ns-d1"
-        style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;background:var(--cream);border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;border:1.5px solid rgba(26,58,42,.08);">
-        <div style="text-align:center;flex-shrink:0;">
-          <div
-            style="font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;color:var(--forest-deep);line-height:1;">
-            4.8</div>
-          <div style="color:var(--gold);font-size:1rem;">?????</div>
-          <p style="font-size:.65rem;color:var(--forest-sage);margin-top:.2rem;">1,240 reviews</p>
+
+      <!-- Summary: score + bars -->
+      <div class="ns-reveal" style="display:flex;align-items:stretch;gap:2rem;flex-wrap:wrap;background:#fff;border:1px solid rgba(26,58,42,.1);border-radius:20px;padding:1.75rem 2rem;margin-bottom:2rem;box-shadow:0 4px 24px rgba(15,34,24,.06);">
+        <!-- Score block -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:120px;flex-shrink:0;">
+          <div id="revScoreEl" style="font-family:'Inter',sans-serif;font-size:3.8rem;font-weight:900;color:var(--forest-deep);line-height:1;letter-spacing:-.03em;">4.8</div>
+          <div id="revStarsEl" style="color:#f59e0b;font-size:1rem;letter-spacing:.05em;margin:.3rem 0 .2rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div id="revCntEl" style="font-size:.68rem;color:var(--forest-sage);font-weight:600;">0 ratings</div>
+          <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-leaf);margin-top:.4rem;">Verified</div>
         </div>
-        <div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:.4rem;">
-          <div style="display:flex;align-items:center;gap:.5rem;"><span
-              style="font-size:.65rem;color:var(--forest-sage);width:10px;">5</span>
-            <div style="flex:1;height:6px;background:rgba(26,58,42,.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;background:var(--gold);border-radius:3px;width:84%;"></div>
-            </div><span style="font-size:.65rem;color:var(--forest-sage);">84%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;"><span
-              style="font-size:.65rem;color:var(--forest-sage);width:10px;">4</span>
-            <div style="flex:1;height:6px;background:rgba(26,58,42,.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;background:var(--gold);border-radius:3px;width:11%;"></div>
-            </div><span style="font-size:.65rem;color:var(--forest-sage);">11%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;"><span
-              style="font-size:.65rem;color:var(--forest-sage);width:10px;">3</span>
-            <div style="flex:1;height:6px;background:rgba(26,58,42,.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;background:var(--gold);border-radius:3px;width:3%;"></div>
-            </div><span style="font-size:.65rem;color:var(--forest-sage);">3%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;"><span
-              style="font-size:.65rem;color:var(--forest-sage);width:10px;">2</span>
-            <div style="flex:1;height:6px;background:rgba(26,58,42,.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;background:var(--gold);border-radius:3px;width:1%;"></div>
-            </div><span style="font-size:.65rem;color:var(--forest-sage);">1%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;"><span
-              style="font-size:.65rem;color:var(--forest-sage);width:10px;">1</span>
-            <div style="flex:1;height:6px;background:rgba(26,58,42,.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;background:var(--gold);border-radius:3px;width:1%;"></div>
-            </div><span style="font-size:.65rem;color:var(--forest-sage);">1%</span>
-          </div>
-        </div>
+        <!-- Divider -->
+        <div style="width:1px;background:rgba(26,58,42,.1);align-self:stretch;flex-shrink:0;"></div>
+        <!-- Bars block -->
+        <div id="barRows" style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:.6rem;min-width:180px;"></div>
       </div>
+
       <!-- Review cards -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;" id="nsReviewsGrid">
+      <div id="reviewsList" class="rev-list" style="margin-bottom:2rem;"></div>
+
+      <!-- Write a review form (shown only to verified purchasers) -->
+      <div id="revForm" style="display:none;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:18px;padding:1.5rem;margin-top:.5rem;">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:1rem;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--forest-deep),var(--forest-mid));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <div>
+            <p style="font-size:.82rem;font-weight:800;color:var(--forest-deep);">Write a Review</p>
+            <p id="revFormUserName" style="font-size:.65rem;color:var(--forest-sage);"></p>
+          </div>
+        </div>
+        <!-- Star picker -->
+        <div style="margin-bottom:.85rem;">
+          <p style="font-size:.68rem;font-weight:700;color:var(--forest-mid);margin-bottom:.4rem;">Your Rating</p>
+          <div id="starPicker" style="display:flex;gap:.25rem;font-size:1.6rem;cursor:pointer;">
+            <span data-star="1" style="color:#d1d5db;transition:color .15s;">&#9733;</span>
+            <span data-star="2" style="color:#d1d5db;transition:color .15s;">&#9733;</span>
+            <span data-star="3" style="color:#d1d5db;transition:color .15s;">&#9733;</span>
+            <span data-star="4" style="color:#d1d5db;transition:color .15s;">&#9733;</span>
+            <span data-star="5" style="color:#d1d5db;transition:color .15s;">&#9733;</span>
+          </div>
+        </div>
+        <!-- Text input -->
+        <textarea id="revTextInput" rows="3" placeholder="Share your experience with this product…"
+          style="width:100%;padding:.75rem 1rem;border:1.5px solid rgba(26,58,42,.15);border-radius:12px;font-size:.82rem;font-family:'Inter',sans-serif;color:var(--forest-deep);background:#fafaf9;resize:vertical;outline:none;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--forest-leaf)'" onblur="this.style.borderColor='rgba(26,58,42,.15)'"></textarea>
+        <!-- Feedback msg -->
+        <p id="revFormMsg" style="font-size:.72rem;margin:.4rem 0 .65rem;min-height:1rem;"></p>
+        <!-- Submit -->
+        <button onclick="submitReview()"
+          style="background:linear-gradient(135deg,var(--forest-deep),var(--forest));color:#fff;border:none;border-radius:10px;padding:.6rem 1.5rem;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;transition:filter .2s,transform .18s;box-shadow:0 4px 14px rgba(15,34,24,.25);"
+          onmouseover="this.style.filter='brightness(1.1)';this.style.transform='translateY(-1px)'"
+          onmouseout="this.style.filter='';this.style.transform=''">Submit Review</button>
       </div>
+
     </div>
   </section>
 
-  <!-- ----------------------------------------------------------
-     TOAST NOTIFICATION
------------------------------------------------------------ -->
-  <div id="nsToast" role="alert" aria-live="polite"
+  <!-- ---- MOBILE STICKY BAR ---- -->
+  <div id="mobBar"
+    style="position:fixed;bottom:0;left:0;right:0;z-index:500;background:#fff;border-top:1px solid rgba(26,58,42,.12);padding:.6rem .85rem;padding-bottom:calc(.6rem + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:.5rem;box-shadow:0 -4px 20px rgba(10,30,15,.1);">
+    <!-- Qty stepper -->
+    <div style="display:flex;align-items:center;border:2px solid #c8e6c9;border-radius:10px;height:44px;overflow:hidden;flex-shrink:0;">
+      <button onclick="changeFlowerQty(-1)"
+        style="width:36px;height:100%;background:none;border:none;font-size:1.1rem;font-weight:900;color:var(--forest);cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif;"
+        onmouseover="this.style.background='#e8f5e9'" onmouseout="this.style.background=''">&#8722;</button>
+      <span id="mobQtyVal"
+        style="width:36px;text-align:center;font-size:.82rem;font-weight:900;color:var(--forest-deep);border-left:2px solid #c8e6c9;border-right:2px solid #c8e6c9;height:100%;display:flex;align-items:center;justify-content:center;">1</span>
+      <button onclick="changeFlowerQty(1)"
+        style="width:36px;height:100%;background:none;border:none;font-size:1.1rem;font-weight:900;color:var(--forest);cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif;"
+        onmouseover="this.style.background='#e8f5e9'" onmouseout="this.style.background=''">+</button>
+    </div>
+    <!-- Add to Cart -->
+    <button onclick="addToCartFn()"
+      style="flex:1;height:44px;background:linear-gradient(135deg,var(--forest-deep),var(--forest));color:#fff;border:none;border-radius:12px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 14px rgba(15,34,24,.25);transition:filter .18s;"
+      onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter=''">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+      Add to Cart
+    </button>
+    <!-- Buy Now -->
+    <button onclick="buyNow()"
+      style="flex:1;height:44px;background:linear-gradient(135deg,#fef9e8,#fdf3c8);color:var(--forest-deep);border:2px solid var(--gold-lt);border-radius:12px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:filter .18s;"
+      onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold-dk)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Buy Now
+    </button>
+  </div>
     style="position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--forest-deep);color:var(--cream);font-size:.78rem;font-weight:700;padding:.65rem 1.25rem;border-radius:30px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;">
   </div>
 
@@ -5604,14 +5721,14 @@ function pit2Switch(tab, btn) {
       window.nsOpenStory = function (idx) {
         nsCurrentStory = idx;
         const m = document.getElementById('nsStoryModal');
-        m.style.display = 'flex';
+        m.classList.add('ns-story-open');
         document.body.style.overflow = 'hidden';
         nsRenderSlide();
         nsStartTimer();
       };
 
       window.nsCloseStory = function () {
-        document.getElementById('nsStoryModal').style.display = 'none';
+        document.getElementById('nsStoryModal').classList.remove('ns-story-open');
         document.body.style.overflow = '';
         clearInterval(nsStoryTimer);
       };
@@ -5625,20 +5742,37 @@ function pit2Switch(tab, btn) {
 
       function nsRenderSlide() {
         const s = NS_STORIES_DATA[nsCurrentStory];
-        document.getElementById('nsStoryProgressBars').innerHTML = NS_STORIES_DATA.map((_, i) =>
-          `<div style="flex:1;height:3px;background:${i < nsCurrentStory ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,.2)'};border-radius:3px;overflow:hidden;">
-      ${i === nsCurrentStory ? `<div id="nsActiveBar" style="height:100%;background:#fff;border-radius:3px;width:0%;transition:width ${NS_DURATION}ms linear;"></div>` : ''}
-    </div>`).join('');
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          const b = document.getElementById('nsActiveBar');
-          if (b) b.style.width = '100%';
-        }));
+        const img = NS_STORY_IMGS[nsCurrentStory] || NS_STORY_IMGS[0];
+
+        // Background image with zoom restart
+        const bg = document.getElementById('nsStoryBg');
+        bg.style.backgroundImage = `url('${img}')`;
+        bg.style.animation = 'none';
+        void bg.offsetWidth; // reflow
+        bg.style.animation = 'nsStoryZoom 8s ease forwards';
+
+        // Number badge
+        const badge = document.getElementById('nsStoryNumBadge');
+        if (badge) badge.textContent = String(nsCurrentStory + 1).padStart(2, '0');
+
+        // Progress bars
+        document.getElementById('nsStoryProgressBars').innerHTML = NS_STORIES_DATA.map((_, i) => {
+          const cls = i < nsCurrentStory ? 'done' : (i === nsCurrentStory ? 'active' : '');
+          return `<div class="ns-prog-track"><div class="ns-prog-fill ${cls}" style="--dur:${NS_DURATION}ms"></div></div>`;
+        }).join('');
+
+        // Content
         document.getElementById('nsStoryContent').innerHTML = `
-    <div style="font-size:3.5rem;line-height:1;">${s.emoji}</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.35rem,4vw,1.8rem);font-weight:700;color:#fff;line-height:1.2;">${s.title}</h2>
-    <p style="font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.8;max-width:320px;">${s.body}</p>
-    <button style="background:var(--gold);color:var(--forest-deep);font-size:.75rem;font-weight:800;padding:.55rem 1.5rem;border-radius:30px;border:none;cursor:pointer;" onclick="nsCloseStory()">${s.cta}</button>
-    <p style="font-size:.62rem;color:rgba(255,255,255,.35);">${nsCurrentStory + 1} / ${NS_STORIES_DATA.length}</p>`;
+          <div class="ns-story-tag-pill">${s.emoji}&nbsp; ${s.cta}</div>
+          <h2 class="ns-story-big-title">${s.title}</h2>
+          <p class="ns-story-desc">${s.body}</p>
+          <div class="ns-story-actions">
+            <button class="ns-story-cta-pill" onclick="nsCloseStory()">
+              ${s.cta}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+            </button>
+            <span class="ns-story-counter">${nsCurrentStory + 1} / ${NS_STORIES_DATA.length}</span>
+          </div>`;
       }
 
       function nsStartTimer() {
@@ -5651,10 +5785,15 @@ function pit2Switch(tab, btn) {
 
       // Touch swipe on story modal
       (function () {
-        let sx = 0;
+        let sx = 0, sy = 0;
         const m = document.getElementById('nsStoryModal');
-        m.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-        m.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) nsNavStory(dx < 0 ? 1 : -1); }, { passive: true });
+        m.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+        m.addEventListener('touchend', e => {
+          const dx = e.changedTouches[0].clientX - sx;
+          const dy = e.changedTouches[0].clientY - sy;
+          if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) nsNavStory(dx < 0 ? 1 : -1);
+          else if (dy < -60) nsCloseStory(); // swipe up to close
+        }, { passive: true });
       })();
 
       /* --- WHY BUY PILLS ------------------------------------ */
@@ -5837,19 +5976,31 @@ function pit2Switch(tab, btn) {
       function nsRenderVideos() {
         const row = document.getElementById('nsVideoRow');
         if (!row) return;
-        row.innerHTML = NS_VIDEOS.map((v, i) => `
-    <div class="video-card ns-snap-item ns-reveal ns-d${Math.min(i + 1, 5)}" onclick="nsOpenVideo('${v.vid}')" role="button" aria-label="Play ${v.title}">
-      <div class="video-card-thumb">
-        <img src="${v.thumb}" alt="${v.title}" loading="lazy"/>
-        <div class="video-card-gradient"></div>
-        <span class="video-card-tag">${v.tag}</span>
-        <span class="video-card-dur">${v.dur}</span>
-        <div class="video-card-play-wrap">
-          <div class="video-play-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--forest-deep)" style="margin-left:2px;"><path d="M5 3l14 9-14 9V3z"/></svg>
-          </div>
-          <span class="video-card-name">${v.title}</span>
+        // First video goes to hero
+        const hero = document.getElementById('vwHero');
+        if (hero && NS_VIDEOS[0]) {
+          const v0 = NS_VIDEOS[0];
+          document.getElementById('vwHeroImg').src = v0.thumb.replace('w=400','w=1200');
+          document.getElementById('vwHeroImg').alt = v0.title;
+          document.getElementById('vwHeroTag').textContent = v0.tag;
+          document.getElementById('vwHeroTitle').textContent = v0.title;
+          document.getElementById('vwHeroDur').innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${v0.dur}`;
+          hero.onclick = () => nsOpenVideo(v0.vid);
+          hero.setAttribute('aria-label', 'Play ' + v0.title);
+        }
+        // Remaining videos go to side stack
+        row.innerHTML = NS_VIDEOS.slice(1).map((v, i) => `
+    <div class="vw-card ns-reveal" onclick="nsOpenVideo('${v.vid}')" role="button" aria-label="Play ${v.title}">
+      <div class="vw-card-img-wrap">
+        <img class="vw-card-img" src="${v.thumb}" alt="${v.title}" loading="lazy"/>
+        <div class="vw-card-play" aria-hidden="true">
+          <svg width="11" height="11" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z" fill="#fff"/></svg>
         </div>
+      </div>
+      <div class="vw-card-body">
+        <span class="vw-card-tag">${v.tag}</span>
+        <h4 class="vw-card-title">${v.title}</h4>
+        <span class="vw-card-dur">${v.dur}</span>
       </div>
     </div>`).join('');
         nsObserve();
@@ -5885,7 +6036,50 @@ function pit2Switch(tab, btn) {
       function nsRenderGallery() {
         const g = document.getElementById('nsGalleryGrid');
         if (!g) return;
-        g.innerHTML = NS_GALLERY.map((item, i) => `
+
+        // Category-specific gallery pools
+        const GALLERY_BY_CAT = {
+          'Rice Varieties': [
+            { src: 'https://images.unsplash.com/photo-1516685018646-549198525c1b?w=400&auto=format&fit=crop', caption: 'Kodo millet pongal — ancient grain, modern wellness.', author: '@thanneer_thurai' },
+            { src: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=400&auto=format&fit=crop', caption: 'Morning kanji with Nansei millet. Changed my life.', author: '@priya_wellness' },
+            { src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&auto=format&fit=crop', caption: 'Colourful thali with millets. So proud to eat Indian.', author: '@chef_kavitha' },
+            { src: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&auto=format&fit=crop', caption: 'Family breakfast with organic millet idli — our Sunday ritual!', author: '@madurai_moms' },
+            { src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&auto=format&fit=crop', caption: 'South Indian breakfast done right — pure, organic, delicious.', author: '@coimbatore_foodies' },
+            { src: 'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=400&auto=format&fit=crop', caption: '3 months in and feeling incredible. This is the real deal.', author: '@rajan_fitness' },
+            { src: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?w=400&auto=format&fit=crop', caption: 'Baby loves the millet porridge. Soft, natural, perfect.', author: '@new_mom_nandini' },
+            { src: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&auto=format&fit=crop', caption: 'The grain quality is unreal. You can smell the difference.', author: '@organic_raj' },
+          ],
+          'Dried Flowers': [
+            { src: 'https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=400&auto=format&fit=crop', caption: 'Beautiful dried blue pea flowers for my herbal teas.', author: '@tealovers_india' },
+            { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&auto=format&fit=crop', caption: 'These flowers turn my lemonade a magical purple!', author: '@wellness_kitchen' },
+            { src: 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=400&auto=format&fit=crop', caption: 'Perfect for garnishing and natural food colouring.', author: '@organic_home_chef' },
+            { src: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&auto=format&fit=crop', caption: 'Fragrant and pure — love adding these to my rice dishes.', author: '@fragrant_kitchen' },
+            { src: 'https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=400&auto=format&fit=crop', caption: 'My herbal tea ritual with Nansei dried flowers.', author: '@morning_ritual_in' },
+            { src: 'https://images.unsplash.com/photo-1455793924027-9a97c9a3f6b6?w=400&auto=format&fit=crop', caption: 'The colour payoff is incredible. Completely natural!', author: '@natural_dye_studio' },
+          ],
+          'Beverages': [
+            { src: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&auto=format&fit=crop', caption: 'Starting every morning with Nansei herbal mix. Best decision.', author: '@morning_wellness' },
+            { src: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400&auto=format&fit=crop', caption: 'This drink mix has replaced my afternoon coffee completely.', author: '@caffeine_free_life' },
+            { src: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop', caption: 'Warm, earthy and naturally sweet. My kids love it!', author: '@healthy_fam_in' },
+            { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&auto=format&fit=crop', caption: 'Ragi drink after workouts — complete nutrition in a glass.', author: '@fitness_foodie_chennai' },
+            { src: 'https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=400&auto=format&fit=crop', caption: 'Pure, no additives. You can actually taste the difference.', author: '@clean_eating_tn' },
+            { src: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=400&auto=format&fit=crop', caption: 'My grandmother would approve of this authentic taste!', author: '@traditional_tastes' },
+          ],
+          'Flour Varieties': [
+            { src: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&auto=format&fit=crop', caption: 'Softest roti I have ever made — all thanks to this flour.', author: '@roti_queen_blr' },
+            { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&auto=format&fit=crop', caption: 'Stone-ground difference is real. Aroma is unbelievable.', author: '@stone_ground_fan' },
+            { src: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop', caption: 'Millet dosa for the whole family. Crispy and nutritious!', author: '@dosa_experiments' },
+            { src: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&auto=format&fit=crop', caption: 'Using this for everything — idli, dosa, ladoo. So versatile.', author: '@nansei_daily_cook' },
+            { src: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=400&auto=format&fit=crop', caption: 'Switched entirely to millet flour. Blood sugar is stable.', author: '@diabetic_wellness_in' },
+            { src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&auto=format&fit=crop', caption: 'Gluten-free baking with Nansei flour is a game changer.', author: '@gf_baking_india' },
+          ],
+        };
+
+        // Pick pool by current product category, fallback to Rice Varieties
+        const cat = (window.currentProduct && window.currentProduct.category) || '';
+        const pool = GALLERY_BY_CAT[cat] || GALLERY_BY_CAT['Rice Varieties'];
+
+        g.innerHTML = pool.map((item, i) => `
     <div class="gallery-item ns-reveal ns-d${Math.min(i + 1, 5)}" onclick="nsOpenLightbox(${i})" role="button" aria-label="View photo by ${item.author}" tabindex="0">
       <img src="${item.src}" alt="${item.caption}" loading="lazy"/>
       <div class="gallery-item-overlay">
@@ -5898,13 +6092,18 @@ function pit2Switch(tab, btn) {
         <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </div>
     </div>`).join('');
+
+        // update lightbox pool reference
+        window._currentGalleryPool = pool;
         nsObserve();
       }
 
       window.nsOpenLightbox = function (idx) {
         nsCurrentLightbox = idx;
         const lb = document.getElementById('nsLightbox');
-        const item = NS_GALLERY[nsCurrentLightbox];
+        const pool = window._currentGalleryPool || [];
+        const item = pool[nsCurrentLightbox];
+        if (!item) return;
         document.getElementById('nsLightboxImg').src = item.src;
         document.getElementById('nsLightboxImg').alt = item.caption;
         document.getElementById('nsLightboxCaption').innerHTML = `${item.caption}<br/><span style="color:var(--gold-lt);font-weight:700;">${item.author}</span>`;
@@ -5918,7 +6117,8 @@ function pit2Switch(tab, btn) {
       };
 
       window.nsLightboxNav = function (d) {
-        nsCurrentLightbox = (nsCurrentLightbox + d + NS_GALLERY.length) % NS_GALLERY.length;
+        const pool = window._currentGalleryPool || [];
+        nsCurrentLightbox = (nsCurrentLightbox + d + pool.length) % pool.length;
         nsOpenLightbox(nsCurrentLightbox);
       };
 
@@ -5990,7 +6190,7 @@ function pit2Switch(tab, btn) {
 
       /* --- KEYBOARD ACCESSIBILITY --------------------------- */
       document.addEventListener('keydown', e => {
-        if (document.getElementById('nsStoryModal').style.display === 'flex') {
+        if (document.getElementById('nsStoryModal').classList.contains('ns-story-open')) {
           if (e.key === 'ArrowRight') nsNavStory(1);
           else if (e.key === 'ArrowLeft') nsNavStory(-1);
           else if (e.key === 'Escape') nsCloseStory();
@@ -6686,6 +6886,7 @@ function pit2Switch(tab, btn) {
           });
           b.classList.add('selected');
           b.style.cssText = 'border-color:var(--forest);background:#e8f5e9;color:var(--forest-mid)';
+          currentQtyVal = v;
           updatePriceFromVariant(v, p.category);
         };
         vb.appendChild(b);
