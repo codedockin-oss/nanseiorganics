@@ -6,10 +6,11 @@ const {
   sendEmailOtp, verifyEmailOtp,
   sendPhoneOtp, verifyPhoneOtp,
   loginOtpSend, loginOtpVerify,
-  checkPhone, registerOtpSend,
+  checkPhone, registerOtpSend, checkMobile,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
+router.post('/check-mobile',       checkMobile);
 router.post('/register',          register);
 router.post('/login',             login);
 router.post('/logout',            logout);

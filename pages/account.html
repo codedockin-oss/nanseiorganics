@@ -71,6 +71,47 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { scrollbar-width: none; }
 
+  /* Mobile bottom nav */
+  #mob-bottom-nav {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 400;
+    background: #fff;
+    border-top: 1px solid rgba(26,58,42,.1);
+    box-shadow: 0 -4px 20px rgba(10,30,15,.1);
+    padding: .45rem .5rem;
+    padding-bottom: calc(.45rem + env(safe-area-inset-bottom, 0px));
+  }
+  @media (max-width: 767px) {
+    #mob-bottom-nav { display: flex; align-items: center; justify-content: space-around; }
+    body { padding-bottom: 64px; }
+    #toast { bottom: calc(64px + 14px) !important; }
+  }
+  .mbn-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    flex: 1; padding: .3rem .2rem;
+    background: none; border: none; cursor: pointer;
+    color: rgba(58,90,69,.55); text-decoration: none;
+    font-size: .58rem; font-weight: 600; letter-spacing: .04em;
+    border-radius: 10px;
+    transition: color .22s, background .22s, transform .18s cubic-bezier(.34,1.56,.64,1);
+    -webkit-tap-highlight-color: transparent;
+    position: relative; overflow: hidden;
+  }
+  .mbn-btn svg { width: 20px; height: 20px; transition: transform .22s cubic-bezier(.34,1.56,.64,1); }
+  .mbn-btn:hover { color: #4a8c5c; background: rgba(74,140,92,.07); }
+  .mbn-btn:hover svg { transform: translateY(-2px) scale(1.12); }
+  .mbn-btn:active { transform: scale(.93); }
+  .mbn-btn.active { color: #0f2218; }
+  .mbn-btn.active svg { color: #0f2218; }
+  .mbn-btn.active::before {
+    content: '';
+    position: absolute; bottom: 2px; left: 50%;
+    transform: translateX(-50%);
+    width: 18px; height: 2.5px;
+    border-radius: 2px; background: #0f2218;
+  }
+
   /* Page transition */
   .page { display: none; }
   .page.active { display: block; animation: pgIn 0.28s ease both; }
@@ -896,6 +937,30 @@ a .nansai-icon,
 
 
 
+
+<!-- Mobile Bottom Nav -->
+<nav id="mob-bottom-nav">
+  <a href="index.html" class="mbn-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </a>
+  <a href="index.html#products" class="mbn-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+    Shop
+  </a>
+  <button class="mbn-btn active" onclick="navTo('orders')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    Orders
+  </button>
+  <button class="mbn-btn" onclick="navTo('wishlist')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+    Wishlist
+  </button>
+  <button class="mbn-btn" onclick="navTo('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Account
+  </button>
+</nav>
 
 <!-- FOOTER -->
 <footer class="bg-gray-900 text-gray-300">

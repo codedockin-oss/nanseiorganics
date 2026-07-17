@@ -11,20 +11,20 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, 'Please provide an email'],
     unique: true,
+    sparse: true,
     lowercase: true,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
   },
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
     minlength: [8, 'Password must be at least 8 characters'],
     select: false,
-    default: undefined
   },
   phone: {
     type: String,
+    required: [true, 'Mobile number is required'],
+    unique: true,
     match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
   },
   role: {
@@ -81,13 +81,12 @@ const userSchema = new mongoose.Schema({
 userSchema.index({ phone: 1 }, { sparse: true });
 userSchema.index({ role: 1 });
 
-// Hash password before saving
+// Hash password before saving (only if present)
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    next();
-  }
+  if (!this.password || !this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 // Compare password

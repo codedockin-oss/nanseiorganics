@@ -3791,11 +3791,11 @@
             style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid rgba(26,58,42,.12);border-radius:12px;box-shadow:0 8px 28px rgba(10,30,15,.14);min-width:160px;overflow:hidden;z-index:500;">
             <a href="account.html"
               style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-bottom:1px solid rgba(26,58,42,.07);transition:background .15s;"
-              onmouseover="this.style.background='#f0faf2'" onmouseout="this.style.background=''">?? My Account</a>
+              onmouseover="this.style.background='#f0faf2'" onmouseout="this.style.background=''"><span aria-hidden="true">[[icon:user]]</span> My Account</a>
             <button
               onclick="localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');window.location.href='login.html'"
               style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:#dc2626;background:none;border:none;width:100%;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;"
-              onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background=''">?? Sign Out</button>
+              onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background=''"><span aria-hidden="true">[[icon:log-out]]</span> Sign Out</button>
           </div>
         </div>
         <a href="wishlist.html" class="relative flex items-center justify-content transition"
@@ -4060,481 +4060,10 @@
     </div><!-- /grid -->
   </div><!-- /main product layout -->
 
-  <!-- NANSEI STORY SECTION START -->
-  <section id="nanseiStory" aria-labelledby="nanseiStoryTitle" style="display:none">
-    <div class="story-inner-container">
-
-      <!-- HEADER ZONE -->
-      <div class="story-header text-center story-reveal">
-        <div class="story-eyebrow">OUR STORY</div>
-        <h2 id="nanseiStoryTitle" class="story-title">Rooted in Nature. Crafted with Purpose.</h2>
-        <div class="story-copy">
-          <p>At Nansei Organics, we believe wellness begins with nature. Every product is carefully sourced,
-            thoughtfully crafted, and quality tested to bring authentic organic goodness from trusted farms to your
-            family.</p>
-          <p>Our mission is simple: deliver pure, sustainable, and chemical-free products that support healthier living
-            while respecting the earth.</p>
-        </div>
-      </div>
-
-      <!-- BENTO GRID -->
-      <div class="story-bento-grid">
-
-        <!-- CARD 1: FARM STORY (Large visual card) -->
-        <div class="ns-bento-card card-farm story-reveal">
-          <div class="card-image-wrap">
-            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&auto=format&fit=crop"
-              alt="Organic farm fields" class="bento-img" />
-            <div class="card-overlay"></div>
-          </div>
-          <div class="card-content-bottom">
-            <span class="card-tag">[[icon:sprout]] Trusted Farms</span>
-            <h3 class="card-heading">Harvested from Rich Soil</h3>
-            <p class="card-subtext">Direct from trusted growers using traditional methods that enrich the soil.</p>
-          </div>
-        </div>
-
-        <!-- CARD 2: QUALITY PROMISES -->
-        <div class="ns-bento-card card-standards story-reveal">
-          <div class="card-body">
-            <span class="card-tag">[[icon:shield-check]] Our Promises</span>
-            <h3 class="card-heading">Uncompromised Quality</h3>
-            <div class="bento-features-list">
-              <div class="bento-feature-item">
-                <span class="bento-feature-icon">[[icon:leaf]]</span>
-                <div class="bento-feature-text">
-                  <h4 class="bento-feature-title">100% Natural</h4>
-                  <p class="bento-feature-desc">Zero chemical pesticides, synthetic additives, or artificial
-                    preservatives.</p>
-                </div>
-              </div>
-              <div class="bento-feature-item">
-                <span class="bento-feature-icon">[[icon:shield-check]]</span>
-                <div class="bento-feature-text">
-                  <h4 class="bento-feature-title">Quality Tested</h4>
-                  <p class="bento-feature-desc">Every single batch is tested for purity, authenticity, and nutritional
-                    profile.</p>
-                </div>
-              </div>
-              <div class="bento-feature-item">
-                <span class="bento-feature-icon">[[icon:recycle]]</span>
-                <div class="bento-feature-text">
-                  <h4 class="bento-feature-title">Sustainable Practices</h4>
-                  <p class="bento-feature-desc">Eco-friendly packaging and farming methods that respect the natural
-                    season.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 3: PURE INGREDIENTS -->
-        <div class="ns-bento-card card-ingredients story-reveal">
-          <div class="card-image-wrap">
-            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=700&auto=format&fit=crop"
-              alt="Fresh organic ingredients" class="bento-img" />
-            <div class="card-overlay"></div>
-          </div>
-          <div class="card-content-bottom">
-            <span class="card-tag">[[icon:leaf]] Pure Ingredients</span>
-            <h3 class="card-heading">Raw & Unprocessed</h3>
-          </div>
-        </div>
-
-        <!-- CARD 4: CRAFTED GOODS / PRODUCT SHOWCASE -->
-        <div class="ns-bento-card card-product story-reveal">
-          <div class="card-image-wrap">
-            <img id="storyProductImg" src="" alt="Nansei organic product" class="bento-img" />
-            <div class="card-overlay"></div>
-          </div>
-          <div class="card-content-bottom">
-            <span class="card-tag">[[icon:package]] Crafted Goods</span>
-            <h3 class="card-heading">Fresh to Order</h3>
-          </div>
-          <div class="story-gold-mark-badge">[[icon:badge-check]]</div>
-        </div>
-
-        <!-- CARD 5: STATS PANEL -->
-        <div class="ns-bento-card card-stats story-reveal">
-          <div class="card-body">
-            <span class="card-tag">[[icon:trending-up]] Our Footprint</span>
-            <h3 class="card-heading">Trust in Numbers</h3>
-
-            <div class="story-stats bento-stats-grid">
-              <div class="bento-stat-item">
-                <span class="bento-stat-num" data-story-count="10000" data-story-suffix="+">0</span>
-                <span class="bento-stat-label">Happy Customers</span>
-              </div>
-              <div class="bento-stat-item">
-                <span class="bento-stat-num" data-story-count="100" data-story-suffix="%">0</span>
-                <span class="bento-stat-label">Natural Ingredients</span>
-              </div>
-              <div class="bento-stat-item">
-                <span class="bento-stat-num" data-story-count="50" data-story-suffix="+">0</span>
-                <span class="bento-stat-label">Farmer Partners</span>
-              </div>
-              <div class="bento-stat-item">
-                <span class="bento-stat-num" data-story-count="5" data-story-suffix="+">0</span>
-                <span class="bento-stat-label">Years of Excellence</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-  <!-- NANSEI STORY SECTION END --><style>@media(max-width:767px){.stories-inner{padding:0 1.75rem}.stories-header{flex-direction:row;align-items:flex-end;justify-content:space-between;flex-wrap:nowrap;gap:.75rem;margin-bottom:2rem}.stories-title{font-size:clamp(1.55rem,5vw,2.2rem)}}@media(max-width:480px){.stories-header{flex-direction:column;align-items:flex-start}.stories-inner{padding:0 1rem}}</style>
-
-  <!-- ----------------------------------------------------------
-     STORIES SECTION (UPGRADE 1 — Reels-style)
------------------------------------------------------------ -->
-  <section id="nsStoriesSection" aria-label="Product education stories">
-    <div class="stories-inner">
-      <div class="stories-header">
-        <div>
-          <div class="stories-eyebrow">Know Your Product</div>
-          <h2 class="stories-title">The Nansei<br><em style="font-style:italic;color:var(--forest-leaf);">Story</em>
-          </h2>
-        </div>
-        <span class="stories-hint">Swipe to explore</span>
-      </div>
-      <div class="stories-row" id="nsStoriesRow"></div>
-    </div>
-  </section>
-
-  <!-- --- STORY FULLSCREEN MODAL (Cinematic Video Feel) -->
-  <style>
-    #nsStoryModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9990;
-      background: rgba(0,0,0,.85);
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    #nsStoryModal.ns-story-open { display: flex; }
-    /* Reel-ratio inner container */
-    #nsStoryInner {
-      position: relative;
-      height: min(92vh, calc(100vw * 16 / 9));
-      width: calc(min(92vh, calc(100vw * 16 / 9)) * 9 / 16);
-      max-width: 95vw;
-      border-radius: 18px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    /* Full-bleed bg image */
-    #nsStoryBg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      transition: opacity .45s ease;
-      z-index: 0;
-      transform: scale(1.04);
-      animation: nsStoryZoom 8s ease forwards;
-    }
-    @keyframes nsStoryZoom {
-      from { transform: scale(1.08); }
-      to   { transform: scale(1.0); }
-    }
-    /* Multi-layer cinematic gradient */
-    #nsStoryBg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 30%, transparent 50%, rgba(0,0,0,.75) 80%, rgba(0,0,0,.95) 100%),
-        linear-gradient(to right, rgba(0,0,0,.2) 0%, transparent 30%);
-    }
-    /* Progress bars */
-    #nsStoryProgressBars {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      right: 56px;
-      display: flex;
-      gap: 5px;
-      z-index: 10;
-    }
-    .ns-prog-track {
-      flex: 1;
-      height: 2.5px;
-      background: rgba(255,255,255,.28);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .ns-prog-fill {
-      height: 100%;
-      background: #fff;
-      border-radius: 3px;
-      width: 0%;
-    }
-    .ns-prog-fill.done  { width: 100%; }
-    .ns-prog-fill.active { animation: nsProgAnim var(--dur, 6000ms) linear forwards; }
-    @keyframes nsProgAnim { from { width: 0% } to { width: 100% } }
-    /* Close btn */
-    #nsStoryClose {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      background: rgba(255,255,255,.15);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,.2);
-      color: #fff;
-      font-size: 1.1rem;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      transition: background .2s;
-    }
-    #nsStoryClose:hover { background: rgba(255,255,255,.28); }
-    /* Tap zones */
-    .ns-story-tap {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 38%;
-      z-index: 8;
-      cursor: pointer;
-    }
-    #nsStoryTapL { left: 0; }
-    #nsStoryTapR { right: 0; }
-    /* Content block */
-    #nsStoryContent {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 2rem 1.75rem 2.5rem;
-      z-index: 9;
-      animation: nsSlideUp .38s cubic-bezier(.22,1,.36,1) both;
-    }
-    @keyframes nsSlideUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .ns-story-tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: rgba(255,255,255,.14);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.22);
-      color: var(--gold-lt);
-      font-size: .58rem;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .28rem .8rem;
-      border-radius: 20px;
-      margin-bottom: .75rem;
-    }
-    .ns-story-big-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 5vw, 2.4rem);
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.15;
-      margin-bottom: .65rem;
-      letter-spacing: -.01em;
-      text-shadow: 0 2px 20px rgba(0,0,0,.4);
-    }
-    .ns-story-desc {
-      font-size: .82rem;
-      color: rgba(255,255,255,.75);
-      line-height: 1.75;
-      margin-bottom: 1.25rem;
-      max-width: 480px;
-    }
-    .ns-story-actions {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      flex-wrap: wrap;
-    }
-    .ns-story-cta-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: var(--gold);
-      color: var(--forest-deep);
-      font-size: .75rem;
-      font-weight: 800;
-      padding: .6rem 1.4rem;
-      border-radius: 30px;
-      border: none;
-      cursor: pointer;
-      transition: filter .2s, transform .18s;
-      letter-spacing: .02em;
-    }
-    .ns-story-cta-pill:hover { filter: brightness(1.1); transform: translateY(-2px); }
-    .ns-story-counter {
-      font-size: .62rem;
-      font-weight: 700;
-      color: rgba(255,255,255,.4);
-      letter-spacing: .08em;
-    }
-    /* Story number badge (top-left of bg) */
-    #nsStoryNumBadge {
-      position: absolute;
-      top: 52px;
-      left: 14px;
-      background: rgba(15,34,24,.7);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(201,168,76,.3);
-      border-radius: 8px;
-      padding: .25rem .6rem;
-      font-size: .58rem;
-      font-weight: 900;
-      color: var(--gold-lt);
-      letter-spacing: .06em;
-      z-index: 10;
-    }
-    /* Nav arrow buttons */
-    .ns-story-nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,.12);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,.18);
-      color: #fff;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      font-size: 1.2rem;
-      transition: background .2s, transform .2s;
-    }
-    .ns-story-nav-btn:hover { background: rgba(255,255,255,.25); transform: translateY(-50%) scale(1.08); }
-    #nsStoryPrev { left: 14px; }
-    #nsStoryNext { right: 14px; }
-    @media (max-width: 480px) {
-      .ns-story-nav-btn { display: none; }
-      #nsStoryContent { padding: 1.5rem 1.25rem 2rem; }
-      .ns-story-big-title { font-size: 1.5rem; }
-    }
-  </style>
 
   <div id="nsStoryModal" role="dialog" aria-modal="true" aria-label="Story viewer" onclick="if(event.target===this)nsCloseStory()">
-    <div id="nsStoryInner">
-    <!-- BG image -->
-    <div id="nsStoryBg"></div>
-    <!-- Progress bars -->
-    <div id="nsStoryProgressBars"></div>
-    <!-- Story number -->
-    <div id="nsStoryNumBadge">01</div>
-    <!-- Close -->
-    <button id="nsStoryClose" onclick="nsCloseStory()" aria-label="Close story">&#x2715;</button>
-    <!-- Tap zones -->
-    <div id="nsStoryTapL" class="ns-story-tap" onclick="nsNavStory(-1)"></div>
-    <div id="nsStoryTapR" class="ns-story-tap" onclick="nsNavStory(1)"></div>
-    <!-- Nav arrows -->
-    <button id="nsStoryPrev" class="ns-story-nav-btn" onclick="nsNavStory(-1)" aria-label="Previous">&#8249;</button>
-    <button id="nsStoryNext" class="ns-story-nav-btn" onclick="nsNavStory(1)" aria-label="Next">&#8250;</button>
-    <!-- Content -->
-    <div id="nsStoryContent"></div>
-    </div>
+ 
   </div>
-
-  <!-- HAND MILL BANNER — above reviews, rice only -->
-  <div id="millBanner" style="display:none;">
-    <section style="background:#f7f3ec;padding:1.5rem 1.5rem;overflow:hidden;">
-      <div style="max-width:1400px;margin:0 auto;">
-        <div id="mill-card-prod"
-          style="display:grid;grid-template-columns:minmax(280px,420px) 1fr;border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 20px 60px rgba(15,34,24,.1),0 4px 16px rgba(15,34,24,.06);transform:perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1);will-change:transform;"
-          onmousemove="millTiltP(event,this)" onmouseleave="millResetP(this)">
-
-          <!-- LEFT: IMAGE -->
-          <div style="position:relative;overflow:hidden;height:420px;">
-            <img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/thirukai/1776950241632.png"
-              alt="Traditional Hand Mill"
-              style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s cubic-bezier(.22,1,.36,1);"
-              id="mill-img-prod" />
-            <div
-              style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.18) 0%,transparent 50%);pointer-events:none;">
-            </div>
-            <div id="mill-shine-prod"
-              style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.12) 0%,transparent 65%);opacity:0;transition:opacity .3s;pointer-events:none;">
-            </div>
-          </div>
-
-          <!-- RIGHT: CONTENT -->
-          <div
-            style="display:flex;flex-direction:column;justify-content:center;padding:1.25rem 1.75rem;border-left:1px solid rgba(26,58,42,.06);">
-            <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem;">
-              <div style="width:1rem;height:1.5px;background:#4a8c5c;"></div>
-              <span
-                style="font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#4a8c5c;">Traditional
-                Process</span>
-            </div>
-            <h2
-              style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,2.4vw,2.4rem);font-weight:700;color:#0f2218;line-height:1.15;margin-bottom:.5rem;">
-              Freshly Ground Grains from
-              <em style="font-style:italic;color:#4a8c5c;">Traditional Hand Mill</em>
-            </h2>
-            <div
-              style="width:2.5rem;height:2px;background:linear-gradient(to right,#b8922a,transparent);margin-bottom:.75rem;">
-            </div>
-            <p style="font-size:.95rem;color:#1a2416;line-height:1.7;margin-bottom:1.1rem;max-width:400px;">
-              Authentic, natural, and handmade process — preserving every nutrient, every flavour, every tradition.
-            </p>
-            <div id="mill-features-prod"
-              style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:.85rem;">
-              <div style="display:flex;align-items:center;gap:.35rem;">
-                <div
-                  style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">
-                  [[icon:wheat]]</div>
-                <div>
-                  <p style="font-size:.82rem;font-weight:700;color:#0f2218;">Stone Ground</p>
-                  <p style="font-size:.72rem;color:#7a9980;">No heat damage</p>
-                </div>
-              </div>
-              <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
-              <div style="display:flex;align-items:center;gap:.35rem;">
-                <div
-                  style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">
-                  [[icon:hand]]</div>
-                <div>
-                  <p style="font-size:.82rem;font-weight:700;color:#0f2218;">Hand Operated</p>
-                  <p style="font-size:.72rem;color:#7a9980;">Zero electricity</p>
-                </div>
-              </div>
-              <div style="width:1px;height:20px;background:rgba(26,58,42,.08);"></div>
-              <div style="display:flex;align-items:center;gap:.35rem;">
-                <div
-                  style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;border:1px solid rgba(26,58,42,.1);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">
-                  [[icon:leaf]]</div>
-                <div>
-                  <p style="font-size:.82rem;font-weight:700;color:#0f2218;">Farm Direct</p>
-                  <p style="font-size:.72rem;color:#7a9980;">25-acre organic farm</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-  </div><!-- /millBanner -->
-
-
-
-
-
   <!-- ----------------------------------------------------------
      MOBILE STORY BAR (UPGRADE 2 — sticky circle bar)
 ----------------------------------------------------------- -->
@@ -4555,525 +4084,7 @@
 
 
 
-  <!-- ----------------------------------------------------------
-     SCROLL STORYTELLING (UPGRADE 8)
------------------------------------------------------------ -->
-  <div class="journey-wrap">
 
-    <div class="journey-header">
-      <div class="journey-eyebrow">Traceability</div>
-      <h2>The Journey From<br><em>Seed to Shelf</em></h2>
-      <p>Five steps &nbsp;·&nbsp; Zero compromise</p>
-    </div>
-
-    <div class="journey-steps">
-
-      <div class="step-row" data-step>
-        <div class="step-img">
-          <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop"
-            alt="Organic farm fields" />
-          <div class="step-img-overlay"></div>
-          <div class="step-num-badge"><span>Step</span><span>01 of 05</span></div>
-          <div class="step-cert-tag">Pesticide-Free</div>
-        </div>
-        <div class="step-text">
-          <div class="step-eyebrow">The soil</div>
-          <h3>25 Acres of Pure,<br><strong>Certified Heritage</strong></h3>
-          <p>Our farm in Thanjavur has been strictly pesticide-free since 2014. We nurture soil that teems with life,
-            ensuring every grain absorbs the authentic minerals of the Cauvery delta.</p>
-          <div class="step-stats">
-            <div class="step-stat"><span class="step-stat-num">12yr</span><span class="step-stat-lbl">Natural
-                cycle</span></div>
-            <div class="step-stat"><span class="step-stat-num">140+</span><span class="step-stat-lbl">Local
-                families</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-connector"><i class="ti ti-arrow-down" aria-hidden="true"></i> continuing the journey</div>
-
-      <div class="step-row reverse" data-step>
-        <div class="step-img">
-          <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=800&auto=format&fit=crop"
-            alt="Hand harvesting crops" />
-          <div class="step-img-overlay"></div>
-          <div class="step-num-badge"><span>Step</span><span>02 of 05</span></div>
-          <div class="step-cert-tag">Hand-Picked</div>
-        </div>
-        <div class="step-text">
-          <div class="step-eyebrow">The harvest</div>
-          <h3>Hand-Picked at the<br><strong>Zenith of Potency</strong></h3>
-          <p>Nature works on its own clock. We harvest only during the precise two-week window when nutrient density is
-            highest. Zero machinery — every grain is hand-collected to prevent bruising.</p>
-          <div class="step-stats">
-            <div class="step-stat"><span class="step-stat-num">2wk</span><span class="step-stat-lbl">Harvest
-                window</span></div>
-            <div class="step-stat"><span class="step-stat-num">0</span><span class="step-stat-lbl">Machines used</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-connector"><i class="ti ti-arrow-down" aria-hidden="true"></i> continuing the journey</div>
-
-      <div class="step-row" data-step>
-        <div class="step-img">
-          <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&auto=format&fit=crop"
-            alt="Lab quality testing" />
-          <div class="step-img-overlay"></div>
-          <div class="step-num-badge"><span>Step</span><span>03 of 05</span></div>
-          <div class="step-cert-tag">Lab Verified</div>
-        </div>
-        <div class="step-text">
-          <div class="step-eyebrow">Validation</div>
-          <h3>200+ Checkpoints of<br><strong>Uncompromising Quality</strong></h3>
-          <p>Trust is built in the lab. Every single batch undergoes rigorous independent testing for heavy metals,
-            pesticides, and microbial purity. If it doesn't pass all 200 checks, it doesn't leave.</p>
-          <div class="step-stats">
-            <div class="step-stat"><span class="step-stat-num">200+</span><span class="step-stat-lbl">Quality
-                checks</span></div>
-            <div class="step-stat"><span class="step-stat-num">100%</span><span class="step-stat-lbl">Pass rate</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-connector"><i class="ti ti-arrow-down" aria-hidden="true"></i> continuing the journey</div>
-
-      <div class="step-row reverse" data-step>
-        <div class="step-img">
-          <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop"
-            alt="Eco-friendly packaging" />
-          <div class="step-img-overlay"></div>
-          <div class="step-num-badge"><span>Step</span><span>04 of 05</span></div>
-          <div class="step-cert-tag">Zero Plastic</div>
-        </div>
-        <div class="step-text">
-          <div class="step-eyebrow">Sustainability</div>
-          <h3>Mindful Packaging for<br><strong>a Healthier Planet</strong></h3>
-          <p>Organic food shouldn't live in toxic plastic. Our earth-first approach uses kraft paper composites and
-            food-grade biodegradable liners, protecting your health and the environment equally.</p>
-          <div class="step-stats">
-            <div class="step-stat"><span class="step-stat-num">0%</span><span class="step-stat-lbl">Plastic used</span>
-            </div>
-            <div class="step-stat"><span class="step-stat-num">100%</span><span
-                class="step-stat-lbl">Biodegradable</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-connector"><i class="ti ti-arrow-down" aria-hidden="true"></i> final step</div>
-
-      <div class="step-row" data-step>
-        <div class="step-img">
-          <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=800&auto=format&fit=crop"
-            alt="Home delivery" />
-          <div class="step-img-overlay"></div>
-          <div class="step-num-badge"><span>Step</span><span>05 of 05</span></div>
-          <div class="step-cert-tag">48hr Delivery</div>
-        </div>
-        <div class="step-text">
-          <div class="step-eyebrow">The arrival</div>
-          <h3>From Our Fields to<br><strong>Your Table in 48 Hours</strong></h3>
-          <p>Freshness has a short shelf life. Every order is dispatched within 24 hours of packing. With real-time
-            tracking and cold-chain support, your food arrives as fresh as the day it was harvested.</p>
-          <div class="step-stats">
-            <div class="step-stat"><span class="step-stat-num">24hr</span><span class="step-stat-lbl">Dispatch
-                time</span></div>
-            <div class="step-stat"><span class="step-stat-num">12k+</span><span class="step-stat-lbl">Happy
-                families</span></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: #fff;
-    }
-
-    .journey-wrap {
-      font-family: var(--font-sans, system-ui, sans-serif);
-      background: #fff;
-    }
-
-    .journey-header {
-      text-align: center;
-      padding: 5rem 2rem 3.5rem;
-      border-bottom: 0.5px solid #e8ede9;
-    }
-
-    .journey-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #2d7a47;
-      margin-bottom: 1rem;
-    }
-
-    .journey-eyebrow::before,
-    .journey-eyebrow::after {
-      content: '';
-      display: inline-block;
-      width: 28px;
-      height: 1px;
-      background: #2d7a47;
-    }
-
-    .journey-header h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 300;
-      color: #0f1f14;
-      line-height: 1.1;
-      letter-spacing: -.03em;
-      margin-bottom: .75rem;
-    }
-
-    .journey-header h2 em {
-      font-style: italic;
-      font-weight: 400;
-      color: #2d7a47;
-    }
-
-    .journey-header p {
-      font-size: 14px;
-      color: #6b7f70;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      font-size: 11px;
-      font-weight: 500;
-    }
-
-    .journey-steps {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 2rem 5rem;
-    }
-
-    .step-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      padding: 5rem 0;
-      border-bottom: 0.5px solid #e8ede9;
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity .65s cubic-bezier(.22, 1, .36, 1), transform .65s cubic-bezier(.22, 1, .36, 1);
-    }
-
-    .step-row.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .step-row:last-child {
-      border-bottom: none;
-    }
-
-    .step-row.reverse .step-img {
-      order: 2;
-    }
-
-    .step-row.reverse .step-text {
-      order: 1;
-    }
-
-    .step-img {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: #e8ede9;
-    }
-
-    .step-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .8s cubic-bezier(.22, 1, .36, 1);
-    }
-
-    .step-row.visible .step-img img {
-      transform: scale(1);
-    }
-
-    .step-img img {
-      transform: scale(1.06);
-    }
-
-    .step-img-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(15, 31, 20, .12), rgba(15, 31, 20, .04));
-      pointer-events: none;
-    }
-
-    .step-num-badge {
-      position: absolute;
-      top: 1.25rem;
-      left: 1.25rem;
-      background: rgba(255, 255, 255, .92);
-      backdrop-filter: blur(8px);
-      border: 0.5px solid rgba(45, 122, 71, .2);
-      border-radius: 50px;
-      padding: .35rem .85rem;
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-    }
-
-    .step-num-badge span:first-child {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #2d7a47;
-    }
-
-    .step-num-badge span:last-child {
-      font-size: 11px;
-      font-weight: 500;
-      color: #0f1f14;
-    }
-
-    .step-cert-tag {
-      position: absolute;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      background: #2d7a47;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: .3rem .7rem;
-      border-radius: 50px;
-    }
-
-    .step-text {
-      padding: 1rem 0;
-    }
-
-    .step-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: #2d7a47;
-      margin-bottom: 1.25rem;
-    }
-
-    .step-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 20px;
-      height: 1px;
-      background: #2d7a47;
-    }
-
-    .step-text h3 {
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 300;
-      color: #0f1f14;
-      line-height: 1.12;
-      letter-spacing: -.025em;
-      margin-bottom: 1.1rem;
-    }
-
-    .step-text h3 strong {
-      font-weight: 500;
-    }
-
-    .step-text p {
-      font-size: 14px;
-      line-height: 1.85;
-      color: #4a5e50;
-      margin-bottom: 1.75rem;
-      max-width: 420px;
-    }
-
-    .step-stats {
-      display: flex;
-      gap: .75rem;
-      flex-wrap: wrap;
-    }
-
-    .step-stat {
-      border: 0.5px solid #d0ddd3;
-      border-radius: 14px;
-      padding: .75rem 1.1rem;
-      min-width: 100px;
-      text-align: center;
-      background: #f7faf8;
-    }
-
-    .step-stat-num {
-      display: block;
-      font-size: 1.6rem;
-      font-weight: 300;
-      color: #0f1f14;
-      letter-spacing: -.04em;
-      line-height: 1;
-      margin-bottom: .2rem;
-    }
-
-    .step-stat-lbl {
-      display: block;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #6b7f70;
-    }
-
-    .step-connector {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: .5rem 0;
-      gap: .5rem;
-      color: #b0c4b8;
-      font-size: 10px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .step-connector::before,
-    .step-connector::after {
-      content: '';
-      flex: 1;
-      height: 0.5px;
-      background: #e0e9e3;
-    }
-
-    .journey-cta {
-      background: #f7faf8;
-      border-top: 0.5px solid #e0e9e3;
-      padding: 5rem 2rem;
-      text-align: center;
-    }
-
-    .journey-cta p {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: #2d7a47;
-      margin-bottom: .85rem;
-    }
-
-    .journey-cta h3 {
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 300;
-      color: #0f1f14;
-      margin-bottom: 2rem;
-      line-height: 1.1;
-      letter-spacing: -.025em;
-    }
-
-    .journey-cta h3 em {
-      font-style: italic;
-      color: #2d7a47;
-      font-weight: 400;
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      background: #0f1f14;
-      color: #fff;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: .04em;
-      padding: .9rem 2.25rem;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      transition: background .2s, transform .2s;
-    }
-
-    .cta-btn:hover {
-      background: #2d7a47;
-      transform: translateY(-2px);
-    }
-
-    .cta-btn-alt {
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      background: transparent;
-      color: #0f1f14;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: .04em;
-      padding: .9rem 2rem;
-      border-radius: 50px;
-      border: 0.5px solid #c0cfc4;
-      cursor: pointer;
-      margin-left: .75rem;
-      transition: border-color .2s, transform .2s;
-    }
-
-    .cta-btn-alt:hover {
-      border-color: #2d7a47;
-      color: #2d7a47;
-      transform: translateY(-2px);
-    }
-
-    @media (max-width: 680px) {
-      .step-row {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 2.5rem 0;
-      }
-
-      /* Keep image always on top, text below — same visual order as desktop */
-      .step-row .step-img    { order: 1 !important; }
-      .step-row .step-text   { order: 2 !important; }
-
-      .step-text p {
-        max-width: 100%;
-      }
-
-      .journey-steps {
-        padding: 0 1rem 3rem;
-      }
-
-      .journey-header {
-        padding: 3rem 1.25rem 2rem;
-      }
-    }
-  </style>
-
-  <script>
-    const rows = document.querySelectorAll('[data-step]');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.15 });
-    rows.forEach(r => obs.observe(r));
-  </script>
-
-  <!---- scroll story telling-  end->
 
 
 
@@ -5588,7 +4599,7 @@
       Buy Now
     </button>
   </div>
-    style="position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--forest-deep);color:var(--cream);font-size:.78rem;font-weight:700;padding:.65rem 1.25rem;border-radius:30px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;">
+
   </div>
 
 
@@ -5645,9 +4656,9 @@
       /* --- ADD TO CART -------------------------------------- */
       window.nsAddCart = function (btn) {
         const orig = btn.innerHTML;
-        btn.innerHTML = '? Added!';
+        btn.innerHTML = '[[icon:check]] Added!';
         btn.style.background = 'var(--forest-leaf)';
-        nsShowToast('?? Added to cart!');
+        nsShowToast('Added to cart!');
         setTimeout(() => { btn.innerHTML = orig; btn.style.background = 'var(--forest-deep)'; }, 2000);
       };
 
@@ -5673,12 +4684,12 @@
 
       /* --- STORIES ------------------------------------------ */
       const NS_STORIES_DATA = [
-        { emoji: '??', title: 'Why Organic Matters', body: 'Conventional farming uses 300+ synthetic chemicals per season. Organic uses zero — composting, rotation, natural pest control. The soil stays alive; so do you.', cta: 'Learn More', bg: 'linear-gradient(160deg,#1a4d2e 0%,#0f2218 100%)' },
-        { emoji: '?????', title: 'Farm to Home Journey', body: 'Direct partnerships with 140+ small-scale farmers across Tamil Nadu. No middlemen. Farmers earn 2.3× market rate. Every farm GPS-tracked and NPOP certified.', cta: 'Our Farmers', bg: 'linear-gradient(160deg,#2d5a3d 0%,#1a3a2a 100%)' },
-        { emoji: '??', title: 'Lab Testing Process', body: 'Every batch through a 200-point quality check at NABL-accredited partner lab. Pesticides, heavy metals, mycotoxins — nothing ships without passing all 200.', cta: 'See Reports', bg: 'linear-gradient(160deg,#164e63 0%,#0c2a38 100%)' },
-        { emoji: '??', title: 'How to Use This Product', body: 'Simple daily rituals make the biggest difference. Start half-dose for 7 days, then full dose. Consistency beats quantity. Works best added to morning kanji or ragi porridge.', cta: 'Full Guide', bg: 'linear-gradient(160deg,#451a03 0%,#1c0a01 100%)' },
-        { emoji: '?', title: 'Customer Success Story', body: '"After 3 months of daily kanji my blood sugar improved from 210 to 148. Doctor was amazed." — Rajan K., Chennai. 12,000+ families transformed.', cta: 'Read Stories', bg: 'linear-gradient(160deg,#3d1a6e 0%,#1a0a38 100%)' },
-        { emoji: '??', title: 'Meet the Farmers', body: 'Murugesan has farmed his 3-acre plot in Thanjavur for 28 years. Since switching to organic in 2016, his soil health score has tripled and income doubled.', cta: 'Watch Story', bg: 'linear-gradient(160deg,#2d4a1e 0%,#1a2e10 100%)' },
+        { emoji: '[[icon:leaf]]', title: 'Why Organic Matters', body: 'Conventional farming uses 300+ synthetic chemicals per season. Organic uses zero — composting, rotation, natural pest control. The soil stays alive; so do you.', cta: 'Learn More', bg: 'linear-gradient(160deg,#1a4d2e 0%,#0f2218 100%)' },
+        { emoji: '[[icon:truck]]', title: 'Farm to Home Journey', body: 'Direct partnerships with 140+ small-scale farmers across Tamil Nadu. No middlemen. Farmers earn 2.3× market rate. Every farm GPS-tracked and NPOP certified.', cta: 'Our Farmers', bg: 'linear-gradient(160deg,#2d5a3d 0%,#1a3a2a 100%)' },
+        { emoji: '[[icon:flask-conical]]', title: 'Lab Testing Process', body: 'Every batch through a 200-point quality check at NABL-accredited partner lab. Pesticides, heavy metals, mycotoxins — nothing ships without passing all 200.', cta: 'See Reports', bg: 'linear-gradient(160deg,#164e63 0%,#0c2a38 100%)' },
+        { emoji: '[[icon:utensils]]', title: 'How to Use This Product', body: 'Simple daily rituals make the biggest difference. Start half-dose for 7 days, then full dose. Consistency beats quantity. Works best added to morning kanji or ragi porridge.', cta: 'Full Guide', bg: 'linear-gradient(160deg,#451a03 0%,#1c0a01 100%)' },
+        { emoji: '[[icon:star]]', title: 'Customer Success Story', body: '"After 3 months of daily kanji my blood sugar improved from 210 to 148. Doctor was amazed." — Rajan K., Chennai. 12,000+ families transformed.', cta: 'Read Stories', bg: 'linear-gradient(160deg,#3d1a6e 0%,#1a0a38 100%)' },
+        { emoji: '[[icon:sprout]]', title: 'Meet the Farmers', body: 'Murugesan has farmed his 3-acre plot in Thanjavur for 28 years. Since switching to organic in 2016, his soil health score has tripled and income doubled.', cta: 'Watch Story', bg: 'linear-gradient(160deg,#2d4a1e 0%,#1a2e10 100%)' },
       ];
 
       /* Story card image pool — pairs each story with a relevant Unsplash photo */
@@ -5691,14 +4702,45 @@
         'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&auto=format&fit=crop',
       ];
 
+      function nsExperience() {
+        const p = nsProduct();
+        return (p && p.experience) || {};
+      }
+
+      function nsManualList(key) {
+        const list = nsExperience()[key];
+        return Array.isArray(list) ? list : null;
+      }
+
+      function nsSetVisible(id, visible) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = visible ? '' : 'none';
+      }
+
+      function nsGetStories() {
+        const manual = nsManualList('stories');
+        if (manual) return manual;
+        return NS_STORIES_DATA;
+      }
+
+      function nsStoryImg(story, i) {
+        return story.img || story.image || story.thumb || NS_STORY_IMGS[i] || NS_STORY_IMGS[0];
+      }
+
       function nsRenderStories() {
         const row = document.getElementById('nsStoriesRow');
         if (!row) return;
-        row.innerHTML = NS_STORIES_DATA.map((s, i) => `
+        const stories = nsGetStories();
+        nsSetVisible('nsStoriesSection', stories.length > 0);
+        if (!stories.length) {
+          row.innerHTML = '';
+          return;
+        }
+        row.innerHTML = stories.map((s, i) => `
     <div class="ns-snap-item" onclick="nsOpenStory(${i})" role="button" aria-label="Open story: ${s.title}">
       <div class="ns-story-gold-line"></div>
       <div class="ns-story-num">0${i + 1}</div>
-      <img class="ns-story-img" src="${NS_STORY_IMGS[i] || NS_STORY_IMGS[0]}" alt="${s.title}" loading="lazy"/>
+      <img class="ns-story-img" src="${nsStoryImg(s, i)}" alt="${s.title}" loading="lazy"/>
       <div class="ns-story-overlay"></div>
       <div class="ns-story-emoji">${s.emoji}</div>
       <div class="ns-story-body">
@@ -5719,6 +4761,8 @@
       const NS_DURATION = 6000;
 
       window.nsOpenStory = function (idx) {
+        const stories = nsGetStories();
+        if (!stories.length) return;
         nsCurrentStory = idx;
         const m = document.getElementById('nsStoryModal');
         m.classList.add('ns-story-open');
@@ -5735,14 +4779,18 @@
 
       window.nsNavStory = function (d) {
         clearInterval(nsStoryTimer);
-        nsCurrentStory = (nsCurrentStory + d + NS_STORIES_DATA.length) % NS_STORIES_DATA.length;
+        const stories = nsGetStories();
+        if (!stories.length) return;
+        nsCurrentStory = (nsCurrentStory + d + stories.length) % stories.length;
         nsRenderSlide();
         nsStartTimer();
       };
 
       function nsRenderSlide() {
-        const s = NS_STORIES_DATA[nsCurrentStory];
-        const img = NS_STORY_IMGS[nsCurrentStory] || NS_STORY_IMGS[0];
+        const stories = nsGetStories();
+        const s = stories[nsCurrentStory];
+        if (!s) return;
+        const img = nsStoryImg(s, nsCurrentStory);
 
         // Background image with zoom restart
         const bg = document.getElementById('nsStoryBg');
@@ -5756,7 +4804,7 @@
         if (badge) badge.textContent = String(nsCurrentStory + 1).padStart(2, '0');
 
         // Progress bars
-        document.getElementById('nsStoryProgressBars').innerHTML = NS_STORIES_DATA.map((_, i) => {
+        document.getElementById('nsStoryProgressBars').innerHTML = stories.map((_, i) => {
           const cls = i < nsCurrentStory ? 'done' : (i === nsCurrentStory ? 'active' : '');
           return `<div class="ns-prog-track"><div class="ns-prog-fill ${cls}" style="--dur:${NS_DURATION}ms"></div></div>`;
         }).join('');
@@ -5771,14 +4819,15 @@
               ${s.cta}
               <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
             </button>
-            <span class="ns-story-counter">${nsCurrentStory + 1} / ${NS_STORIES_DATA.length}</span>
+            <span class="ns-story-counter">${nsCurrentStory + 1} / ${stories.length}</span>
           </div>`;
       }
 
       function nsStartTimer() {
         clearInterval(nsStoryTimer);
         nsStoryTimer = setInterval(() => {
-          if (nsCurrentStory < NS_STORIES_DATA.length - 1) nsNavStory(1);
+          const stories = nsGetStories();
+          if (nsCurrentStory < stories.length - 1) nsNavStory(1);
           else nsCloseStory();
         }, NS_DURATION);
       }
@@ -5798,11 +4847,11 @@
 
       /* --- WHY BUY PILLS ------------------------------------ */
       const NS_WHY = [
-        { icon: '??', text: 'Loved by 12,000+ Families' },
-        { icon: '??', text: '200+ Sold This Month' },
-        { icon: '?', text: '4.8/5 Customer Rating' },
-        { icon: '??', text: '100% Heritage Ingredients' },
-        { icon: '??', text: 'Lab Tested Every Batch' },
+        { icon: '[[icon:heart]]', text: 'Loved by 12,000+ Families' },
+        { icon: '[[icon:shopping-bag]]', text: '200+ Sold This Month' },
+        { icon: '[[icon:star]]', text: '4.8/5 Customer Rating' },
+        { icon: '[[icon:wheat]]', text: '100% Heritage Ingredients' },
+        { icon: '[[icon:flask-conical]]', text: 'Lab Tested Every Batch' },
       ];
 
       function nsRenderWhyBuy() {
@@ -5815,12 +4864,12 @@
 
       /* --- STORY BAR ---------------------------------------- */
       const NS_BAR = [
-        { emoji: '??', label: 'Organic', ring: '#16a34a', bg: '#dcfce7' },
-        { emoji: '??', label: 'Tested', ring: '#2563eb', bg: '#dbeafe' },
-        { emoji: '??', label: 'Chem-Free', ring: '#d97706', bg: '#fef3c7' },
-        { emoji: '??', label: 'Fresh', ring: '#059669', bg: '#d1fae5' },
-        { emoji: '?', label: 'Certified', ring: '#7c3aed', bg: '#ede9fe' },
-        { emoji: '??', label: 'Eco Pack', ring: '#0284c7', bg: '#e0f2fe' },
+        { emoji: '[[icon:leaf]]', label: 'Organic', ring: '#16a34a', bg: '#dcfce7' },
+        { emoji: '[[icon:flask-conical]]', label: 'Tested', ring: '#2563eb', bg: '#dbeafe' },
+        { emoji: '[[icon:shield-check]]', label: 'Chem-Free', ring: '#d97706', bg: '#fef3c7' },
+        { emoji: '[[icon:sparkles]]', label: 'Fresh', ring: '#059669', bg: '#d1fae5' },
+        { emoji: '[[icon:badge-check]]', label: 'Certified', ring: '#7c3aed', bg: '#ede9fe' },
+        { emoji: '[[icon:package-check]]', label: 'Eco Pack', ring: '#0284c7', bg: '#e0f2fe' },
       ];
 
       function nsRenderStoryBar() {
@@ -5828,8 +4877,19 @@
         if (!bar) return;
         const row = bar.querySelector('.ns-snap-row');
         if (!row) return;
-        row.innerHTML = NS_BAR.map((item, i) => `
-    <div class="ns-snap-item" style="display:flex;flex-direction:column;align-items:center;gap:.3rem;cursor:pointer;" onclick="nsOpenStory(${Math.min(i, NS_STORIES_DATA.length - 1)})" role="button" aria-label="View ${item.label} story" tabindex="0">
+        const stories = nsGetStories();
+        if (!stories.length) {
+          row.innerHTML = '';
+          return;
+        }
+        const items = stories.map((story, i) => ({
+          emoji: story.emoji || NS_BAR[i % NS_BAR.length].emoji,
+          label: story.label || story.cta || story.title || NS_BAR[i % NS_BAR.length].label,
+          ring: story.ring || NS_BAR[i % NS_BAR.length].ring,
+          bg: story.bgColor || NS_BAR[i % NS_BAR.length].bg
+        }));
+        row.innerHTML = items.map((item, i) => `
+    <div class="ns-snap-item" style="display:flex;flex-direction:column;align-items:center;gap:.3rem;cursor:pointer;" onclick="nsOpenStory(${i})" role="button" aria-label="View ${item.label} story" tabindex="0">
       <div style="position:relative;width:46px;height:46px;">
         <svg width="46" height="46" viewBox="0 0 46 46" style="position:absolute;inset:0;transform:rotate(-90deg);" aria-hidden="true">
           <circle cx="23" cy="23" r="19" fill="none" stroke="rgba(26,58,42,.1)" stroke-width="2.5"/>
@@ -5847,10 +4907,10 @@
 
       /* --- INGREDIENT GRID ---------------------------------- */
       const NS_INGREDIENTS = [
-        { emoji: '??', name: 'Kodo Millet', origin: 'Thanjavur, TN', desc: 'Ancient grain with 3× more dietary fibre than rice. Lowers glycaemic response by 37% in controlled studies.', tags: ['Diabetic-friendly', 'High fibre', 'Gluten-free'] },
-        { emoji: '??', name: 'Moringa Leaf', origin: 'Madurai, TN', desc: 'Dried at under 40°C to protect heat-sensitive vitamin C and iron. 9 essential amino acids.', tags: ['Iron rich', 'Protein', 'Immunity'] },
-        { emoji: '??', name: 'Amla', origin: 'Sivagangai, TN', desc: 'Sun-dried whole fruit — 20× vitamin C of an orange per gram. Preserved naturally.', tags: ['Vitamin C', 'Hair health', 'Digestion'] },
-        { emoji: '???', name: 'Heritage Turmeric', origin: 'Dindigul, TN', desc: '3.5% curcumin content — 2× the FSSAI minimum standard. Zero irradiation.', tags: ['Anti-inflammatory', 'Liver support', 'Antioxidant'] },
+        { emoji: '[[icon:wheat]]', name: 'Kodo Millet', origin: 'Thanjavur, TN', desc: 'Ancient grain with 3× more dietary fibre than rice. Lowers glycaemic response by 37% in controlled studies.', tags: ['Diabetic-friendly', 'High fibre', 'Gluten-free'] },
+        { emoji: '[[icon:leaf]]', name: 'Moringa Leaf', origin: 'Madurai, TN', desc: 'Dried at under 40°C to protect heat-sensitive vitamin C and iron. 9 essential amino acids.', tags: ['Iron rich', 'Protein', 'Immunity'] },
+        { emoji: '[[icon:apple]]', name: 'Amla', origin: 'Sivagangai, TN', desc: 'Sun-dried whole fruit — 20× vitamin C of an orange per gram. Preserved naturally.', tags: ['Vitamin C', 'Hair health', 'Digestion'] },
+        { emoji: '[[icon:sparkles]]', name: 'Heritage Turmeric', origin: 'Dindigul, TN', desc: '3.5% curcumin content — 2× the FSSAI minimum standard. Zero irradiation.', tags: ['Anti-inflammatory', 'Liver support', 'Antioxidant'] },
       ];
 
       function nsRenderIngredients() {
@@ -5862,7 +4922,7 @@
          onmouseleave="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(26,58,42,.1)'">
       <div style="font-size:2.2rem;margin-bottom:.7rem;">${ing.emoji}</div>
       <h3 style="font-size:.88rem;font-weight:800;color:var(--forest-deep);margin-bottom:.2rem;">${ing.name}</h3>
-      <p style="font-size:.62rem;font-weight:700;color:var(--forest-leaf);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;">?? ${ing.origin}</p>
+      <p style="font-size:.62rem;font-weight:700;color:var(--forest-leaf);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;"><span aria-hidden="true">[[icon:map-pin]]</span> ${ing.origin}</p>
       <p style="font-size:.72rem;color:#6b7280;line-height:1.7;margin-bottom:.75rem;">${ing.desc}</p>
       <div style="display:flex;flex-wrap:wrap;gap:.3rem;">
         ${ing.tags.map(t => `<span style="font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(74,140,92,.1);color:var(--forest-mid);border:1px solid rgba(74,140,92,.2);">${t}</span>`).join('')}
@@ -5873,11 +4933,11 @@
 
       /* --- ORIGIN MAP CARDS --------------------------------- */
       const NS_ORIGINS = [
-        { id: 'thanjavur', emoji: '??', name: 'Thanjavur', crop: 'Kodo Millet', color: '#2563eb', farmers: '62 farmers', area: '840 acres', cert: 'NPOP Organic 2016' },
-        { id: 'madurai', emoji: '??', name: 'Madurai', crop: 'Moringa Leaf', color: '#c9a84c', farmers: '28 farmers', area: '190 acres', cert: 'NPOP Organic 2018' },
-        { id: 'sivagangai', emoji: '??', name: 'Sivagangai', crop: 'Amla', color: '#7c3aed', farmers: '19 farmers', area: '120 acres', cert: 'NPOP Organic 2019' },
-        { id: 'dindigul', emoji: '??', name: 'Dindigul', crop: 'Turmeric', color: '#4a8c5c', farmers: '31 farmers', area: '240 acres', cert: 'NPOP Organic 2017' },
-        { id: 'kancheepuram', emoji: '??', name: 'Kancheepuram', crop: 'Neem Leaf', color: '#dc2626', farmers: '12 farmers', area: '88 acres', cert: 'NPOP Organic 2020' },
+        { id: 'thanjavur', emoji: '[[icon:map-pin]]', name: 'Thanjavur', crop: 'Kodo Millet', color: '#2563eb', farmers: '62 farmers', area: '840 acres', cert: 'NPOP Organic 2016' },
+        { id: 'madurai', emoji: '[[icon:flower-2]]', name: 'Madurai', crop: 'Moringa Leaf', color: '#c9a84c', farmers: '28 farmers', area: '190 acres', cert: 'NPOP Organic 2018' },
+        { id: 'sivagangai', emoji: '[[icon:apple]]', name: 'Sivagangai', crop: 'Amla', color: '#7c3aed', farmers: '19 farmers', area: '120 acres', cert: 'NPOP Organic 2019' },
+        { id: 'dindigul', emoji: '[[icon:sparkles]]', name: 'Dindigul', crop: 'Turmeric', color: '#4a8c5c', farmers: '31 farmers', area: '240 acres', cert: 'NPOP Organic 2017' },
+        { id: 'kancheepuram', emoji: '[[icon:leaf]]', name: 'Kancheepuram', crop: 'Neem Leaf', color: '#dc2626', farmers: '12 farmers', area: '88 acres', cert: 'NPOP Organic 2020' },
       ];
 
       let nsActiveOrigin = 'thanjavur';
@@ -5942,12 +5002,12 @@
 
       /* --- TRUST BADGES ------------------------------------- */
       const NS_TRUST_DATA = [
-        { emoji: '??', title: 'Fast Delivery', sub: '2–5 working days' },
-        { emoji: '??', title: 'Secure Payments', sub: 'UPI · Cards · COD' },
-        { emoji: '?', title: 'Easy Returns', sub: '7-day hassle-free' },
-        { emoji: '??', title: 'Customer Support', sub: 'Mon–Sat 9am–6pm' },
-        { emoji: '??', title: 'Certified Organic', sub: 'NPOP & FSSAI' },
-        { emoji: '??', title: 'Farm Direct', sub: 'Zero middlemen' },
+        { emoji: '[[icon:truck]]', title: 'Fast Delivery', sub: '2–5 working days' },
+        { emoji: '[[icon:lock-keyhole]]', title: 'Secure Payments', sub: 'UPI · Cards · COD' },
+        { emoji: '[[icon:rotate-ccw]]', title: 'Easy Returns', sub: '7-day hassle-free' },
+        { emoji: '[[icon:headphones]]', title: 'Customer Support', sub: 'Mon–Sat 9am–6pm' },
+        { emoji: '[[icon:badge-check]]', title: 'Certified Organic', sub: 'NPOP & FSSAI' },
+        { emoji: '[[icon:sprout]]', title: 'Farm Direct', sub: 'Zero middlemen' },
       ];
 
       function nsRenderTrust() {
@@ -5965,6 +5025,82 @@
       }
 
       /* --- VIDEOS ------------------------------------------- */
+      const NS_PRODUCT_REELS = [
+        'https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4',
+        'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4',
+        'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4',
+        'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4',
+        'https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4'
+      ];
+
+      function nsProduct() {
+        return window.currentProduct || null;
+      }
+
+      function nsProductImages(p) {
+        const imgs = [p?.image, ...(p?.thumbs || [])].filter(Boolean);
+        return imgs.length ? imgs : ['https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=900&auto=format&fit=crop'];
+      }
+
+      function nsCategoryTopics(p) {
+        const byCat = {
+          'Rice Varieties': {
+            use: 'perfect soaking, cooking ratio and kanji method',
+            kitchen: ['Heritage rice kanji breakfast', 'Traditional sambar rice lunch', 'Slow-cooked curd rice bowl', 'Festive sweet pongal'],
+            gallery: ['kanji bowl', 'family lunch plate', 'grain close-up', 'meal prep jar']
+          },
+          'Dried Flowers': {
+            use: 'tea infusion, sherbet, garnish and natural colour extraction',
+            kitchen: ['Cooling herbal tea', 'Flower-infused lemonade', 'Natural colour dessert', 'Evening wellness brew'],
+            gallery: ['herbal tea cup', 'flower infusion', 'dessert garnish', 'wellness shelf']
+          },
+          'Beverages': {
+            use: 'chilled serving, warm milk blend and summer mocktail ideas',
+            kitchen: ['Iced summer cooler', 'Warm evening milk', 'Kids lunchbox drink', 'Rose-scented dessert pour'],
+            gallery: ['summer glass', 'family drink tray', 'milk blend', 'party cooler']
+          },
+          'Flour Varieties': {
+            use: 'soft dough, steaming, dosa batter and breakfast prep',
+            kitchen: ['Soft idiyappam breakfast', 'Crisp dosa batter', 'Quick porridge bowl', 'Homemade snack plate'],
+            gallery: ['fresh idiyappam', 'breakfast plate', 'flour texture', 'steamed dish']
+          },
+          'Other Products': {
+            use: 'daily tonic, smoothie booster and dessert topping',
+            kitchen: ['Morning digestive tonic', 'Fruit smoothie boost', 'Energy ball mix', 'Curd bowl topping'],
+            gallery: ['tonic glass', 'smoothie jar', 'energy snack', 'pantry ritual']
+          }
+        };
+        return byCat[p?.category] || byCat['Rice Varieties'];
+      }
+
+      function nsBuildProductVideos() {
+        const p = nsProduct();
+        if (!p) return NS_VIDEOS;
+        const exp = nsExperience();
+        const manual = nsManualList('watchLearn');
+        const imgs = nsProductImages(p);
+        const topics = nsCategoryTopics(p);
+        const reelPool = Array.isArray(exp.reels) && exp.reels.length ? exp.reels : NS_PRODUCT_REELS;
+        const start = (Number(p.id) || 1) % reelPool.length;
+        const reel = i => reelPool[(start + i) % reelPool.length];
+        if (manual) {
+          return manual.map((v, i) => ({
+            title: v.title || `${p.name} video ${i + 1}`,
+            dur: v.dur || v.duration || '1:30',
+            thumb: v.thumb || v.image || imgs[i % imgs.length],
+            vid: v.vid || v.video || v.src || reel(i),
+            tag: v.tag || 'Watch & Learn'
+          }));
+        }
+        return [
+          { title: `${p.name}: product story`, dur: '2:18', thumb: imgs[0], vid: reel(0), tag: 'Product ID ' + p.id },
+          { title: `How to use ${p.name}`, dur: '1:52', thumb: imgs[1] || imgs[0], vid: reel(1), tag: 'Watch & Learn' },
+          { title: topics.use, dur: '2:06', thumb: imgs[2] || imgs[0], vid: reel(2), tag: 'Kitchen Guide' },
+          { title: `Farm handling for ${p.category}`, dur: '1:44', thumb: imgs[0], vid: reel(3), tag: 'Farm Direct' },
+          { title: `Storage and freshness tips`, dur: '1:25', thumb: imgs[1] || imgs[0], vid: reel(4), tag: 'Care Tips' },
+        ];
+      }
+
       const NS_VIDEOS = [
         { title: 'Farm Harvesting', dur: '2:34', thumb: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&auto=format&fit=crop', vid: 'dQw4w9WgXcQ', tag: 'Our Farm' },
         { title: 'Milling Process', dur: '1:58', thumb: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop', vid: 'dQw4w9WgXcQ', tag: 'Processing' },
@@ -5976,11 +5112,19 @@
       function nsRenderVideos() {
         const row = document.getElementById('nsVideoRow');
         if (!row) return;
+        const videos = nsBuildProductVideos();
+        nsSetVisible('nsVideos', videos.length > 0);
+        if (!videos.length) {
+          row.innerHTML = '';
+          return;
+        }
+        const badge = document.querySelector('#nsVideos .vw-count-badge');
+        if (badge) badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>${videos.length} Videos`;
         // First video goes to hero
         const hero = document.getElementById('vwHero');
-        if (hero && NS_VIDEOS[0]) {
-          const v0 = NS_VIDEOS[0];
-          document.getElementById('vwHeroImg').src = v0.thumb.replace('w=400','w=1200');
+        if (hero && videos[0]) {
+          const v0 = videos[0];
+          document.getElementById('vwHeroImg').src = v0.thumb.includes('w=400') ? v0.thumb.replace('w=400', 'w=1200') : v0.thumb;
           document.getElementById('vwHeroImg').alt = v0.title;
           document.getElementById('vwHeroTag').textContent = v0.tag;
           document.getElementById('vwHeroTitle').textContent = v0.title;
@@ -5989,7 +5133,7 @@
           hero.setAttribute('aria-label', 'Play ' + v0.title);
         }
         // Remaining videos go to side stack
-        row.innerHTML = NS_VIDEOS.slice(1).map((v, i) => `
+        row.innerHTML = videos.slice(1).map((v, i) => `
     <div class="vw-card ns-reveal" onclick="nsOpenVideo('${v.vid}')" role="button" aria-label="Play ${v.title}">
       <div class="vw-card-img-wrap">
         <img class="vw-card-img" src="${v.thumb}" alt="${v.title}" loading="lazy"/>
@@ -6008,13 +5152,41 @@
 
       window.nsOpenVideo = function (vid) {
         const m = document.getElementById('nsVideoModal'), f = document.getElementById('nsVideoFrame');
-        f.src = 'https://www.youtube.com/embed/' + vid + '?autoplay=1&rel=0';
+        let native = document.getElementById('nsVideoNative');
+        if (!native) {
+          native = document.createElement('video');
+          native.id = 'nsVideoNative';
+          native.controls = true;
+          native.playsInline = true;
+          native.style.cssText = 'display:none;width:100%;height:100%;object-fit:contain;background:#000;';
+          f.parentNode.insertBefore(native, f);
+        }
+        if (/\.mp4(\?|$)/i.test(vid)) {
+          f.src = '';
+          f.style.display = 'none';
+          native.src = vid;
+          native.style.display = 'block';
+          native.play().catch(() => {});
+        } else {
+          native.pause();
+          native.removeAttribute('src');
+          native.style.display = 'none';
+          f.style.display = 'block';
+          f.src = 'https://www.youtube.com/embed/' + vid + '?autoplay=1&rel=0';
+        }
         m.style.display = 'flex';
         document.body.style.overflow = 'hidden';
       };
 
       window.nsCloseVideo = function () {
+        const native = document.getElementById('nsVideoNative');
+        if (native) {
+          native.pause();
+          native.removeAttribute('src');
+          native.style.display = 'none';
+        }
         document.getElementById('nsVideoFrame').src = '';
+        document.getElementById('nsVideoFrame').style.display = 'block';
         document.getElementById('nsVideoModal').style.display = 'none';
         document.body.style.overflow = '';
       };
@@ -6075,9 +5247,40 @@
           ],
         };
 
-        // Pick pool by current product category, fallback to Rice Varieties
-        const cat = (window.currentProduct && window.currentProduct.category) || '';
-        const pool = GALLERY_BY_CAT[cat] || GALLERY_BY_CAT['Rice Varieties'];
+        const p = nsProduct();
+        const manual = nsManualList('fromTheirKitchens');
+        let pool;
+        if (manual) {
+          pool = manual.map((item, i) => ({
+            src: item.src || item.image || item.thumb || nsProductImages(p)[i % nsProductImages(p).length],
+            caption: item.caption || item.title || `${p?.name || 'Nansei Organics'} kitchen photo`,
+            author: item.author || item.by || `@nansei_home_${i + 1}`
+          }));
+        } else {
+          // Pick pool by current product category and rewrite it around the active product ID.
+          const cat = (p && p.category) || 'Rice Varieties';
+          const basePool = GALLERY_BY_CAT[cat] || GALLERY_BY_CAT['Rice Varieties'];
+          const imgs = p ? nsProductImages(p) : [];
+          const topics = p ? nsCategoryTopics(p) : null;
+          const kitchenIdeas = topics ? topics.kitchen : [];
+          pool = basePool.map((item, i) => {
+            const idea = kitchenIdeas[i % Math.max(kitchenIdeas.length, 1)] || 'home kitchen ritual';
+            const productName = p ? p.name : 'Nansei Organics';
+            const sourceImage = imgs[i] || imgs[i % Math.max(imgs.length, 1)] || item.src;
+            return {
+              src: i < imgs.length ? sourceImage : item.src,
+              caption: `${productName} in a ${idea.toLowerCase()} - shared by a Nansei customer.`,
+              author: item.author || `@nansei_home_${(i + 1)}`
+            };
+          });
+        }
+
+        nsSetVisible('nsGallery', pool.length > 0);
+        if (!pool.length) {
+          g.innerHTML = '';
+          window._currentGalleryPool = [];
+          return;
+        }
 
         g.innerHTML = pool.map((item, i) => `
     <div class="gallery-item ns-reveal ns-d${Math.min(i + 1, 5)}" onclick="nsOpenLightbox(${i})" role="button" aria-label="View photo by ${item.author}" tabindex="0">
@@ -6154,10 +5357,10 @@
 
       /* --- RELATED PRODUCTS --------------------------------- */
       const NS_RELATED = [
-        { name: 'Barnyard Millet', price: '?229', orig: '?319', img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&auto=format&fit=crop', badge: 'Bestseller' },
-        { name: 'Little Millet Flour', price: '?219', orig: '?299', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&auto=format&fit=crop', badge: 'New Harvest' },
-        { name: 'Organic Moringa', price: '?349', orig: '?499', img: 'https://images.unsplash.com/photo-1515543904379-3d757abe3d12?w=300&auto=format&fit=crop', badge: 'Lab Tested' },
-        { name: 'Turmeric Powder', price: '?189', orig: '?249', img: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&auto=format&fit=crop', badge: 'Pure Origin' },
+        { name: 'Barnyard Millet', price: '₹229', orig: '₹319', img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&auto=format&fit=crop', badge: 'Bestseller' },
+        { name: 'Little Millet Flour', price: '₹219', orig: '₹299', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&auto=format&fit=crop', badge: 'New Harvest' },
+        { name: 'Organic Moringa', price: '₹349', orig: '₹499', img: 'https://images.unsplash.com/photo-1515543904379-3d757abe3d12?w=300&auto=format&fit=crop', badge: 'Lab Tested' },
+        { name: 'Turmeric Powder', price: '₹189', orig: '₹249', img: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&auto=format&fit=crop', badge: 'Pure Origin' },
       ];
 
       function nsRenderRelated() {
@@ -6217,7 +5420,18 @@
         nsRenderReviews();
         nsRenderRelated();
         nsObserve();
+        window.nansaiApplyIcons?.(document.body);
       }
+
+      window.nsRefreshProductExperience = function () {
+        nsRenderStories();
+        nsRenderStoryBar();
+        nsRenderVideos();
+        nsRenderGallery();
+        nsRenderReviews();
+        nsObserve();
+        window.nansaiApplyIcons?.(document.body);
+      };
 
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', nsInit);
       else nsInit();
@@ -6435,7 +5649,7 @@
           products. Trusted by farmers everywhere.</p>
         <div class="flex gap-3">
           <a href="#"
-            class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">??</a>
+            class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">[[icon:instagram]]</a>
           <a href="#"
             class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">f</a>
           <a href="#"
@@ -6508,7 +5722,30 @@
         nutrients: [{ label: "Energy", value: "~350 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "70–75 g", per: "per 100g" }, { label: "Dietary Fiber", value: "4–6 g", per: "per 100g" }, { label: "Protein", value: "7–9 g", per: "per 100g" }, { label: "Fat", value: "1–2 g", per: "per 100g" }, { label: "Iron", value: "2–3 mg", per: "per 100g" }, { label: "Calcium", value: "20–30 mg", per: "per 100g" }, { label: "Magnesium", value: "60–80 mg", per: "per 100g" }],
         howToUse: ["Soak rice for 6–8 hours before cooking for best results.", "Use 1:2.5 ratio of rice to water for perfect texture.", "Ideal for Karunguruvai rice kanji (porridge) — very popular for health.", "Suitable for daily meals, sambar rice and traditional recipes.", "Can be used in Karunguruvai rice recipe in Tamil for authentic cooking."],
         specs: { "Net Weight": "1 kg", "Origin": "Tamil Nadu, India", "Shelf Life": "12 months", "Type": "Heritage Short Grain", "Processing": "Hand-pounded", "Certification": "FSSAI" },
-        reviewData: [{ name: "Priya S.", rating: 5, text: "Authentic taste! Reminds me of my grandmother's cooking. The aroma while cooking is wonderful.", date: "Feb 2026", verified: true }, { name: "Ramesh K.", rating: 5, text: "Best heritage rice I've found online. Cooks perfectly and very nutritious.", date: "Jan 2026", verified: true }]
+        reviewData: [{ name: "Priya S.", rating: 5, text: "Authentic taste! Reminds me of my grandmother's cooking. The aroma while cooking is wonderful.", date: "Feb 2026", verified: true }, { name: "Ramesh K.", rating: 5, text: "Best heritage rice I've found online. Cooks perfectly and very nutritious.", date: "Jan 2026", verified: true }],
+        experience: {
+          stories: [
+            { emoji: "[[icon:leaf]]", title: "Why Karunguruvai Rice", body: "Karunguruvai is one of Tamil Nadu's oldest medicinal rice varieties, grown pesticide-free in the Cauvery delta and stone-milled to preserve its natural dark hue and nutrients.", cta: "Our Story", img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&auto=format&fit=crop" },
+            { emoji: "[[icon:utensils]]", title: "The Kanji Ritual", body: "Soak overnight, simmer slowly and serve with a drizzle of ghee — the traditional Karunguruvai kanji is a morning ritual passed down through Tamil families for generations.", cta: "How To Cook", img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&auto=format&fit=crop" },
+            { emoji: "[[icon:shield-check]]", title: "Zero Chemicals", body: "Every grain is sourced from NPOP-certified organic farms. No synthetic pesticides, no artificial polish — just pure heritage rice as nature intended.", cta: "Certifications", img: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&auto=format&fit=crop" }
+          ],
+          reels: [
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+          ],
+          watchLearn: [
+            { title: "How to cook Karunguruvai kanji", tag: "Watch & Learn", dur: "2:10", thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop", video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4" },
+            { title: "Farm harvest — Karunguruvai", tag: "Farm Direct", dur: "1:45", thumb: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=700&auto=format&fit=crop", video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4" },
+            { title: "Traditional sambar rice recipe", tag: "Kitchen Guide", dur: "1:58", thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop", video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4" }
+          ],
+          fromTheirKitchens: [
+            { src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=500&auto=format&fit=crop", caption: "Karunguruvai kanji served with a drizzle of ghee.", author: "@heritage_kitchen" },
+            { src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop", caption: "Daily sambar rice made with Karunguruvai.", author: "@amma_cooks" },
+            { src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=500&auto=format&fit=crop", caption: "Fresh harvest from our partner farms.", author: "@nansai_farm" },
+            { src: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500&auto=format&fit=crop", caption: "Organic paddy fields — pesticide-free since 2014.", author: "@organic_roots" }
+          ]
+        }
       },
 
       {
@@ -6523,6 +5760,81 @@
         benefits: [{ icon: "[[icon:heart]]", title: "Heart Health", desc: "Supports heart health and reduces bad cholesterol levels." }, { icon: "[[icon:scale]]", title: "Weight Management", desc: "Helps in digestion and keeps you full longer, aiding weight management." }, { icon: "[[icon:chart-no-axes-column-increasing]]", title: "Diabetes Control", desc: "Maintains stable blood sugar levels with low glycemic properties." }, { icon: "[[icon:cherry]]", title: "Anthocyanin Rich", desc: "Powerful antioxidants that fight inflammation and oxidative stress." }, { icon: "[[icon:dumbbell]]", title: "High in Iron", desc: "Excellent source of plant-based iron, prevents anemia." }, { icon: "[[icon:circle-check]]", title: "Gluten-Free", desc: "Naturally gluten-free grain, safe for sensitive individuals." }],
         nutrients: [{ label: "Energy", value: "350–360 kcal", per: "per 100g" }, { label: "Protein", value: "7.5–9 g", per: "per 100g" }, { label: "Carbohydrates", value: "72–78 g", per: "per 100g" }, { label: "Dietary Fiber", value: "3–5 g", per: "per 100g" }, { label: "Fat", value: "2–3.5 g", per: "per 100g" }, { label: "Iron", value: "1.2–5 mg", per: "per 100g" }, { label: "Calcium", value: "~50 mg", per: "per 100g" }, { label: "Magnesium", value: "88–160 mg", per: "per 100g" }],
         howToUse: ["Soak Karuppu Kavuni rice overnight (8–10 hours) for best results.", "Use 1:3 ratio of rice to water — it needs more water than regular rice.", "Pressure cook for 4–5 whistles or cook on low flame for 35–40 minutes.", "Ideal for Kavuni Arisi Payasam — soak overnight, cook with coconut milk and jaggery.", "Can be used for daily meals, kanji (porridge) and traditional sweet recipes.", "Store in an airtight container in a cool, dry place."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Black Kavuni Rice",
+              body: "Karuppu Kavuni is a deep-purple heritage rice prized for its anthocyanin-rich bran and naturally chewy texture.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Slow-cooked Kavuni Payasam",
+              body: "Soak overnight, cook gently, and finish with coconut milk and jaggery for the classic Chettinad-style dessert.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Whole-grain colour, no polish",
+              body: "The rich colour comes from the grain itself. We keep the bran intact and avoid artificial colour, polish, or shortcuts.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "How to cook Karuppu Kavuni rice",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            },
+            {
+              title: "Traditional kavuni arisi payasam",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            },
+            {
+              title: "Black Kavuni Rice storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Kavuni payasam finished with coconut milk.",
+              author: "@nansei_home_02_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              caption: "Black rice bowl with banana and jaggery.",
+              author: "@nansei_home_02_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              caption: "Overnight-soaked Kavuni ready for slow cooking.",
+              author: "@nansei_home_02_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Festive dessert made with whole-grain black rice.",
+              author: "@nansei_home_02_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Kavitha R.", rating: 5, text: "Made kavuni arisi payasam — absolutely divine! The color and taste are incredible.", date: "Feb 2026", verified: true }, { name: "Senthil M.", rating: 5, text: "Authentic black kavuni. Hard to find this quality elsewhere.", date: "Jan 2026", verified: true }]
       },
 
@@ -6538,6 +5850,81 @@
         benefits: [{ icon: "[[icon:zap]]", title: "Easy to Digest", desc: "Light on stomach, ideal for elderly, children and all age groups." }, { icon: "[[icon:leaf]]", title: "Rich in Minerals", desc: "Contains zinc, magnesium and phosphorus for immunity and bone health." }, { icon: "[[icon:heart]]", title: "Moderate Fiber", desc: "Supports healthy bowel movement and gut health." }, { icon: "[[icon:heart]]", title: "Low Fat", desc: "Heart-healthy grain option for daily consumption." }, { icon: "[[icon:circle-check]]", title: "Gluten-Free", desc: "Safe for gluten-sensitive individuals and all dietary needs." }, { icon: "[[icon:battery-full]]", title: "Natural Energy", desc: "Complex carbs provide sustained energy throughout the day." }],
         nutrients: [{ label: "Energy", value: "~340 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "72–76 g", per: "per 100g" }, { label: "Dietary Fiber", value: "2–4 g", per: "per 100g" }, { label: "Protein", value: "6–8 g", per: "per 100g" }, { label: "Fat", value: "0.5–1 g", per: "per 100g" }, { label: "Zinc", value: "1–2 mg", per: "per 100g" }, { label: "Magnesium", value: "40–60 mg", per: "per 100g" }, { label: "Phosphorus", value: "100–130 mg", per: "per 100g" }],
         howToUse: ["Rinse rice 2–3 times before cooking.", "Use 1:2 ratio of rice to water — cooks faster than other heritage varieties.", "Cook on medium heat for 15–20 minutes (60-day rice cooks quickly).", "Suitable for daily meals — rice, sambar, rasam and curd rice.", "Ideal for kanji (porridge) — especially good for elderly and children.", "Store in an airtight container in a cool, dry place."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Arubatham Kuruvai",
+              body: "This 60-day heritage rice is valued for quick cooking, a light bite, and everyday comfort meals.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Daily sambar rice staple",
+              body: "Rinse, cook with a simple 1:2 water ratio, and pair with sambar, rasam, or curd rice for a soft daily meal.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Short-season heritage grain",
+              body: "Small-batch sourcing keeps the grain fresh and naturally aromatic without heavy processing.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4",
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Quick cooking Arubatham Kuruvai",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            },
+            {
+              title: "Light kanji for children and elders",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            },
+            {
+              title: "Arubatham Kuruvai storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Soft daily rice served with sambar.",
+              author: "@nansei_home_03_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              caption: "Light kanji made for breakfast.",
+              author: "@nansei_home_03_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              caption: "Curd rice bowl using short-duration rice.",
+              author: "@nansei_home_03_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Simple family lunch with Arubatham Kuruvai.",
+              author: "@nansei_home_03_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Meena T.", rating: 5, text: "Very light rice, perfect for daily cooking. My family loves it.", date: "Jan 2026", verified: true }]
       },
 
@@ -6553,6 +5940,81 @@
         benefits: [{ icon: "[[icon:flower-2]]", title: "Women's Health", desc: "Aids irregular periods, improves reproductive health and helps with hormonal imbalance." }, { icon: "[[icon:baby]]", title: "Pregnancy & Lactation", desc: "Supports healthy pregnancy, smooth delivery and increases milk secretion for nursing mothers." }, { icon: "[[icon:chart-no-axes-column-increasing]]", title: "Diabetic Friendly", desc: "Low glycemic index (41–46) and high fiber helps manage diabetes and promotes satiety." }, { icon: "[[icon:sparkles]]", title: "Bone & Skin Health", desc: "Antioxidants improve skin and hair health; magnesium strengthens bones." }, { icon: "[[icon:dumbbell]]", title: "High Iron Content", desc: "Rich in iron at 6.60 mg per 100g — helps prevent anemia." }, { icon: "[[icon:circle-check]]", title: "Gluten-Free", desc: "Naturally gluten-free, suitable for all age groups." }],
         nutrients: [{ label: "Iron", value: "6.60 mg", per: "per 100g" }, { label: "Protein", value: "~11.74 g", per: "per 100g" }, { label: "Dietary Fiber", value: "4.3–15 g", per: "per 100g" }, { label: "Glycemic Index", value: "41–46 (Low)", per: "per serving" }],
         howToUse: ["Soak Poongar rice for 6–8 hours before cooking for best results.", "Use 1:2.5 ratio of rice to water.", "Cook on medium-low heat for 25–30 minutes or pressure cook for 3 whistles.", "Ideal for Poongar rice kanji (porridge) — especially recommended for women's health.", "Suitable for daily meals, sambar rice and traditional South Indian recipes.", "Postpartum: prepare kanji with ghee and rock sugar for nursing mothers."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Poongar Rice",
+              body: "Poongar is a traditional pinkish-red rice known in Tamil homes for fibre, minerals, and women's wellness meals.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Women's wellness kanji",
+              body: "Soak well and cook into a gentle kanji or soft rice bowl for a mineral-rich meal that feels rooted and familiar.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Naturally red, never polished",
+              body: "Its pink-red shade is protected by minimal milling, keeping the bran layer and natural character intact.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4",
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "How to cook Poongar rice",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            },
+            {
+              title: "Poongar kanji and curd rice",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            },
+            {
+              title: "Poongar Rice storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Poongar kanji served warm.",
+              author: "@nansei_home_04_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              caption: "Pink-red rice with vegetable kootu.",
+              author: "@nansei_home_04_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              caption: "Women's wellness breakfast bowl.",
+              author: "@nansei_home_04_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Hand-pounded Poongar stored in a pantry jar.",
+              author: "@nansei_home_04_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Lakshmi P.", rating: 5, text: "Excellent quality Poongar rice. The pinkish color is beautiful and it tastes wonderful.", date: "Feb 2026", verified: true }]
       },
 
@@ -6568,6 +6030,81 @@
         benefits: [{ icon: "[[icon:dumbbell]]", title: "Stamina Booster", desc: "Traditionally known to enhance physical strength and endurance." }, { icon: "[[icon:circle]]", title: "High Iron", desc: "Rich source of plant-based iron — helps prevent anemia and fatigue." }, { icon: "[[icon:heart]]", title: "Fiber Rich", desc: "Excellent dietary fiber content supports digestion and keeps you full." }, { icon: "[[icon:sparkles]]", title: "Antioxidants", desc: "Natural pigments with protective anti-inflammatory properties." }, { icon: "[[icon:chart-no-axes-column-increasing]]", title: "Low Glycemic", desc: "Slower energy release than white rice — suitable for diabetic diets." }, { icon: "[[icon:circle-check]]", title: "Gluten-Free", desc: "Naturally gluten-free grain suitable for all age groups." }],
         nutrients: [{ label: "Energy", value: "~350 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "70–75 g", per: "per 100g" }, { label: "Dietary Fiber", value: "4–6 g", per: "per 100g" }, { label: "Protein", value: "8–11 g", per: "per 100g" }, { label: "Fat", value: "1.5–3 g", per: "per 100g" }, { label: "Iron", value: "3–5 mg", per: "per 100g" }, { label: "Calcium", value: "20–40 mg", per: "per 100g" }, { label: "Magnesium", value: "60–90 mg", per: "per 100g" }],
         howToUse: ["Soak Mappillai Samba rice for 1 hour before cooking.", "Use 1:2.5 ratio of rice to water.", "Cook on medium-low heat for 30–35 minutes.", "Pairs beautifully with coconut milk curries and traditional gravies.", "Excellent as a simple pulao with ginger and turmeric.", "Can be used for kanji (porridge) for maximum health benefits."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Mappillai Samba",
+              body: "Mappillai Samba is a bold red heritage rice traditionally associated with stamina, strength, and festive meals.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Energy-rich lunch plate",
+              body: "Cook after a long soak and serve with kuzhambu or greens for a satisfying meal with a hearty texture.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Strong grain, slow milled",
+              body: "The grain is processed gently so its bran, rustic aroma, and signature red colour remain present.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Cooking Mappillai Samba rice",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            },
+            {
+              title: "Hearty red rice lunch plate",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            },
+            {
+              title: "Mappillai Samba storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Mappillai Samba lunch with greens.",
+              author: "@nansei_home_05_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              caption: "Red rice kanji after morning soaking.",
+              author: "@nansei_home_05_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              caption: "Rustic rice bowl with kuzhambu.",
+              author: "@nansei_home_05_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Heritage grain ready for weekly meal prep.",
+              author: "@nansei_home_05_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Arjun V.", rating: 5, text: "Amazing rice! Noticed improved energy levels. Authentic Mappillai Samba.", date: "Feb 2026", verified: true }]
       },
 
@@ -6583,6 +6120,81 @@
         benefits: [{ icon: "[[icon:zap]]", title: "Easy Digestion", desc: "Light on the stomach and suitable for daily meals for all age groups." }, { icon: "[[icon:heart]]", title: "Supports Gut Health", desc: "Helps maintain smooth digestion and healthy bowel movement." }, { icon: "[[icon:battery-full]]", title: "Energy Booster", desc: "Provides steady energy throughout the day with complex carbohydrates." }, { icon: "[[icon:wheat]]", title: "Traditional Nutrition", desc: "Retains natural nutrients from traditional farming methods." }, { icon: "[[icon:circle-check]]", title: "Balanced Diet Support", desc: "Suitable for all age groups as part of a balanced daily diet." }, { icon: "[[icon:flower-2]]", title: "Natural Aroma", desc: "Unique floral fragrance enhances the taste of every meal." }],
         nutrients: [{ label: "Energy", value: "~340–360 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "75–78 g", per: "per 100g" }, { label: "Dietary Fiber", value: "2–4 g", per: "per 100g" }, { label: "Protein", value: "6–8 g", per: "per 100g" }, { label: "Fat", value: "0.5–1 g", per: "per 100g" }, { label: "Iron", value: "1–2 mg", per: "per 100g" }, { label: "Calcium", value: "10–20 mg", per: "per 100g" }, { label: "Magnesium", value: "40–60 mg", per: "per 100g" }],
         howToUse: ["Rinse rice 2–3 times before cooking.", "Use 1:2 ratio of rice to water for perfect texture.", "Cook on medium heat for 20–25 minutes.", "Suitable for daily meals — rice, sambar, rasam and curd rice.", "Can be used for kanji (porridge) and idli/dosa batter.", "The natural floral aroma is best preserved when cooked in an open pot."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Iluppai Poo Samba",
+              body: "Iluppai Poo Samba is loved for its distinctive aroma, heritage value, and soft cooked texture.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Aromatic rice for special meals",
+              body: "Soak, cook slowly, and serve with mild curries so the grain's natural fragrance stays in focus.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Fragrance from the grain",
+              body: "No flavouring is added. The aroma comes from careful sourcing, drying, and minimal handling.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Cook aromatic Iluppai Poo Samba",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            },
+            {
+              title: "Traditional rice with mild curry",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            },
+            {
+              title: "Iluppai Poo Samba storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Aromatic rice served with coconut curry.",
+              author: "@nansei_home_06_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              caption: "Slow-cooked Samba rice for dinner.",
+              author: "@nansei_home_06_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              caption: "Soft rice bowl with ghee.",
+              author: "@nansei_home_06_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Heritage grain stored after sun drying.",
+              author: "@nansei_home_06_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Vijaya R.", rating: 5, text: "The aroma while cooking is incredible! Very unique and nutritious rice.", date: "Jan 2026", verified: true }]
       },
 
@@ -6598,6 +6210,81 @@
         benefits: [{ icon: "[[icon:zap]]", title: "Easy Digestion", desc: "Light on the stomach and suitable for daily meals for all age groups." }, { icon: "[[icon:heart]]", title: "Gut Health", desc: "Supports smooth digestion and healthy metabolism." }, { icon: "[[icon:battery-full]]", title: "Steady Energy", desc: "Provides long-lasting energy without heaviness throughout the day." }, { icon: "[[icon:leaf]]", title: "Healthy Alternative", desc: "Better nutritional choice compared to polished white rice." }, { icon: "[[icon:circle-check]]", title: "Balanced Nutrition", desc: "Helps maintain overall health and wellness for the whole family." }, { icon: "[[icon:bone]]", title: "Mineral Rich", desc: "Contains calcium, phosphorus and magnesium for strong bones." }],
         nutrients: [{ label: "Energy", value: "~340–360 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "75–78 g", per: "per 100g" }, { label: "Dietary Fiber", value: "2–4 g", per: "per 100g" }, { label: "Protein", value: "6–8 g", per: "per 100g" }, { label: "Fat", value: "0.5–1 g", per: "per 100g" }, { label: "Iron", value: "1–2 mg", per: "per 100g" }, { label: "Calcium", value: "10–20 mg", per: "per 100g" }, { label: "Magnesium", value: "40–60 mg", per: "per 100g" }],
         howToUse: ["Rinse White Kavuni rice 2–3 times before cooking.", "Use 1:2 ratio of rice to water.", "Cook on medium heat for 20–25 minutes until soft and sticky.", "Perfect for sweet pongal — cook with moong dal, jaggery and ghee.", "Ideal for payasam (rice pudding) with coconut milk and cardamom.", "Can be used for daily meals and traditional celebration dishes."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Vellai Kavuni",
+              body: "White Kavuni is a sticky heritage rice that works beautifully in sweet pongal, payasam, and festive dishes.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Sweet pongal texture guide",
+              body: "Soak well and cook until glossy for the soft, slightly sticky texture traditional sweets need.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Naturally glutinous texture",
+              body: "The texture comes from the rice variety itself, with no starch additives or polishing agents.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "How to cook White Kavuni",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            },
+            {
+              title: "Sweet pongal with Vellai Kavuni",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            },
+            {
+              title: "Vellai Kavuni storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Sweet pongal made with White Kavuni.",
+              author: "@nansei_home_07_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop",
+              caption: "Sticky rice payasam with jaggery.",
+              author: "@nansei_home_07_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
+              caption: "Festival bowl topped with ghee.",
+              author: "@nansei_home_07_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop",
+              caption: "Soaked Kavuni ready for cooking.",
+              author: "@nansei_home_07_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Deepa S.", rating: 5, text: "Perfect for making sweet pongal. Sticky texture is just right.", date: "Jan 2026", verified: true }]
       },
 
@@ -6613,6 +6300,81 @@
         howToUse: ["Boil 10–15 dried petals in 500ml water for 5 minutes to make rose water.", "Use rose water as a face toner — apply with cotton pad morning and night.", "Add petals to warm bath water for a relaxing aromatic soak.", "Prepare rose milk by soaking petals in warm milk with sugar.", "Use dried petals in face packs mixed with sandalwood powder and rose water.", "Store prepared rose water in the refrigerator for up to 7 days."],
         specs: { "Net Weight": "100 g", "Origin": "Tamil Nadu, India", "Shelf Life": "18 months", "Type": "Sun-dried Petals", "Fragrance": "Strong natural rose", "Certification": "FSSAI", "Properties": "Natural fragrance compounds, mild antioxidants, cooling nature", "Traditional Use": "Rose water, face pack, herbal tea, skincare" },
         nutrition: { "Skin Care": { value: "Panneer rose benefits for skin include hydration, natural glow and toning", icon: "[[icon:flower-2]]" }, "Hair Care": { value: "Helps improve hair strength and scalp health naturally", icon: "[[icon:scissors]]" }, "Cooling Effect": { value: "Natural cooling properties for body and skin, especially in summer", icon: "[[icon:snowflake]]" }, "Face Care": { value: "Panneer rose water for face helps refresh, tone and brighten skin", icon: "[[icon:sparkles]]" }, "Natural Wellness": { value: "Supports overall health through traditional herbal use", icon: "[[icon:leaf]]" }, "Anti-inflammatory": { value: "Mild antioxidants and herbal properties reduce skin inflammation", icon: "[[icon:heart]]" } },
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Paneer Rose",
+              body: "Paneer Rose petals are dried gently to preserve their natural perfume, colour, and cooling character.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Rose milk and rose water",
+              body: "Steep the petals for rose water, blend into rose milk, or sprinkle sparingly over desserts for fragrance.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Petals without perfume oil",
+              body: "The fragrance is naturally floral. No synthetic essence, artificial colour, or heavy sweetener is added.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4",
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Make rose milk from dried petals",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            },
+            {
+              title: "Rose water and dessert garnish",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            },
+            {
+              title: "Paneer Rose storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Rose milk infused with Paneer Rose.",
+              author: "@nansei_home_08_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              caption: "Homemade rose water in a glass bottle.",
+              author: "@nansei_home_08_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              caption: "Dessert garnished with dried petals.",
+              author: "@nansei_home_08_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Cooling summer drink with rose fragrance.",
+              author: "@nansei_home_08_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Ananya M.", rating: 5, text: "Beautiful fragrance! I use it for rose milk and the taste is heavenly.", date: "Feb 2026", verified: true }, { name: "Preethi K.", rating: 5, text: "Pure and fragrant. Makes the best rose water for my skin.", date: "Jan 2026", verified: true }]
       },
 
@@ -6628,6 +6390,81 @@
         howToUse: ["Boil 5–10 dried hibiscus flowers in 300ml water for 5 minutes to make hibiscus tea.", "Strain and add honey or jaggery to taste. Serve hot or cold.", "For hair mask: grind dried flowers into powder, mix with coconut oil, apply to scalp for 30 minutes.", "For face pack: mix hibiscus powder with yogurt and apply for 15 minutes.", "Prepare hibiscus sherbet by boiling flowers with sugar and cooling spices.", "Store dried flowers in an airtight container away from moisture."],
         specs: { "Net Weight": "100 g", "Origin": "Tamil Nadu, India", "Shelf Life": "18 months", "Type": "Dried Hibiscus Flowers", "Color": "Deep Red", "Certification": "FSSAI", "Properties": "Rich in antioxidants, natural cooling, herbal compounds for hair & skin, detox support", "Traditional Use": "Hibiscus tea, hair mask, face pack, herbal drinks, detox tea" },
         nutrition: { "Hair Growth Support": { value: "Hibiscus powder helps strengthen hair and reduce hair fall naturally", icon: "[[icon:scissors]]" }, "Skin Care": { value: "Improves skin glow and acts as a natural cleanser and face pack", icon: "[[icon:sparkles]]" }, "Heart Health": { value: "Hibiscus tea supports healthy blood pressure levels", icon: "[[icon:heart]]" }, "Cooling Effect": { value: "Helps reduce body heat naturally, ideal for summer use", icon: "[[icon:snowflake]]" }, "Women's Health": { value: "Hibiscus tea benefits for women include hormonal balance support", icon: "[[icon:flower-2]]" }, "Rich in Antioxidants": { value: "Natural antioxidants support detox and overall wellness", icon: "[[icon:heart]]" } },
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Hibiscus Flower",
+              body: "Dried hibiscus gives a naturally tart, ruby-red infusion rich in colour and refreshing flavour.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Hibiscus sherbet and tea",
+              body: "Steep in hot water for tea or simmer into a syrup for a bright summer sherbet over ice.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Colour from real petals",
+              body: "The deep red colour comes only from hibiscus petals, never from artificial dyes.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4",
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Brew hibiscus tea and sherbet",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            },
+            {
+              title: "Ruby-red summer cooler",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            },
+            {
+              title: "Hibiscus Flower storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Hibiscus tea served chilled.",
+              author: "@nansei_home_09_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              caption: "Ruby sherbet poured over ice.",
+              author: "@nansei_home_09_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              caption: "Petal infusion for natural colour.",
+              author: "@nansei_home_09_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Tangy hibiscus drink with lemon.",
+              author: "@nansei_home_09_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Sridevi M.", rating: 5, text: "Perfect for making hibiscus sherbet. Deep red color and wonderful tart taste.", date: "Feb 2026", verified: true }]
       },
 
@@ -6643,6 +6480,81 @@
         howToUse: ["Boil 5–10 dried Avarampoo flowers in 300ml water for 5–7 minutes.", "Strain and drink as herbal tea — best consumed in the morning on an empty stomach.", "For face pack: grind dried flowers into powder, mix with turmeric and rose water, apply for 15 minutes.", "For hair care: mix Avarampoo powder with coconut oil and apply to scalp.", "Can be combined with other herbs like neem or tulsi for enhanced benefits.", "Store in an airtight container in a cool, dry place."],
         specs: { "Net Weight": "100 g", "Origin": "Tamil Nadu, India", "Shelf Life": "18 months", "Type": "Dried Medicinal Flowers", "Traditional Use": "Siddha Medicine", "Certification": "FSSAI", "Properties": "Natural cooling, antibacterial, anti-inflammatory, herbal detox support", "Usage": "Avarampoo tea, face pack, hair care, herbal drink, traditional Tamil remedies" },
         nutrition: { "Diabetes Support": { value: "Avarampoo tea helps manage blood sugar levels naturally", icon: "[[icon:chart-no-axes-column-increasing]]" }, "Skin Care": { value: "Improves skin glow, reduces acne and cleans pores with natural compounds", icon: "[[icon:sparkles]]" }, "Body Cooling": { value: "Acts as a natural body coolant, especially beneficial in summer", icon: "[[icon:snowflake]]" }, "Hair Health": { value: "Helps reduce dandruff and supports healthy hair growth", icon: "[[icon:scissors]]" }, "Digestive Health": { value: "Improves digestion and supports gut health naturally", icon: "[[icon:heart]]" }, "Herbal Detox": { value: "Antibacterial and anti-inflammatory compounds support body detox", icon: "[[icon:leaf]]" } },
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Aavaram Flower",
+              body: "Aavaram is a traditional Tamil flower used for cooling herbal drinks and gentle daily wellness routines.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Cooling herbal tea",
+              body: "Steep the flowers lightly, strain, and serve warm or chilled as a simple caffeine-free drink.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Sun-dried and sorted",
+              body: "The flowers are dried cleanly and packed without colour, flavour, or preservative additives.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Brew Aavaram flower tea",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            },
+            {
+              title: "Cooling Aavaram summer drink",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            },
+            {
+              title: "Aavaram Flower storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Aavaram tea served in the morning.",
+              author: "@nansei_home_10_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              caption: "Cooling herbal drink with palm candy.",
+              author: "@nansei_home_10_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              caption: "Dried flowers stored for tea.",
+              author: "@nansei_home_10_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Caffeine-free evening wellness brew.",
+              author: "@nansei_home_10_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Dr. Kamala N.", rating: 5, text: "Excellent quality Aavaram flowers. I recommend to my patients for blood sugar management.", date: "Jan 2026", verified: true }]
       },
 
@@ -6658,6 +6570,81 @@
         howToUse: ["Prepare butterfly pea flower tea by boiling 5–8 dried flowers in 250ml water for 3–5 minutes.", "Add lemon juice to change the color from blue to purple — a natural pH reaction.", "Use as natural food color in rice, drinks and desserts.", "Apply as face pack in powder form mixed with rose water for skin glow.", "Use in hair care routines — mix powder with coconut oil for scalp massage.", "Suitable for herbal drinks, detox water and iced teas."],
         specs: { "Net Weight": "50 g", "Origin": "Tamil Nadu, India", "Shelf Life": "18 months", "Type": "Dried Butterfly Pea", "Color": "Deep Blue", "Certification": "FSSAI", "Properties": "Rich in antioxidants, natural blue anthocyanins, cooling and detox properties", "Usage": "Butterfly pea flower tea, natural food color, face pack, hair care, herbal detox drinks" },
         nutrition: { "Memory Boost": { value: "Supports brain function and focus with natural anthocyanin compounds", icon: "[[icon:brain]]" }, "Skin Care": { value: "Improves skin glow and reduces dullness with antioxidant properties", icon: "[[icon:sparkles]]" }, "Hair Health": { value: "Helps in hair growth and scalp care naturally", icon: "[[icon:scissors]]" }, "Cooling Effect": { value: "Reduces body heat naturally, ideal for summer herbal drinks", icon: "[[icon:snowflake]]" }, "Weight Management": { value: "Supports healthy metabolism and weight management", icon: "[[icon:scale]]" }, "Anthocyanin Rich": { value: "Powerful antioxidants with anti-aging and anti-inflammatory properties", icon: "[[icon:heart]]" } },
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Butterfly Pea Flower",
+              body: "Butterfly Pea is prized for its vivid blue infusion and natural colour-changing reaction with lemon.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Blue lemonade moment",
+              body: "Steep the petals, chill the tea, and add lemon to watch the blue turn purple in the glass.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Natural colour extraction",
+              body: "The blue comes from real Sangu Poo petals. No synthetic colour, no added flavour, and no preservatives.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Make colour-changing blue tea",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            },
+            {
+              title: "Butterfly pea lemonade",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            },
+            {
+              title: "Butterfly Pea Flower storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Blue tea changing colour with lemon.",
+              author: "@nansei_home_11_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=700&auto=format&fit=crop",
+              caption: "Butterfly pea lemonade over ice.",
+              author: "@nansei_home_11_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=700&auto=format&fit=crop",
+              caption: "Natural blue dessert garnish.",
+              author: "@nansei_home_11_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1490750967868-88df5691cc47?w=700&auto=format&fit=crop",
+              caption: "Evening herbal tea with Sangu Poo.",
+              author: "@nansei_home_11_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Nisha R.", rating: 5, text: "The color change is magical! Makes the most beautiful blue lemonade.", date: "Feb 2026", verified: true }, { name: "Chef Arun B.", rating: 5, text: "Using this in my restaurant for color-changing cocktails. Customers love it!", date: "Jan 2026", verified: true }]
       },
 
@@ -6673,6 +6660,81 @@
         benefits: [{ icon: "[[icon:flower]]", title: "Real Rose Petals", desc: "Made from genuine Paneer Rose petals — not artificial essence." }, { icon: "[[icon:sparkles]]", title: "Antioxidant Rich", desc: "Rose petals contain natural antioxidants that support skin health." }, { icon: "[[icon:snowflake]]", title: "Cooling Effect", desc: "Natural body-cooling properties — ideal for summer." }, { icon: "[[icon:heart]]", title: "Digestive Aid", desc: "Rose and cardamom combination aids digestion naturally." }, { icon: "[[icon:smile]]", title: "Mood Lifting", desc: "Natural aromatherapy benefits uplift mood and reduce stress." }, { icon: "[[icon:circle-check]]", title: "No Artificial Colors", desc: "Pure natural pink color from real rose petals — no chemicals." }],
         nutrients: [{ label: "Rose Petals", value: "Real Paneer Rose", per: "per serving" }, { label: "Sweetener", value: "Natural cane sugar", per: "per serving" }, { label: "Antioxidants", value: "Present", per: "per serving" }, { label: "Flavonoids", value: "Present", per: "per serving" }],
         howToUse: ["Mix 2 tablespoons of rose milk mix in 200ml cold milk.", "Stir well until fully dissolved.", "Add ice cubes and serve immediately for best taste.", "Can also be served warm — mix in warm milk and stir.", "Add a pinch of cardamom for extra flavor.", "Store the mix in a cool, dry place away from moisture."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Real Rose Milk",
+              body: "This rose milk mix is built around real rose flavour instead of artificial essence-heavy shortcuts.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Cold rose milk in minutes",
+              body: "Stir into chilled milk, add ice, and serve as a cooling drink for children, guests, or summer afternoons.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Real floral flavour",
+              body: "The taste is clean and petal-forward, with no artificial colour dominating the glass.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Mix perfect real rose milk",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            },
+            {
+              title: "Iced rose milk and dessert pour",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            },
+            {
+              title: "Real Rose Milk storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop",
+              caption: "Cold rose milk served with ice.",
+              author: "@nansei_home_12_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop",
+              caption: "Kids' evening drink with real rose flavour.",
+              author: "@nansei_home_12_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop",
+              caption: "Rose milk poured over falooda.",
+              author: "@nansei_home_12_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop",
+              caption: "Warm rose milk with cardamom.",
+              author: "@nansei_home_12_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Kavitha S.", rating: 5, text: "Finally a rose milk that tastes like the real thing! No artificial taste at all.", date: "Feb 2026", verified: true }, { name: "Priya M.", rating: 5, text: "My kids love this. So happy it's made from real roses.", date: "Jan 2026", verified: true }]
       },
 
@@ -6688,6 +6750,81 @@
         benefits: [{ icon: "[[icon:circle]]", title: "Vitamin C Rich", desc: "High natural vitamin C content supports immunity and skin health." }, { icon: "[[icon:snowflake]]", title: "Cooling Effect", desc: "Traditional body-cooling summer drink — reduces body heat naturally." }, { icon: "[[icon:heart]]", title: "Heart Health", desc: "Anthocyanins support cardiovascular health and blood pressure." }, { icon: "[[icon:sparkles]]", title: "Rich in Antioxidants", desc: "Natural antioxidants fight free radicals and support overall wellness." }, { icon: "[[icon:heart]]", title: "Digestive Aid", desc: "Organic acids in hibiscus aid digestion and gut health." }, { icon: "[[icon:circle-check]]", title: "No Artificial Color", desc: "Natural deep red color from real hibiscus — no artificial additives." }],
         nutrients: [{ label: "Vitamin C", value: "25–30 mg", per: "per serving" }, { label: "Anthocyanins", value: "Rich", per: "per serving" }, { label: "Organic Acids", value: "Present", per: "per serving" }, { label: "Antioxidants", value: "High", per: "per serving" }],
         howToUse: ["Mix 2–3 tablespoons of sherbet mix in 200ml cold water.", "Stir well until fully dissolved and serve over ice.", "Can also be mixed with cold milk for a creamy version.", "Add black salt and roasted cumin for a traditional taste.", "Dilute more or less according to your taste preference.", "Store the mix in a cool, dry place. Refrigerate after opening."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Hibiscus Sherbet",
+              body: "A tangy, naturally red sherbet mix made for quick summer coolers and family-friendly refreshment.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Instant summer cooler",
+              body: "Stir into cold water, add ice, and finish with lemon or black salt for a bright traditional drink.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "No artificial red",
+              body: "The colour and tartness come from hibiscus, keeping the drink vivid without synthetic dyes.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4",
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Make hibiscus sherbet",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel4.mp4"
+            },
+            {
+              title: "Chilled hibiscus cooler",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            },
+            {
+              title: "Hibiscus Sherbet storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop",
+              caption: "Hibiscus sherbet poured over ice.",
+              author: "@nansei_home_13_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop",
+              caption: "Tangy red summer drink with lemon.",
+              author: "@nansei_home_13_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop",
+              caption: "Family cooler served in tall glasses.",
+              author: "@nansei_home_13_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&auto=format&fit=crop",
+              caption: "Sherbet mixed with chilled water.",
+              author: "@nansei_home_13_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Radha V.", rating: 5, text: "Perfect summer drink! The natural red color is beautiful and the taste is amazing.", date: "Feb 2026", verified: true }]
       },
 
@@ -6703,6 +6840,81 @@
         benefits: [{ icon: "[[icon:zap]]", title: "Easy to Digest", desc: "Hand-pounding preserves natural digestive enzymes for better absorption." }, { icon: "[[icon:circle-check]]", title: "Gluten-Free", desc: "100% rice-based, naturally gluten-free — safe for all dietary needs." }, { icon: "[[icon:heart]]", title: "Natural Fiber", desc: "Retains natural rice bran fiber for healthy digestion." }, { icon: "[[icon:heart]]", title: "Low Fat", desc: "Naturally low in fat — a heart-healthy flour choice." }, { icon: "[[icon:battery-full]]", title: "Sustained Energy", desc: "Complex carbs provide long-lasting energy without heaviness." }, { icon: "[[icon:leaf]]", title: "Mineral Rich", desc: "Contains iron, zinc and magnesium preserved by traditional processing." }],
         nutrients: [{ label: "Energy", value: "~350 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "78–82 g", per: "per 100g" }, { label: "Protein", value: "6–8 g", per: "per 100g" }, { label: "Fat", value: "0.5–1 g", per: "per 100g" }, { label: "Dietary Fiber", value: "1–3 g", per: "per 100g" }, { label: "Iron", value: "1–2 mg", per: "per 100g" }, { label: "Zinc", value: "1–1.5 mg", per: "per 100g" }, { label: "Magnesium", value: "25–40 mg", per: "per 100g" }],
         howToUse: ["Mix 1 cup flour with 1 cup boiling water and ½ tsp salt.", "Mix immediately with a wooden spoon until a smooth dough forms.", "Let rest for 5 minutes, then press through idiyappam press onto greased plates.", "Steam for 8–10 minutes until firm and glossy.", "Serve immediately with coconut milk, vegetable stew or chutney.", "Store unused flour in an airtight container — use within 6 months."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Idiyappam Flour",
+              body: "Hand-pounded rice flour gives idiyappam a softer, silkier bite than ordinary machine-milled flour.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Soft idiyappam method",
+              body: "Add boiling water, knead while warm, press, and steam for delicate strands that hold their shape.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Traditional rice flour texture",
+              body: "The flour is prepared for softness and clean rice aroma without conditioners or blending fillers.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4",
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Make soft idiyappam dough",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%205.mp4"
+            },
+            {
+              title: "Steamed idiyappam breakfast",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            },
+            {
+              title: "Idiyappam Flour storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
+              caption: "Fresh idiyappam with coconut milk.",
+              author: "@nansei_home_14_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop",
+              caption: "Warm dough ready for the press.",
+              author: "@nansei_home_14_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop",
+              caption: "Steamed string hoppers for breakfast.",
+              author: "@nansei_home_14_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
+              caption: "Rice flour stored for weekend tiffin.",
+              author: "@nansei_home_14_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Meena S.", rating: 5, text: "The idiyappam comes out so soft and silky! Much better than store-bought flour.", date: "Feb 2026", verified: true }, { name: "Lakshmi R.", rating: 5, text: "Authentic hand-pounded quality. My family can taste the difference.", date: "Jan 2026", verified: true }]
       },
 
@@ -6718,6 +6930,81 @@
         benefits: [{ icon: "[[icon:dumbbell]]", title: "High Protein", desc: "Black urad dal provides ~25g protein per 100g — excellent plant-based protein." }, { icon: "[[icon:circle]]", title: "Iron Rich", desc: "Excellent source of plant-based iron at 7mg per 100g — prevents anemia." }, { icon: "[[icon:brain]]", title: "B-Vitamins", desc: "Rich in B1, B2, B3 for healthy metabolism and energy production." }, { icon: "[[icon:bone]]", title: "Bone Health", desc: "Calcium and phosphorus combination supports strong bones and teeth." }, { icon: "[[icon:battery-full]]", title: "Sustained Energy", desc: "Complex carbs and protein provide energy for 4–5 hours." }, { icon: "[[icon:circle-check]]", title: "Gluten-Free", desc: "Naturally gluten-free health mix — safe for all dietary needs." }],
         nutrients: [{ label: "Protein", value: "~25 g", per: "per 100g" }, { label: "Iron", value: "~7 mg", per: "per 100g" }, { label: "Calcium", value: "138 mg", per: "per 100g" }, { label: "Carbohydrates", value: "58–62 g", per: "per 100g" }, { label: "Dietary Fiber", value: "3–5 g", per: "per 100g" }, { label: "Fat", value: "1.5–3 g", per: "per 100g" }, { label: "Potassium", value: "983 mg", per: "per 100g" }, { label: "Magnesium", value: "267 mg", per: "per 100g" }],
         howToUse: ["Mix 3 tablespoons of health mix powder in 200ml warm milk or water.", "Add jaggery or honey and a pinch of cardamom to taste.", "Stir well and serve immediately as a morning porridge.", "Can be added to dosa or idli batter for extra nutrition.", "Blend into smoothies or milkshakes for a protein boost.", "Optional: add 1 tsp ghee for extra flavor and nutrition."],
+        experience: {
+          stories: [
+            {
+              emoji: "[[icon:leaf]]",
+              title: "Why Black Urad Health Mix",
+              body: "Roasted black urad dal brings plant protein, iron, and a naturally nutty base for daily porridge.",
+              cta: "Product Story",
+              img: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:utensils]]",
+              title: "Morning strength porridge",
+              body: "Cook with milk or water, sweeten lightly with jaggery, and finish with cardamom or ghee.",
+              cta: "Kitchen Ritual",
+              img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop"
+            },
+            {
+              emoji: "[[icon:shield-check]]",
+              title: "Roasted, ground, ready",
+              body: "The mix keeps the focus on black urad dal nutrition without artificial flavours or unnecessary fillers.",
+              cta: "Quality Promise",
+              img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop"
+            }
+          ],
+          reels: [
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+          ],
+          watchLearn: [
+            {
+              title: "Prepare black urad health mix",
+              tag: "Watch & Learn",
+              dur: "2:04",
+              thumb: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4"
+            },
+            {
+              title: "Protein-rich morning porridge",
+              tag: "Kitchen Guide",
+              dur: "1:42",
+              thumb: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4"
+            },
+            {
+              title: "Black Urad Health Mix storage and freshness tips",
+              tag: "Care Tips",
+              dur: "1:18",
+              thumb: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop",
+              video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+            }
+          ],
+          fromTheirKitchens: [
+            {
+              src: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
+              caption: "Black urad porridge with jaggery.",
+              author: "@nansei_home_15_1"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop",
+              caption: "Health mix stirred into warm milk.",
+              author: "@nansei_home_15_2"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop",
+              caption: "Protein dosa batter boosted with urad mix.",
+              author: "@nansei_home_15_3"
+            },
+            {
+              src: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
+              caption: "Breakfast bowl finished with ghee.",
+              author: "@nansei_home_15_4"
+            }
+          ]
+        },
         reviewData: [{ name: "Sunita K.", rating: 5, text: "My children love this as a morning porridge. Very nutritious and filling.", date: "Jan 2026", verified: true }]
       },
 
@@ -6733,9 +7020,59 @@
         benefits: [{ icon: "[[icon:heart]]", title: "High Fiber", desc: "Excellent natural remedy for constipation — both soluble and insoluble fiber." }, { icon: "[[icon:dumbbell]]", title: "Iron Rich", desc: "High iron content helps prevent anemia and boosts energy levels." }, { icon: "[[icon:bone]]", title: "Calcium", desc: "Good source of plant-based calcium for strong bones and teeth." }, { icon: "[[icon:zap]]", title: "Natural Enzymes", desc: "Digestive enzymes support gut health and smooth digestion." }, { icon: "[[icon:sparkles]]", title: "Antioxidants", desc: "Rich in polyphenols and flavonoids that fight inflammation." }, { icon: "[[icon:package]]", title: "Natural Energy", desc: "Natural sugars provide quick energy without artificial additives." }],
         nutrients: [{ label: "Dietary Fiber", value: "9–10 g", per: "per 100g" }, { label: "Iron", value: "2–3 mg", per: "per 100g" }, { label: "Calcium", value: "162 mg", per: "per 100g" }, { label: "Potassium", value: "680 mg", per: "per 100g" }, { label: "Carbohydrates", value: "63–68 g", per: "per 100g" }, { label: "Protein", value: "3–4 g", per: "per 100g" }, { label: "Fat", value: "1–2 g", per: "per 100g" }, { label: "Energy", value: "~249 kcal", per: "per 100g" }],
         howToUse: ["Morning tonic: mix 1 tsp in warm water with lemon and honey.", "Smoothie boost: add 2 tsp to any fruit or vegetable smoothie.", "Porridge: stir into oats or ragi porridge for added fiber.", "Energy balls: mix with dates, nuts and coconut to form energy balls.", "Can be added to milkshakes, yogurt or desserts.", "Start with 1 tsp daily and gradually increase to 2 tsp for best results."],
+        experience: {
+          // Manual controls for this product page.
+          // To hide a section for this product, set its array to [].
+          stories: [
+            { emoji: "[[icon:leaf]]", title: "Why Country Fig Powder", body: "Sun-dried country figs are powdered in small batches to keep their natural fibre, minerals and gentle sweetness intact.", cta: "Fig Story", img: "https://images.unsplash.com/photo-1603052875302-d376b7c0638a?w=600&auto=format&fit=crop" },
+            { emoji: "[[icon:glass-water]]", title: "Morning Digestive Ritual", body: "Mix one teaspoon with warm water, lemon and honey for a simple morning tonic that fits into daily wellness routines.", cta: "How To Use", img: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=600&auto=format&fit=crop" },
+            { emoji: "[[icon:sparkles]]", title: "No Fillers Added", body: "Only dried fig powder goes into the pack. No artificial flavour, no colour, and no unnecessary additives.", cta: "Pure Pack", img: "https://images.unsplash.com/photo-1514995428455-447d4443fa7f?w=600&auto=format&fit=crop" }
+          ],
+          reels: [
+            "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4",
+            "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4"
+          ],
+          watchLearn: [
+            { title: "Country Fig Powder morning tonic", tag: "Watch & Learn", dur: "1:34", thumb: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=700&auto=format&fit=crop", video: "https://ik.imagekit.io/ueorokkbc/images/videos/slide%20video.mp4" },
+            { title: "Add fig powder to smoothies", tag: "Kitchen Guide", dur: "1:12", thumb: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=700&auto=format&fit=crop", video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel2.mp4" },
+            { title: "Make quick fig energy balls", tag: "Recipe", dur: "1:48", thumb: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=700&auto=format&fit=crop", video: "https://ik.imagekit.io/bq9dscs4g/agro%20store/reel%203.mp4" }
+          ],
+          fromTheirKitchens: [
+            { src: "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=500&auto=format&fit=crop", caption: "Country Fig Powder mixed as a warm morning tonic.", author: "@morning_wellness" },
+            { src: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&auto=format&fit=crop", caption: "A spoon of fig powder blended into a fruit smoothie.", author: "@smoothie_home" },
+            { src: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=500&auto=format&fit=crop", caption: "Homemade energy balls with fig powder, dates and nuts.", author: "@healthy_snacks" },
+            { src: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&auto=format&fit=crop", caption: "Curd bowl topped with Country Fig Powder.", author: "@simple_kitchen" }
+          ]
+        },
         reviewData: [{ name: "Dr. Anand R.", rating: 5, text: "Excellent quality fig powder. I recommend to patients with digestive issues.", date: "Feb 2026", verified: true }, { name: "Priya N.", rating: 4, text: "Good quality and very effective for digestion. Will buy again.", date: "Jan 2026", verified: true }]
       },
     ];
+
+    function hydrateProductExperienceReviews(p) {
+      if (!p) return;
+      const existing = Array.isArray(p.reviewData) ? p.reviewData : [];
+      const names = ['Anitha R.', 'Suresh K.', 'Meena P.', 'Harini S.', 'Dinesh V.', 'Revathi M.'];
+      const cities = ['Chennai', 'Madurai', 'Coimbatore', 'Trichy', 'Salem', 'Bengaluru'];
+      const categoryTone = {
+        'Rice Varieties': ['cooks beautifully after soaking', 'has a clean heritage-rice aroma', 'works well for kanji and daily meals'],
+        'Dried Flowers': ['gives a bright natural infusion', 'smells fresh even after drying', 'is lovely for tea and summer drinks'],
+        'Beverages': ['mixes smoothly without artificial taste', 'feels refreshing in summer', 'has a natural flavour my family liked'],
+        'Flour Varieties': ['makes soft breakfast dishes', 'has a proper hand-pounded texture', 'feels lighter than regular flour'],
+        'Other Products': ['is easy to add to a morning routine', 'tastes natural without fillers', 'works well in smoothies and warm water']
+      };
+      const tone = categoryTone[p.category] || categoryTone['Other Products'];
+      const generated = names.map((name, i) => ({
+        name,
+        rating: i === 2 ? 4 : 5,
+        text: `${p.name} ${tone[i % tone.length]}. The pack felt fresh, the quality was consistent, and it matched the product details shown here.`,
+        date: ['Jun 2026', 'May 2026', 'Apr 2026', 'Mar 2026', 'Feb 2026', 'Jan 2026'][i],
+        verified: true,
+        loc: cities[i]
+      }));
+      const seen = new Set(existing.map(r => (r.name || '') + '|' + (r.text || '')));
+      p.reviewData = existing.concat(generated.filter(r => !seen.has(r.name + '|' + r.text))).slice(0, 8);
+    }
 
     /* --- QUANTITY CONFIG --- */
     const QUANTITY_CONFIG_P = {
@@ -6766,8 +7103,11 @@
     function loadProduct() {
       const id = new URLSearchParams(window.location.search).get('id') || '1';
       currentProduct = products.find(p => String(p.id) === String(id)) || products[0];
+      window.currentProduct = currentProduct;
+      hydrateProductExperienceReviews(currentProduct);
       document.title = currentProduct.name + ' | NANSAI';
       try { render(); } catch (e) { console.error('render error', e); }
+      try { window.nsRefreshProductExperience?.(); } catch (e) { console.warn('product experience refresh failed', e); }
       try { renderRelated(); } catch (e) { }
       try { renderBlog(); } catch (e) { }
       try { updateCounters(); } catch (e) { }
@@ -6824,12 +7164,7 @@
       document.getElementById('pTitle').textContent = p.name;
       document.getElementById('pTagline').textContent = p.tagline;
 
-      // Hand Mill Banner — rice only
-      const millBanner = document.getElementById('millBanner');
-      if (millBanner) {
-        const isRice = p.category === 'Rice Varieties' || p.category === 'rice' || [1, 2, 3, 4, 5, 6, 7].includes(Number(p.id));
-        millBanner.style.display = isRice ? 'flex' : 'none';
-      }
+
 
       // Rating
       document.getElementById('pStarsEl').innerHTML = renderStars(p.rating);
@@ -6838,8 +7173,8 @@
       document.getElementById('pSoldEl').textContent = p.sold + ' sold';
 
       // Price
-      document.getElementById('pPriceEl').textContent = '?' + p.price;
-      document.getElementById('pOldPriceEl').textContent = '?' + p.oldPrice;
+      document.getElementById('pPriceEl').textContent = '₹' + p.price;
+      document.getElementById('pOldPriceEl').textContent = '₹' + p.oldPrice;
       document.getElementById('pDiscEl').textContent = disc + '% OFF';
       document.getElementById('pSavingEl').textContent = '\ud83c\udf89 You save \u20b9' + (p.oldPrice - p.price) + ' on this order!';
       initQty(p);
@@ -6988,9 +7323,9 @@
       document.getElementById('revCntEl').textContent = p.reviews + ' ratings';
 
       const bars = [
-        { label: '5?', pct: Math.round(p.rating * 15) },
-        { label: '4?', pct: Math.round((5 - p.rating) * 18) + 10 },
-        { label: '3?', pct: 8 }, { label: '2?', pct: 4 }, { label: '1?', pct: 3 },
+        { label: '5★', pct: Math.round(p.rating * 15) },
+        { label: '4★', pct: Math.round((5 - p.rating) * 18) + 10 },
+        { label: '3★', pct: 8 }, { label: '2★', pct: 4 }, { label: '1★', pct: 3 },
       ];
       document.getElementById('barRows').innerHTML = bars.map(b => `
     <div class="rev-bar-row">
@@ -7278,7 +7613,7 @@
       if (navigator.share) {
         navigator.share({ title: p.name + ' | NANSAI', text: p.tagline, url });
       } else {
-        navigator.clipboard.writeText(url).then(() => showToast('?? Link copied to clipboard!'));
+        navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard!'));
       }
     }
 
@@ -7381,8 +7716,8 @@
         <div class="rel-name">${p.name}</div>
         <div class="rel-stars"><span>${renderStars(p.rating)}</span><small>${p.rating} (${p.reviews})</small></div>
         <div class="rel-price-row">
-          <span class="rel-price" data-card-price>?${p.price}</span>
-          <span class="rel-old" data-card-old>?${p.oldPrice}</span>
+          <span class="rel-price" data-card-price>₹${p.price}</span>
+          <span class="rel-old" data-card-old>₹${p.oldPrice}</span>
           <span class="rel-disc" data-card-disc>${d}% off</span>
         </div>
         <button class="rel-add-btn" id="relbtn-${p.id}" onclick="event.stopPropagation();startRelQty(${p.id})">
@@ -7500,8 +7835,8 @@
       const priceEl = card.querySelector('[data-card-price]');
       const oldEl = card.querySelector('[data-card-old]');
       const discEl = card.querySelector('[data-card-disc]');
-      if (priceEl) priceEl.textContent = '?' + totalPrice;
-      if (oldEl) oldEl.textContent = '?' + oldTotal;
+      if (priceEl) priceEl.textContent = '₹' + totalPrice;
+      if (oldEl) oldEl.textContent = '₹' + oldTotal;
       if (discEl) discEl.textContent = d + '% off';
     }
     function confirmRelCart(id) {
@@ -7539,7 +7874,7 @@
       if (!p) return;
       Cart.add(p, 1).then(() => {
         updateCounters();
-        showToast('?? ' + p.name + ' added!');
+        showToast(p.name + ' added!');
         const btn = document.getElementById('relbtn-' + id);
         if (btn) {
           btn.classList.add('added'); btn.textContent = ' Added!';
@@ -7674,7 +8009,7 @@
 
     /* --- STARS --- */
     function renderStars(r) {
-      return [1, 2, 3, 4, 5].map(i => i <= Math.floor(r) ? '?' : i - r < 1 ? '?' : '?').join('');
+      return [1, 2, 3, 4, 5].map(i => i <= Math.floor(r) ? '★' : i - r < 1 ? '★' : '☆').join('');
     }
 
     /* --- WRITE REVIEW --- */

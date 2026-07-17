@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nansai — Sign In / Sign Up</title>
+<title>Nansei Organics — Sign In</title>
 <script src="../js/config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <style>
@@ -24,6 +24,8 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .leaf{position:fixed;z-index:0;pointer-events:none;opacity:.07;}
 .leaf.l1{top:6%;left:2%;}
 .leaf.l2{bottom:8%;right:3%;}
+
+/* Card */
 .card{position:relative;z-index:10;background:var(--warm-white);border-radius:20px;
   border:1px solid rgba(26,58,42,.1);
   box-shadow:0 2px 6px rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.07),0 28px 60px rgba(0,0,0,.05);
@@ -34,40 +36,62 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,#f4f1ea 0%,#fdfaf5 100%);}
 .header-logo{height:56px;width:auto;display:block;}
-.tab-bar{display:flex;border-bottom:1px solid rgba(26,58,42,.08);}
-.tab{flex:1;padding:.85rem 1rem;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:700;
-  border:none;background:none;cursor:pointer;color:var(--text-lt);
-  letter-spacing:.02em;position:relative;transition:color .2s;}
-.tab::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:2px;
-  background:var(--gold-dk);border-radius:2px 2px 0 0;opacity:0;transition:opacity .2s,left .2s,right .2s;}
-.tab.active{color:var(--forest);}
-.tab.active::after{opacity:1;left:16%;right:16%;}
 .card-body{padding:26px 28px 28px;}
+
+/* Panels */
 .panel{display:none;}
 .panel.on{display:block;animation:fadeUp .32s cubic-bezier(.22,1,.36,1) both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 .panel-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--text-dk);margin-bottom:3px;line-height:1.2;}
 .panel-sub{font-size:.78rem;color:var(--text-lt);margin-bottom:20px;line-height:1.5;}
+
+/* Form */
 label.fl{display:block;font-size:.75rem;font-weight:700;color:var(--text-dk);margin-bottom:5px;letter-spacing:.01em;}
-.inp-wrap{margin-bottom:13px;}
+.inp-wrap{margin-bottom:13px;position:relative;}
 input.inp{width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);
   font-family:'Inter',sans-serif;font-size:.88rem;color:var(--text-dk);background:#fff;outline:none;
   transition:border-color .2s,box-shadow .2s;}
 input.inp:focus{border-color:var(--forest-leaf);box-shadow:0 0 0 3px rgba(74,140,92,.1);}
 input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(184,50,50,.1);}
+
+/* Phone prefix */
+.phone-wrap{display:flex;gap:0;}
+.phone-prefix{padding:.75rem .9rem;background:#f4f1ea;border:1.5px solid var(--border);border-right:none;
+  border-radius:var(--radius) 0 0 var(--radius);font-size:.88rem;font-weight:700;color:var(--text-md);
+  display:flex;align-items:center;white-space:nowrap;line-height:1;}
+.phone-wrap input.inp{border-radius:0 var(--radius) var(--radius) 0;flex:1;}
+
+/* Buttons */
 .btn-primary{width:100%;padding:.82rem 1rem;
   background:linear-gradient(135deg,var(--forest) 0%,var(--forest-mid) 100%);
   color:#fff;border:none;border-radius:var(--radius);font-family:'Roboto',sans-serif;
   font-size:.88rem;font-weight:700;cursor:pointer;letter-spacing:.03em;
   transition:filter .2s,transform .15s,box-shadow .2s;margin-top:4px;
-  box-shadow:0 3px 10px rgba(26,58,42,.28);}
+  box-shadow:0 3px 10px rgba(26,58,42,.28);display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,58,42,.32);}
 .btn-primary:active{transform:none;filter:brightness(.95);}
 .btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none;}
-.or-divider{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:.7rem;color:var(--text-lt);}
-.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(26,58,42,.1);}
+.btn-back{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;
+  color:var(--text-lt);background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px;
+  font-family:'Inter',sans-serif;transition:color .2s;}
+.btn-back:hover{color:var(--forest);}
+
+/* Spinner */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Footer links */
+.footer-note{text-align:center;font-size:.74rem;color:var(--text-lt);margin-top:18px;}
+.footer-note a,.footer-note button.lnk{color:var(--forest-leaf);text-decoration:none;font-weight:600;
+  background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:.74rem;padding:0;}
+.footer-note a:hover,.footer-note button.lnk:hover{text-decoration:underline;}
+
+/* Trust strip */
 .trust-strip{display:flex;justify-content:center;gap:18px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(26,58,42,.07);}
 .trust-item{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--text-lt);}
+
+/* Success */
 .success-wrap{text-align:center;padding:1.5rem 0;}
 .s-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#e6f4ec,#f0fdf4);
   border:1.5px solid rgba(74,140,92,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
@@ -75,6 +99,8 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(184,50,50,.1);
 .success-sub{font-size:.78rem;color:var(--text-lt);margin-bottom:1.25rem;}
 .progress-bar{height:3px;background:rgba(26,58,42,.08);border-radius:99px;overflow:hidden;}
 .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--forest-leaf),var(--gold-dk));border-radius:99px;transition:width 1.5s ease;}
+
+/* Toast */
 #toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-10px);
   background:var(--forest);color:var(--cream);font-size:.76rem;font-weight:600;
   padding:.5rem 1.2rem;border-radius:30px;white-space:nowrap;max-width:90vw;text-align:center;
@@ -82,22 +108,7 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(184,50,50,.1);
   border:1px solid rgba(201,168,76,.2);
   transition:opacity .25s,transform .25s;box-shadow:0 6px 20px rgba(0,0,0,.2);}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
-.footer-note{text-align:center;font-size:.74rem;color:var(--text-lt);margin-top:18px;}
-.footer-note a{color:var(--forest-leaf);text-decoration:none;font-weight:600;}
-.footer-note a:hover{text-decoration:underline;}
-.pw-wrap{position:relative;}
-.pw-wrap input{padding-right:2.8rem;}
-.pw-toggle{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;color:var(--text-lt);padding:0;
-  display:flex;align-items:center;transition:color .2s;}
-.pw-toggle:hover{color:var(--forest);}
-.forgot-link{display:block;text-align:right;font-size:.73rem;color:var(--forest-leaf);
-  font-weight:600;text-decoration:none;margin-top:-6px;margin-bottom:14px;}
-.forgot-link:hover{text-decoration:underline;}
-.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;
-  color:var(--text-lt);background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px;
-  font-family:'Inter',sans-serif;transition:color .2s;}
-.back-btn:hover{color:var(--forest);}
+#toast.err-toast{background:#b83232;}
 </style>
 </head>
 <body>
@@ -111,101 +122,86 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(184,50,50,.1);
     <img src="nansei_org_logo.svg" alt="Nansei Organics" class="header-logo"/>
   </div>
 
-  <div class="tab-bar" id="tabBar">
-    <button class="tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
-    <button class="tab" id="tab-register" onclick="switchTab('register')">Create Account</button>
-  </div>
-
   <div class="card-body">
 
-    <!-- LOGIN -->
+    <!-- LOGIN PANEL -->
     <div id="panel-login" class="panel on">
       <div class="panel-title">Welcome back</div>
-      <div class="panel-sub">Sign in to your Nansai account</div>
-      <label class="fl">Email Address</label>
+      <div class="panel-sub">Enter your mobile number to continue</div>
+      <label class="fl" for="login-phone">Mobile Number</label>
       <div class="inp-wrap">
-        <input id="login-email" class="inp" type="email" placeholder="you@example.com" autocomplete="email"/>
+        <div class="phone-wrap">
+          <span class="phone-prefix">🇮🇳 +91</span>
+          <input id="login-phone" class="inp" type="tel" inputmode="numeric" maxlength="10"
+            placeholder="10-digit mobile number" autocomplete="tel"/>
+        </div>
       </div>
-      <label class="fl">Password</label>
-      <div class="inp-wrap pw-wrap">
-        <input id="login-pass" class="inp" type="password" placeholder="Your password" autocomplete="current-password"/>
-        <button type="button" class="pw-toggle" onclick="togglePw('login-pass',this)" tabindex="-1">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-      </div>
-      <a href="#" class="forgot-link" onclick="switchTab('forgot');return false;">Forgot password?</a>
-      <button class="btn-primary" id="btn-login" onclick="doLogin()">Sign In</button>
-      <div class="or-divider">or</div>
-      <div style="text-align:center;font-size:.76rem;color:var(--text-lt);">
-        Don't have an account?
-        <a href="#" onclick="switchTab('register');return false;" style="color:var(--forest-leaf);font-weight:700;text-decoration:none;">Create one free</a>
-      </div>
-      <div class="trust-strip">
-        <div class="trust-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Secure</span></div>
-        <div class="trust-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>FSSAI</span></div>
-        <div class="trust-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6 2 3 8 3 14c0 4 2.5 7 6 8 0-4 1-8 3-10-1 3-1 7 0 10 3.5-1 6-4.5 6-8 0-6-3-12-6-12z"/></svg><span>Organic</span></div>
-      </div>
-    </div>
-
-    <!-- REGISTER -->
-    <div id="panel-register" class="panel">
-      <div class="panel-title">Join Nansai</div>
-      <div class="panel-sub">Create your free account in seconds</div>
-      <label class="fl">Full Name</label>
-      <div class="inp-wrap">
-        <input id="reg-name" class="inp" type="text" placeholder="e.g. Arjun Kumar" autocomplete="name"/>
-      </div>
-      <label class="fl">Email Address</label>
-      <div class="inp-wrap">
-        <input id="reg-email" class="inp" type="email" placeholder="you@example.com" autocomplete="email"/>
-      </div>
-      <label class="fl">Mobile Number</label>
-      <div class="inp-wrap">
-        <input id="reg-phone" class="inp" type="tel" placeholder="10-digit mobile number" autocomplete="tel" maxlength="10" inputmode="numeric"/>
-      </div>
-      <label class="fl">Password</label>
-      <div class="inp-wrap pw-wrap">
-        <input id="reg-pass" class="inp" type="password" placeholder="Min. 8 characters" autocomplete="new-password"/>
-        <button type="button" class="pw-toggle" onclick="togglePw('reg-pass',this)" tabindex="-1">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-      </div>
-      <button class="btn-primary" id="btn-register" onclick="doRegister()">Create Account</button>
-      <div class="or-divider">or</div>
-      <div style="text-align:center;font-size:.76rem;color:var(--text-lt);">
-        Already have an account?
-        <a href="#" onclick="switchTab('login');return false;" style="color:var(--forest-leaf);font-weight:700;text-decoration:none;">Sign in</a>
-      </div>
-      <div class="trust-strip">
-        <div class="trust-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Secure</span></div>
-        <div class="trust-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>FSSAI</span></div>
-        <div class="trust-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6 2 3 8 3 14c0 4 2.5 7 6 8 0-4 1-8 3-10-1 3-1 7 0 10 3.5-1 6-4.5 6-8 0-6-3-12-6-12z"/></svg><span>Organic</span></div>
-      </div>
-    </div>
-
-    <!-- FORGOT PASSWORD -->
-    <div id="panel-forgot" class="panel">
-      <button class="back-btn" onclick="switchTab('login')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back to Sign In
+      <button class="btn-primary" id="btn-continue" onclick="handleContinue()">
+        Continue
       </button>
-      <div class="panel-title">Reset Password</div>
-      <div class="panel-sub">Enter your email and we'll send a reset link</div>
-      <label class="fl">Email Address</label>
-      <div class="inp-wrap">
-        <input id="forgot-email" class="inp" type="email" placeholder="you@example.com" autocomplete="email"/>
+      <div class="footer-note" style="margin-top:16px;">
+        New customer? <button class="lnk" onclick="showRegister('')">Create an account</button>
       </div>
-      <button class="btn-primary" id="btn-forgot" onclick="doForgot()">Send Reset Link</button>
+      <div class="trust-strip">
+        <span class="trust-item">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secure Login
+        </span>
+        <span class="trust-item">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Instant Access
+        </span>
+        <span class="trust-item">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+          100% Organic
+        </span>
+      </div>
     </div>
 
-    <!-- SUCCESS -->
+    <!-- REGISTER PANEL -->
+    <div id="panel-register" class="panel">
+      <button class="btn-back" onclick="showLogin()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <div class="panel-title">Create Account</div>
+      <div class="panel-sub">Join Nansei Organics — pure, natural, and fresh.</div>
+
+      <label class="fl" for="reg-name">Full Name</label>
+      <div class="inp-wrap">
+        <input id="reg-name" class="inp" type="text" placeholder="Your full name" autocomplete="name"/>
+      </div>
+
+      <label class="fl" for="reg-phone">Mobile Number</label>
+      <div class="inp-wrap">
+        <div class="phone-wrap">
+          <span class="phone-prefix">🇮🇳 +91</span>
+          <input id="reg-phone" class="inp" type="tel" inputmode="numeric" maxlength="10"
+            placeholder="10-digit mobile number" autocomplete="tel"/>
+        </div>
+      </div>
+
+      <label class="fl" for="reg-email">Gmail ID</label>
+      <div class="inp-wrap">
+        <input id="reg-email" class="inp" type="email" placeholder="yourname@gmail.com" autocomplete="email"/>
+      </div>
+
+      <button class="btn-primary" id="btn-register" onclick="handleRegister()">
+        Create Account
+      </button>
+      <div class="footer-note" style="margin-top:16px;">
+        Already have an account? <button class="lnk" onclick="showLogin()">Sign in</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS PANEL -->
     <div id="panel-success" class="panel">
       <div class="success-wrap">
         <div class="s-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--forest-leaf)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4a8c5c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
         </div>
-        <div class="success-hi" id="success-hi">Welcome!</div>
-        <div class="success-sub" id="success-sub">Taking you to the store…</div>
+        <div class="success-hi" id="success-name">Welcome!</div>
+        <div class="success-sub" id="success-msg">You're now signed in. Redirecting…</div>
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
       </div>
     </div>
@@ -213,180 +209,185 @@ input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(184,50,50,.1);
   </div>
 </div>
 
-<div class="footer-note">
-  <a href="index.html">← Continue browsing as guest</a>
-</div>
-
 <script>
-const API = window.API_BASE || 'http://localhost:5000/api';
+const API = window.API_BASE || '/api';
+let toastTimer;
 
-function toast(msg, dur) {
-  dur = dur || 2600;
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('on');
-  clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove('on'); }, dur);
+function toast(msg, isErr = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'on' + (isErr ? ' err-toast' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 3200);
 }
 
-function switchTab(tab) {
-  ['login','register','forgot','success'].forEach(function(t) {
-    var btn   = document.getElementById('tab-' + t);
-    var panel = document.getElementById('panel-' + t);
-    if (btn)   btn.classList.toggle('active', t === tab);
-    if (panel) panel.classList.toggle('on', t === tab);
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<span class="spinner"></span> Please wait…'
+    : (btnId === 'btn-continue' ? 'Continue' : 'Create Account');
+}
+
+function showPanel(id) {
+  ['panel-login','panel-register','panel-success'].forEach(p => {
+    const el = document.getElementById(p);
+    el.classList.remove('on');
+    el.style.display = 'none';
   });
-  document.getElementById('tabBar').style.display =
-    (tab === 'forgot' || tab === 'success') ? 'none' : 'flex';
+  const target = document.getElementById(id);
+  target.style.display = 'block';
+  requestAnimationFrame(() => target.classList.add('on'));
 }
 
-function togglePw(id, btn) {
-  var inp = document.getElementById(id);
-  var show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  btn.querySelector('svg').innerHTML = show
-    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
-    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+function showLogin() { showPanel('panel-login'); }
+
+function showRegister(phone) {
+  showPanel('panel-register');
+  const phoneEl = document.getElementById('reg-phone');
+  if (phone) phoneEl.value = phone;
+  setTimeout(() => {
+    (phone ? document.getElementById('reg-name') : phoneEl).focus();
+  }, 80);
 }
 
-function markErr(id) {
-  var el = document.getElementById(id);
-  el.classList.add('err'); el.focus();
-  setTimeout(function(){ el.classList.remove('err'); }, 800);
-}
-
-function showSuccess(user, isNew) {
-  var name = ((user && user.name) || 'there').split(' ')[0];
-  document.getElementById('success-hi').textContent  = (isNew ? 'Welcome, ' : 'Welcome back, ') + name + '!';
-  document.getElementById('success-sub').textContent = isNew ? 'Account created! Taking you to the store…' : 'Signed in! Taking you to the store…';
-  switchTab('success');
-  requestAnimationFrame(function(){
-    document.getElementById('progress-fill').style.width = '100%';
+function showSuccess(name, isNew) {
+  showPanel('panel-success');
+  document.getElementById('success-name').textContent = `Welcome${name ? ', ' + name.split(' ')[0] : ''}! 🌿`;
+  document.getElementById('success-msg').textContent = isNew
+    ? 'Account created! Redirecting to your shop…'
+    : 'You\'re signed in! Redirecting…';
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.getElementById('progress-fill').style.width = '100%';
+    }, 50);
   });
-  var token = localStorage.getItem('nansai_token');
-  localStorage.setItem('admin_token', token || '');
-  localStorage.setItem('admin_user', JSON.stringify({ name: user.name, email: user.email }));
-
-  fetch(API + '/auth/me', { headers: { Authorization: 'Bearer ' + token } })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var u = data.data || data.user || user;
-      localStorage.setItem('nansai_user', JSON.stringify(u));
-      var dest = u.role === 'admin' ? 'admin-panel.html' : (sessionStorage.getItem('redirectAfterLogin') || 'index.html');
-      sessionStorage.removeItem('redirectAfterLogin');
-      setTimeout(function(){ window.location.href = dest; }, 1600);
-    })
-    .catch(function(){
-      var dest = (user.role === 'admin') ? 'admin-panel.html' : 'index.html';
-      setTimeout(function(){ window.location.href = dest; }, 1600);
-    });
+  setTimeout(() => {
+    window.location.href = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'index.html' : '/pages/index.html';
+  }, 1700);
 }
 
-async function doLogin() {
-  var email = document.getElementById('login-email').value.trim();
-  var pass  = document.getElementById('login-pass').value;
-  if (!/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email)) { markErr('login-email'); toast('Enter a valid email address'); return; }
-  if (!pass) { markErr('login-pass'); toast('Enter your password'); return; }
-  var btn = document.getElementById('btn-login');
-  btn.textContent = 'Signing in…'; btn.disabled = true;
-  try {
-    var res  = await fetch(API + '/auth/login', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password: pass })
-    });
-    var data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Invalid email or password');
-    localStorage.setItem('nansai_token', data.token);
-    localStorage.setItem('nansai_user',  JSON.stringify(data.user));
-    showSuccess(data.user, false);
-  } catch(err) {
-    markErr('login-pass');
-    toast('❌ ' + err.message);
-    btn.textContent = 'Sign In'; btn.disabled = false;
+function storeSession(token, user) {
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(user));
+}
+
+function validatePhone(val) {
+  return /^\d{10}$/.test(val.trim());
+}
+
+// ── Continue (Login) ──
+async function handleContinue() {
+  const phone = document.getElementById('login-phone').value.trim();
+  const phoneEl = document.getElementById('login-phone');
+
+  if (!validatePhone(phone)) {
+    phoneEl.classList.add('err');
+    toast('Enter a valid 10-digit mobile number', true);
+    phoneEl.focus();
+    return;
   }
-}
+  phoneEl.classList.remove('err');
+  setLoading('btn-continue', true);
 
-async function doRegister() {
-  var name  = document.getElementById('reg-name').value.trim();
-  var email = document.getElementById('reg-email').value.trim();
-  var phone = document.getElementById('reg-phone').value.trim();
-  var pass  = document.getElementById('reg-pass').value;
-  if (!name)  { markErr('reg-name');  toast('Please enter your full name'); return; }
-  if (!/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email)) { markErr('reg-email'); toast('Enter a valid email address'); return; }
-  if (!/^\d{10}$/.test(phone)) { markErr('reg-phone'); toast('Enter a valid 10-digit mobile number'); return; }
-  if (pass.length < 8) { markErr('reg-pass'); toast('Password must be at least 8 characters'); return; }
-  var btn = document.getElementById('btn-register');
-  btn.textContent = 'Creating account…'; btn.disabled = true;
   try {
-    var res  = await fetch(API + '/auth/register', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ name, email, password: pass, phone })
+    const res = await fetch(`${API}/auth/check-mobile`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone }),
     });
-    var data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Registration failed');
-    localStorage.setItem('nansai_token', data.token);
-    localStorage.setItem('nansai_user',  JSON.stringify(data.user));
-    showSuccess(data.user, true);
-  } catch(err) {
-    toast('❌ ' + err.message);
-    btn.textContent = 'Create Account'; btn.disabled = false;
-  }
-}
+    const data = await res.json();
 
-async function doForgot() {
-  var email = document.getElementById('forgot-email').value.trim();
-  if (!/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email)) { markErr('forgot-email'); toast('Enter a valid email address'); return; }
-  var btn = document.getElementById('btn-forgot');
-  btn.textContent = 'Sending…'; btn.disabled = true;
-  try {
-    var res  = await fetch(API + '/auth/forgot-password', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email })
-    });
-    var data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Failed to send reset link');
-    toast('✅ Reset link sent to ' + email, 3500);
-    setTimeout(function(){ switchTab('login'); }, 2200);
-  } catch(err) {
-    toast('❌ ' + err.message);
+    if (!res.ok) throw new Error(data.message || 'Something went wrong');
+
+    if (data.exists) {
+      storeSession(data.token, data.user);
+      showSuccess(data.user?.name, false);
+    } else {
+      showRegister(phone);
+    }
+  } catch (err) {
+    toast(err.message || 'Network error. Please try again.', true);
   } finally {
-    btn.textContent = 'Send Reset Link'; btn.disabled = false;
+    setLoading('btn-continue', false);
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  // enter key
-  ['login-email','login-pass'].forEach(function(id){
-    document.getElementById(id).addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-  });
-  ['reg-name','reg-email','reg-phone','reg-pass'].forEach(function(id){
-    document.getElementById(id).addEventListener('keydown', function(e){ if(e.key==='Enter') doRegister(); });
-  });
-  document.getElementById('forgot-email').addEventListener('keydown', function(e){ if(e.key==='Enter') doForgot(); });
+// ── Create Account ──
+async function handleRegister() {
+  const name  = document.getElementById('reg-name').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
 
-  // digits only for phone
-  document.getElementById('reg-phone').addEventListener('input', function(){
-    this.value = this.value.replace(/\D/g,'').slice(0,10);
-  });
+  const nameEl  = document.getElementById('reg-name');
+  const phoneEl = document.getElementById('reg-phone');
+  const emailEl = document.getElementById('reg-email');
 
-  // ?tab=register URL param
-  if(new URLSearchParams(window.location.search).get('tab') === 'register') switchTab('register');
+  [nameEl, phoneEl, emailEl].forEach(el => el.classList.remove('err'));
 
-  // already logged in? skip
-  var token = localStorage.getItem('nansai_token');
-  if (!token) return;
-  fetch(API + '/auth/me', { headers: { Authorization: 'Bearer ' + token } })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var user = data.data || data.user;
-      if (!user) throw new Error();
-      toast('Welcome back, ' + (user.name||'').split(' ')[0] + '!');
-      var dest = user.role === 'admin' ? 'admin-panel.html' : 'index.html';
-      setTimeout(function(){ window.location.href = dest; }, 900);
-    })
-    .catch(function(){
-      localStorage.removeItem('nansai_token');
-      localStorage.removeItem('nansai_user');
+  if (!name) {
+    nameEl.classList.add('err'); toast('Full name is required', true); nameEl.focus(); return;
+  }
+  if (!validatePhone(phone)) {
+    phoneEl.classList.add('err'); toast('Enter a valid 10-digit mobile number', true); phoneEl.focus(); return;
+  }
+  if (!email || !/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email)) {
+    emailEl.classList.add('err'); toast('Enter a valid email address', true); emailEl.focus(); return;
+  }
+
+  setLoading('btn-register', true);
+
+  try {
+    const res = await fetch(`${API}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email }),
     });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || 'Registration failed');
+
+    storeSession(data.token, data.user);
+    showSuccess(data.user?.name, true);
+  } catch (err) {
+    toast(err.message || 'Network error. Please try again.', true);
+  } finally {
+    setLoading('btn-register', false);
+  }
+}
+
+// Enter key support
+document.getElementById('login-phone').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleContinue();
 });
+['reg-name','reg-phone','reg-email'].forEach((id, i, arr) => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const next = arr[i + 1];
+      if (next) document.getElementById(next).focus();
+      else handleRegister();
+    }
+  });
+});
+
+// Numeric-only phone inputs
+['login-phone','reg-phone'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(0, 10);
+    this.classList.remove('err');
+  });
+});
+
+// Remove err on change
+['reg-name','reg-email'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    this.classList.remove('err');
+  });
+});
+
+// Auto-focus on load
+document.getElementById('login-phone').focus();
 </script>
 </body>
 </html>

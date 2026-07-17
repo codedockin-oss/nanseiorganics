@@ -22,6 +22,11 @@
   status = 200
 
 [[redirects]]
+  from = "/product.html"
+  to = "/pages/product.html"
+  status = 200
+
+[[redirects]]
   from = "/wishlist"
   to = "/pages/wishlist.html"
   status = 200
@@ -47,10 +52,50 @@
   status = 200
 
 [[redirects]]
+  from = "/refund-policy"
+  to = "/pages/refund-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/refund-policy.html"
+  to = "/pages/refund-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/pages/privacy-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy-policy.html"
+  to = "/pages/privacy-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms-and-conditions"
+  to = "/pages/terms-and-conditions.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms-and-conditions.html"
+  to = "/pages/terms-and-conditions.html"
+  status = 200
+
+[[redirects]]
+  from = "/pages/*"
+  to = "/pages/:splat"
+  status = 200
+
+[[redirects]]
   from = "/api/*"
   to = "https://nansei-backend.onrender.com/api/:splat"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/pages/index.html"
+  status = 404
 
 [[headers]]
   for = "/*"

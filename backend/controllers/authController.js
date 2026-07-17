@@ -29,41 +29,56 @@ function checkAndIncrementDailyOtp(user) {
   return null;
 }
 
+// @route   POST /api/auth/check-mobile
+exports.checkMobile = async (req, res, next) => {
+  try {
+    const { phone } = req.body;
+    if (!phone || !/^\d{10}$/.test(phone))
+      return res.status(400).json({ success: false, message: 'Enter a valid 10-digit mobile number' });
+
+    const user = await User.findOne({ phone });
+    if (!user) return res.status(200).json({ success: true, exists: false });
+
+    const token = user.generateToken();
+    await User.findByIdAndUpdate(user._id, {
+      $push: { activityHistory: { $each: [{ type: 'login', description: 'Logged in via mobile' }], $slice: -200 } }
+    });
+    res.status(200).json({
+      success: true, exists: true, token,
+      user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role }
+    });
+  } catch (error) { next(error); }
+};
+
 // @route   POST /api/auth/register
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, phone, email } = req.body;
 
-    if (!name || !email || !password || !phone) {
-      return res.status(400).json({ success: false, message: 'Name, email, password and mobile number are required' });
-    }
+    if (!name || !phone || !email)
+      return res.status(400).json({ success: false, message: 'Name, mobile number and email are required' });
+    if (!/^\d{10}$/.test(phone))
+      return res.status(400).json({ success: false, message: 'Enter a valid 10-digit mobile number' });
+    if (!/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email))
+      return res.status(400).json({ success: false, message: 'Enter a valid email address' });
 
-    const existing = await User.findOne({ email: email.toLowerCase() });
-    if (existing) {
+    const existingPhone = await User.findOne({ phone });
+    if (existingPhone)
+      return res.status(400).json({ success: false, message: 'An account with this mobile number already exists' });
+
+    const existingEmail = await User.findOne({ email: email.toLowerCase() });
+    if (existingEmail)
       return res.status(400).json({ success: false, message: 'An account with this email already exists' });
-    }
 
-    const phoneOtp = generateOtp();
-    const expire = Date.now() + 10 * 60 * 1000;
-
-    const user = await User.create({
-      name, email, password, phone,
-      emailVerified: false,
-      phoneOtp, phoneOtpExpire: expire
-    });
-
+    const user = await User.create({ name: name.trim(), phone, email: email.toLowerCase(), phoneVerified: true });
     await Cart.create({ user: user._id, items: [] });
-
-    try {
-      await sendSms(phone, phoneOtp);
-    } catch (e) { console.error('Phone OTP SMS failed:', e.message); }
 
     const token = user.generateToken();
     res.status(201).json({
       success: true,
-      message: 'Account created. Please verify your mobile number.',
+      message: 'Account created successfully!',
       token,
-      user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role, emailVerified: true, phoneVerified: false }
+      user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role }
     });
   } catch (error) { next(error); }
 };

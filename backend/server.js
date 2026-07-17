@@ -133,7 +133,7 @@ app.get('/api/health', (_req, res) => {
 // OTP limiters applied specifically before the auth router
 app.use('/api/auth/login-otp-send',    otpLimiter);
 app.use('/api/auth/register-otp-send', otpLimiter);
-// All other auth routes use the standard auth limiter
+// check-mobile shares the standard auth limiter
 app.use('/api/auth',      authLimiter,    authRoutes);
 app.use('/api/products',  publicLimiter,  productRoutes);
 app.use('/api/categories',publicLimiter,  categoryRoutes);
