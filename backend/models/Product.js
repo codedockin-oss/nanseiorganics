@@ -48,6 +48,12 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please provide weight/quantity']
   },
+  quantityOptions: [{
+    label: { type: String, required: true, trim: true },
+    quantity: { type: Number, min: 0 },
+    unit: { type: String, trim: true },
+    price: { type: Number, min: 0 }
+  }],
   badge: {
     type: String,
     enum: ['new', 'hot', 'sale', 'bestseller'],

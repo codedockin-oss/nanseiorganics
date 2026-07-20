@@ -3,34 +3,46 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: [true, 'First name is required'],
+    trim: true,
+    maxlength: [50, 'First name cannot exceed 50 characters']
+  },
+  lastName: {
+    type: String,
+    required: [true, 'Last name is required'],
+    trim: true,
+    maxlength: [50, 'Last name cannot exceed 50 characters']
+  },
   name: {
     type: String,
-    required: [true, 'Please provide a name'],
     trim: true,
-    maxlength: [50, 'Name cannot exceed 50 characters']
+    maxlength: [100, 'Name cannot exceed 100 characters']
   },
   email: {
     type: String,
-    unique: true,
-    sparse: true,
+    required: [true, 'Email is required'],
     lowercase: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
+    trim: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email']
   },
   password: {
     type: String,
+    required: [true, 'Password is required'],
     minlength: [8, 'Password must be at least 8 characters'],
     select: false,
   },
   phone: {
     type: String,
-    required: [true, 'Mobile number is required'],
     unique: true,
+    sparse: true,
     match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
+    enum: ['customer', 'admin', 'user'],
+    default: 'customer'
   },
   avatar: {
     type: String,
@@ -78,8 +90,28 @@ const userSchema = new mongoose.Schema({
 });
 
 // Indexes
+userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ phone: 1 }, { sparse: true });
 userSchema.index({ role: 1 });
+
+// Keep legacy `name` users compatible with the split-name auth flow.
+userSchema.pre('validate', function(next) {
+  if ((!this.firstName || !this.lastName) && this.name) {
+    const parts = this.name.trim().split(/\s+/);
+    if (!this.firstName) this.firstName = parts.shift() || this.name.trim();
+    if (!this.lastName) this.lastName = parts.join(' ') || 'Customer';
+  }
+  next();
+});
+
+// Derive `name` from firstName + lastName before saving.
+userSchema.pre('save', function(next) {
+  if (this.email) this.email = this.email.toLowerCase().trim();
+  if (this.firstName || this.lastName) {
+    this.name = [this.firstName, this.lastName].filter(Boolean).join(' ').trim();
+  }
+  next();
+});
 
 // Hash password before saving (only if present)
 userSchema.pre('save', async function(next) {
@@ -96,11 +128,24 @@ userSchema.methods.comparePassword = async function(enteredPassword) {
 
 // Generate JWT token — include role so authorize() middleware works
 userSchema.methods.generateToken = function() {
+  const role = this.role === 'user' ? 'customer' : this.role;
   return jwt.sign(
-    { id: this._id, role: this.role },
+    { id: this._id, userId: this._id, email: this.email, role },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRE }
+    { expiresIn: process.env.JWT_EXPIRE || '7d' }
   );
+};
+
+userSchema.methods.toAuthJSON = function() {
+  const role = this.role === 'user' ? 'customer' : this.role;
+  return {
+    id: this._id,
+    firstName: this.firstName,
+    lastName: this.lastName,
+    name: this.name,
+    email: this.email,
+    role,
+  };
 };
 
 module.exports = mongoose.model('User', userSchema);

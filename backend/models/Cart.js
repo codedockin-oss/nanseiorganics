@@ -12,6 +12,22 @@ const cartItemSchema = new mongoose.Schema({
     min: [1, 'Quantity cannot be less than 1'],
     default: 1
   },
+  selectedQuantity: {
+    type: String,
+    required: true,
+    trim: true,
+    default: '1'
+  },
+  selectedUnit: {
+    type: String,
+    trim: true
+  },
+  selectedPrice: {
+    type: Number,
+    required: true,
+    min: [0, 'Selected price cannot be negative'],
+    default: 0
+  },
   price: {
     type: Number,
     required: true
@@ -40,8 +56,12 @@ const cartSchema = new mongoose.Schema({
 
 // Calculate totals before saving
 cartSchema.pre('save', function(next) {
+  this.items.forEach(item => {
+    if (!item.selectedQuantity) item.selectedQuantity = String(item.quantity || 1);
+    if (item.selectedPrice === undefined || item.selectedPrice === null) item.selectedPrice = item.price || 0;
+  });
   this.totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
-  this.totalPrice = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  this.totalPrice = this.items.reduce((sum, item) => sum + ((item.selectedPrice ?? item.price) * item.quantity), 0);
   next();
 });
 

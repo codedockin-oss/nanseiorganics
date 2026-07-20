@@ -12,7 +12,7 @@ exports.protect = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id || decoded.userId).select('-password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'User not found' });
     }
@@ -38,10 +38,12 @@ exports.admin = (req, res, next) => {
 // Authorize specific roles
 exports.authorize = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    const role = req.user.role === 'user' ? 'customer' : req.user.role;
+    const allowed = roles.map(r => r === 'user' ? 'customer' : r);
+    if (!allowed.includes(role)) {
       return res.status(403).json({
         success: false,
-        message: `User role '${req.user.role}' is not authorized to access this route`
+        message: `User role '${role}' is not authorized to access this route`
       });
     }
     next();

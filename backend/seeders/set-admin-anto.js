@@ -28,6 +28,8 @@ async function run() {
     console.log('✅ Admin updated — phone:', phone, '| password: anto');
   } else {
     user = new User({
+      firstName: 'Anto',
+      lastName: 'Admin',
       name: 'Anto',
       email: `${phone}@nansai.local`,
       phone,

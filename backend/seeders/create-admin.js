@@ -30,6 +30,8 @@ async function createAdmin() {
       }
     } else {
       await User.create({
+        firstName: 'Nansai',
+        lastName: 'Admin',
         name: 'Nansai Admin',
         email,
         password,

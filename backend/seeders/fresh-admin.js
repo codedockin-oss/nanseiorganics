@@ -13,8 +13,10 @@ const User = require('../models/User');
 
 // ── Admin credentials ──────────────────────────────────────
 const ADMIN = {
+  firstName:     'Anthony',
+  lastName:      'Admin',
   name:          'Anthony',
-  email:         'athanyanis@gmail.com',
+  email:         'anthanyanis@gmail.com',
   password:      'Nansai@2025',
   phone:         '6382142578',
   role:          'admin',

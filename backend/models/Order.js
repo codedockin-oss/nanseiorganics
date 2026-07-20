@@ -12,6 +12,20 @@ const orderItemSchema = new mongoose.Schema({
     required: true,
     min: 1
   },
+  selectedQuantity: {
+    type: String,
+    required: true,
+    trim: true,
+    default: '1'
+  },
+  selectedUnit: {
+    type: String,
+    trim: true
+  },
+  selectedPrice: {
+    type: Number,
+    min: 0
+  },
   price: {
     type: Number,
     required: true
@@ -107,6 +121,10 @@ orderSchema.index({ createdAt: -1 });                   // admin list
 
 // Generate order number before saving
 orderSchema.pre('save', async function(next) {
+  this.items.forEach(item => {
+    if (!item.selectedQuantity) item.selectedQuantity = String(item.quantity || 1);
+    if (item.selectedPrice === undefined || item.selectedPrice === null) item.selectedPrice = item.price || 0;
+  });
   if (!this.orderNumber) {
     const count = await mongoose.model('Order').countDocuments();
     this.orderNumber = `ORD${Date.now()}${String(count + 1).padStart(4, '0')}`;

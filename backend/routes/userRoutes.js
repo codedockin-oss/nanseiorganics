@@ -41,7 +41,7 @@ router.put('/profile', protect, async (req, res) => {
 
 router.get('/', protect, authorize('admin'), async (req, res) => {
   try {
-    const users = await User.find({ role: 'user' }).select('-password').sort('-createdAt');
+    const users = await User.find({ role: { $in: ['customer', 'user'] } }).select('-password').sort('-createdAt');
     const Order = require('../models/Order');
     const orderStats = await Order.aggregate([
       { $group: { _id: '$user', orderCount: { $sum: 1 }, totalSpent: { $sum: '$totalPrice' } } }
@@ -77,8 +77,8 @@ router.delete('/:id', protect, authorize('admin'), async (req, res) => {
 router.put('/:id/role', protect, authorize('admin'), async (req, res) => {
   try {
     const { role } = req.body;
-    if (!['user', 'admin'].includes(role)) {
-      return res.status(400).json({ success: false, message: 'Invalid role. Must be user or admin' });
+    if (!['customer', 'user', 'admin'].includes(role)) {
+      return res.status(400).json({ success: false, message: 'Invalid role. Must be customer or admin' });
     }
     if (req.params.id === req.user.id) {
       return res.status(400).json({ success: false, message: 'You cannot change your own role' });

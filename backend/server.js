@@ -24,6 +24,7 @@ const userRoutes     = require('./routes/userRoutes');
 const comboRoutes    = require('./routes/comboRoutes');
 const addressRoutes  = require('./routes/addressRoutes');
 const couponRoutes   = require('./routes/couponRoutes');
+const discountRoutes = require('./routes/discountRoutes');
 const paymentRoutes  = require('./routes/paymentRoutes');
 const blogRoutes     = require('./routes/blogRoutes');
 const newsRoutes     = require('./routes/newsRoutes');
@@ -111,8 +112,6 @@ const makeLimit = (max, windowMin = 15) => rateLimit({
   message: { success: false, message: 'Too many requests, please try again later.' },
 });
 
-// OTP: 10 sends per hour per IP (generous for real use)
-const otpLimiter     = makeLimit(10, 60);
 // Auth (login/register/check): 50 req / 15 min
 const authLimiter    = makeLimit(50, 15);
 // Public reads: 500 req / 15 min
@@ -130,10 +129,6 @@ app.get('/api/health', (_req, res) => {
 });
 
 // ── API Routes ──
-// OTP limiters applied specifically before the auth router
-app.use('/api/auth/login-otp-send',    otpLimiter);
-app.use('/api/auth/register-otp-send', otpLimiter);
-// check-mobile shares the standard auth limiter
 app.use('/api/auth',      authLimiter,    authRoutes);
 app.use('/api/products',  publicLimiter,  productRoutes);
 app.use('/api/categories',publicLimiter,  categoryRoutes);
@@ -145,6 +140,7 @@ app.use('/api/reviews',   writeLimiter,   reviewRoutes);
 app.use('/api/users',     adminLimiter,   userRoutes);
 app.use('/api/addresses', writeLimiter,   addressRoutes);
 app.use('/api/coupons',   publicLimiter,  couponRoutes);
+app.use('/api/discounts', publicLimiter,  discountRoutes);
 app.use('/api/payment',   paymentLimiter, paymentRoutes);
 app.use('/api/blogs',     publicLimiter,  blogRoutes);
 app.use('/api/news',      publicLimiter,  newsRoutes);
