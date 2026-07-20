@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -6,8 +6,8 @@
 <title>NANSEI Organics Checkout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script src="../js/config.js"></script>
-<script src="../frontend/js/api.js"></script>
+<script src="/js/config.js"></script>
+<script src="/frontend/js/api.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Razorpay Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -317,7 +317,7 @@ textarea.inp{resize:none;line-height:1.65}
   #toast{font-size:.78rem;padding:9px 18px;white-space:normal;text-align:center;max-width:90vw}
   /* Step 3 mobile: add bottom padding for sticky button */
   #step3{padding-bottom:80px}
-  /* Hide inline Pay Now on mobile â€” sticky bar handles it */
+  /* Hide inline Pay Now on mobile — sticky bar handles it */
   #btnPayNow{display:none!important}
   .rzp-section{border-radius:16px}
 }
@@ -587,7 +587,7 @@ a .nansai-icon,
                   <input type="text" class="co-inp" id="coPin" maxlength="6" autocomplete="postal-code"
                     placeholder="6-digit PIN"
                     oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);coPinLookup(this.value)"/>
-                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking upï¿½</span>
+                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking up�</span>
                 </div>
                 <p class="co-err-msg" id="coPin-err"></p>
               </div>
@@ -873,7 +873,7 @@ a .nansai-icon,
               </div>
             </div>
 
-            <!-- Pay Now Button â€” hidden on mobile (sticky bar handles it) -->
+            <!-- Pay Now Button — hidden on mobile (sticky bar handles it) -->
             <button class="btn-pay-now" id="btnPayNow" onclick="initiateRazorpay()" style="border-radius:8px">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#555"/></svg>
               <span id="payNowLabel">Pay Now</span>
@@ -1189,7 +1189,7 @@ window.API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://nansei-backen
 // -- RAZORPAY CONFIGURATION --
 const RZP_MERCHANT_NAME = 'NANSEI Organics';
 const RZP_MERCHANT_LOGO = '';
-let _rzpKeyId = ''; // set from backend response ï¿½ leave empty until you add real keys
+let _rzpKeyId = ''; // set from backend response � leave empty until you add real keys
 
 // -- AUTH TOKEN HELPERS --
 function _getTok() {
@@ -1265,7 +1265,7 @@ function _saveLC(c) { localStorage.setItem('cart', JSON.stringify(c)); }
 document.addEventListener('DOMContentLoaded', () => {
   cart = _lcCart();
   addresses = _loadAddresses();
-  // Clear localStorage orders if user is logged in â€” API is the source of truth
+  // Clear localStorage orders if user is logged in — API is the source of truth
   if (_getTok()) localStorage.removeItem('mkOrders');
   renderCartStep();
   loadAndRenderAddrGrid();
@@ -1427,9 +1427,9 @@ function updateSummary() {
 
   // Step 3 pay now label
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = 'Pay Now ₹' + total.toLocaleString();
+  if (pnl) pnl.textContent = 'Pay Now ?' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = 'Pay Now ₹' + total.toLocaleString();
+  if (spl) spl.textContent = 'Pay Now ?' + total.toLocaleString();
   const pa = document.getElementById('payableAmount');
   if (pa) pa.innerHTML = '&#8377;' + total.toLocaleString();
 
@@ -1587,7 +1587,7 @@ function toggleNewAddr() {
 }
 // -- CHECKOUT ADDRESS: validation rules --
 const _coRules = {
-  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3ï¿½50 letters)' },
+  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3�50 letters)' },
   coMobile:{ test: v => /^[6-9]\d{9}$/.test(v),                  msg: 'Enter a valid 10-digit Indian mobile number' },
   coPin:   { test: v => /^[1-9]\d{5}$/.test(v),                  msg: 'Enter a valid 6-digit PIN code' },
   coAddr1: { test: v => v.trim().length >= 5,                     msg: 'Enter at least 5 characters for address' },
@@ -1724,9 +1724,9 @@ function selectGateway(id) {
   // Update Pay Now button label
   const { total } = calcTotal();
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now ₹' + total.toLocaleString();
+  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now ?' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now ₹' + total.toLocaleString();
+  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now ?' + total.toLocaleString();
 }
 
 function selectBilling(type) {
@@ -1766,7 +1766,7 @@ async function initiateRazorpay() {
   if (!addresses.length) { showToast('&#128205; Please add a delivery address.'); return; }
   if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
 
-  // COD ï¿½ place order directly, no payment gateway
+  // COD � place order directly, no payment gateway
   if (selectedGateway === 'cod') {
     _showProcessingOverlay('Placing Order', 'Confirming your Cash on Delivery order');
     return;
@@ -1796,7 +1796,7 @@ async function initiateRazorpay() {
   }
 
   // Step 1: Create Razorpay order on backend to get order_id
-  // NOTE: send amount in rupees â€” backend converts to paise
+  // NOTE: send amount in rupees — backend converts to paise
   let rzpOrderId = null;
   try {
     const rzpRes = await fetch(window.API_BASE + '/orders/razorpay/create', {
@@ -1818,7 +1818,7 @@ async function initiateRazorpay() {
   // Step 2: Open Razorpay checkout
   const options = {
     key: _rzpKeyId,
-    amount: total * 100, // paise â€” must match what backend created
+    amount: total * 100, // paise — must match what backend created
     currency: 'INR',
     name: RZP_MERCHANT_NAME,
     description: 'Order from NANSEI Organics - ' + cart.length + ' item' + (cart.length > 1 ? 's' : ''),
@@ -1860,7 +1860,7 @@ async function initiateRazorpay() {
     });
     rzp.open();
   } catch (err) {
-    // Razorpay not loaded or invalid key â€” show processing simulation
+    // Razorpay not loaded or invalid key — show processing simulation
     console.warn('Razorpay load error:', err);
     if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
     // Simulate success for demo
@@ -2112,7 +2112,7 @@ function renderOrders() {
           ]
         };
       });
-      // When logged in â€” show ONLY API orders, ignore localStorage junk
+      // When logged in — show ONLY API orders, ignore localStorage junk
       _renderOrderList(apiOrders);
     }).catch(() => _renderOrderList(getOrders()));
   } else {
