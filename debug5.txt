@@ -1,0 +1,61 @@
+﻿    el.style.left = Math.min(Math.max(0, cx - ox), maxX) + 'px';
+    el.style.top  = Math.min(Math.max(0, cy - oy), maxY) + 'px';
+  }
+
+  function endDrag() { dragging = false; el.style.transition = ''; }
+
+  el.addEventListener('mousedown',  e => { if (e.target.closest('#btn-reel-minimize')) return; startDrag(e.clientX, e.clientY); e.preventDefault(); });
+  document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+  document.addEventListener('mouseup',   endDrag);
+
+  el.addEventListener('touchstart', e => { if (e.target.closest('#btn-reel-minimize')) return; const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, { passive: true });
+  document.addEventListener('touchmove',  e => { if (!dragging) return; const t = e.touches[0]; moveDrag(t.clientX, t.clientY); e.preventDefault(); }, { passive: false });
+  document.addEventListener('touchend',   endDrag);
+
+  el.addEventListener('click', e => { if (moved) { moved = false; e.stopImmediatePropagation(); e.preventDefault(); } });
+})();
+
+/* ════ AUTH NAV ════ */
+(function(){
+  const user = JSON.parse(localStorage.getItem('nansai_user') || 'null');
+  if (!user) return;
+  const firstName = (user.name || '').split(' ')[0] || 'User';
+  const btn = document.getElementById('navSignInBtn');
+  const txt = document.getElementById('navSignInText');
+  const mob = document.getElementById('mobSignInLink');
+
+  // Show AD circle for admin only
+  if (user.role === 'admin') {
+    const adminCircle = document.getElementById('adminCircleBtn');
+    if (adminCircle) adminCircle.style.display = 'flex';
+  }
+  // Profile icon — always shows greeting for all logged-in users
+  const greeting = 'Hi, ' + firstName;
+  if (btn) btn.href = 'account.html';
+  if (txt) txt.textContent = greeting;
+  if (mob) { mob.href = 'account.html'; mob.textContent = '[[icon:user]] ' + greeting; }
+})();
+</script>
+<!--starting of hand mill video-->
+<script>
+  /* ── Intersection Observer reveal ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  /* ── Video Modal ── */
+  function openVideoModal(src) {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe');
+    const video = document.getElementById('video-native');
+    
+    if (src.includes('.mp4')) {
+      iframe.style.display = 'none';
+      iframe.src = '';
+      video.src = src;
+      video.style.display = 'block';
+    } else {

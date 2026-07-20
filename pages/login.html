@@ -1,393 +1,458 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nansei Organics — Sign In</title>
+<title>Nansei Organics - Authentication</title>
 <script src="../js/config.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
+<script src="../frontend/js/api.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --forest:#1a3a2a;--forest-mid:#2d5a3d;--forest-leaf:#4a8c5c;
-  --cream:#f7f3ec;--warm-white:#fdfaf5;
-  --gold:#c9a84c;--gold-lt:#e8c97a;--gold-dk:#b8922a;
-  --text-dk:#1a2416;--text-md:#3d5a45;--text-lt:#7a9980;
-  --border:rgba(26,58,42,.15);--error:#b83232;--radius:12px;
+  --forest:#123220;
+  --forest-mid:#2d5a3d;
+  --leaf:#4a8c5c;
+  --sage:#8fbc9a;
+  --mint:#eef8f1;
+  --cream:#f7f3ec;
+  --warm:#fdfaf5;
+  --gold:#c9a84c;
+  --ink:#172116;
+  --muted:#6d8371;
+  --line:rgba(18,50,32,.13);
+  --error:#b83232;
+  --ok:#15803d;
+  --radius:18px;
 }
-html,body{min-height:100%;background:var(--cream);font-family:'Inter',sans-serif;color:var(--text-dk);}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px;}
-.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 70% 55% at 5% 100%,rgba(26,58,42,.07) 0%,transparent 55%),
-    radial-gradient(ellipse 55% 45% at 95% 0%,rgba(201,168,76,.06) 0%,transparent 50%),
-    linear-gradient(160deg,#f2f0ea 0%,#f7f3ec 60%,#f0ede5 100%);}
-.leaf{position:fixed;z-index:0;pointer-events:none;opacity:.07;}
-.leaf.l1{top:6%;left:2%;}
-.leaf.l2{bottom:8%;right:3%;}
-
-/* Card */
-.card{position:relative;z-index:10;background:var(--warm-white);border-radius:20px;
-  border:1px solid rgba(26,58,42,.1);
-  box-shadow:0 2px 6px rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.07),0 28px 60px rgba(0,0,0,.05);
-  width:100%;max-width:420px;overflow:hidden;
-  animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
-@keyframes cardIn{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
-.card-header{padding:20px 28px 18px;border-bottom:1px solid rgba(26,58,42,.08);
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#f4f1ea 0%,#fdfaf5 100%);}
-.header-logo{height:56px;width:auto;display:block;}
-.card-body{padding:26px 28px 28px;}
-
-/* Panels */
-.panel{display:none;}
-.panel.on{display:block;animation:fadeUp .32s cubic-bezier(.22,1,.36,1) both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-.panel-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--text-dk);margin-bottom:3px;line-height:1.2;}
-.panel-sub{font-size:.78rem;color:var(--text-lt);margin-bottom:20px;line-height:1.5;}
-
-/* Form */
-label.fl{display:block;font-size:.75rem;font-weight:700;color:var(--text-dk);margin-bottom:5px;letter-spacing:.01em;}
-.inp-wrap{margin-bottom:13px;position:relative;}
-input.inp{width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);
-  font-family:'Inter',sans-serif;font-size:.88rem;color:var(--text-dk);background:#fff;outline:none;
-  transition:border-color .2s,box-shadow .2s;}
-input.inp:focus{border-color:var(--forest-leaf);box-shadow:0 0 0 3px rgba(74,140,92,.1);}
-input.inp.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(184,50,50,.1);}
-
-/* Phone prefix */
-.phone-wrap{display:flex;gap:0;}
-.phone-prefix{padding:.75rem .9rem;background:#f4f1ea;border:1.5px solid var(--border);border-right:none;
-  border-radius:var(--radius) 0 0 var(--radius);font-size:.88rem;font-weight:700;color:var(--text-md);
-  display:flex;align-items:center;white-space:nowrap;line-height:1;}
-.phone-wrap input.inp{border-radius:0 var(--radius) var(--radius) 0;flex:1;}
-
-/* Buttons */
-.btn-primary{width:100%;padding:.82rem 1rem;
-  background:linear-gradient(135deg,var(--forest) 0%,var(--forest-mid) 100%);
-  color:#fff;border:none;border-radius:var(--radius);font-family:'Roboto',sans-serif;
-  font-size:.88rem;font-weight:700;cursor:pointer;letter-spacing:.03em;
-  transition:filter .2s,transform .15s,box-shadow .2s;margin-top:4px;
-  box-shadow:0 3px 10px rgba(26,58,42,.28);display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,58,42,.32);}
-.btn-primary:active{transform:none;filter:brightness(.95);}
-.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none;}
-.btn-back{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;
-  color:var(--text-lt);background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px;
-  font-family:'Inter',sans-serif;transition:color .2s;}
-.btn-back:hover{color:var(--forest);}
-
-/* Spinner */
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;
-  border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* Footer links */
-.footer-note{text-align:center;font-size:.74rem;color:var(--text-lt);margin-top:18px;}
-.footer-note a,.footer-note button.lnk{color:var(--forest-leaf);text-decoration:none;font-weight:600;
-  background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:.74rem;padding:0;}
-.footer-note a:hover,.footer-note button.lnk:hover{text-decoration:underline;}
-
-/* Trust strip */
-.trust-strip{display:flex;justify-content:center;gap:18px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(26,58,42,.07);}
-.trust-item{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--text-lt);}
-
-/* Success */
-.success-wrap{text-align:center;padding:1.5rem 0;}
-.s-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#e6f4ec,#f0fdf4);
-  border:1.5px solid rgba(74,140,92,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
-.success-hi{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:var(--text-dk);margin-bottom:5px;}
-.success-sub{font-size:.78rem;color:var(--text-lt);margin-bottom:1.25rem;}
-.progress-bar{height:3px;background:rgba(26,58,42,.08);border-radius:99px;overflow:hidden;}
-.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--forest-leaf),var(--gold-dk));border-radius:99px;transition:width 1.5s ease;}
-
-/* Toast */
-#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-10px);
-  background:var(--forest);color:var(--cream);font-size:.76rem;font-weight:600;
-  padding:.5rem 1.2rem;border-radius:30px;white-space:nowrap;max-width:90vw;text-align:center;
-  pointer-events:none;opacity:0;z-index:9999;
-  border:1px solid rgba(201,168,76,.2);
-  transition:opacity .25s,transform .25s;box-shadow:0 6px 20px rgba(0,0,0,.2);}
-#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
-#toast.err-toast{background:#b83232;}
+html{min-height:100%}
+body{
+  min-height:100vh;
+  font-family:"DM Sans",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 8%,rgba(143,188,154,.24),transparent 28%),
+    radial-gradient(circle at 88% 16%,rgba(201,168,76,.16),transparent 26%),
+    linear-gradient(135deg,#ffffff 0%,#f5fbf6 48%,#f7f3ec 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 16px;
+}
+button,input{font:inherit}
+.shell{
+  width:min(1040px,100%);
+  min-height:640px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(360px,430px);
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.76);
+  border-radius:28px;
+  box-shadow:0 26px 80px rgba(18,50,32,.16);
+  overflow:hidden;
+  backdrop-filter:blur(18px);
+}
+.brand-panel{
+  position:relative;
+  padding:42px;
+  background:
+    linear-gradient(140deg,rgba(18,50,32,.88),rgba(45,90,61,.82)),
+    url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80") center/cover;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  overflow:hidden;
+}
+.brand-panel::after{
+  content:"";
+  position:absolute;
+  inset:auto -18% -20% 22%;
+  height:260px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:50%;
+  transform:rotate(-8deg);
+}
+.brand-logo{
+  position:relative;
+  z-index:1;
+  width:132px;
+  height:auto;
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.18));
+}
+.brand-copy{position:relative;z-index:1;max-width:470px}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#dfeee2;
+  margin-bottom:14px;
+}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold)}
+h1{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(2.45rem,5vw,4.9rem);
+  line-height:.94;
+  font-weight:700;
+  letter-spacing:0;
+}
+.brand-copy p{
+  margin-top:18px;
+  max-width:390px;
+  color:rgba(255,255,255,.76);
+  line-height:1.75;
+  font-size:.96rem;
+}
+.trust-row{
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:34px;
+}
+.trust-pill{
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.1);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:.76rem;
+  font-weight:700;
+  color:#eef8f1;
+}
+.auth-panel{
+  background:rgba(255,255,255,.9);
+  padding:34px;
+  display:flex;
+  align-items:center;
+}
+.auth-card{width:100%}
+.mobile-logo{display:none;width:118px;margin:0 auto 22px}
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  padding:5px;
+  background:var(--mint);
+  border:1px solid var(--line);
+  border-radius:16px;
+  margin-bottom:24px;
+}
+.tab{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  border-radius:12px;
+  min-height:44px;
+  cursor:pointer;
+  font-weight:800;
+  transition:background .22s,color .22s,box-shadow .22s;
+}
+.tab.active{
+  background:#fff;
+  color:var(--forest);
+  box-shadow:0 8px 20px rgba(18,50,32,.08);
+}
+.panel{display:none;animation:fade .28s ease both}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.panel h2{
+  font-family:"Cormorant Garamond",serif;
+  font-size:2.1rem;
+  line-height:1;
+  color:var(--forest);
+  margin-bottom:8px;
+}
+.sub{
+  color:var(--muted);
+  font-size:.9rem;
+  line-height:1.55;
+  margin-bottom:22px;
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:15px}
+label{
+  display:block;
+  margin-bottom:7px;
+  color:var(--forest);
+  font-size:.78rem;
+  font-weight:800;
+}
+.input-wrap{position:relative}
+input{
+  width:100%;
+  min-height:48px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  color:var(--ink);
+  padding:0 14px;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+input:focus{
+  border-color:var(--leaf);
+  box-shadow:0 0 0 4px rgba(74,140,92,.12);
+  background:#fff;
+}
+input.invalid{
+  border-color:var(--error);
+  box-shadow:0 0 0 4px rgba(184,50,50,.1);
+}
+.password input{padding-right:48px}
+.toggle{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:var(--muted);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:background .2s,color .2s;
+}
+.toggle:hover{background:var(--mint);color:var(--forest)}
+.error{
+  display:none;
+  margin-top:6px;
+  color:var(--error);
+  font-size:.74rem;
+  font-weight:700;
+}
+.error.show{display:block}
+.strength{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  margin-top:8px;
+}
+.strength-track{
+  height:5px;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(18,50,32,.09);
+}
+.strength-bar{
+  width:0;
+  height:100%;
+  border-radius:999px;
+  transition:width .28s,background .28s;
+}
+.strength-text{
+  font-size:.68rem;
+  color:var(--muted);
+  font-weight:800;
+  min-width:54px;
+  text-align:right;
+}
+.forgot{
+  display:inline-flex;
+  margin:-3px 0 16px auto;
+  color:var(--leaf);
+  font-size:.8rem;
+  font-weight:800;
+  text-decoration:none;
+}
+.forgot:hover{text-decoration:underline}
+.submit{
+  width:100%;
+  min-height:50px;
+  border:0;
+  border-radius:15px;
+  background:linear-gradient(135deg,var(--forest),var(--forest-mid));
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-weight:900;
+  box-shadow:0 14px 30px rgba(18,50,32,.22);
+  transition:transform .18s,filter .18s,opacity .18s;
+}
+.submit:hover{transform:translateY(-1px);filter:brightness(1.04)}
+.submit:disabled{opacity:.62;cursor:not-allowed;transform:none;filter:none}
+.spinner{
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.35);
+  border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.switch{
+  margin-top:18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.87rem;
+}
+.switch button{
+  border:0;
+  background:transparent;
+  color:var(--leaf);
+  cursor:pointer;
+  font-weight:900;
+}
+.switch button:hover{text-decoration:underline}
+#toast{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%) translateY(-12px);
+  background:var(--forest);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 12px 34px rgba(18,50,32,.22);
+  padding:11px 18px;
+  border-radius:999px;
+  opacity:0;
+  pointer-events:none;
+  z-index:20;
+  font-size:.84rem;
+  font-weight:800;
+  transition:opacity .24s,transform .24s;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.error{background:var(--error)}
+@media (max-width:840px){
+  body{align-items:flex-start;padding:18px 12px}
+  .shell{grid-template-columns:1fr;min-height:auto;border-radius:22px}
+  .brand-panel{display:none}
+  .auth-panel{padding:26px 18px}
+  .mobile-logo{display:block}
+}
+@media (max-width:480px){
+  .grid-2{grid-template-columns:1fr;gap:0}
+  .panel h2{font-size:1.8rem}
+  .auth-panel{padding:22px 14px}
+  input,.submit{min-height:47px}
+}
 </style>
 </head>
 <body>
-<div class="bg-layer"></div>
-<div class="leaf l1"><svg width="90" height="90" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="#1a3a2a"/></svg></div>
-<div class="leaf l2"><svg width="66" height="66" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="#c9a84c" transform="rotate(40 32 32)"/></svg></div>
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
-<div class="card">
-  <div class="card-header">
-    <img src="nansei_org_logo.svg" alt="Nansei Organics" class="header-logo"/>
-  </div>
-
-  <div class="card-body">
-
-    <!-- LOGIN PANEL -->
-    <div id="panel-login" class="panel on">
-      <div class="panel-title">Welcome back</div>
-      <div class="panel-sub">Enter your mobile number to continue</div>
-      <label class="fl" for="login-phone">Mobile Number</label>
-      <div class="inp-wrap">
-        <div class="phone-wrap">
-          <span class="phone-prefix">🇮🇳 +91</span>
-          <input id="login-phone" class="inp" type="tel" inputmode="numeric" maxlength="10"
-            placeholder="10-digit mobile number" autocomplete="tel"/>
-        </div>
-      </div>
-      <button class="btn-primary" id="btn-continue" onclick="handleContinue()">
-        Continue
-      </button>
-      <div class="footer-note" style="margin-top:16px;">
-        New customer? <button class="lnk" onclick="showRegister('')">Create an account</button>
-      </div>
-      <div class="trust-strip">
-        <span class="trust-item">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Secure Login
-        </span>
-        <span class="trust-item">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          Instant Access
-        </span>
-        <span class="trust-item">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-          100% Organic
-        </span>
+<main class="shell">
+  <section class="brand-panel" aria-label="Nansei Organics">
+    <img class="brand-logo" src="nansei_org_logo.svg" alt="Nansei Organics"/>
+    <div class="brand-copy">
+      <div class="eyebrow">Organic pantry access</div>
+      <h1>Welcome to Nansei Organics</h1>
+      <p>Sign in to manage orders, save favourites, and keep your farm-fresh organic essentials close at hand.</p>
+      <div class="trust-row">
+        <span class="trust-pill">Secure account</span>
+        <span class="trust-pill">Fresh harvests</span>
+        <span class="trust-pill">Premium organics</span>
       </div>
     </div>
+  </section>
 
-    <!-- REGISTER PANEL -->
-    <div id="panel-register" class="panel">
-      <button class="btn-back" onclick="showLogin()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <div class="panel-title">Create Account</div>
-      <div class="panel-sub">Join Nansei Organics — pure, natural, and fresh.</div>
+  <section class="auth-panel">
+    <div class="auth-card">
+      <img class="mobile-logo" src="nansei_org_logo.svg" alt="Nansei Organics"/>
 
-      <label class="fl" for="reg-name">Full Name</label>
-      <div class="inp-wrap">
-        <input id="reg-name" class="inp" type="text" placeholder="Your full name" autocomplete="name"/>
+      <div class="tabs" role="tablist" aria-label="Authentication">
+        <button class="tab active" type="button" id="loginTab" role="tab" aria-selected="true" onclick="switchTab('login')">Login</button>
+        <button class="tab" type="button" id="registerTab" role="tab" aria-selected="false" onclick="switchTab('register')">Register</button>
       </div>
 
-      <label class="fl" for="reg-phone">Mobile Number</label>
-      <div class="inp-wrap">
-        <div class="phone-wrap">
-          <span class="phone-prefix">🇮🇳 +91</span>
-          <input id="reg-phone" class="inp" type="tel" inputmode="numeric" maxlength="10"
-            placeholder="10-digit mobile number" autocomplete="tel"/>
+      <form id="loginPanel" class="panel active" novalidate>
+        <h2>Welcome back</h2>
+        <p class="sub">Login with your email and password to continue.</p>
+
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"/>
+          <div class="error" id="loginEmailError"></div>
         </div>
-      </div>
 
-      <label class="fl" for="reg-email">Gmail ID</label>
-      <div class="inp-wrap">
-        <input id="reg-email" class="inp" type="email" placeholder="yourname@gmail.com" autocomplete="email"/>
-      </div>
-
-      <button class="btn-primary" id="btn-register" onclick="handleRegister()">
-        Create Account
-      </button>
-      <div class="footer-note" style="margin-top:16px;">
-        Already have an account? <button class="lnk" onclick="showLogin()">Sign in</button>
-      </div>
-    </div>
-
-    <!-- SUCCESS PANEL -->
-    <div id="panel-success" class="panel">
-      <div class="success-wrap">
-        <div class="s-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4a8c5c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <div class="input-wrap password">
+            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"/>
+            <button class="toggle" type="button" onclick="togglePassword('loginPassword', this)" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="error" id="loginPasswordError"></div>
         </div>
-        <div class="success-hi" id="success-name">Welcome!</div>
-        <div class="success-sub" id="success-msg">You're now signed in. Redirecting…</div>
-        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-      </div>
+
+        <a class="forgot" href="#" onclick="forgotPassword(event)">Forgot Password</a>
+        <button class="submit" id="loginButton" type="submit">Login</button>
+
+        <p class="switch">Don't have an account? <button type="button" onclick="switchTab('register')">Create one</button></p>
+      </form>
+
+      <form id="registerPanel" class="panel" novalidate>
+        <h2>Create Account</h2>
+        <p class="sub">Start your Nansei Organics account in a few details.</p>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="text" autocomplete="given-name" placeholder="First name"/>
+            <div class="error" id="firstNameError"></div>
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="text" autocomplete="family-name" placeholder="Last name"/>
+            <div class="error" id="lastNameError"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="registerEmail">Email</label>
+          <input id="registerEmail" type="email" autocomplete="email" placeholder="you@example.com"/>
+          <div class="error" id="registerEmailError"></div>
+        </div>
+
+        <div class="field">
+          <label for="registerPassword">Password</label>
+          <div class="input-wrap password">
+            <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Minimum 8 characters"/>
+            <button class="toggle" type="button" onclick="togglePassword('registerPassword', this)" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="strength" aria-hidden="true">
+            <div class="strength-track"><div class="strength-bar" id="strengthBar"></div></div>
+            <span class="strength-text" id="strengthText">Weak</span>
+          </div>
+          <div class="error" id="registerPasswordError"></div>
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrap password">
+            <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Repeat password"/>
+            <button class="toggle" type="button" onclick="togglePassword('confirmPassword', this)" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="error" id="confirmPasswordError"></div>
+        </div>
+
+        <button class="submit" id="registerButton" type="submit">Create Account</button>
+        <p class="switch">Already have an account? <button type="button" onclick="switchTab('login')">Login</button></p>
+      </form>
     </div>
+  </section>
+</main>
 
-  </div>
-</div>
-
-<script>
-const API = window.API_BASE || '/api';
-let toastTimer;
-
-function toast(msg, isErr = false) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'on' + (isErr ? ' err-toast' : '');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.className = ''; }, 3200);
-}
-
-function setLoading(btnId, loading) {
-  const btn = document.getElementById(btnId);
-  btn.disabled = loading;
-  btn.innerHTML = loading
-    ? '<span class="spinner"></span> Please wait…'
-    : (btnId === 'btn-continue' ? 'Continue' : 'Create Account');
-}
-
-function showPanel(id) {
-  ['panel-login','panel-register','panel-success'].forEach(p => {
-    const el = document.getElementById(p);
-    el.classList.remove('on');
-    el.style.display = 'none';
-  });
-  const target = document.getElementById(id);
-  target.style.display = 'block';
-  requestAnimationFrame(() => target.classList.add('on'));
-}
-
-function showLogin() { showPanel('panel-login'); }
-
-function showRegister(phone) {
-  showPanel('panel-register');
-  const phoneEl = document.getElementById('reg-phone');
-  if (phone) phoneEl.value = phone;
-  setTimeout(() => {
-    (phone ? document.getElementById('reg-name') : phoneEl).focus();
-  }, 80);
-}
-
-function showSuccess(name, isNew) {
-  showPanel('panel-success');
-  document.getElementById('success-name').textContent = `Welcome${name ? ', ' + name.split(' ')[0] : ''}! 🌿`;
-  document.getElementById('success-msg').textContent = isNew
-    ? 'Account created! Redirecting to your shop…'
-    : 'You\'re signed in! Redirecting…';
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      document.getElementById('progress-fill').style.width = '100%';
-    }, 50);
-  });
-  setTimeout(() => {
-    window.location.href = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'index.html' : '/pages/index.html';
-  }, 1700);
-}
-
-function storeSession(token, user) {
-  localStorage.setItem('token', token);
-  localStorage.setItem('user', JSON.stringify(user));
-}
-
-function validatePhone(val) {
-  return /^\d{10}$/.test(val.trim());
-}
-
-// ── Continue (Login) ──
-async function handleContinue() {
-  const phone = document.getElementById('login-phone').value.trim();
-  const phoneEl = document.getElementById('login-phone');
-
-  if (!validatePhone(phone)) {
-    phoneEl.classList.add('err');
-    toast('Enter a valid 10-digit mobile number', true);
-    phoneEl.focus();
-    return;
-  }
-  phoneEl.classList.remove('err');
-  setLoading('btn-continue', true);
-
-  try {
-    const res = await fetch(`${API}/auth/check-mobile`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone }),
-    });
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message || 'Something went wrong');
-
-    if (data.exists) {
-      storeSession(data.token, data.user);
-      showSuccess(data.user?.name, false);
-    } else {
-      showRegister(phone);
-    }
-  } catch (err) {
-    toast(err.message || 'Network error. Please try again.', true);
-  } finally {
-    setLoading('btn-continue', false);
-  }
-}
-
-// ── Create Account ──
-async function handleRegister() {
-  const name  = document.getElementById('reg-name').value.trim();
-  const phone = document.getElementById('reg-phone').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
-
-  const nameEl  = document.getElementById('reg-name');
-  const phoneEl = document.getElementById('reg-phone');
-  const emailEl = document.getElementById('reg-email');
-
-  [nameEl, phoneEl, emailEl].forEach(el => el.classList.remove('err'));
-
-  if (!name) {
-    nameEl.classList.add('err'); toast('Full name is required', true); nameEl.focus(); return;
-  }
-  if (!validatePhone(phone)) {
-    phoneEl.classList.add('err'); toast('Enter a valid 10-digit mobile number', true); phoneEl.focus(); return;
-  }
-  if (!email || !/^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$/i.test(email)) {
-    emailEl.classList.add('err'); toast('Enter a valid email address', true); emailEl.focus(); return;
-  }
-
-  setLoading('btn-register', true);
-
-  try {
-    const res = await fetch(`${API}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, email }),
-    });
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message || 'Registration failed');
-
-    storeSession(data.token, data.user);
-    showSuccess(data.user?.name, true);
-  } catch (err) {
-    toast(err.message || 'Network error. Please try again.', true);
-  } finally {
-    setLoading('btn-register', false);
-  }
-}
-
-// Enter key support
-document.getElementById('login-phone').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleContinue();
-});
-['reg-name','reg-phone','reg-email'].forEach((id, i, arr) => {
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      const next = arr[i + 1];
-      if (next) document.getElementById(next).focus();
-      else handleRegister();
-    }
-  });
-});
-
-// Numeric-only phone inputs
-['login-phone','reg-phone'].forEach(id => {
-  document.getElementById(id).addEventListener('input', function() {
-    this.value = this.value.replace(/\D/g, '').slice(0, 10);
-    this.classList.remove('err');
-  });
-});
-
-// Remove err on change
-['reg-name','reg-email'].forEach(id => {
-  document.getElementById(id).addEventListener('input', function() {
-    this.classList.remove('err');
-  });
-});
-
-// Auto-focus on load
-document.getElementById('login-phone').focus();
-</script>
-</body>
+<script src="../js/login.js"></script></body>
 </html>
+

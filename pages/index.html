@@ -36,9 +36,9 @@ tailwind.config = {
 </script>
 
 <style>
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    DESIGN TOKENS
-═══════════════════════════════════════ */
+--------------------------------------- */
 :root {
   --forest:      #1a3a2a;
   --forest-deep: #0f2218;
@@ -61,11 +61,11 @@ tailwind.config = {
 html { scroll-behavior:smooth; }
 body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk); overflow-x:hidden; }
 
-/* ── font roles ──
-   price        → Inter 900 (ExtraBold)
-   headings/ui  → Inter 700 (Bold)
-   body text    → Inter 400 (Regular)
-   atc/buy btns → Roboto 700
+/* -- font roles --
+   price        ? Inter 900 (ExtraBold)
+   headings/ui  ? Inter 700 (Bold)
+   body text    ? Inter 400 (Regular)
+   atc/buy btns ? Roboto 700
 */
 .font-price   { font-family:'Inter',sans-serif; font-weight:900; }
 .font-bold-ui { font-family:'Inter',sans-serif; font-weight:700; }
@@ -84,9 +84,9 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
 }
 #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* ═══════════════════════════════════════
-   ── UNIFIED NAVBAR ──
-═══════════════════════════════════════ */
+/* ---------------------------------------
+   -- UNIFIED NAVBAR --
+--------------------------------------- */
 .site-nav {
   position:sticky; top:0; z-index:1000;
   background:#fff;
@@ -202,9 +202,9 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
 .mob-ham.open span:nth-child(2) { opacity:0; }
 .mob-ham.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    MOBILE SEARCH ROW
-═══════════════════════════════════════ */
+--------------------------------------- */
 .mob-search-row {
   display:none; background:#FEFCE9;
   border-bottom:1px solid rgba(26,58,42,.08);
@@ -225,16 +225,16 @@ body { font-family:'Inter',sans-serif; background:#f7f3ec; color:var(--text-dk);
 .mob-search-row .sb svg { width:13px; height:13px; }
 .mob-search-row .search-suggestions { top:calc(100% + 6px); left:0; right:0; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    OFFER BAR
-═══════════════════════════════════════ */
+--------------------------------------- */
 @keyframes ping { 75%,100%{transform:scale(2);opacity:0} }
 @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 .animate-marquee { animation:marquee 35s linear infinite; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    PARALLAX HERO SLIDER — 3D CAROUSEL
-═══════════════════════════════════════ */
+--------------------------------------- */
 .slider-shell { position:relative; width:100%; overflow:hidden; perspective:1200px; perspective-origin:50% 50%; }
 #track { display:flex; height:100%; transform-style:preserve-3d; transition:none; }
 .slide {
@@ -285,9 +285,9 @@ video.slide-bg { transform:none!important; transition:none!important; }
 #muteBtn:hover { background:#c9a84c; color:#0a100b; }
 #muteBtn.visible { display:flex; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    FLOATING LEAVES — injected into hero
-═══════════════════════════════════════ */
+--------------------------------------- */
 @keyframes leafFloat1 {
   0%,100% { transform:translateY(0) rotate(0deg) scale(1); }
   35%     { transform:translateY(-18px) rotate(9deg) scale(1.06); }
@@ -306,9 +306,9 @@ video.slide-bg { transform:none!important; transition:none!important; }
 }
 .hero-leaf { position:absolute; pointer-events:none; user-select:none; z-index:4; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    SCROLL REVEAL
-═══════════════════════════════════════ */
+--------------------------------------- */
 .sr { opacity:0; transform:translateY(32px); transition:opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
 .sr.is-visible { opacity:1; transform:none; }
 .sr-left { opacity:0; transform:translateX(-36px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
@@ -324,9 +324,9 @@ video.slide-bg { transform:none!important; transition:none!important; }
 .sd-5 { transition-delay:.40s; }
 .sd-6 { transition-delay:.48s; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    PRODUCT CARDS
-═══════════════════════════════════════ */
+--------------------------------------- */
 @keyframes floatCard {
   0%,100% { transform:translateY(0); }
   50%     { transform:translateY(-7px); }
@@ -397,24 +397,24 @@ video.slide-bg { transform:none!important; transition:none!important; }
 .qty-selector-area { animation:qtyFadeIn 260ms ease-out both; }
 
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    BLOG CARDS
-═══════════════════════════════════════ */
+--------------------------------------- */
 .blog-card { background:#fff; border-radius:18px; overflow:hidden; border:1px solid rgba(26,58,42,.08); box-shadow:0 4px 20px rgba(26,58,42,.06); transition:box-shadow .4s,transform .4s; transform-style:preserve-3d; cursor:pointer; }
 .blog-card:hover { box-shadow:0 24px 60px rgba(26,58,42,.15); }
 .blog-card-img { height:210px; overflow:hidden; }
 .blog-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s cubic-bezier(.22,1,.36,1); }
 .blog-card:hover .blog-card-img img { transform:scale(1.06); }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    WHY CARDS
-═══════════════════════════════════════ */
+--------------------------------------- */
 .why-card { transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s; }
 .why-card:hover { transform:translateY(-8px); box-shadow:0 20px 48px rgba(21,128,61,.13)!important; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    PARALLAX SECTIONS
-═══════════════════════════════════════ */
+--------------------------------------- */
 .parallax-section { position:relative; overflow:hidden; }
 .parallax-bg-layer { position:absolute; inset:0; background-size:cover; background-position:center; will-change:transform; }
 .parallax-overlay-dark {
@@ -423,9 +423,9 @@ video.slide-bg { transform:none!important; transition:none!important; }
 }
 .parallax-fg { position:relative; z-index:2; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    DROPDOWN (minimal, source-accurate)
-═══════════════════════════════════════ */
+--------------------------------------- */
 #dd-overlay {
   display:none; position:fixed;
   inset:var(--nav-h) 0 0;
@@ -435,9 +435,9 @@ video.slide-bg { transform:none!important; transition:none!important; }
 }
 #dd-overlay.show { display:block; pointer-events:all; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    MOBILE OVERRIDES
-═══════════════════════════════════════ */
+--------------------------------------- */
 @media(max-width:768px){
   .nav-links,.nav-search,.nav-orders-btn,.nav-divider { display:none!important; }
   .mob-ham { display:flex; }
@@ -457,12 +457,12 @@ video.slide-bg { transform:none!important; transition:none!important; }
   .nav-actions { gap:.45rem; }
 }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    MOBILE UX — COMPLETE OVERHAUL
-═══════════════════════════════════════ */
+--------------------------------------- */
 @media(max-width:768px){
 
-  /* ── NAV ── */
+  /* -- NAV -- */
   :root { --nav-h: 58px; }
   .nav-inner { padding: 0 1rem; gap: .6rem; }
   .nav-logo img { height: 48px !important; }
@@ -470,11 +470,11 @@ video.slide-bg { transform:none!important; transition:none!important; }
   .nav-icon-btn svg { width: 17px; height: 17px; }
   .nav-badge { min-width: 14px; height: 14px; font-size: .5rem; }
 
-  /* ── MOBILE SEARCH ROW ── */
+  /* -- MOBILE SEARCH ROW -- */
   .mob-search-row { padding: .5rem .85rem .6rem; }
   .mob-search-row input { font-size: 16px; padding: .6rem 2.8rem .6rem 1rem; border-radius: 10px; }
 
-  /* ── HERO SLIDER ── */
+  /* -- HERO SLIDER -- */
   #sliderShell { height: clamp(260px, 58vw, 380px) !important; }
   .slide-content { padding: 1rem 1rem 1rem 1.4rem !important; justify-content: flex-end !important; padding-bottom: 3.5rem !important; }
   .slide-title { font-size: clamp(1.25rem, 5.5vw, 1.7rem) !important; margin-bottom: .4rem; }
@@ -485,14 +485,14 @@ video.slide-bg { transform:none!important; transition:none!important; }
   .ghost-num { display: none; }
   .hero-leaf { display: none; }
 
-  /* ── PRODUCTS SECTION ── */
+  /* -- PRODUCTS SECTION -- */
   #products { padding: 2rem 0 2.5rem !important; }
   #products > div { padding: 0 .85rem !important; }
   #sr-prod-hdr { margin-bottom: 1.5rem !important; }
   #sr-prod-hdr h1 { font-size: clamp(1.4rem, 6vw, 1.9rem) !important; }
   #sr-prod-hdr p { font-size: .78rem !important; }
 
-  /* ── FILTER PILLS ── */
+  /* -- FILTER PILLS -- */
   .filter-bar {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
@@ -510,7 +510,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
     text-overflow: ellipsis !important;
   }
 
-  /* ── PRODUCT SECTIONS — hide scroll btns, show 2-col grid ── */
+  /* -- PRODUCT SECTIONS — hide scroll btns, show 2-col grid -- */
   .hscroll-wrap { gap: 0 !important; }
   .scroll-btn { display: none !important; }
   .prod-hscroll {
@@ -557,7 +557,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
     grid-column: 1 / -1 !important;
   }
 
-  /* ── MID PARALLAX BANNER ── */
+  /* -- MID PARALLAX BANNER -- */
   #midParallax { min-height: 320px !important; }
   #midParallax .parallax-fg { padding: 2.5rem 1.25rem !important; }
   #midParallax h2 { font-size: clamp(1.5rem, 6vw, 2rem) !important; margin-bottom: .75rem !important; }
@@ -570,7 +570,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
   #sr-mid-stats > div > div:first-child { font-size: 2rem !important; }
   #sr-mid-stats > div > div:last-child { font-size: .52rem !important; }
 
-  /* ── WHY SECTION ── */
+  /* -- WHY SECTION -- */
   #why-section { padding: 2.5rem 1rem !important; }
   #why-section .grid { gap: .75rem !important; }
   .why-card { padding: 1rem !important; border-radius: 16px !important; }
@@ -578,7 +578,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
   .why-card h3 { font-size: .88rem !important; margin-bottom: .35rem !important; }
   .why-card p { font-size: .7rem !important; }
 
-  /* ── BLOG SECTION ── */
+  /* -- BLOG SECTION -- */
   #blog-section {
     display: block !important;
     padding: 2rem .85rem 2.5rem !important;
@@ -634,24 +634,26 @@ video.slide-bg { transform:none!important; transition:none!important; }
     transform: scale(1.35);
   }
 
-  /* ── FOOTER ── */
+  /* -- FOOTER -- */
   #site-footer .grid { grid-template-columns: 1fr 1fr !important; gap: 1.5rem !important; padding: 2rem 1.25rem !important; }
   #site-footer .grid > div:first-child { grid-column: 1 / -1; }
   #site-footer .grid > div:last-child { grid-column: 1 / -1; }
 
-  /* ── REEL WIDGET — move up above sticky bar ── */
+  /* -- REEL WIDGET — move up above sticky bar -- */
   #reel-widget { bottom: 72px !important; right: 10px !important; width: 130px !important; }
   #reel-tab { bottom: 72px !important; }
   .mini-caption { font-size: 8.5px !important; padding: 5px 6px !important; }
 
-  /* ── TOAST — above sticky bar ── */
+  /* -- TOAST — above sticky bar -- */
   #toast { bottom: calc(64px + 14px) !important; font-size: .74rem !important; }
 
-  /* ── CART DRAWER ── */
+  /* -- CART DRAWER -- */
   #cartDrawer { width: 100vw !important; }
 }
+</style>
 
-/* ── MOBILE STICKY BOTTOM BAR ── */
+<style>
+/* -- MOBILE STICKY BOTTOM BAR -- */
 #mob-sticky-bar {
   display: none;
   position: fixed;
@@ -722,6 +724,8 @@ video.slide-bg { transform:none!important; transition:none!important; }
   border-radius: 20px; display: flex; align-items: center; justify-content: center;
   border: 1.5px solid #fff; line-height: 1;
 }
+</style>
+<style>
 .prod-hscroll::-webkit-scrollbar { display:none; }
 .hscroll-wrap { display:flex; align-items:center; gap:10px; }
 .prod-hscroll { perspective:1200px; overflow-x:auto !important; overflow-y:visible !important; }
@@ -765,10 +769,12 @@ video.slide-bg { transform:none!important; transition:none!important; }
   50%      { box-shadow:0 4px 16px rgba(0,0,0,.4), 0 0 0 6px rgba(255,255,255,0); }
 }
 .hscroll-wrap .scroll-btn { animation:btnPulse 2.5s ease-in-out infinite; }
+</style>
 
-/* ═══════════════════════════════════════
+<style>
+/* ---------------------------------------
    FLOATING REELS WIDGET
-═══════════════════════════════════════ */
+--------------------------------------- */
 #reel-widget {
   position:fixed; bottom:24px; right:16px;
   width:195px; border-radius:14px;
@@ -900,15 +906,16 @@ video.slide-bg { transform:none!important; transition:none!important; }
 }
 .reel-modal-arrows{ display:none; }
 
-/* ═══════════════════════════════════════
+/* ---------------------------------------
    SECTION PATTERNS
-═══════════════════════════════════════ */
+--------------------------------------- */
 .texture-section {
   background-color:var(--cream);
   background-image:radial-gradient(ellipse at 15% 50%,rgba(74,140,92,.04) 0%,transparent 60%),
                    radial-gradient(ellipse at 85% 20%,rgba(201,168,76,.04) 0%,transparent 60%);
 }
 </style>
+
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
@@ -1060,9 +1067,9 @@ a .nansai-icon,
 <!-- TOAST -->
 <div id="toast"></div>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      FLOATING REELS WIDGET
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <!-- Restore tab -->
 <div id="reel-tab" title="Open Reels"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1a3a2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
 
@@ -1093,9 +1100,9 @@ a .nansai-icon,
 <!-- OVERLAY -->
 <div id="dd-overlay"></div>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      OFFER BAR — DESKTOP
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <div id="desk-offer-bar" class="w-full bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-y border-amber-200">
   <div class="max-w-[1400px] mx-auto flex items-center justify-between h-11 px-4 gap-6 overflow-hidden">
     <div class="flex items-center gap-2 shrink-0">
@@ -1108,15 +1115,15 @@ a .nansai-icon,
     <div class="flex-1 overflow-hidden">
       <div id="offerTrack" class="flex items-center gap-8 whitespace-nowrap text-[13px] text-[#4a3510] font-medium animate-marquee hover:[animation-play-state:paused]" style="width:max-content;">
         <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">[[icon:gift]] First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
-        <span class="text-amber-400">◆</span>
-        <span>[[icon:wheat]] Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹221</mark></span>
-        <span class="text-amber-400">◆</span>
+        <span class="text-amber-400">?</span>
+        <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">?999</mark></span>
+        <span class="text-amber-400">?</span>
+        <span>[[icon:wheat]] Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">?221</mark></span>
+        <span class="text-amber-400">?</span>
         <span>[[icon:flower]] Paneer Rose <b class="text-rose-600">Only 32 Left</b></span>
-        <span class="text-amber-400">◆</span>
+        <span class="text-amber-400">?</span>
         <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Supplements Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
-        <span class="text-amber-400">◆</span>
+        <span class="text-amber-400">?</span>
         <span>[[icon:tractor]] Farm Direct · Lab Tested · Organic Certified</span>
       </div>
     </div>
@@ -1154,9 +1161,9 @@ a .nansai-icon,
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      NAVBAR
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <header class="site-nav">
   <div class="nav-inner bg-white">
     <a class="nav-logo" href="index.html" style="display:flex;align-items:center;">
@@ -1171,6 +1178,7 @@ a .nansai-icon,
     </div>
     <ul class="nav-links">
       <li><a class="nav-link" href="#products">Shop</a></li>
+      <li><a class="nav-link" href="farm.html">Farm</a></li>
       <li><a class="nav-link" href="#why-section">Our Promise</a></li>
       <li><a class="nav-link" href="blog.html">Blogs</a></li>
       <li><a class="nav-link" href="news.html">News</a></li>
@@ -1209,16 +1217,18 @@ a .nansai-icon,
 <!-- Mobile Drawer -->
 <div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
   <nav style="display:flex;flex-direction:column;gap:.25rem;">
-    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
-    <a href="#why-section" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('why-section').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
-    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
+    <a href="index.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] Home</a>
+    <a href="#products" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('products').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Products</a>
+    <a href="farm.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:tractor]] Farm</a>
+    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:info]] About</a>
+    <a href="blog.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blog</a>
     <a href="news.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
-    <a href="#site-footer" onclick="toggleMobDrawer();setTimeout(()=>document.getElementById('site-footer').scrollIntoView({behavior:'smooth'}),100);return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
     <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
+    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Account</a>
     <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
     <a href="wishlist.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
     <a href="#" onclick="toggleMobDrawer();openCart();return false;" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-bag]] Cart</a>
+    <a id="mobLogoutLink" href="#" onclick="if(typeof Auth!=='undefined')Auth.logout();return false;" style="display:none;padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:#dc2626;text-decoration:none;border-radius:10px;">[[icon:log-out]] Logout</a>
   </nav>
 </div>
 
@@ -1233,9 +1243,9 @@ a .nansai-icon,
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      HERO SLIDER — PARALLAX ENHANCED
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <section class="parallax-section" id="heroSection" style="background:#0a100b;">
   <div class="slider-shell" id="sliderShell" style="height:clamp(220px,34vw,460px);">
 
@@ -1267,7 +1277,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>With Nansai</p>
           <h2 class="slide-title">Experience the Root of <em>Nature</em></h2>
           <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
-          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ?</button>
         </div>
         <button id="slide0-sound-btn" onclick="toggleSlide0Sound()" style="position:absolute;bottom:4.5rem;left:1rem;z-index:20;width:2rem;height:2rem;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(5,12,6,.55);backdrop-filter:blur(6px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;" title="Toggle sound">
           <!-- muted icon (default) -->
@@ -1281,7 +1291,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>With Nansai</p>
           <h2 class="slide-title">25 Acres of naturally grown<br/><em>goodness</em></h2>
           <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
-          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ↓</button>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products ?</button>
         </div>
       </div>
       <div class="slide" id="slide-1">
@@ -1291,7 +1301,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>Organic Products</p>
           <h2 class="slide-title">22 years of<br/><em>organic farming</em></h2>
           <p class="slide-desc">Heritage rice varieties, dried flowers, and natural beverages. Certified. Lab-tested. Direct from the farm.</p>
-          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now ?</button>
         </div>
         <span class="ghost-num">02</span>
       </div>
@@ -1302,7 +1312,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>With Nansai</p>
           <h2 class="slide-title">Cultivated in Living Soil,<br/>Harvested for <em>Healthy Lives.</em></h2>
           <p class="slide-desc">Zero chemicals. Zero compromise. 9 internationally recognised certifications.</p>
-          <button class="slide-cta" onclick="document.getElementById('why-section').scrollIntoView({behavior:'smooth'})">Our Promise →</button>
+          <button class="slide-cta" onclick="document.getElementById('why-section').scrollIntoView({behavior:'smooth'})">Our Promise ?</button>
         </div>
         <span class="ghost-num">03</span>
       </div>
@@ -1313,7 +1323,7 @@ a .nansai-icon,
           <p class="eyebrow"><span></span>Our Harvest</p>
           <h2 class="slide-title">Paddy · Banana · Fig · Herbs</h2>
           <p class="slide-desc">25 acres of certified organic land — seven crop varieties, 200+ farming families.</p>
-          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">View Products →</button>
+          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">View Products ?</button>
         </div>
         <span class="ghost-num">04</span>
       </div>
@@ -1349,13 +1359,13 @@ a .nansai-icon,
   50%     { opacity:.25; transform:translateY(6px); }
 }
 </style>
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      TRADITIONAL HAND MILL BANNER
-═══════════════════════════════════════ -->
-<!-- ═══════════════════════════════════════
+--------------------------------------- -->
+<!-- ---------------------------------------
      COMBINED HERITAGE HAND MILL & VIDEO STORIES SECTION
      (Nansei Premium Theme)
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <style>
   #mill-heritage-section {
     background: linear-gradient(180deg, var(--warm-white) 0%, var(--cream) 100%);
@@ -1602,9 +1612,9 @@ a .nansai-icon,
 </style>
 <!-- lightbox-placeholder -->
 
-<!-- ═══════════════════════════════════════════
+<!-- -------------------------------------------
      SECTION 3 — FOUNDER STORY
-═══════════════════════════════════════════ -->
+------------------------------------------- -->
 <style>
 #founder {
   background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 100%);
@@ -1758,7 +1768,7 @@ function millResetIdx(card) {
 
     .font-display { font-family: 'Cormorant Garamond', serif; }
 
-    /* ── Reveal animations ── */
+    /* -- Reveal animations -- */
     .reveal {
       opacity: 0;
       transform: translateY(32px);
@@ -1770,7 +1780,7 @@ function millResetIdx(card) {
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
 
-    /* ── Section eyebrow ── */
+    /* -- Section eyebrow -- */
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -1790,7 +1800,7 @@ function millResetIdx(card) {
       background: var(--green-mid);
     }
 
-    /* ── Section headings ── */
+    /* -- Section headings -- */
     .section-heading {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 400;
@@ -1926,7 +1936,7 @@ function millResetIdx(card) {
     }
     .video-card:hover .play-sm { background: rgba(255,255,255,0.26); transform: scale(1.12); }
 
-    /* ── FARM GALLERY ── (overridden by premium styles) */
+    /* -- FARM GALLERY -- (overridden by premium styles) */
     .bento-item {
       border-radius: 20px;
       overflow: hidden;
@@ -2027,7 +2037,7 @@ function millResetIdx(card) {
       pointer-events: none;
     }
 
-    /* ── LIGHTBOX ── */
+    /* -- LIGHTBOX -- */
     #lightbox {
       display: none;
       position: fixed;
@@ -2068,10 +2078,10 @@ function millResetIdx(card) {
       letter-spacing: 0.04em;
     }
 
-    /* ── FOUNDER STORY ── (overridden by premium styles) */
+    /* -- FOUNDER STORY -- (overridden by premium styles) */
     .founder-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* ── QUOTE ── */
+    /* -- QUOTE -- */
     #quote { background: var(--beige); }
 
     .quote-mark {
@@ -2088,7 +2098,7 @@ function millResetIdx(card) {
       padding-left: 36px;
     }
 
-    /* ── CTA ── */
+    /* -- CTA -- */
     #cta { background: var(--green-deep); }
 
     .btn-primary {
@@ -2136,7 +2146,7 @@ function millResetIdx(card) {
       transform: translateY(-2px);
     }
 
-    /* ── Divider ── */
+    /* -- Divider -- */
     .grain-divider {
       width: 48px;
       height: 2px;
@@ -2167,15 +2177,15 @@ function millResetIdx(card) {
 
 
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      PRODUCTS SECTION
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <section id="products" class="texture-section" style="padding:3.5rem 0 4rem;">
   <div style="max-width:1400px;margin:0 auto;padding:0 1.5rem;overflow:visible;">
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:2.5rem;" class="sr" id="sr-prod-hdr">
-      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">[[icon:wheat]] Explore the Fields ↓</button>
+      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">[[icon:wheat]] Explore the Fields ?</button>
       <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#1a2416;margin-bottom:.35rem;"> Bringing Nature's Best To  <em style="color:#166534;">Your Family .</em></h1>
       <p style="color:#7a9980;font-size:.85rem;">16 farm-fresh, certified products · Direct from Organic Farmers</p>
     </div>
@@ -2237,9 +2247,9 @@ function millResetIdx(card) {
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      MID PARALLAX BANNER
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <section class="parallax-section" id="midParallax" style="min-height:440px;display:flex;align-items:center;">
   <div class="parallax-bg-layer" id="midBgLayer" style="background-image:url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1400&auto=format&fit=crop&q=85');"></div>
   <div class="parallax-overlay-dark"></div>
@@ -2287,9 +2297,9 @@ function millResetIdx(card) {
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      MOMENTS FROM OUR FIELDS (GALLERY)
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <style>
 #gallery {
   background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 100%);
@@ -2561,7 +2571,7 @@ function millResetIdx(card) {
 
 <!-- Video Modal -->
 <div id="video-modal" role="dialog" aria-modal="true" aria-label="Video player" style="display:none; position:fixed; inset:0; background:rgba(10,24,20,0.95); z-index:2000; align-items:center; justify-content:center; padding:24px;">
-  <button id="video-modal-close" aria-label="Close video" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.12);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  <button id="video-modal-close" aria-label="Close video" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.12);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">?</button>
   <div style="width:100%;max-width:900px;">
     <div style="position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;">
       <iframe id="video-iframe" src="" title="Video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;display:none;"></iframe>
@@ -2591,9 +2601,9 @@ function millResetIdx(card) {
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
+<!-- -------------------------------------------
      FOUNDER STORY
-═══════════════════════════════════════════ -->
+------------------------------------------- -->
 <section id="founder" aria-label="Founder Story">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;" class="founder-grid reveal">
@@ -2628,9 +2638,9 @@ function millResetIdx(card) {
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      WHY CHOOSE US
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <section id="why-section" class="bg-gradient-to-br from-green-50 to-white py-16 px-4">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-12 sr" id="sr-why-hdr">
@@ -2647,7 +2657,7 @@ function millResetIdx(card) {
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-2" id="sr-why-2">
         <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:truck]]</div>
         <h3 class="font-bold text-base mb-2">Fast Delivery</h3>
-        <p class="text-gray-500 text-xs leading-relaxed">Quick & reliable delivery across all regions. Free above ₹999.</p>
+        <p class="text-gray-500 text-xs leading-relaxed">Quick & reliable delivery across all regions. Free above ?999.</p>
       </div>
       <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-3" id="sr-why-3">
         <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:circle-dollar-sign]]</div>
@@ -2663,9 +2673,9 @@ function millResetIdx(card) {
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      BLOG SECTION
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <section id="blog-section" class="texture-section py-16 px-4">
   <div style="max-width:1400px;margin:0 auto;">
 
@@ -2677,7 +2687,7 @@ function millResetIdx(card) {
         <p style="font-size:.78rem;color:var(--text-lt);margin-top:.25rem;">Organic wisdom, recipes and farm updates.</p>
       </div>
       <a href="blog.html" style="display:inline-flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;padding:.55rem 1.2rem;border:1.5px solid rgba(74,140,92,.3);border-radius:8px;transition:all .2s;white-space:nowrap;" onmouseover="this.style.background='var(--forest-leaf)';this.style.color='#fff';this.style.borderColor='var(--forest-leaf)'" onmouseout="this.style.background='';this.style.color='var(--forest-leaf)';this.style.borderColor='rgba(74,140,92,.3)'">
-        View All Articles →
+        View All Articles ?
       </a>
     </div>
 
@@ -2740,9 +2750,9 @@ function millResetIdx(card) {
   <span class="active"></span><span></span><span></span>
 </div>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      BLOG ARTICLE MODAL
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <div id="blog-modal" onclick="if(event.target===this)closeBlogModal()" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0);transition:background .3s,backdrop-filter .3s;align-items:center;justify-content:center;padding:1rem;">
   <div id="blog-modal-box" style="background:#fdfaf5;border-radius:24px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;transform:scale(.92) translateY(20px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;position:relative;scrollbar-width:thin;">
     <button onclick="closeBlogModal()" style="position:fixed;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:2001;backdrop-filter:blur(4px);">[[icon:x]]</button>
@@ -2757,9 +2767,39 @@ function millResetIdx(card) {
 </div>
 
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
+     MOBILE STICKY BOTTOM NAV BAR
+--------------------------------------- -->
+<nav id="mob-sticky-bar">
+  <a href="index.html" class="mob-bar-btn active">
+    <div class="mob-bar-icon-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span>Home</span>
+  </a>
+  <a href="blog.html" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+    </div>
+    <span>Blog</span>
+  </a>
+  <a href="news.html" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg>
+    </div>
+    <span>News</span>
+  </a>
+  <a href="farm.html" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
+    </div>
+    <span>Farm</span>
+  </a>
+</nav>
+
+<!-- ---------------------------------------
      FOOTER
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <footer id="site-footer" class="bg-gray-900 text-gray-300">
   <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
     <div>
@@ -2767,7 +2807,7 @@ function millResetIdx(card) {
       <p style="font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:#6b7280;margin-bottom:.85rem;">Experience the Root of Nature</p>
       <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural products. Trusted by farmers everywhere.</p>
       <div class="flex gap-3">
-        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">𝕏</a>
+        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">??</a>
         <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">f</a>
         <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">in</a>
       </div>
@@ -2814,31 +2854,31 @@ function millResetIdx(card) {
   </div>
 </footer>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      JAVASCRIPT
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 <script>
-/* ════ OFFER BAR DUPLICATE ════ */
+/* ---- OFFER BAR DUPLICATE ---- */
 const ot=document.getElementById('offerTrack');
 if(ot) ot.innerHTML+=ot.innerHTML;
 const cs=document.getElementById('certStrip');
 if(cs) cs.innerHTML+=cs.innerHTML;
 
-/* ════ MOBILE OFFER BAR POPULATE ════ */
+/* ---- MOBILE OFFER BAR POPULATE ---- */
 (function(){
   const mobTrack=document.getElementById('mobMarqueeTrack');
   if(!mobTrack)return;
-  const items=['[[icon:gift]] First Order 10% OFF — NANSAI10','◆','[[icon:truck]] Free Delivery above ₹999','◆','[[icon:wheat]] Heritage Rice Varieties — Farm Direct','◆','[[icon:flower]] Paneer Rose — Only 32 Left','◆','[[icon:heart]] Buy 2 Flowers Get 1 FREE — HEALTH3','◆','[[icon:leaf]] Organic · Lab Tested · 9 Certifications'];
-  const html=items.map(t=>t==='◆'?`<span style="color:#9a7520;">◆</span>`:`<span>${t}</span>`).join('');
+  const items=['[[icon:gift]] First Order 10% OFF — NANSAI10','?','[[icon:truck]] Free Delivery above ?999','?','[[icon:wheat]] Heritage Rice Varieties — Farm Direct','?','[[icon:flower]] Paneer Rose — Only 32 Left','?','[[icon:heart]] Buy 2 Flowers Get 1 FREE — HEALTH3','?','[[icon:leaf]] Organic · Lab Tested · 9 Certifications'];
+  const html=items.map(t=>t==='?'?`<span style="color:#9a7520;">?</span>`:`<span>${t}</span>`).join('');
   mobTrack.innerHTML=html+html;
 })();
 
-/* ════ COPY COUPON ════ */
+/* ---- COPY COUPON ---- */
 document.querySelectorAll('[data-code]').forEach(el=>{
   el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('[[icon:circle-check]] Code '+el.dataset.code+' copied!'); };
 });
 
-/* ════ COUNTDOWN ════ */
+/* ---- COUNTDOWN ---- */
 function updateTimer(){
   const now=new Date(),end=new Date();
   end.setHours(23,59,59);
@@ -2849,21 +2889,21 @@ function updateTimer(){
 }
 setInterval(updateTimer,1000); updateTimer();
 
-/* ════ TOAST ════ */
+/* ---- TOAST ---- */
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
-/* ════ NEWSLETTER ════ */
+/* ---- NEWSLETTER ---- */
 function subNewsletter(e){
   e.preventDefault();
   showToast('[[icon:leaf]] Subscribed! Welcome to the farm family.');
   e.target.reset();
 }
 
-/* ════ REELS MOBILE VIEW MORE BUTTON INJECT ════ */
+/* ---- REELS MOBILE VIEW MORE BUTTON INJECT ---- */
 document.addEventListener('DOMContentLoaded', function(){
   const sec = document.getElementById('nansei-reels-section');
   if(!sec) return;
@@ -2874,7 +2914,7 @@ document.addEventListener('DOMContentLoaded', function(){
   sec.appendChild(btn);
 });
 
-/* ════ PRODUCTS DATA ════ */
+/* ---- PRODUCTS DATA ---- */
 const products=[
   {id:1, name:"Karunguruvai Rice",                 category:"rice",     price:180,oldPrice:220,rating:4.7,reviews:142,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602"},
   {id:2, name:"Karuppu Kavuni Rice",               category:"rice",     price:220,oldPrice:270,rating:4.8,reviews:198,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741"},
@@ -2898,7 +2938,8 @@ const products=[
 let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]');
 let cart=JSON.parse(localStorage.getItem('cart')||'[]');
 
-function stars(r){return[1,2,3,4,5].map(i=>i<=Math.floor(r)?'★':i-r<1?'★':'☆').join('');}
+function stars(r){const val=Number(r)||0;return[1,2,3,4,5].map(i=>i<=Math.floor(val)?'★':'☆').join('');}
+function ratingText(p){return Number(p.reviews||p.numReviews||0)>0?Number(p.rating||0).toFixed(1):'No reviews yet';}
 function disc(p){return Math.round((1-p.price/p.oldPrice)*100);}
 
 function saveCart(){
@@ -2908,7 +2949,7 @@ function saveCart(){
   if(typeof CartAPI!=='undefined'&&localStorage.getItem('nansai_token')){
     cart.forEach(i=>{
       if(CartAPI.set) CartAPI.set(String(i.id),i.qty||1).catch(()=>{});
-      else CartAPI.add(String(i.id),i.qty||1,i.price).catch(()=>{});
+      else CartAPI.add(String(i.id),i.qty||1,i.selectedPrice??i.price,{selectedQuantity:i.selectedQuantity||i.qtyLabel,selectedUnit:i.selectedUnit||i.unit,selectedPrice:i.selectedPrice??i.price}).catch(()=>{});
     });
   }
 }
@@ -2920,15 +2961,15 @@ function syncCounters(){
   const mbw=document.getElementById('mobBarWishCount'); if(mbw) mbw.textContent=wishlist.length;
 }
 
-/* ════ PRODUCT CARD HTML ════ */
+/* ---- PRODUCT CARD HTML ---- */
 const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4','prod-float-5','prod-float-6'];
 function prodCardHTML(p,i){
   const d=disc(p);
   const isW=wishlist.includes(p.id);
   const badgeEl=p.badge==='hot'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">🔥 HOT</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">?? HOT</span>`
     :p.badge==='new'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">✦ NEW</span>`
+    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">? NEW</span>`
     :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
   const fc=floatClasses[i%floatClasses.length];
   return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
@@ -2942,10 +2983,10 @@ function prodCardHTML(p,i){
     <div class="prod-info" style="overflow:visible;">
       <span style="font-size:.68rem;font-weight:400;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;">${p.category}</span>
       <h3 style="font-size:.95rem;font-weight:700;color:#1a2416;line-height:1.3;font-family:'Inter',sans-serif;">${p.name}</h3>
-      <div style="display:flex;align-items:center;gap:3px;"><span style="color:#f59e0b;font-size:.78rem;">${stars(p.rating)}</span><span style="color:#9ca3af;font-size:.72rem;margin-left:2px;font-family:'Inter',sans-serif;">${p.rating}</span></div>
+      <div style="display:flex;align-items:center;gap:3px;"><span style="color:#f59e0b;font-size:.78rem;">${stars(p.rating)}</span><span style="color:#9ca3af;font-size:.72rem;margin-left:2px;font-family:'Inter',sans-serif;">${ratingText(p)}</span></div>
       <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:2px;">
-        <span data-card-price style="color:#166534;font-weight:900;font-size:1.1rem;font-family:'Inter',sans-serif;">₹${p.price}</span>
-        <span data-card-old style="color:#9ca3af;font-size:.78rem;text-decoration:line-through;font-family:'Inter',sans-serif;">₹${p.oldPrice}</span>
+        <span data-card-price style="color:#166534;font-weight:900;font-size:1.1rem;font-family:'Inter',sans-serif;">?${p.price}</span>
+        <span data-card-old style="color:#9ca3af;font-size:.78rem;text-decoration:line-through;font-family:'Inter',sans-serif;">?${p.oldPrice}</span>
         <span data-card-disc style="background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px;font-family:'Inter',sans-serif;">${d}% off</span>
       </div>
       <div id="cardbtn-area-${p.id}" class="prod-btn-area" style="margin-top:auto;">
@@ -2959,13 +3000,13 @@ function prodCardHTML(p,i){
 }
 
 const sectionMeta={
-  new:        {icon:'✦',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
-  bestseller: {icon:'🔥',label:'Natures Favorites',    sub:'Most loved by thousands of families',           accent:'#d97706'},
-  rice:       {icon:'🌾',label:'Rice Varieties',        sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
-  flowers:    {icon:'🌸',label:'Dried Flowers',         sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
-  beverages:  {icon:'🥤',label:'Beverages',             sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
-  flour:      {icon:'📦',label:'Flour Varieties',       sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
-  other:      {icon:'🌿',label:'Other Products',        sub:'More goodness from nature',                     accent:'#16a34a'},
+  new:        {icon:'?',label:'Fresh From Nature',     sub:'Just landed — fresh from the farm',            accent:'#059669'},
+  bestseller: {icon:'??',label:'Natures Favorites',    sub:'Most loved by thousands of families',           accent:'#d97706'},
+  rice:       {icon:'??',label:'Rice Varieties',        sub:'Heritage & traditional rice from Tamil Nadu',   accent:'#65a30d'},
+  flowers:    {icon:'??',label:'Dried Flowers',         sub:'Sun-dried, aromatic & medicinal flowers',       accent:'#db2777'},
+  beverages:  {icon:'??',label:'Beverages',             sub:'Natural drinks crafted with pure ingredients',  accent:'#0891b2'},
+  flour:      {icon:'??',label:'Flour Varieties',       sub:'Hand-pounded & stone-ground flours',            accent:'#ca8a04'},
+  other:      {icon:'??',label:'Other Products',        sub:'More goodness from nature',                     accent:'#16a34a'},
 };
 const SECTION_ORDER=['new','bestseller','rice','flowers','beverages','flour','other'];
 
@@ -3039,7 +3080,7 @@ function renderFlat(list,cat){
   attachCarousel3D();
 }
 
-/* ════ QUANTITY CONFIG ════ */
+/* ---- QUANTITY CONFIG ---- */
 const QTY_CFG={
   flowers:   {unit:'pcs',  options:[1,5,10,25]},
   rice:      {unit:'kg',   options:[0.25,0.5,1,2]},
@@ -3085,7 +3126,7 @@ function startQtySelect(id,triggerBtn){
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
     </button>
   </div>
-  <a href="product.html?id=${p.id}" onclick="event.stopPropagation()" style="display:block;width:100%;text-align:center;font-size:.68rem;font-weight:600;color:var(--forest-leaf);padding:5px 0 2px;text-decoration:none;letter-spacing:.03em;border-top:1px solid rgba(26,58,42,.07);margin-top:5px;transition:color .2s;" onmouseover="this.style.color='var(--forest-deep)'" onmouseout="this.style.color='var(--forest-leaf)'">View Product →</a>`;
+  <a href="product.html?id=${p.id}" onclick="event.stopPropagation()" style="display:block;width:100%;text-align:center;font-size:.68rem;font-weight:600;color:var(--forest-leaf);padding:5px 0 2px;text-decoration:none;letter-spacing:.03em;border-top:1px solid rgba(26,58,42,.07);margin-top:5px;transition:color .2s;" onmouseover="this.style.color='var(--forest-deep)'" onmouseout="this.style.color='var(--forest-leaf)'">View Product ?</a>`;
 }
 
 function selectPill(id,val,btn){
@@ -3103,8 +3144,8 @@ function selectPill(id,val,btn){
   const priceEl=card.querySelector('[data-card-price]');
   const oldEl=card.querySelector('[data-card-old]');
   const discEl=card.querySelector('[data-card-disc]');
-  if(priceEl) priceEl.textContent='₹'+totalPrice;
-  if(oldEl)   oldEl.textContent='₹'+oldTotal;
+  if(priceEl) priceEl.textContent='?'+totalPrice;
+  if(oldEl)   oldEl.textContent='?'+oldTotal;
   if(discEl)  discEl.textContent=d+'% off';
 }
 
@@ -3114,7 +3155,7 @@ function confirmAddToCart(id,triggerBtn){
   const totalPrice=unit==='ml'?Math.round(p.price*(qty/1000)):Math.round(p.price*qty);
   const label=fmtQty(qty,unit);
   const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
-  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit});
+  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit,selectedQuantity:label,selectedUnit:unit,selectedPrice:totalPrice});
   saveCart();
   showToast(`[[icon:shopping-cart]] ${p.name} · ${fmtQty(qty,unit)} added!`);
   const confirmBtn=triggerBtn||null;
@@ -3150,7 +3191,7 @@ function addDirectToCart(id, btn) {
   var totalPrice = unit === 'ml' ? Math.round(p.price * (qtyVal / 1000)) : Math.round(p.price * qtyVal);
   var label = fmtQty(qtyVal, unit);
   var ex = cart.find(function(i){ return i.id === id && i.qtyLabel === label; });
-  if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image, qty:1, qtyVal:qtyVal, qtyLabel:label}); }
+  if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image, qty:1, qtyVal:qtyVal, qtyLabel:label, unit:unit, selectedQuantity:label, selectedUnit:unit, selectedPrice:totalPrice}); }
   saveCart();
   showToast(p.name + ' (' + label + ') added to cart!');
   if (btn) {
@@ -3173,13 +3214,13 @@ function toggleWish(id,btn){
     wishlist.push(id);
     if(svg){ svg.setAttribute('fill','#ef4444'); svg.setAttribute('stroke','#ef4444'); }
     if(btn){ btn.style.transform='scale(1.4)'; setTimeout(()=>btn.style.transform='scale(1)',250); }
-    showToast('❤️ Added to wishlist!');
+    showToast('?? Added to wishlist!');
     if(typeof WishlistAPI!=='undefined'&&localStorage.getItem('nansai_token'))WishlistAPI.add(String(id)).catch(()=>{});
   }
   localStorage.setItem('wishlist',JSON.stringify(wishlist));syncCounters();
 }
 
-/* ════ CATEGORY FILTER ════ */
+/* ---- CATEGORY FILTER ---- */
 const deskCatMeta={all:{label:'All Products',sub:'All 16 farm-fresh certified products'},new:{label:'New Arrivals',sub:'Just landed — fresh from the farm'},bestseller:{label:'Best Sellers',sub:'Most loved by thousands of families'},rice:{label:'Rice Varieties',sub:'Heritage & traditional rice from Tamil Nadu'},flowers:{label:'Dried Flowers',sub:'Sun-dried, aromatic & medicinal flowers'},beverages:{label:'Beverages',sub:'Natural drinks crafted with pure ingredients'},flour:{label:'Flour Varieties',sub:'Hand-pounded & stone-ground flours'},other:{label:'Other Products',sub:'More goodness from nature'}};
 
 function deskCatClick(el,cat){
@@ -3218,7 +3259,7 @@ function renderSearchSuggestions(input,matches){
         <span class="suggestion-name">${p.name}</span>
         <span class="suggestion-meta">${p.category}</span>
       </span>
-      <span class="suggestion-price">₹${p.price}</span>
+      <span class="suggestion-price">?${p.price}</span>
     </button>
   `).join('');
   box.classList.add('show');
@@ -3277,7 +3318,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape') hideSearchSuggestions();
 });
 
-/* ════ SLIDE 0 SOUND TOGGLE ════ */
+/* ---- SLIDE 0 SOUND TOGGLE ---- */
 function toggleSlide0Sound(){
   const v=document.getElementById('slide0-video');
   const icon=document.getElementById('slide0-sound-icon');
@@ -3288,7 +3329,7 @@ function toggleSlide0Sound(){
     :'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
 }
 
-/* ════ HERO SLIDER — 3D CAROUSEL ════ */
+/* ---- HERO SLIDER — 3D CAROUSEL ---- */
 (function(){
   const TOTAL=5, DUR=5000;
   let cur=0, pct=0, rafId=null, lastTS=null, slide0Paused=true;
@@ -3376,7 +3417,7 @@ function toggleSlide0Sound(){
   resetTimer();
 })();
 
-/* ════ PARALLAX SCROLL ════ */
+/* ---- PARALLAX SCROLL ---- */
 // parallax config (used by onScroll)
 function onScroll(){
   const scrollY=window.scrollY;
@@ -3396,7 +3437,7 @@ function onScroll(){
 window.addEventListener('scroll',onScroll,{passive:true});
 onScroll();
 
-/* ════ SCROLL REVEAL ════ */
+/* ---- SCROLL REVEAL ---- */
 const srObserver=new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){ entry.target.classList.add('is-visible'); }
@@ -3404,13 +3445,13 @@ const srObserver=new IntersectionObserver((entries)=>{
 },{threshold:0.08,rootMargin:'0px 0px -36px 0px'});
 document.querySelectorAll('.sr,.sr-left,.sr-right,.sr-scale').forEach(el=>srObserver.observe(el));
 
-/* ════ INIT ════ */
+/* ---- INIT ---- */
 renderSections();
 attachCarousel3D();
 syncCounters();
 setTimeout(initScrollBtns, 100);
 
-/* ════ LOAD PRODUCTS FROM API ════ */
+/* ---- LOAD PRODUCTS FROM API ---- */
 (function(){
   const base = window.API_BASE || 'http://localhost:5000/api';
   fetch(base + '/products?limit=100')
@@ -3424,7 +3465,7 @@ setTimeout(initScrollBtns, 100);
         category: p.category,
         price:    p.price,
         oldPrice: p.oldPrice || Math.round(p.price * 1.25),
-        rating:   p.rating || 4.5,
+        rating:   Number(p.numReviews || 0) > 0 ? Number(p.rating || 0) : 0,
         reviews:  p.numReviews || 0,
         badge:    p.badge || 'new',
         section:  p.section || 'category',
@@ -3442,7 +3483,7 @@ setTimeout(initScrollBtns, 100);
     .catch(() => { /* silently keep static data on error */ });
 })();
 
-/* ════ AUTO-SEARCH FROM URL PARAM ════ */
+/* ---- AUTO-SEARCH FROM URL PARAM ---- */
 (function(){
   const q = new URLSearchParams(window.location.search).get('search');
   if(!q) return;
@@ -3454,7 +3495,7 @@ setTimeout(initScrollBtns, 100);
   setTimeout(()=>document.getElementById('products')?.scrollIntoView({behavior:'smooth'}), 300);
 })();
 
-/* ════ BLOG TILT ════ */
+/* ---- BLOG TILT ---- */
 document.querySelectorAll('[data-tilt]').forEach(card=>{
   card.addEventListener('mousemove',e=>{
     const rect=card.getBoundingClientRect();
@@ -3470,7 +3511,7 @@ document.querySelectorAll('[data-tilt]').forEach(card=>{
   card.addEventListener('mouseenter',()=>{ card.style.transition='transform .14s ease'; });
 });
 
-/* ════ TYPING PLACEHOLDER ════ */
+/* ---- TYPING PLACEHOLDER ---- */
 (function(){
   const words=['Karunguruvai Rice...','Paneer Rose Flowers...','Hibiscus Sherbet...','Idiyappam Flour...','Black Kavuni Rice...','Butterfly Pea...','Mappillai Samba...'];
   let ci=0,char=0,del=false;
@@ -3497,7 +3538,7 @@ document.querySelectorAll('[data-tilt]').forEach(card=>{
   });
 })();
 
-/* ════ MOBILE DRAWER ════ */
+/* ---- MOBILE DRAWER ---- */
 function toggleMobDrawer(){
   const drawer=document.getElementById('mobDrawer');
   const ham=document.getElementById('mobHam');
@@ -3517,7 +3558,7 @@ document.addEventListener('click',function(e){
   }
 });
 
-/* ════ CART DRAWER ════ */
+/* ---- CART DRAWER ---- */
 function openCart(){
   renderCartDrawer();
   document.getElementById('cartDrawer').style.transform='translateX(0)';
@@ -3560,7 +3601,7 @@ function renderCartDrawer(){
   }).join('');
   if(footer){
     footer.style.display='block';
-    footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">₹${total}</span></div><a href="checkoutmyorderpage.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout →</a>`;
+    footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">?${total}</span></div><a href="checkoutmyorderpage.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout ?</a>`;
   }
 }
 function cartQty(idx,delta){
@@ -3579,7 +3620,7 @@ function removeFromCart(idx){
   saveCart();renderCartDrawer();
 }
 
-/* ════ 3D CAROUSEL SCROLL ════ */
+/* ---- 3D CAROUSEL SCROLL ---- */
 function scrollRow(secId, dir) {
   const el = document.getElementById('hscroll-' + secId);
   if (!el) return;
@@ -3612,7 +3653,7 @@ function attachCarousel3D(){
   // intentionally empty — removed to prevent inline style conflicts with card-lifted
 }
 
-/* ════ REEL WIDGET SCROLL TRIGGER ════ */
+/* ---- REEL WIDGET SCROLL TRIGGER ---- */
 (function(){
   const widget = document.getElementById('reel-widget');
   const tab    = document.getElementById('reel-tab');
@@ -3652,16 +3693,16 @@ function attachCarousel3D(){
   }
 })();
 
-/* ════════════════════════════════════════
+/* ----------------------------------------
    FLOATING REELS WIDGET
-════════════════════════════════════════ */
+---------------------------------------- */
 (function(){
   /* Video data — swap src with your real product videos */
   const REELS = [
-    { src:'',       caption:'[[icon:wheat]] 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
-    { src:'',          caption:'[[icon:flower-2]] Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
-    { src:'',       caption:'[[icon:leaf]] Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
-    { src:'',          caption:'[[icon:flower-2]] From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
+    { src:'',       caption:'[[icon:wheat]] 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'?180', id:1  },
+    { src:'',          caption:'[[icon:flower-2]] Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'?150', id:8  },
+    { src:'',       caption:'[[icon:leaf]] Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'?220', id:2  },
+    { src:'',          caption:'[[icon:flower-2]] From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'?120', id:9  },
   ];
 
   let cur = 0, autoTimer = null;
@@ -3736,7 +3777,7 @@ function attachCarousel3D(){
   $('modal-caption').textContent = REELS[0].caption;
   startAuto();
 
-  /* Mini player → open modal */
+  /* Mini player ? open modal */
   $('reel-widget').addEventListener('click', e => {
     if (e.target.closest('#btn-reel-minimize')) return;
     $('reel-modal').classList.add('open');
@@ -3778,7 +3819,7 @@ function attachCarousel3D(){
   addSwipe($('modal-track'));
 })();
 
-/* ════ BLOG MOBILE SCROLL DOTS ════ */
+/* ---- BLOG MOBILE SCROLL DOTS ---- */
 (function(){
   const dotsWrap = document.getElementById('blog-scroll-dots');
   const blogGrid = document.querySelector('#blog-section > div > div:last-child');
@@ -3790,7 +3831,7 @@ function attachCarousel3D(){
   }, { passive: true });
 })();
 
-/* ════ BLOG MODAL ════ */
+/* ---- BLOG MODAL ---- */
 const BLOGS = [
   {
     title: 'Why Heritage Rice Varieties Are the Future of Healthy Eating',
@@ -3865,7 +3906,7 @@ function closeBlogModal() {
 }
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModal(); });
 
-/* ════ REEL WIDGET DRAG ════ */
+/* ---- REEL WIDGET DRAG ---- */
 (function(){
   // Drag disabled on mobile
   if(window.innerWidth <= 768) return;
@@ -3910,7 +3951,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   el.addEventListener('click', e => { if (moved) { moved = false; e.stopImmediatePropagation(); e.preventDefault(); } });
 })();
 
-/* ════ AUTH NAV ════ */
+/* ---- AUTH NAV ---- */
 (function(){
   const user = JSON.parse(localStorage.getItem('nansai_user') || 'null');
   if (!user) return;
@@ -3933,7 +3974,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
 </script>
 <!--starting of hand mill video-->
 <script>
-  /* ── Intersection Observer reveal ── */
+  /* -- Intersection Observer reveal -- */
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -3942,7 +3983,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   reveals.forEach(el => observer.observe(el));
 
-  /* ── Video Modal ── */
+  /* -- Video Modal -- */
   function openVideoModal(src) {
     const modal = document.getElementById('video-modal');
     const iframe = document.getElementById('video-iframe');
@@ -3985,7 +4026,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeVideoModal(); closeLightbox(); }});
 
-  /* ── Lightbox ── */
+  /* -- Lightbox -- */
   function openLightbox(card) {
     const img = card.querySelector('img');
     document.getElementById('lightbox-img').src = img.src.replace(/w=\d+/, 'w=1400');
@@ -4011,18 +4052,21 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     Home
   </a>
-  <a href="blog.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    Blogs
+  <a href="#products" onclick="document.getElementById('products')?.scrollIntoView({behavior:'smooth'});return false;" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+      <span class="mob-bar-badge" id="mobBarCartCount">0</span>
+    </div>
+    Products
   </a>
-  <a href="news.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-    News
+  <a href="farm.html" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l-2 2 2 2"/><path d="M21 17l2 2-2 2"/><path d="M2 19h20"/><path d="M12 3v10"/><path d="M7 8l5-5 5 5"/><path d="M5 19V9"/><path d="M19 19V9"/></svg>
+    Farm
   </a>
-  <a href="login.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Account
-  </a>
+  <button onclick="toggleMobDrawer()" class="mob-bar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    Menu
+  </button>
 </nav>
 
 <!-- CART DRAWER -->

@@ -1,82 +1,148 @@
 const API_BASE = window.API_BASE || 'http://localhost:5000/api';
-const _ALLOWED_PATH = /^\/[a-zA-Z0-9\-_/?=&%+.]+$/;
+const _ALLOWED_PATH = /^\/[a-zA-Z0-9\-_/?:=&%+.]+$/;
+const AUTH_KEYS = [
+  'nansai_token',
+  'nansai_user',
+  'nansai_activity',
+  'token',
+  'user',
+  'authToken',
+  'jwt',
+];
 
-/* ── helpers ── */
 function getToken() {
-  return localStorage.getItem('nansai_token');
+  return localStorage.getItem('nansai_token') || sessionStorage.getItem('nansai_token');
 }
 
 function authHeaders() {
   return {
     'Content-Type': 'application/json',
-    ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {})
+    ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
   };
 }
 
 async function request(method, path, body = null) {
   if (!_ALLOWED_PATH.test(path)) throw new Error('Invalid request path');
+
   const res = await fetch(API_BASE + path, {
     method,
     headers: authHeaders(),
-    ...(body ? { body: JSON.stringify(body) } : {})
+    credentials: 'include',
+    ...(body ? { body: JSON.stringify(body) } : {}),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Request failed');
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    if (res.status === 401 && typeof Auth !== 'undefined') Auth.clearSession();
+    throw new Error(data.message || 'Request failed');
+  }
   return data;
 }
 
-/* ════════════════════════════════
-   AUTH
-════════════════════════════════ */
+function redirectPath(path) {
+  if (/^https?:\/\//i.test(path)) return path;
+  return path;
+}
+
 const Auth = {
-  async register(name, email, password, phone) {
-    const data = await request('POST', '/auth/register', { name, email, password, phone });
-    localStorage.setItem('nansai_token', data.token);
-    localStorage.setItem('nansai_user', JSON.stringify(data.user));
+  async register(firstName, lastName, email, password) {
+    const data = await request('POST', '/auth/register', { firstName, lastName, email, password });
+    this.persist(data.token, data.user);
     return data;
   },
 
   async login(email, password) {
     const data = await request('POST', '/auth/login', { email, password });
-    localStorage.setItem('nansai_token', data.token);
-    localStorage.setItem('nansai_user', JSON.stringify(data.user));
-    // Pre-fetch activity history so it's ready when account page loads
-    try {
-      const hist = await request('GET', '/users/activity');
-      localStorage.setItem('nansai_activity', JSON.stringify(hist.data || []));
-    } catch {}
+    this.persist(data.token, data.user);
+    this.refreshActivity().catch(() => {});
     return data;
   },
 
-  logout() {
-    localStorage.removeItem('nansai_token');
-    localStorage.removeItem('nansai_user');
-    localStorage.removeItem('nansai_activity');
-    window.location.href = 'login.html';
+  persist(token, user) {
+    localStorage.setItem('nansai_token', token);
+    localStorage.setItem('nansai_user', JSON.stringify(user));
+  },
+
+  clearSession() {
+    AUTH_KEYS.forEach((key) => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
+
+    document.cookie.split(';').forEach((cookie) => {
+      const name = cookie.split('=')[0].trim();
+      if (!name) return;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${location.hostname}`;
+    });
+
+    window.NanseiAuthState = null;
+  },
+
+  async logout(redirectTo = 'login.html') {
+    try {
+      if (getToken()) await request('POST', '/auth/logout');
+    } catch {}
+    this.clearSession();
+    window.location.href = redirectPath(redirectTo);
   },
 
   getUser() {
-    const u = localStorage.getItem('nansai_user');
-    return u ? JSON.parse(u) : null;
+    try {
+      return JSON.parse(localStorage.getItem('nansai_user') || sessionStorage.getItem('nansai_user') || 'null');
+    } catch {
+      return null;
+    }
   },
 
   isLoggedIn() {
-    return !!getToken();
+    return Boolean(getToken());
+  },
+
+  async refreshUser() {
+    if (!getToken()) return null;
+    const data = await request('GET', '/auth/me');
+    const user = data.user || data.data;
+    if (user) localStorage.setItem('nansai_user', JSON.stringify(user));
+    return user;
+  },
+
+  requireAuth(loginPath = 'login.html') {
+    if (!this.isLoggedIn()) {
+      this.clearSession();
+      window.location.replace(loginPath);
+      return false;
+    }
+    this.refreshUser().catch(() => {
+      this.clearSession();
+      window.location.replace(loginPath);
+    });
+    return true;
+  },
+
+  redirectIfAuthenticated(target = 'index.html') {
+    if (!this.isLoggedIn()) return;
+    const user = this.getUser();
+    window.location.replace(user?.role === 'admin' ? 'admin-panel.html' : target);
   },
 
   async forgotPassword(email) {
     return request('POST', '/auth/forgot-password', { email });
-  }
+  },
+
+  async refreshActivity() {
+    if (!getToken()) return [];
+    const hist = await request('GET', '/users/activity');
+    const data = hist.data || [];
+    localStorage.setItem('nansai_activity', JSON.stringify(data));
+    return data;
+  },
 };
 
-/* ════════════════════════════════
-   PRODUCTS
-════════════════════════════════ */
 const Products = {
   async getAll(params = {}) {
     const query = new URLSearchParams(params).toString();
-    const path  = query ? `/products?${query}` : '/products';
-    return request('GET', path);
+    return request('GET', query ? `/products?${query}` : '/products');
   },
 
   async getOne(id) {
@@ -88,24 +154,28 @@ const Products = {
   },
 
   async getByCategory(category) {
-    return request('GET', `/products?category=${category}`);
+    return request('GET', `/products?category=${encodeURIComponent(category)}`);
   },
 
   async getRelated(id) {
     return request('GET', `/products/${id}/related`);
-  }
+  },
 };
 
-/* ════════════════════════════════
-   CART
-════════════════════════════════ */
 const CartAPI = {
   async get() {
     return request('GET', '/cart');
   },
 
-  async add(productId, quantity = 1, price = 0) {
-    return request('POST', '/cart/add', { productId, quantity, price });
+  async add(productId, quantity = 1, price = 0, selection = {}) {
+    return request('POST', '/cart/add', {
+      productId,
+      quantity,
+      price,
+      selectedQuantity: selection.selectedQuantity || selection.qtyLabel || selection.label,
+      selectedUnit: selection.selectedUnit || selection.unit,
+      selectedPrice: selection.selectedPrice ?? selection.price ?? price,
+    });
   },
 
   async remove(productId) {
@@ -114,12 +184,9 @@ const CartAPI = {
 
   async clear() {
     return request('DELETE', '/cart/clear');
-  }
+  },
 };
 
-/* ════════════════════════════════
-   ORDERS
-════════════════════════════════ */
 const Orders = {
   async create(orderData) {
     return request('POST', '/orders', orderData);
@@ -131,12 +198,9 @@ const Orders = {
 
   async getOne(id) {
     return request('GET', `/orders/${id}`);
-  }
+  },
 };
 
-/* ════════════════════════════════
-   WISHLIST
-════════════════════════════════ */
 const WishlistAPI = {
   async get() {
     return request('GET', '/wishlist');
@@ -148,42 +212,65 @@ const WishlistAPI = {
 
   async remove(productId) {
     return request('DELETE', `/wishlist/remove/${productId}`);
-  }
+  },
 };
 
-/* ════════════════════════════════
-   ACTIVITY
-════════════════════════════════ */
 const ActivityAPI = {
-  /**
-   * Log an activity event to the backend (only when logged in).
-   * @param {string} type  - e.g. 'add_to_cart', 'wishlist_add', 'view_product'
-   * @param {string} description
-   * @param {object} meta  - optional extra data
-   */
   async log(type, description, meta = {}) {
     if (!getToken()) return;
     try {
       await request('POST', '/users/activity', { type, description, meta });
-      // Refresh cached history
-      const hist = await request('GET', '/users/activity');
-      localStorage.setItem('nansai_activity', JSON.stringify(hist.data || []));
+      await Auth.refreshActivity();
     } catch {}
   },
 
-  /** Returns cached history (array, newest first). */
   getCached() {
-    try { return JSON.parse(localStorage.getItem('nansai_activity') || '[]'); } catch { return []; }
+    try {
+      return JSON.parse(localStorage.getItem('nansai_activity') || '[]');
+    } catch {
+      return [];
+    }
   },
 
-  /** Fetch fresh history from server and update cache. */
   async fetch() {
-    if (!getToken()) return [];
     try {
-      const hist = await request('GET', '/users/activity');
-      const data = hist.data || [];
-      localStorage.setItem('nansai_activity', JSON.stringify(data));
-      return data;
-    } catch { return this.getCached(); }
-  }
+      return await Auth.refreshActivity();
+    } catch {
+      return this.getCached();
+    }
+  },
 };
+
+const Discounts = {
+  async getActive(productId = '') {
+    return request('GET', productId ? `/discounts/active?productId=${encodeURIComponent(productId)}` : '/discounts/active');
+  },
+
+  async getAll() {
+    return request('GET', '/discounts');
+  },
+
+  async create(discount) {
+    return request('POST', '/discounts', discount);
+  },
+
+  async update(id, discount) {
+    return request('PUT', `/discounts/${id}`, discount);
+  },
+
+  async toggle(id, isActive) {
+    return request('PATCH', `/discounts/${id}/toggle`, { isActive });
+  },
+
+  async delete(id) {
+    return request('DELETE', `/discounts/${id}`);
+  },
+};
+
+window.Auth = Auth;
+window.Products = Products;
+window.CartAPI = CartAPI;
+window.Orders = Orders;
+window.WishlistAPI = WishlistAPI;
+window.ActivityAPI = ActivityAPI;
+window.Discounts = Discounts;

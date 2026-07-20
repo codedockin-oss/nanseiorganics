@@ -8,6 +8,19 @@
   <script>
     /* -- Inline Cart / Wish / Counters (no backend required) -- */
     window.API_BASE = '';
+    /* renderStars — SVG-based, cross-browser safe */
+    window.renderStars = function(r) {
+      const val = Number(r) || 0;
+      const full = Math.floor(val);
+      const half = val - full >= 0.5 ? 1 : 0;
+      const empty = 5 - full - half;
+      const S = '<svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;">';
+      const poly = '<polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>';
+      const starFull  = S + '<defs></defs>' + poly.replace('/>', ' fill="#f59e0b" stroke="#f59e0b" stroke-width="1"/>') + '</svg>';
+      const starHalf  = S + '<defs><linearGradient id="hg"><stop offset="50%" stop-color="#f59e0b"/><stop offset="50%" stop-color="#d1d5db"/></linearGradient></defs>' + poly.replace('/>', ' fill="url(#hg)" stroke="#f59e0b" stroke-width="1"/>') + '</svg>';
+      const starEmpty = S + '<defs></defs>' + poly.replace('/>', ' fill="#d1d5db" stroke="#d1d5db" stroke-width="1"/>') + '</svg>';
+      return starFull.repeat(full) + starHalf.repeat(half) + starEmpty.repeat(empty);
+    };
     window._updateBadge = function () { const c = JSON.parse(localStorage.getItem('cart') || '[]'); const t = c.reduce((s, i) => s + (i.qty || 1), 0); document.querySelectorAll('#cartCount').forEach(el => { if (el) el.textContent = t; }); };
     window._updateWishBadge = function () { const w = JSON.parse(localStorage.getItem('wishlist') || '[]'); document.querySelectorAll('#wishlistCount').forEach(el => { if (el) el.textContent = w.length; }); };
     window.Cart = {
@@ -3931,7 +3944,7 @@
           <span id="pRatingEl" class="font-black text-gray-800 text-sm"></span>
           <div class="w-px h-4 bg-gray-200"></div>
           <span id="pReviewsEl" class="text-sm" style="color:var(--forest-sage)"></span>
-          <div class="w-px h-4 bg-gray-200"></div>
+          <div class="w-px h-4 bg-gray-200" id="pSoldDivider" style="display:none"></div>
           <span id="pSoldEl" class="text-sm font-bold" style="color:var(--forest-mid)"></span>
         </div>
 
@@ -4518,9 +4531,9 @@
       <div class="ns-reveal" style="display:flex;align-items:stretch;gap:2rem;flex-wrap:wrap;background:#fff;border:1px solid rgba(26,58,42,.1);border-radius:20px;padding:1.75rem 2rem;margin-bottom:2rem;box-shadow:0 4px 24px rgba(15,34,24,.06);">
         <!-- Score block -->
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:120px;flex-shrink:0;">
-          <div id="revScoreEl" style="font-family:'Inter',sans-serif;font-size:3.8rem;font-weight:900;color:var(--forest-deep);line-height:1;letter-spacing:-.03em;">4.8</div>
-          <div id="revStarsEl" style="color:#f59e0b;font-size:1rem;letter-spacing:.05em;margin:.3rem 0 .2rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div id="revCntEl" style="font-size:.68rem;color:var(--forest-sage);font-weight:600;">0 ratings</div>
+          <div id="revScoreEl" style="font-family:'Inter',sans-serif;font-size:3.8rem;font-weight:900;color:var(--forest-deep);line-height:1;letter-spacing:-.03em;">—</div>
+          <div id="revStarsEl" style="color:#f59e0b;font-size:1rem;letter-spacing:.05em;margin:.3rem 0 .2rem;"></div>
+          <div id="revCntEl" style="font-size:.68rem;color:var(--forest-sage);font-weight:600;">No reviews yet</div>
           <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-leaf);margin-top:.4rem;">Verified</div>
         </div>
         <!-- Divider -->
@@ -4848,7 +4861,7 @@
       /* --- WHY BUY PILLS ------------------------------------ */
       const NS_WHY = [
         { icon: '[[icon:heart]]', text: 'Loved by 12,000+ Families' },
-        { icon: '[[icon:shopping-bag]]', text: '200+ Sold This Month' },
+        { icon: '[[icon:shopping-bag]]', text: 'Farm Direct Delivery' },
         { icon: '[[icon:star]]', text: '4.8/5 Customer Rating' },
         { icon: '[[icon:wheat]]', text: '100% Heritage Ingredients' },
         { icon: '[[icon:flask-conical]]', text: 'Lab Tested Every Batch' },
@@ -5347,9 +5360,9 @@
           <p style="font-size:.78rem;font-weight:800;color:${i === 0 ? '#fff' : 'var(--forest-deep)'};">${r.name}</p>
           <p style="font-size:.62rem;color:${i === 0 ? 'rgba(255,255,255,.5)' : 'var(--forest-sage)'};">${r.loc} · ${r.date}</p>
         </div>
-        ${r.verified ? `<span style="margin-left:auto;font-size:.58rem;font-weight:700;background:${i === 0 ? 'rgba(74,222,128,.15)' : '#dcfce7'};color:${i === 0 ? '#4ade80' : '#16a34a'};padding:2px 8px;border-radius:20px;">? Verified</span>` : ''}
+        ${r.verified ? `<span style="margin-left:auto;font-size:.58rem;font-weight:700;background:${i === 0 ? 'rgba(74,222,128,.15)' : '#dcfce7'};color:${i === 0 ? '#4ade80' : '#16a34a'};padding:2px 8px;border-radius:20px;">&#10003; Verified</span>` : ''}
       </div>
-      <div style="color:var(--gold);font-size:.85rem;margin-bottom:.6rem;">${'?'.repeat(r.stars)}${'?'.repeat(5 - r.stars)}</div>
+      <div style="color:var(--gold);font-size:.85rem;margin-bottom:.6rem;">${renderStars(r.stars)}</div>
       <p style="font-size:.75rem;line-height:1.8;color:${i === 0 ? 'rgba(247,243,236,.8)' : '#374151'};">${r.text}</p>
     </div>`).join('');
         nsObserve();
@@ -7100,11 +7113,53 @@
     let itemQty = 1;
 
     /* --- LOAD --- */
-    function loadProduct() {
+    function mapApiProduct(p) {
+      return {
+        id: p._id,
+        name: p.name,
+        category: p.category || 'Other Products',
+        price: p.price || 0,
+        oldPrice: p.oldPrice || p.price || 0,
+        rating: Number(p.numReviews || 0) > 0 ? Number(p.rating || 0) : 0,
+        reviews: p.numReviews || 0,
+        sold: p.sold || 0,
+        badge: p.badge || 'new',
+        image: p.images?.[0]?.url || p.image || '',
+        thumbs: (p.images || []).slice(1).map(img => img.url || img).filter(Boolean),
+        tagline: p.tagline || '',
+        desc: p.description || '',
+        benefits: (p.benefits || []).map(b => typeof b === 'string' ? { icon: '[[icon:leaf]]', title: b, desc: b } : b),
+        specs: p.specs || {},
+        variants: (p.quantityOptions || []).map(opt => opt.label || `${opt.quantity}${opt.unit || ''}`),
+        quantityOptions: p.quantityOptions || [],
+        reviewData: (p.reviews || []).map(r => ({
+          id: r._id,
+          name: r.user?.name || [r.user?.firstName, r.user?.lastName].filter(Boolean).join(' ') || 'Customer',
+          rating: r.rating,
+          text: r.comment,
+          date: r.createdAt ? new Date(r.createdAt).toLocaleString('en-IN', { month: 'short', year: 'numeric' }) : '',
+          verified: Boolean(r.isVerifiedPurchase)
+        }))
+      };
+    }
+
+    async function loadProduct() {
       const id = new URLSearchParams(window.location.search).get('id') || '1';
       currentProduct = products.find(p => String(p.id) === String(id)) || products[0];
+      const isStaticFallback = /^\d+$/.test(String(id));
+      if (!isStaticFallback) {
+        try {
+          const base = window.API_BASE || 'http://localhost:5000/api';
+          const res = await fetch(base + '/products/' + encodeURIComponent(id));
+          const data = await res.json();
+          if (res.ok && data.success && data.product) currentProduct = mapApiProduct(data.product);
+        } catch (error) {
+          console.warn('API product load failed:', error.message);
+        }
+      } else {
+        currentProduct = { ...currentProduct, rating: 0, reviews: 0, reviewData: [] };
+      }
       window.currentProduct = currentProduct;
-      hydrateProductExperienceReviews(currentProduct);
       document.title = currentProduct.name + ' | NANSAI';
       try { render(); } catch (e) { console.error('render error', e); }
       try { window.nsRefreshProductExperience?.(); } catch (e) { console.warn('product experience refresh failed', e); }
@@ -7168,9 +7223,9 @@
 
       // Rating
       document.getElementById('pStarsEl').innerHTML = renderStars(p.rating);
-      document.getElementById('pRatingEl').textContent = p.rating;
-      document.getElementById('pReviewsEl').textContent = p.reviews + ' reviews';
-      document.getElementById('pSoldEl').textContent = p.sold + ' sold';
+      document.getElementById('pRatingEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : 'No reviews yet';
+      document.getElementById('pReviewsEl').textContent = p.reviews > 0 ? p.reviews + ' reviews' : 'No reviews yet';
+      document.getElementById('pSoldEl').textContent = '';
 
       // Price
       document.getElementById('pPriceEl').textContent = '₹' + p.price;
@@ -7318,13 +7373,13 @@
       </tr>`).join('') + `</tbody>`;
 
       // Reviews
-      document.getElementById('revScoreEl').textContent = p.rating;
+      document.getElementById('revScoreEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : 'No reviews yet';
       document.getElementById('revStarsEl').innerHTML = renderStars(p.rating);
-      document.getElementById('revCntEl').textContent = p.reviews + ' ratings';
+      document.getElementById('revCntEl').textContent = p.reviews > 0 ? p.reviews + ' ratings' : 'No reviews yet';
 
       const bars = [
-        { label: '5★', pct: Math.round(p.rating * 15) },
-        { label: '4★', pct: Math.round((5 - p.rating) * 18) + 10 },
+        { label: '5★', pct: p.reviews > 0 ? Math.round(p.rating * 15) : 0 },
+        { label: '4★', pct: p.reviews > 0 ? Math.round((5 - p.rating) * 18) + 10 : 0 },
         { label: '3★', pct: 8 }, { label: '2★', pct: 4 }, { label: '1★', pct: 3 },
       ];
       document.getElementById('barRows').innerHTML = bars.map(b => `
@@ -7385,6 +7440,7 @@
         }
       });
       initReviewForm();
+      if (currentProduct && !/^\d+$/.test(String(currentProduct.id))) loadProductReviews(currentProduct.id);
       window.nansaiApplyIcons?.(document.body);
       // Check for a review pre-saved from the orders page
       const user = (function () { try { return JSON.parse(localStorage.getItem('nansai_user') || 'null'); } catch { return null; } })();
@@ -8014,38 +8070,95 @@
 
     /* --- WRITE REVIEW --- */
     let selectedStar = 0;
+    let _revOrderId = null;
+
+    async function loadProductReviews(productId) {
+      const base = window.API_BASE || 'http://localhost:5000/api';
+      try {
+        const res = await fetch(base + '/reviews/product/' + productId);
+        const data = await res.json();
+        if (!data.success) return;
+        const rating = data.rating || 0;
+        const count = data.numReviews || 0;
+        document.getElementById('revScoreEl').textContent = count > 0 ? Number(rating).toFixed(1) : '\u2014';
+        document.getElementById('revStarsEl').innerHTML = count > 0 ? renderStars(rating) : '';
+        document.getElementById('revCntEl').textContent = count > 0 ? count + ' rating' + (count !== 1 ? 's' : '') : 'No reviews yet';
+        document.getElementById('pStarsEl').innerHTML = renderStars(rating);
+        document.getElementById('pRatingEl').textContent = count > 0 ? Number(rating).toFixed(1) : '';
+        document.getElementById('pReviewsEl').textContent = count > 0 ? count + ' review' + (count !== 1 ? 's' : '') : 'No reviews yet';
+        const reviews = data.data || [];
+        const counts = [0,0,0,0,0];
+        reviews.forEach(r => { if (r.rating >= 1 && r.rating <= 5) counts[r.rating-1]++; });
+        const total = reviews.length || 1;
+        const bars = [5,4,3,2,1].map(star => ({ label: star + '\u2605', pct: Math.round((counts[star-1]/total)*100) }));
+        document.getElementById('barRows').innerHTML = bars.map(b =>
+          '<div class="rev-bar-row"><span class="rev-bar-label">' + b.label + '</span><div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:0%" data-pct="' + b.pct + '"></div></div><span class="rev-bar-pct">' + b.pct + '%</span></div>'
+        ).join('');
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          document.querySelectorAll('.rev-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+        }));
+        const listEl = document.getElementById('reviewsList');
+        if (!reviews.length) {
+          listEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--forest-sage);font-size:.85rem;">No reviews yet. Be the first to review this product!</div>';
+        } else {
+          const LIMIT = 5;
+          listEl.innerHTML = reviews.slice(0, LIMIT).map(r => {
+            const name = (r.user && (r.user.name || r.user.firstName)) || 'Customer';
+            const date = new Date(r.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+            return '<div class="rev-card"><div class="rev-card-head"><div class="rev-avatar">' + name[0].toUpperCase() + '</div><div class="rev-meta"><div class="rev-name">' + name + '</div><div class="rev-stars-row">' + renderStars(r.rating) + '</div></div><span class="rev-date">' + date + '</span></div>' +
+              (r.title ? '<p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);margin-bottom:.35rem;">' + r.title + '</p>' : '') +
+              '<p class="rev-text">' + r.comment + '</p>' +
+              (r.isVerifiedPurchase ? '<span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>' : '') +
+              '</div>';
+          }).join('');
+          if (reviews.length > LIMIT) {
+            const remaining = reviews.length - LIMIT;
+            const wrap = document.createElement('div');
+            wrap.id = 'revViewMoreWrap';
+            wrap.style.cssText = 'grid-column:1/-1;display:flex;justify-content:center;margin-top:.5rem;';
+            wrap.innerHTML = '<button onclick="expandReviews()" style="display:flex;align-items:center;gap:.5rem;padding:.65rem 1.75rem;border-radius:30px;border:1.5px solid rgba(26,58,42,.18);background:#fff;color:var(--forest-mid);font-size:.78rem;font-weight:700;cursor:pointer;font-family:\'Inter\',sans-serif;transition:all .2s;" onmouseover="this.style.background=\'var(--forest)\';this.style.color=\'#fff\'" onmouseout="this.style.background=\'#fff\';this.style.color=\'var(--forest-mid)\'">View ' + remaining + ' More Review' + (remaining > 1 ? 's' : '') + '</button>';
+            listEl.appendChild(wrap);
+          }
+        }
+        if (currentProduct) currentProduct.reviewData = reviews.map(r => ({ name: (r.user && (r.user.name || r.user.firstName)) || 'Customer', rating: r.rating, text: r.comment, date: new Date(r.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }), verified: r.isVerifiedPurchase }));
+      } catch(e) { /* silently keep static data */ }
+    }
 
     function initReviewForm() {
       const user = (function () { try { return JSON.parse(localStorage.getItem('nansai_user') || 'null'); } catch { return null; } })();
       const token = localStorage.getItem('nansai_token');
       if (!user || !token) return;
-      const key = 'rev_' + currentProduct.id + '_' + (user._id || user.email || 'u');
-      if (localStorage.getItem(key)) {
-        document.getElementById('revForm').style.display = 'block';
-        document.getElementById('revForm').innerHTML = '<p style="font-size:.82rem;font-weight:600;color:var(--forest-leaf);padding:.5rem 0;">&#9989; You have already reviewed this product. Thank you!</p>';
-        return;
-      }
       const base = window.API_BASE || 'http://localhost:5000/api';
       fetch(base + '/orders/my-orders', { headers: { Authorization: 'Bearer ' + token } })
         .then(r => r.json())
         .then(data => {
           const pid = String(currentProduct.id);
-          const hasPurchased = (data.data || []).some(order =>
-            (order.items || []).some(item => String(item.product?._id || item.product || '') === pid)
+          const deliveredOrder = (data.data || []).find(order =>
+            order.orderStatus === 'Delivered' &&
+            (order.items || []).some(item => String(item.product && (item.product._id || item.product) || '') === pid)
           );
-          if (hasPurchased) {
-            document.getElementById('revForm').style.display = 'block';
-            document.getElementById('revFormUserName').textContent = 'Posting as ' + (user.name || 'You');
-            document.querySelectorAll('#starPicker span').forEach(s => {
-              s.addEventListener('mouseover', () => highlightStars(+s.dataset.star));
-              s.addEventListener('mouseout', () => highlightStars(selectedStar));
-              s.addEventListener('click', () => { selectedStar = +s.dataset.star; highlightStars(selectedStar); });
+          if (!deliveredOrder) return;
+          return fetch(base + '/reviews/my-reviews', { headers: { Authorization: 'Bearer ' + token } })
+            .then(r => r.json())
+            .then(revData => {
+              const alreadyReviewed = (revData.data || []).some(r => String(r.product) === pid);
+              const form = document.getElementById('revForm');
+              if (alreadyReviewed) {
+                form.style.display = 'block';
+                form.innerHTML = '<p style="font-size:.82rem;font-weight:600;color:var(--forest-leaf);padding:.5rem 0;">&#9989; You have already reviewed this product. Thank you!</p>';
+                return;
+              }
+              _revOrderId = deliveredOrder._id;
+              form.style.display = 'block';
+              document.getElementById('revFormUserName').textContent = 'Posting as ' + (user.name || 'You');
+              document.querySelectorAll('#starPicker span').forEach(s => {
+                s.addEventListener('mouseover', () => highlightStars(+s.dataset.star));
+                s.addEventListener('mouseout', () => highlightStars(selectedStar));
+                s.addEventListener('click', () => { selectedStar = +s.dataset.star; highlightStars(selectedStar); });
+              });
             });
-          } else {
-
-          }
         })
-        .catch(() => { });
+        .catch(() => {});
     }
 
     function highlightStars(n) {
@@ -8054,34 +8167,30 @@
       });
     }
 
-    function submitReview() {
+    async function submitReview() {
       const user = (function () { try { return JSON.parse(localStorage.getItem('nansai_user') || 'null'); } catch { return null; } })();
+      const token = localStorage.getItem('nansai_token');
       const text = document.getElementById('revTextInput').value.trim();
       const msg = document.getElementById('revFormMsg');
       if (!selectedStar) { msg.textContent = 'Please select a star rating.'; msg.style.color = '#ef4444'; return; }
-      if (text.length < 10) { msg.textContent = 'Please write at least 10 characters.'; msg.style.color = '#ef4444'; return; }
-      const now = new Date();
-      const dateStr = now.toLocaleString('en-IN', { month: 'short', year: 'numeric' });
-      const newRev = { name: user.name || 'Customer', rating: selectedStar, text, date: dateStr, verified: true };
-      // Save locally
-      const key = 'rev_' + currentProduct.id + '_' + (user._id || user.email || 'u');
-      localStorage.setItem(key, '1');
-      // Prepend to reviewData and re-render list
-      currentProduct.reviewData = [newRev, ...(currentProduct.reviewData || [])];
-      currentProduct.reviews = (currentProduct.reviews || 0) + 1;
-      document.getElementById('revCntEl').textContent = currentProduct.reviews + ' ratings';
-      document.getElementById('pReviewsEl').textContent = currentProduct.reviews + ' reviews';
-      const listEl = document.getElementById('reviewsList');
-      const card = document.createElement('div');
-      card.className = 'rev-card';
-      card.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity .35s ease,transform .35s ease;';
-      card.innerHTML = `<div class="rev-card-head"><div class="rev-avatar">${newRev.name[0]}</div><div class="rev-meta"><div class="rev-name">${newRev.name}</div><div class="rev-stars-row">${renderStars(newRev.rating)}</div></div><span class="rev-date">${newRev.date}</span></div><p class="rev-text">${newRev.text}</p><span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>`;
-      listEl.insertBefore(card, listEl.firstChild);
-      window.nansaiApplyIcons?.(card);
-      requestAnimationFrame(() => requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }));
-      // Hide form, show thank you
-      document.getElementById('revForm').innerHTML = '<p style="font-size:.85rem;font-weight:700;color:var(--forest-leaf);padding:.5rem 0;">&#127881; Thank you for your review!</p>';
-      showToast('[[icon:star]] Review submitted!');
+      if (text.length < 3) { msg.textContent = 'Please write at least a few words.'; msg.style.color = '#ef4444'; return; }
+      if (!_revOrderId) { msg.textContent = 'Reviews can be submitted after your order is delivered.'; msg.style.color = '#ef4444'; return; }
+      const base = window.API_BASE || 'http://localhost:5000/api';
+      try {
+        const res = await fetch(base + '/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ product: currentProduct.id, orderId: _revOrderId, rating: selectedStar, comment: text })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Review failed');
+        document.getElementById('revForm').innerHTML = '<p style="font-size:.85rem;font-weight:700;color:var(--forest-leaf);padding:.5rem 0;">&#127881; Thank you for your review!</p>';
+        showToast('\u2b50 Review submitted!');
+        await loadProductReviews(currentProduct.id);
+      } catch (error) {
+        msg.textContent = error.message || 'Could not submit review';
+        msg.style.color = '#ef4444';
+      }
     }
 
     /* --- EXPAND REVIEWS --- */

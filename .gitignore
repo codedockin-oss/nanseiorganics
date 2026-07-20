@@ -55,3 +55,12 @@ client id.txt
 backend/test-atlas.js
 backend/test-connection.js
 backend/reset-admin-pw.js
+
+# Patch/debug scripts
+patch_*.py
+run_*.py
+debug_*.py
+fix_*.py
+fix2.py
+fix_cart.py
+fix_product.js

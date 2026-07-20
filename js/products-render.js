@@ -83,11 +83,11 @@ function prodCardHTML(p, i) {
     <div class="p-2 sm:p-2.5 flex flex-col flex-1 gap-1.5">
       <span class="text-[9px] font-black text-green-600 uppercase tracking-wider">${p.category}</span>
       <h3 class="font-bold text-xs text-gray-900 leading-snug line-clamp-2">${p.name}</h3>
-      <div class="flex items-center gap-1"><span class="text-amber-400 text-[10px]">${stars(p.rating)}</span><span class="text-gray-400 text-[10px]">${p.rating}</span></div>
+      <div class="flex items-center gap-1"><span class="text-amber-400 text-[10px]">${stars(p.rating)}</span><span class="text-gray-400 text-[10px]">${ratingText(p)}</span></div>
       <div class="flex items-center gap-1.5 flex-wrap mt-auto"><span class="text-green-700 font-black text-sm">₹${p.price}</span><span class="text-gray-400 text-[10px] line-through">₹${p.oldPrice}</span><span class="bg-amber-50 text-amber-600 text-[9px] font-black px-1 py-0.5 rounded-full border border-amber-200">${d}% off</span></div>
       <div class="flex items-center gap-1.5 mt-1">
         <select id="qty-${p.id}" onclick="event.stopPropagation()" onchange="event.stopPropagation()" class="border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-gray-50 outline-none cursor-pointer" style="height:28px;padding:0 4px;max-width:90px;">
-          ${qtyOptionsHTML(p.category)}
+          ${qtyOptionsHTML(p.category, p)}
         </select>
         <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id})" class="cart-btn flex-1 bg-green-800 hover:bg-green-700 text-white text-[11px] font-bold py-1.5 rounded-lg flex items-center justify-center gap-1 transition">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
@@ -218,7 +218,7 @@ function renderMobProducts(list) {
       <div style="padding:.4rem .5rem;display:flex;flex-direction:column;gap:2px;flex:1;">
         <span style="font-size:.5rem;font-weight:800;color:#16a34a;text-transform:uppercase;letter-spacing:.08em;">${p.category}</span>
         <h3 style="font-size:.65rem;font-weight:700;color:#1a2416;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name}</h3>
-        <div style="display:flex;align-items:center;gap:3px;"><span style="color:#f59e0b;font-size:.52rem;">${stars(p.rating)}</span><span style="color:#9ca3af;font-size:.5rem;">${p.rating}</span></div>
+        <div style="display:flex;align-items:center;gap:3px;"><span style="color:#f59e0b;font-size:.52rem;">${stars(p.rating)}</span><span style="color:#9ca3af;font-size:.5rem;">${ratingText(p)}</span></div>
         <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:auto;">
           <span style="color:#166634;font-weight:800;font-size:.75rem;">₹${p.price}</span>
           <span style="color:#9ca3af;font-size:.55rem;text-decoration:line-through;">₹${p.oldPrice}</span>
@@ -226,7 +226,7 @@ function renderMobProducts(list) {
         </div>
         <div style="display:flex;align-items:center;gap:4px;margin-top:3px;">
           <select id="qty-${p.id}" onclick="event.stopPropagation()" onchange="event.stopPropagation()" style="height:24px;border:1px solid #d1d5db;border-radius:6px;font-size:.6rem;font-weight:700;color:#374151;background:#f3f4f6;padding:0 3px;outline:none;cursor:pointer;max-width:80px;font-family:'DM Sans',sans-serif;">
-            ${qtyOptionsHTML(p.category)}
+            ${qtyOptionsHTML(p.category, p)}
           </select>
           <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id})" class="cart-btn" style="flex:1;background:#166534;color:#fff;font-size:.6rem;font-weight:700;padding:5px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:2px;">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>

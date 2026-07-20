@@ -26,7 +26,7 @@
   * { font-family: 'DM Sans', sans-serif; box-sizing: border-box; }
   body { background: #F8FAFC; margin: 0; }
   .mono { font-family: 'DM Mono', monospace; }
-
+  
   /* Sidebar */
   #sidebar { width: 240px; min-height: 100vh; background: var(--c-sidebar); border-right: 1px solid var(--c-sidebar-border); flex-shrink: 0; position: fixed; top: 0; left: 0; bottom: 0; z-index: 40; transition: transform 0.2s; }
   #main-content { margin-left: 240px; min-height: 100vh; }
@@ -273,6 +273,18 @@ a .nansai-icon,
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Customers
       </div>
+      <div class="nav-item" onclick="navigate('discounts')" data-page="discounts">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M19 5L5 19M7.5 8.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM16.5 18.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Discounts
+      </div>
+      <div class="nav-item" onclick="navigate('reviews')" data-page="reviews">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 17.3L18.2 21l-1.6-7L22 9.3l-7.1-.6L12 2 9.1 8.7 2 9.3 7.4 14 5.8 21 12 17.3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        Reviews
+      </div>
+      <div class="nav-item" onclick="navigate('settings')" data-page="settings">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1012 8a3.5 3.5 0 000 7.5z"/><path d="M19.4 15a1.7 1.7 0 00.34 1.88l.06.06a2 2 0 01-2.83 2.83l-.06-.06A1.7 1.7 0 0015 19.4a1.7 1.7 0 00-1 .6 1.7 1.7 0 00-.4 1.1V21a2 2 0 01-4 0v-.09a1.7 1.7 0 00-.4-1.1 1.7 1.7 0 00-1-.6 1.7 1.7 0 00-1.88.34l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.7 1.7 0 004.6 15a1.7 1.7 0 00-.6-1 1.7 1.7 0 00-1.1-.4H3a2 2 0 010-4h.09a1.7 1.7 0 001.1-.4 1.7 1.7 0 00.6-1 1.7 1.7 0 00-.34-1.88l-.06-.06A2 2 0 017.22 3.43l.06.06A1.7 1.7 0 009.16 3.8a1.7 1.7 0 001-.6A1.7 1.7 0 0010.6 2V2a2 2 0 014 0v.09a1.7 1.7 0 00.4 1.1 1.7 1.7 0 001 .6 1.7 1.7 0 001.88-.34l.06-.06a2 2 0 012.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.88 1.7 1.7 0 00.6 1 1.7 1.7 0 001.1.4H21a2 2 0 010 4h-.09a1.7 1.7 0 00-1.1.4 1.7 1.7 0 00-.6 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Settings
+      </div>
       <div class="nav-item" onclick="navigate('news')" data-page="news">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         News
@@ -462,6 +474,34 @@ a .nansai-icon,
             </table>
           </div>
         </div>
+      </div>
+
+      <!-- ===== DISCOUNTS PAGE ===== -->
+      <div id="page-discounts" class="page">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;">
+          <input class="form-input" style="width:240px;font-size:13px;" placeholder="Search discounts..." id="discount-search" oninput="renderDiscounts()">
+          <button class="btn btn-primary" onclick="openDiscountModal()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            Create Discount
+          </button>
+        </div>
+        <div class="stat-card" style="padding:0;overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Type</th><th>Value</th><th>Products</th><th>Dates</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="discounts-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-reviews" class="page">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;"><input class="form-input" style="width:240px;font-size:13px;" placeholder="Search reviews..." id="review-search" oninput="renderReviews()"><span id="review-count" style="font-size:13px;color:#64748B;"></span></div>
+        <div class="stat-card" style="padding:0;overflow:hidden;"><div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Product</th><th>Customer</th><th>Rating</th><th>Review</th><th>Verified</th><th>Date</th><th>Actions</th></tr></thead><tbody id="reviews-body"></tbody></table></div></div>
+      </div>
+
+      <div id="page-settings" class="page">
+        <div class="stat-card"><p style="margin:0;color:#64748B;font-size:14px;">Settings ready for store configuration.</p></div>
       </div>
 
       <!-- ===== NEWS PAGE ===== -->
@@ -839,6 +879,7 @@ const Store = {
   products: [],
   orders: [],
   customers: [],
+  discounts: [],
   nextProductId: 1,
   nextOrderId: 1001,
   nextCustomerId: 1,
@@ -868,6 +909,11 @@ const API = {
     const r = await fetch(this.base + endpoint, { method: 'DELETE', headers: { Authorization: `Bearer ${getToken()}` } });
     if (r.status === 401) { doLogout(); return { success: false }; }
     return r.json();
+  },
+  async patch(endpoint, data) {
+    const r = await fetch(this.base + endpoint, { method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }, body: JSON.stringify(data) });
+    if (r.status === 401) { doLogout(); return { success: false }; }
+    return r.json();
   }
 };
 
@@ -877,10 +923,11 @@ const API = {
 // LOAD DATA FROM BACKEND
 // ============================================================
 async function loadData() {
-  const [prodRes, orderRes, custRes] = await Promise.all([
+  const [prodRes, orderRes, custRes, discountRes] = await Promise.all([
     API.get('/products/admin/all'),
     API.get('/orders'),
     API.get('/users'),
+    API.get('/discounts'),
   ]);
 
   if (prodRes.success) {
@@ -912,6 +959,8 @@ async function loadData() {
       products:  (o.items || []).map(i => ({
         name:  i.name  || i.product?.name  || 'Product',
         qty:   i.quantity || 1,
+        qtyLabel: i.selectedQuantity || String(i.quantity || 1),
+        selectedUnit: i.selectedUnit || '',
         price: i.price || i.product?.price || 0,
         image: i.image || i.product?.images?.[0]?.url || '',
       })),
@@ -927,6 +976,7 @@ async function loadData() {
       phone: c.phone || '—',
     }));
   }
+  if (discountRes.success) Store.discounts = discountRes.data || [];
 }
 
 // ============================================================
@@ -946,7 +996,7 @@ function getToken() { return localStorage.getItem('admin_token') || localStorage
 // ============================================================
 // NAVIGATION
 // ============================================================
-const pageTitles = { dashboard: 'Dashboard', products: 'Products', orders: 'Orders', customers: 'Customers', news: 'News', blogs: 'Blog Articles' };
+const pageTitles = { dashboard: 'Dashboard', products: 'Products', orders: 'Orders', customers: 'Customers', discounts: 'Discounts', reviews: 'Reviews', settings: 'Settings', news: 'News', blogs: 'Blog Articles' };
 function navigate(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
@@ -956,8 +1006,10 @@ function navigate(page) {
   if (page === 'products') renderProducts();
   if (page === 'orders') renderOrders();
   if (page === 'customers') renderCustomers();
+  if (page === 'discounts') renderDiscounts();
   if (page === 'news') renderNews();
   if (page === 'blogs') renderBlogs();
+  if (page === 'reviews') renderReviews();
 }
 
 // ============================================================
@@ -1655,6 +1707,8 @@ async function renderOrders() {
     products: (o.items || []).map(i => ({
       name:  i.name  || i.product?.name  || 'Product',
       qty:   i.quantity || 1,
+      qtyLabel: i.selectedQuantity || String(i.quantity || 1),
+      selectedUnit: i.selectedUnit || '',
       price: i.price || i.product?.price || 0,
       image: i.image || i.product?.images?.[0]?.url || '',
     })),
@@ -1684,7 +1738,7 @@ async function renderOrders() {
     } else if (next === 'delivered') {
       actionBtn = `<button class="btn btn-sm" style="background:#DCFCE7;color:#166534;border:1.5px solid #BBF7D0;" onclick="advanceOrder('${o.id}','delivered')">[[icon:circle-check]] Deliver</button>`;
     }
-    const prodNames = o.products.map(p => `${p.name} ×${p.qty}`).join(', ');
+    const prodNames = o.products.map(p => `${p.name} - ${p.qtyLabel || p.qty}`).join(', ');
     return `
       <tr>
         <td><span class="mono" style="font-size:12px;color:#2563EB;cursor:pointer;" onclick="openOrderModal('${o.id}')">${o.id}</span></td>
@@ -1775,7 +1829,7 @@ function openOrderModal(orderId) {
       <img src="${p.image||''}" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:1px solid #E2E8F0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22><rect width=%2236%22 height=%2236%22 fill=%22%23F1F5F9%22/></svg>'">
       <div style="flex:1;">
         <p style="margin:0;font-size:13px;font-weight:500;">${p.name}</p>
-        <p style="margin:0;font-size:12px;color:#64748B;">Qty: ${p.qty} × ₹${p.price.toLocaleString('en-IN')}</p>
+        <p style="margin:0;font-size:12px;color:#64748B;">Quantity: ${p.qtyLabel || p.qty} × ₹${p.price.toLocaleString('en-IN')}</p>
       </div>
       <span style="font-weight:600;font-size:13px;">₹${(p.price*p.qty).toLocaleString('en-IN')}</span>
     </div>
@@ -1933,6 +1987,33 @@ document.addEventListener('keydown', e => {
 // ============================================================
 // AUTO LOGIN CHECK — verify token with backend
 // ============================================================
+// ============================================================
+// REVIEWS (ADMIN)
+// ============================================================
+async function renderReviews() {
+  const res = await API.get('/reviews/admin/all');
+  if (!res.success) { document.getElementById('reviews-body').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">Failed to load reviews</td></tr>'; return; }
+  const all = res.data || [];
+  const query = (document.getElementById('review-search')?.value || '').toLowerCase();
+  const filtered = query ? all.filter(r => (r.product?.name||'').toLowerCase().includes(query) || (r.user?.name||'').toLowerCase().includes(query) || (r.comment||'').toLowerCase().includes(query)) : all;
+  const countEl = document.getElementById('review-count');
+  if (countEl) countEl.textContent = filtered.length + ' review' + (filtered.length !== 1 ? 's' : '');
+  const stars = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+  document.getElementById('reviews-body').innerHTML = filtered.length ? filtered.map(r => {
+    const date = new Date(r.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    const pName = r.product?.name || '—';
+    const cName = r.user?.name || r.user?.firstName || '—';
+    const comment = (r.comment||'').slice(0,80) + ((r.comment||'').length > 80 ? '…' : '');
+    const titleHtml = r.title ? '<strong>' + r.title + '</strong> — ' : '';
+    return '<tr><td style="font-size:13px;font-weight:500;">' + pName + '</td><td style="font-size:13px;">' + cName + '</td><td><span style="color:#f59e0b;font-size:14px;">' + stars(r.rating) + '</span> <span style="font-size:11px;color:#64748B;">(' + r.rating + ')</span></td><td style="font-size:12px;color:#475569;max-width:220px;">' + titleHtml + comment + '</td><td>' + (r.isVerifiedPurchase ? '<span class="badge badge-delivered">✓ Verified</span>' : '<span class="badge badge-unpaid">Unverified</span>') + '</td><td style="font-size:12px;color:#64748B;">' + date + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteReview(\'' + r._id + '\')" >Delete</button></td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">No reviews found</td></tr>';
+}
+async function deleteReview(id) {
+  if (!confirm('Delete this review?')) return;
+  const res = await API.delete('/reviews/' + id);
+  if (!res.success) { toast(res.message || 'Failed to delete review', 'error'); return; }
+  toast('Review deleted', 'info'); renderReviews();
+}
 window.onload = async () => {
   const token = localStorage.getItem('admin_token') || localStorage.getItem('nansai_token');
 

@@ -6,6 +6,7 @@
 <title>Your Account — Nansai Organics</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <script>
   tailwind.config = {
@@ -941,23 +942,33 @@ a .nansai-icon,
 <!-- Mobile Bottom Nav -->
 <nav id="mob-bottom-nav">
   <a href="index.html" class="mbn-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <div style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
     Home
   </a>
   <a href="index.html#products" class="mbn-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+    <div style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="15" width="7" height="7"/><rect x="2" y="15" width="7" height="7"/></svg>
+    </div>
     Shop
   </a>
-  <button class="mbn-btn active" onclick="navTo('orders')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    Orders
-  </button>
+  <a href="checkoutmyorderpage.html" class="mbn-btn" style="background:#0f2218;color:#fff;border-radius:14px;padding:.45rem .6rem;flex:1.4;box-shadow:0 4px 14px rgba(15,34,24,.28);">
+    <div style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
+    </div>
+    Cart
+  </a>
   <button class="mbn-btn" onclick="navTo('wishlist')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+    <div style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+    </div>
     Wishlist
   </button>
-  <button class="mbn-btn" onclick="navTo('home')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  <button class="mbn-btn active" onclick="navTo('home')">
+    <div style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
     Account
   </button>
 </nav>
@@ -1558,13 +1569,11 @@ function renderWish(){
 
 function doSearch(){const q=(document.getElementById('navQ')?.value||document.getElementById('mobQ')?.value||'').trim();window.location.href='index.html'+(q?'?q='+encodeURIComponent(q):'');}
 function copyRef(){const el=document.getElementById('refInput');if(el)navigator.clipboard.writeText(el.value).then(()=>showToast('[[icon:gift]] Referral code copied!'));}
-function logout(){localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.location.href='login.html',900);}
+function logout(){showToast('[[icon:hand]] Signed out. See you soon!');setTimeout(()=>window.NanseiAuth.logout('login.html'),650);}
 
 // Auth guard — redirect to login if not signed in
 (function(){
-  if(!localStorage.getItem('nansai_token')){
-    window.location.replace('login.html');
-  }
+  window.NanseiAuth.requireAuth('login.html');
 })();
 
 loadProfile();

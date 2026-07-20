@@ -204,11 +204,11 @@ textarea.inp{resize:none;line-height:1.65}
 }
 
 /* Orders page */
-.order-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--fog-2);overflow:hidden;box-shadow:var(--shadow);animation:slideUp .4s cubic-bezier(.22,1,.36,1) both;transition:box-shadow .25s,transform .25s}
-.order-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.order-card{background:var(--white);border-radius:16px;border:1px solid var(--fog-2);overflow:hidden;box-shadow:0 2px 12px rgba(15,34,24,.07);animation:slideUp .4s cubic-bezier(.22,1,.36,1) both;transition:box-shadow .25s,transform .25s}
+.order-card:hover{box-shadow:0 8px 32px rgba(15,34,24,.12);transform:translateY(-2px)}
 .order-header-bar{background:var(--fog);border-bottom:1px solid var(--fog-2);padding:14px 24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center}
-.order-meta-label{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
-.order-meta-val{font-size:.87rem;font-weight:600;color:var(--ink)}
+.order-meta-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.order-meta-val{font-size:.85rem;font-weight:600;color:var(--ink)}
 .status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:99px;font-size:.73rem;font-weight:700}
 .sb-delivered{background:rgba(45,90,61,.1);color:var(--moss)}
 .sb-shipped{background:rgba(29,78,216,.1);color:#1d4ed8}
@@ -217,9 +217,6 @@ textarea.inp{resize:none;line-height:1.65}
 .progress-track{height:4px;background:var(--fog-2);border-radius:99px;overflow:hidden}
 .progress-bar{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
 .order-action-row{display:flex;flex-wrap:wrap;gap:8px}
-.filter-pill{padding:7px 18px;border-radius:99px;font-size:.8rem;font-weight:600;border:1.5px solid var(--fog-2);background:var(--white);color:var(--ink-3);cursor:pointer;transition:all .18s}
-.filter-pill:hover{border-color:var(--sage);color:var(--ink)}
-.filter-pill.active{background:var(--moss);color:#fff;border-color:var(--moss)}
 
 /* Modals */
 .modal-back{display:none;position:fixed;inset:0;z-index:500;background:rgba(13,26,15,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease}
@@ -309,9 +306,12 @@ textarea.inp{resize:none;line-height:1.65}
   #addrGrid{grid-template-columns:1fr !important}
   .summary-sidebar{position:static;border-radius:var(--r-lg)}
   #summaryItems{max-height:180px}
-  #ordersPage > div{padding:24px 12px}
+  #ordersPage > div{padding:24px 16px 80px}
   #ordersPage h1{font-size:1.8rem !important}
-  .order-header-bar{padding:10px 14px;gap:10px}
+  .order-header-bar{padding:10px 14px;gap:10px;flex-wrap:wrap}
+  .order-header-bar > div{min-width:0}
+  .order-action-row{flex-direction:column;width:100%}
+  .order-action-row .btn{width:100%;justify-content:center}
   .modal-head{padding:16px 18px}
   .modal-body{padding:16px 18px}
   #toast{font-size:.78rem;padding:9px 18px;white-space:normal;text-align:center;max-width:90vw}
@@ -968,39 +968,34 @@ a .nansai-icon,
 
 <!-- ------------------ ORDERS PAGE ------------------ -->
 <div id="ordersPage" class="pg">
-  <div style="max-width:900px;margin:0 auto;padding:40px 20px">
-    <div style="margin-bottom:32px">
-      <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;margin-bottom:6px">Your Orders</h1>
-      <p style="font-size:.87rem;color:var(--ink-3)" id="orderCountLabel"></p>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:28px">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;flex:1">
-        <button class="filter-pill active" onclick="setOrderFilter(this,'all')">All Orders</button>
-        <button class="filter-pill" onclick="setOrderFilter(this,'delivered')">Delivered</button>
-        <button class="filter-pill" onclick="setOrderFilter(this,'shipped')">Shipped</button>
-        <button class="filter-pill" onclick="setOrderFilter(this,'processing')">Processing</button>
-        <button class="filter-pill" onclick="setOrderFilter(this,'cancelled')">Cancelled</button>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <div class="search-bar" style="min-width:200px">
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="var(--sage)" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="text" id="ordersSearch" placeholder="Search orders..." oninput="renderOrders()"/>
+  <div style="max-width:1200px;margin:0 auto;padding:48px 24px 80px;">
+
+    <!-- Page Header -->
+    <div style="margin-bottom:40px;padding-bottom:28px;border-bottom:1px solid var(--fog-2);">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#fff" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <select id="sortSelect" class="inp" style="padding:10px 36px 10px 14px;font-size:.85rem;min-width:160px;cursor:pointer" onchange="renderOrders()">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="high">Price: High to Low</option>
-          <option value="low">Price: Low to High</option>
-        </select>
+        <div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1;">My Orders</h1>
+          <p style="font-size:.85rem;color:var(--ink-3);margin-top:4px;" id="orderCountLabel"></p>
+        </div>
       </div>
     </div>
-    <div id="ordersList" style="display:flex;flex-direction:column;gap:16px"></div>
-    <div id="ordersEmpty" style="display:none" class="empty-state">
+
+    <!-- Hidden inputs kept for JS compatibility -->
+    <input type="hidden" id="ordersSearch" value=""/>
+    <select id="sortSelect" style="display:none;"><option value="newest">Newest First</option></select>
+
+    <div id="ordersList" style="display:flex;flex-direction:column;gap:20px;"></div>
+
+    <div id="ordersEmpty" style="display:none;" class="empty-state">
       <div class="empty-icon">&#128230;</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:8px">No orders yet</h3>
-      <p style="font-size:.88rem;color:var(--ink-3);max-width:280px;margin:0 auto 28px">Place your first order and it will appear here.</p>
-      <button onclick="showPage('checkout')" class="btn btn-primary" style="padding:12px 32px">Start Shopping</button>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:8px;">No orders yet</h3>
+      <p style="font-size:.88rem;color:var(--ink-3);max-width:280px;margin:0 auto 28px;">Place your first order and it will appear here.</p>
+      <button onclick="showPage('checkout')" class="btn btn-primary" style="padding:12px 32px;">Start Shopping</button>
     </div>
+
   </div>
 </div>
 
@@ -1032,27 +1027,53 @@ a .nansai-icon,
 
 <!-- Review Modal -->
 <div class="modal-back" id="reviewModal">
-  <div class="modal-box" onclick="event.stopPropagation()">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:520px">
     <div class="modal-head">
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Leave a Review</h2>
+      <div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)" id="reviewModalTitle">Write a Review</h2>
+        <p style="font-size:.75rem;color:var(--ink-3);margin-top:2px" id="reviewModalSub">Share your experience with this product</p>
+      </div>
       <button class="modal-close" onclick="closeModal('reviewModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
-      <div style="display:flex;gap:14px;margin-bottom:16px;align-items:center">
-        <img id="reviewImg" src="" style="width:60px;height:60px;border-radius:14px;object-fit:cover;border:1px solid var(--fog-2)"/>
-        <div><p style="font-weight:700;font-size:.92rem" id="reviewProductName"></p><p style="font-size:.78rem;color:var(--ink-3);margin-top:3px" id="reviewOrderLabel"></p></div>
+      <!-- Product info -->
+      <div style="display:flex;gap:14px;margin-bottom:20px;align-items:center;background:var(--fog);border-radius:14px;padding:14px">
+        <img id="reviewImg" src="" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid var(--fog-2);flex-shrink:0"/>
+        <div style="flex:1;min-width:0">
+          <p style="font-weight:700;font-size:.92rem;color:var(--ink)" id="reviewProductName"></p>
+          <p style="font-size:.75rem;color:var(--ink-3);margin-top:3px" id="reviewOrderLabel"></p>
+          <span id="reviewVerifiedBadge" style="display:inline-flex;align-items:center;gap:4px;font-size:.65rem;font-weight:700;color:var(--moss);background:rgba(45,90,61,.1);padding:2px 8px;border-radius:99px;margin-top:4px">&#10003; Verified Purchase</span>
+        </div>
       </div>
+      <!-- Product selector for multi-item orders -->
       <select id="reviewProductSelect" style="display:none;width:100%;padding:10px 14px;border:1.5px solid var(--fog-2);border-radius:12px;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--ink);background:var(--fog);outline:none;margin-bottom:16px;cursor:pointer"></select>
-      <p style="font-size:.85rem;font-weight:600;margin-bottom:12px">How would you rate this product?</p>
-      <div style="display:flex;gap:6px;margin-bottom:20px" id="starRow">
+      <!-- Star rating -->
+      <p style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px">Your Rating <span style="color:#ef4444">*</span></p>
+      <div style="display:flex;gap:4px;margin-bottom:6px" id="starRow">
         <button class="star-btn" data-v="1" onclick="setStars(1)">&#9733;</button>
         <button class="star-btn" data-v="2" onclick="setStars(2)">&#9733;</button>
         <button class="star-btn" data-v="3" onclick="setStars(3)">&#9733;</button>
         <button class="star-btn" data-v="4" onclick="setStars(4)">&#9733;</button>
         <button class="star-btn" data-v="5" onclick="setStars(5)">&#9733;</button>
       </div>
-      <textarea id="reviewText" class="inp" rows="4" placeholder="Share your experience" style="margin-bottom:16px"></textarea>
-      <button onclick="submitReview()" class="btn btn-primary btn-full">Submit Review</button>
+      <p id="starLabel" style="font-size:.78rem;color:var(--amber);font-weight:600;min-height:1.2em;margin-bottom:16px"></p>
+      <!-- Title (optional) -->
+      <label class="field-label" style="margin-bottom:8px">Review Title <span style="font-size:.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--sage)">(optional)</span></label>
+      <input type="text" id="reviewTitle" class="inp" placeholder="e.g. Great quality rice!" maxlength="100" style="margin-bottom:14px"/>
+      <!-- Comment -->
+      <label class="field-label" style="margin-bottom:8px">Your Review <span style="color:#ef4444">*</span></label>
+      <textarea id="reviewText" class="inp" rows="4" placeholder="Share your experience with this product..." maxlength="1000" style="margin-bottom:6px"></textarea>
+      <p id="reviewCharCount" style="font-size:.68rem;color:var(--sage);text-align:right;margin-bottom:16px">0 / 1000</p>
+      <!-- Error message -->
+      <p id="reviewError" style="display:none;font-size:.78rem;color:#ef4444;font-weight:600;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px"></p>
+      <!-- Buttons -->
+      <div style="display:flex;gap:10px">
+        <button onclick="closeModal('reviewModal')" class="btn btn-ghost" style="flex:1;border-radius:12px">Cancel</button>
+        <button onclick="submitReview()" class="btn btn-primary" style="flex:2;border-radius:12px" id="reviewSubmitBtn">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+          Submit Review
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1250,6 +1271,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAndRenderAddrGrid();
   updateSummary();
   updateOrdersBadge();
+  _loadMyReviews();
   // sync wishlist badge
   (function(){
     const wl = JSON.parse(localStorage.getItem('wishlist')||'[]');
@@ -1368,8 +1390,10 @@ function subtotal() { return cart.reduce((s, i) => s + i.price * i.qty, 0); }
 function origTotal() { return cart.reduce((s, i) => s + (i.oldPrice || i.price) * i.qty, 0); }
 function calcTotal() {
   const sub = subtotal(), orig = origTotal(), disc = orig - sub;
-  const gst = Math.round((sub - couponDisc) * 0.05);
-  return { sub, orig, disc, gst, total: Math.max(0, sub - couponDisc) + deliveryCost + gst };
+  const discountTotal = disc + couponDisc;
+  const taxable = Math.max(0, sub - couponDisc);
+  const gst = Math.round(taxable * 0.05);
+  return { sub, orig, disc, discountTotal, gst, total: taxable + deliveryCost + gst };
 }
 
 function updateSummary() {
@@ -1426,7 +1450,7 @@ function updateSummary() {
   if (msi) msi.innerHTML = cart.map(item => `
     <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--fog-2)">
       <div style="width:34px;height:34px;border-radius:8px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>
-      <div style="flex:1;min-width:0"><p style="font-size:.78rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</p><p style="font-size:.68rem;color:var(--ink-3)">${item.qty}</p></div>
+      <div style="flex:1;min-width:0"><p style="font-size:.78rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</p><p style="font-size:.68rem;color:var(--ink-3)">${item.qtyLabel || item.selectedQuantity || item.qty}</p></div>
       <span style="font-size:.78rem;font-weight:700;color:var(--ink)">&#8377;${(item.price * item.qty).toLocaleString()}</span>
     </div>`).join('');
 }
@@ -1860,10 +1884,10 @@ async function _onRazorpaySuccess(response) {
   const d = new Date(); d.setDate(d.getDate() + 5);
 
   const orderPayload = {
-    items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, price: c.price })),
+    items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price })),
     shippingAddress: { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: 'Tamil Nadu', pincode, country: 'India' },
     paymentMethod: 'Razorpay',
-    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc, totalPrice: total,
+    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc + couponDisc, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
 
@@ -1924,13 +1948,13 @@ async function _doPlaceOrder() {
   const isCod = selectedGateway === 'cod';
   const payMethodMap = { razorpay: 'Razorpay', payu: 'PayU', cod: 'COD' };
   const payload = {
-    items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, price: c.price })),
+    items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price })),
     shippingAddress: { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: 'Tamil Nadu', pincode, country: 'India' },
     paymentMethod: payMethodMap[selectedGateway] || 'Razorpay',
     isPaid: !isCod,
     paidAt: isCod ? undefined : new Date().toISOString(),
     paymentInfo: isCod ? undefined : { id: 'PAY' + Date.now(), status: 'completed', paidAt: new Date().toISOString() },
-    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc, totalPrice: total,
+    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc + couponDisc, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
 
@@ -2060,8 +2084,7 @@ function statusClass(s) { return { delivered: 'sb-delivered', shipped: 'sb-shipp
 
 function setOrderFilter(btn, val) {
   currentOrderFilter = val;
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active'); renderOrders();
+  renderOrders();
 }
 function renderOrders() {
   if (_getTok()) {
@@ -2079,7 +2102,7 @@ function renderOrders() {
           trackingNo: o.trackingNumber || 'ORD-TR-' + o._id?.slice(-8),
           payMethod: o.paymentMethod, eta,
           address: { name: o.shippingAddress?.fullName, tag: 'Home', line: (o.shippingAddress?.addressLine1 || '') + ',\n' + (o.shippingAddress?.city || '') + '  ' + (o.shippingAddress?.pincode || ''), phone: o.shippingAddress?.phone || '' },
-          products: (o.items || []).map(i => ({ id: i.product?._id || i.product, name: i.name, image: i.image, price: i.price, qty: i.quantity, oldPrice: null })),
+          products: (o.items || []).map(i => ({ id: i.product?._id || i.product, name: i.name, image: i.image, price: i.price, qty: i.quantity, qtyLabel: i.selectedQuantity, selectedQuantity: i.selectedQuantity, selectedUnit: i.selectedUnit, oldPrice: null })),
           timeline: [
             { label: 'Order Placed', date: d.toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }), done: true },
             { label: 'Payment Confirmed', date: o.isPaid ? new Date(o.paidAt || o.createdAt).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Pending', done: o.isPaid },
@@ -2115,10 +2138,22 @@ function _renderOrderList(list) {
 function renderOrderCard(o, idx) {
   const mp = o.products[0], ex = o.products.length - 1;
   const ic = o.status === 'cancelled', id = o.status === 'delivered', is = o.status === 'shipped', ip = o.status === 'processing';
-  let actions = '';
-  if (id) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReview('${o.id}')">&#11088; Review</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReturn('${o.id}')">&#128230; Return</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
-  else if (is) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track Package</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel</button>`;
-  else if (ip) actions = `<button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel Order</button>`;
+  let actions = '', reviewBtns = '';
+  if (id) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReturn('${o.id}')">&#128230; Return</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
+  // Per-product review buttons for delivered orders
+  let reviewBtns = '';
+  if (id) {
+    reviewBtns = o.products.map((p, pi) => {
+      const pid = String(p.id);
+      const reviewed = _myReviews[pid];
+      if (reviewed) {
+        return `<button class="btn btn-ghost" style="font-size:.78rem;padding:8px 14px;border-radius:10px;color:var(--moss);border-color:rgba(45,90,61,.3)" onclick="openReview('${o.id}',${pi})" title="Edit your review for ${p.name}">&#10003; Review Submitted &mdash; Edit</button>`;
+      }
+      return `<button class="btn btn-primary" style="font-size:.78rem;padding:8px 14px;border-radius:10px;background:linear-gradient(135deg,var(--moss),var(--moss-l))" onclick="openReview('${o.id}',${pi})">&#11088; Write Review${o.products.length > 1 ? ' &mdash; ' + p.name.split(' ').slice(0,2).join(' ') : ''}</button>`;
+    }).join('');
+  }
+  else if (is) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track Package</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel</button><span style="font-size:.72rem;color:var(--sage);padding:4px 0;display:block">&#128274; Reviews available after delivery</span>`;
+  else if (ip) actions = `<button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel Order</button><span style="font-size:.72rem;color:var(--sage);padding:4px 0;display:block">&#128274; Reviews available after delivery</span>`;
   else actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
   const steps = ['Ordered', 'Packed', 'Shipped', 'Delivered'];
   return `<div class="order-card" style="animation-delay:${idx * .06}s">
@@ -2138,7 +2173,7 @@ function renderOrderCard(o, idx) {
         <div style="flex:1;min-width:0">
           <h3 style="font-weight:800;font-size:.97rem;color:var(--ink);margin-bottom:4px">${mp.name}</h3>
           ${ex > 0 ? `<p style="font-size:.78rem;color:var(--sage);margin-bottom:6px">& ${ex} more item${ex > 1 ? 's' : ''}</p>` : ''}
-          <p style="font-size:.78rem;color:var(--ink-3)">Qty: ${mp.qty} &nbsp;&#8377;${mp.price.toLocaleString()} each</p>
+          <p style="font-size:.78rem;color:var(--ink-3)">Quantity: ${mp.qtyLabel || mp.selectedQuantity || mp.qty} &nbsp;&#8377;${mp.price.toLocaleString()} each</p>
           ${!ic ? `
           <div style="margin-top:14px">
             <div style="display:flex;justify-content:space-between;margin-bottom:8px">${steps.map(s => `<span style="font-size:.65rem;font-weight:600;color:var(--ink-3)">${s}</span>`).join('')}</div>
@@ -2147,7 +2182,7 @@ function renderOrderCard(o, idx) {
           </div>` : `<p style="font-size:.8rem;color:var(--red);font-weight:600;margin-top:12px">This order has been cancelled.</p>`}
         </div>
       </div>
-      <div class="order-action-row" style="flex-direction:column;align-items:flex-start;gap:8px;min-width:160px">${actions}</div>
+      <div class="order-action-row" style="flex-direction:column;align-items:flex-start;gap:8px;min-width:160px">${actions}${reviewBtns}</div>
     </div>
   </div>`;
 }
@@ -2179,52 +2214,136 @@ function copyTracking() {
   navigator.clipboard.writeText(o.trackingNo).then(() => showToast('&#9989; Copied!')).catch(() => showToast('Tracking: ' + o.trackingNo));
 }
 let _reviewProductIdx = 0;
-function openReview(id) {
-  currentReviewId = id; reviewStars = 0; _reviewProductIdx = 0;
-  const o = getOrders().find(x => x.id === id);
-  if (!o) return;
-  _renderReviewProduct(o, 0);
-  // If multiple products, show a selector
-  const sel = document.getElementById('reviewProductSelect');
-  if (o.products.length > 1) {
-    sel.style.display = 'block';
-    sel.innerHTML = o.products.map((p, i) =>
-      `<option value="${i}">${p.name}</option>`
-    ).join('');
-    sel.onchange = () => { _reviewProductIdx = +sel.value; _renderReviewProduct(o, _reviewProductIdx); };
-  } else {
-    sel.style.display = 'none';
-  }
-  document.getElementById('reviewText').value = '';
-  document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('lit'));
-  openModal('reviewModal');
+let _reviewOrderObj = null;
+let _myReviews = {}; // productId -> review doc
+
+async function _loadMyReviews() {
+  if (!_getTok()) return;
+  try {
+    const res = await _apiReq('GET', '/reviews/my-reviews');
+    _myReviews = {};
+    (res.data || []).forEach(r => { _myReviews[String(r.product)] = r; });
+  } catch { /* ignore */ }
 }
+
+function openReview(orderId, productIdx) {
+  if (!_getTok()) { showToast('&#128274; Please login to write a review'); return; }
+  productIdx = productIdx || 0;
+  // Find order from rendered list
+  _apiReq('GET', '/orders/my-orders').then(res => {
+    const apiOrders = res.data || [];
+    const raw = apiOrders.find(o => (o.orderNumber || o._id) === orderId || o._id === orderId);
+    if (!raw) { showToast('Order not found'); return; }
+    if (raw.orderStatus !== 'Delivered') {
+      showToast('&#128274; Reviews can be submitted after your order is delivered.');
+      return;
+    }
+    const products = (raw.items || []).map(i => ({
+      id: i.product?._id || i.product,
+      name: i.name,
+      image: i.image,
+      qty: i.quantity
+    }));
+    _reviewOrderObj = { _id: raw._id, orderNumber: raw.orderNumber, products };
+    _reviewProductIdx = productIdx;
+    reviewStars = 0;
+    _renderReviewProduct(_reviewOrderObj, _reviewProductIdx);
+    const sel = document.getElementById('reviewProductSelect');
+    if (products.length > 1) {
+      sel.style.display = 'block';
+      sel.innerHTML = products.map((p, i) => `<option value="${i}">${p.name}</option>`).join('');
+      sel.value = String(productIdx);
+      sel.onchange = () => { _reviewProductIdx = +sel.value; _renderReviewProduct(_reviewOrderObj, _reviewProductIdx); };
+    } else {
+      sel.style.display = 'none';
+    }
+    document.getElementById('reviewText').value = '';
+    document.getElementById('reviewTitle').value = '';
+    document.getElementById('reviewCharCount').textContent = '0 / 1000';
+    document.getElementById('reviewError').style.display = 'none';
+    document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('lit'));
+    openModal('reviewModal');
+  }).catch(() => showToast('Could not load order details'));
+}
+
 function _renderReviewProduct(o, idx) {
   const p = o.products[idx];
-  document.getElementById('reviewImg').src = p.image;
+  const alreadyReviewed = _myReviews[String(p.id)];
+  document.getElementById('reviewImg').src = p.image || '';
   document.getElementById('reviewProductName').textContent = p.name;
-  document.getElementById('reviewOrderLabel').textContent = 'Order #' + o.id;
+  document.getElementById('reviewOrderLabel').textContent = 'Order #' + (o.orderNumber || o._id);
   reviewStars = 0;
   document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('lit'));
   document.getElementById('reviewText').value = '';
+  document.getElementById('reviewTitle').value = '';
+  document.getElementById('reviewError').style.display = 'none';
+  document.getElementById('starLabel').textContent = '';
+  if (alreadyReviewed) {
+    document.getElementById('reviewModalTitle').textContent = 'Edit Your Review';
+    document.getElementById('reviewModalSub').textContent = 'Update your experience with this product';
+    document.getElementById('reviewSubmitBtn').innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Update Review';
+    reviewStars = alreadyReviewed.rating;
+    document.querySelectorAll('.star-btn').forEach(s => s.classList.toggle('lit', parseInt(s.dataset.v) <= reviewStars));
+    _updateStarLabel(reviewStars);
+  } else {
+    document.getElementById('reviewModalTitle').textContent = 'Write a Review';
+    document.getElementById('reviewModalSub').textContent = 'Share your experience with this product';
+    document.getElementById('reviewSubmitBtn').innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg> Submit Review';
+  }
 }
-function setStars(n) { reviewStars = n; document.querySelectorAll('.star-btn').forEach(s => s.classList.toggle('lit', parseInt(s.dataset.v) <= n)); }
-function submitReview() {
-  if (!reviewStars) { showToast('&#11088; Please select a star rating'); return; }
-  const text = document.getElementById('reviewText').value.trim();
-  if (!text) { showToast('&#9999; Please write your review'); return; }
-  const o = getOrders().find(x => x.id === currentReviewId);
-  const p = o?.products[_reviewProductIdx];
-  if (!p) return;
-  // Save review to localStorage so product page can display it
-  const user = (function(){ try { return JSON.parse(localStorage.getItem('nansai_user')||'null'); } catch { return null; } })();
-  const revKey = 'rev_' + p.id + '_' + (user?._id || user?.email || 'u');
-  const dateStr = new Date().toLocaleString('en-IN', { month: 'short', year: 'numeric' });
-  const review = { name: user?.name || 'Customer', rating: reviewStars, text, date: dateStr, verified: true };
-  localStorage.setItem(revKey, JSON.stringify(review));
-  closeModal('reviewModal');
-  showToast('&#9989; Review submitted! Redirecting to product...');
-  setTimeout(() => { window.location.href = 'product.html?id=' + p.id; }, 1200);
+
+function _updateStarLabel(n) {
+  const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+  const el = document.getElementById('starLabel');
+  if (el) el.textContent = labels[n] || '';
+}
+
+function setStars(n) {
+  reviewStars = n;
+  document.querySelectorAll('.star-btn').forEach(s => s.classList.toggle('lit', parseInt(s.dataset.v) <= n));
+  _updateStarLabel(n);
+}
+
+// Track char count
+document.addEventListener('DOMContentLoaded', () => {
+  const ta = document.getElementById('reviewText');
+  if (ta) ta.addEventListener('input', () => {
+    document.getElementById('reviewCharCount').textContent = ta.value.length + ' / 1000';
+  });
+});
+
+async function submitReview() {
+  const errEl = document.getElementById('reviewError');
+  errEl.style.display = 'none';
+  if (!reviewStars) { errEl.textContent = '&#11088; Please select a star rating'; errEl.style.display = 'block'; return; }
+  const comment = document.getElementById('reviewText').value.trim();
+  if (!comment) { errEl.textContent = '&#9999; Please write your review comment'; errEl.style.display = 'block'; return; }
+  if (comment.length < 3) { errEl.textContent = 'Review comment is too short'; errEl.style.display = 'block'; return; }
+  if (!_reviewOrderObj) return;
+  const p = _reviewOrderObj.products[_reviewProductIdx];
+  if (!p || !p.id) { errEl.textContent = 'Product not found'; errEl.style.display = 'block'; return; }
+  const title = document.getElementById('reviewTitle').value.trim();
+  const btn = document.getElementById('reviewSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg class="spin" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Submitting...';
+  const existingReview = _myReviews[String(p.id)];
+  try {
+    if (existingReview) {
+      await _apiReq('PATCH', '/reviews/' + existingReview._id, { rating: reviewStars, title, comment });
+      showToast('&#9989; Review updated!');
+    } else {
+      await _apiReq('POST', '/reviews', { product: p.id, orderId: _reviewOrderObj._id, rating: reviewStars, title, comment });
+      showToast('&#9989; Review submitted! Thank you.');
+    }
+    await _loadMyReviews();
+    closeModal('reviewModal');
+    renderOrders();
+  } catch (err) {
+    errEl.textContent = err.message || 'Failed to submit review';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg> Submit Review';
+  }
 }
 function openCancel(id) {
   currentCancelId = id;
@@ -2255,7 +2374,7 @@ function openInvoice(id) {
   document.getElementById('inv-total').innerHTML = '&#8377;' + o.total.toLocaleString();
   document.getElementById('inv-items').innerHTML = `
     <div class="inv-head-row"><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Item</span><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Amount</span></div>
-    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=60'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Qty: ${p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
+    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=60'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
   openModal('invoiceModal');
 }
 function openReturn(id) { document.querySelectorAll('input[name="returnReason"]').forEach(r => r.checked = false); openModal('returnModal'); }

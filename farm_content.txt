@@ -1,0 +1,296 @@
+﻿<section id="mill-heritage-section">
+  <div style="max-width: 1300px; margin: 0 auto;">
+    
+    <!-- Unified Header -->
+    <div class="reveal" style="text-align: center; margin-bottom: 64px;">
+      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+        <span style="width: 20px; height: 1px; background: var(--gold-dk);"></span>
+        <span style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-dk);">Traditional Knowledge</span>
+        <span style="width: 20px; height: 1px; background: var(--gold-dk);"></span>
+      </div>
+      
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 600; color: var(--forest-deep); line-height: 1.15; margin-bottom: 18px;">
+        The Traditional Hand Mill <br style="display: none;"/>
+        <span style="font-style: italic; color: var(--forest-leaf);">Discover the Story Behind</span>
+      </h2>
+      
+      <div style="width: 3rem; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto 18px;"></div>
+      
+      <p style="font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.65; color: var(--text-md); max-width: 680px; margin: 0 auto; font-weight: 400;">
+        Explore the traditions, wisdom, and natural farming practices that make our slow stone-milled grains unique. Operating at low RPM with zero friction heat, our hand-operated mill preserves every active nutrient.
+      </p>
+    </div>
+    
+    <!-- 2-Column Split Content -->
+    <div style="display: grid; grid-template-columns: 1fr; gap: 48px; align-items: start;" class="mill-grid-cols">
+      
+      <!-- LEFT: HAND MILL DETAILS -->
+      <div>
+        <div id="mill-card-idx" style="display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 20px 50px rgba(15,34,24,0.08), 0 4px 16px rgba(15,34,24,0.04); transform: perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0); transition: transform .6s cubic-bezier(.22,1,.36,1), box-shadow .6s cubic-bezier(.22,1,.36,1); will-change: transform;" onmousemove="millTiltIdx(event, this)" onmouseleave="millResetIdx(this)">
+          
+          <!-- Image -->
+          <div class="mill-img-container">
+            <img src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg" alt="Traditional Hand Mill"
+              id="mill-img-idx"
+              style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform .6s cubic-bezier(.22,1,.36,1);"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15, 34, 24, 0.4) 0%, transparent 60%); pointer-events: none;"></div>
+            <div id="mill-shine-idx" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 65%); opacity: 0; transition: opacity .3s; pointer-events: none;"></div>
+          </div>
+          
+          <!-- Info Details -->
+          <div class="mill-content-container">
+            <div style="position: absolute; right: 24px; bottom: 20px; opacity: 0.04; pointer-events: none; color: var(--forest-deep);">
+              <svg width="90" height="90" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="currentColor"/></svg>
+            </div>
+            
+            <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <div style="width: 12px; height: 1.5px; background: var(--gold-dk);"></div>
+              <span style="font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dk);">Thirugai Milling</span>
+            </div>
+            
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--forest-deep); margin-bottom: 16px;">
+              Authentic, Zero-Heat Stone Milling
+            </h3>
+            
+            <p style="font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.65; color: var(--text-md); margin-bottom: 28px;">
+              Traditional stone hand-milling is slow and manual. It generates no heat damage, protecting valuable enzymes, iron, calcium, and vitamin contents that are completely lost in modern high-RPM industrial mills.
+            </p>
+            
+            <!-- Features Stack -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- F1 -->
+              <div class="premium-feature-box">
+                <div class="premium-feature-icon">[[icon:wheat]]</div>
+                <div>
+                  <h4 class="premium-feature-title">Stone Ground Integrity</h4>
+                  <p class="premium-feature-desc">Slow grinding ensures no heat damage and preserves original dietary fibers and minerals.</p>
+                </div>
+              </div>
+              
+              <!-- F2 -->
+              <div class="premium-feature-box">
+                <div class="premium-feature-icon">[[icon:hand]]</div>
+                <div>
+                  <h4 class="premium-feature-title">Artisanal Hand Operation</h4>
+                  <p class="premium-feature-desc">Zero electrical power is used. Every single bag represents our dedication to organic heritage.</p>
+                </div>
+              </div>
+              
+              <!-- F3 -->
+              <div class="premium-feature-box">
+                <div class="premium-feature-icon">[[icon:leaf]]</div>
+                <div>
+                  <h4 class="premium-feature-title">Direct Farm Sourcing</h4>
+                  <p class="premium-feature-desc">Directly trace your rice back to the fertile soils of our certified 25-acre organic farm.</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- RIGHT: VIDEO GALLERY -->
+      <div>
+        <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--forest-deep); margin: 0;">Milling in Motion</h3>
+          <span style="font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-lt); letter-spacing: 0.1em;">5 Videos</span>
+        </div>
+        
+        <!-- Featured Video -->
+        <div class="featured-video-wrap premium-featured-video reveal" role="button" tabindex="0" aria-label="Play: The Art of Traditional Hand Milling"
+          onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')"
+          onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')">
+          <img
+            src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20153122.png"
+            alt="Traditional wooden hand mill — rice milling process"
+            loading="lazy"
+            style="width: 100%; height: 100%; object-fit: cover;"
+          />
+          <div class="video-glass-overlay premium-video-overlay">
+            <div class="premium-video-overlay-inner">
+              <div class="play-btn" aria-hidden="true" style="background: var(--gold-dk); border-color: rgba(255, 255, 255, 0.4); width: 60px; height: 60px; box-shadow: 0 8px 20px rgba(184, 146, 42, 0.45); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div>
+                <p style="color: var(--gold-lt); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Featured Story</p>
+                <h4 class="font-display" style="font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 600; color: white; line-height: 1.25; margin: 0;">
+                  The Art of Traditional Hand Milling
+                </h4>
+                <p style="color: rgba(255,255,255,0.72); font-family: 'Inter', sans-serif; font-size: 12.5px; margin-top: 6px; max-width: 440px; line-height: 1.5; font-weight: 400;">
+                  Witness how our traditional wooden stone mill gently husks grains to protect their natural nutrient profile.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Video scroll track: 2x2 grid on desktop, scrollable row on mobile -->
+        <div class="video-gallery-wrapper">
+          <div class="video-scroll-track video-grid-layout">
+            
+            <!-- Card 2 -->
+            <div class="video-card reveal reveal-delay-1" role="button" tabindex="0" aria-label="Play: Nammalvar on Our Wooden Hand Mill"
+              onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/namm.jfif" alt="Nammalvar on our wooden mill" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Nammalvar on Wooden Mill
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  Insights on traditional grain hand-milling.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="video-card reveal reveal-delay-2" role="button" tabindex="0" aria-label="Play: Preserving Nutrition Through Hand Milling"
+              onclick="openVideoModal('https://www.youtube.com/embXcQ')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Stone ground nutrition" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Preserving Vital Nutrition
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  Science of slow stone grinding.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="video-card reveal reveal-delay-3" role="button" tabindex="0" aria-label="Play: From Harvest to Hand-Milled Rice"
+              onclick="openVideoModal('https://www.youtube.com/eXcQ')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Field harvest to milled rice" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Harvest to Hand-Milled Rice
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  The journey from field to kitchen.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Card 5 -->
+            <div class="video-card reveal reveal-delay-4" role="button" tabindex="0" aria-label="Play: Seeds of Our Heritage"
+              onclick="openVideoModal('https://ik.imagekit.io/bq9dtore/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')"
+              onkeydown="if(event.key==='Enter')openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')">
+              <img class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Heirloom grain seeds catalog" />
+              <div class="video-card-overlay">
+                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
+                  Seeds of Our Heritage
+                </p>
+                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
+                  Living library of heirloom paddy varieties.
+                </p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- Video Modal -->
+<div id="video-modal" role="dialog" aria-modal="true" aria-label="Video player" style="display:none; position:fixed; inset:0; background:rgba(10,24,20,0.95); z-index:2000; align-items:center; justify-content:center; padding:24px;">
+  <button id="video-modal-close" aria-label="Close video" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.12);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  <div style="width:100%;max-width:900px;">
+    <div style="position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;">
+      <iframe id="video-iframe" src="" title="Video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;display:none;"></iframe>
+      <video id="video-native" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;border:none;display:none;"></video>
+    </div>
+  </div>
+</div>
+<!--gallery section start--->
+<section id="gallery" aria-label="Life at the Farm Gallery">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+    <div class="reveal" style="text-align:center; margin-bottom:64px;">
+      <div class="gallery-eyebrow"><span></span>Life at the Farm<span></span></div>
+      <h2 class="gallery-title">Moments from <em>Our Fields</em></h2>
+      <div class="gallery-gold-rule"></div>
+      <p class="gallery-subtitle">A glimpse into the people, traditions, and landscapes behind every harvest.</p>
+    </div>
+    <div class="bento-grid reveal">
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Pichai Murugan in the paddy fields"><img src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Pichai Murugan in the paddy fields" loading="lazy" data-caption="Pichai Murugan in the Paddy Fields" /><div class="bento-caption"><span class="bento-caption-text">Pichai Murugan in the Paddy Fields</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Traditional farming activities"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%2010.14.20%20AM.jpeg" alt="Traditional farming activities" loading="lazy" data-caption="Traditional Farming Activities" /><div class="bento-caption"><span class="bento-caption-text">Traditional Farming Activities</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Harvest season"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.49.35%20AM.jpeg" alt="Rice harvest season" loading="lazy" data-caption="Harvest Season" /><div class="bento-caption"><span class="bento-caption-text">Harvest Season</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Wooden hand-milling process"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.46%20AM.jpeg" alt="Wooden hand-milling process" loading="lazy" data-caption="The Wooden Hand-Milling Process" /><div class="bento-caption"><span class="bento-caption-text">The Wooden Hand-Milling Process</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Rice drying in the sun"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.50%20AM.jpeg" alt="Rice drying under the open sky" loading="lazy" data-caption="Drying Under the Open Sky" /><div class="bento-caption"><span class="bento-caption-text">Drying Under the Open Sky</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Farm landscape at dawn"><img src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Pichai Murugan in the paddy fields" alt="Serene farm landscape at dawn" loading="lazy" data-caption="The Farm at Dawn" /><div class="bento-caption"><span class="bento-caption-text">The Farm at Dawn</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Heirloom seed selection"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%2010.14.20%20AM.jpeg" alt="Heirloom seed selection" loading="lazy" data-caption="Choosing the Seeds" /><div class="bento-caption"><span class="bento-caption-text">Choosing the Seeds</span></div></div>
+      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Rice storage and preparation"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.51%20AM.jpeg" alt="Rice storage and preparation" loading="lazy" data-caption="Storage &amp; Preparation" /><div class="bento-caption"><span class="bento-caption-text">Storage &amp; Preparation</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOUNDER STORY
+═══════════════════════════════════════════ -->
+<section id="founder" aria-label="Founder Story">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;" class="founder-grid reveal">
+      <div class="founder-image-wrap" style="height: 600px; position: relative;">
+        <img src="" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top, rgba(5,12,6,.85), transparent); border-radius: 0 0 20px 20px;"></div>
+        <div style="position:absolute;bottom:24px;left:24px;right:24px;background:rgba(247,243,236,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;padding:18px 22px;border:1px solid rgba(201,168,76,.2);">
+          <p style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:6px;font-weight:700;">Natural Farmer</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--forest-deep);letter-spacing:.01em;">Founder</p>
+        </div>
+        <div style="position:absolute;top:20px;right:20px;width:40px;height:40px;border-top:1.5px solid rgba(201,168,76,.4);border-right:1.5px solid rgba(201,168,76,.4);border-radius:0 8px 0 0;pointer-events:none;"></div>
+        <div style="position:absolute;bottom:20px;left:20px;width:40px;height:40px;border-bottom:1.5px solid rgba(201,168,76,.4);border-left:1.5px solid rgba(201,168,76,.4);border-radius:0 0 0 8px;pointer-events:none;"></div>
+      </div>
+      <div>
+        <div class="founder-premium-eyebrow"><span></span>Meet the Farmer<span></span></div>
+        <h2 class="founder-premium-title">Rooted in the<br><em>Land He Loves</em></h2>
+        <div style="display:flex; gap:20px; margin-bottom:32px; padding:24px; background:rgba(26,58,42,.04); border:1px solid rgba(201,168,76,.18); border-radius:14px;">
+          <div class="founder-accent-line" style="width:3px;min-height:56px;border-radius:2px;flex-shrink:0;"></div>
+          <p class="founder-premium-quote">&ldquo;Farming isn't just our livelihood — it's our language, our prayer, our way of speaking to the earth.&rdquo;</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:36px;">
+          <p class="founder-premium-body"> has tended the same fields his grandfather once walked, nurturing heirloom paddy varieties that most of the world has forgotten. Guided by the seasonal rhythms of the land, he farms without chemical inputs — choosing instead the wisdom of composting, water conservation, and deep ecological attentiveness.</p>
+          <p class="founder-premium-body">His commitment to the wooden hand mill is not nostalgia — it is conviction. He believes every revolution of that ancient millstone locks in something no industrial machine can replicate: the living integrity of the grain, the warmth of unhurried craft, and an unbroken chain of knowledge passed from one generation to the next.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0; padding-top:32px; border-top:1px solid rgba(26,58,42,.1);">
+          <div style="text-align:center;padding:20px 12px;border-right:1px solid rgba(26,58,42,.08);"><div class="founder-stat-num">25+</div><div class="founder-stat-label">Years of Natural<br>Farming</div></div>
+          <div style="text-align:center;padding:20px 12px;border-right:1px solid rgba(26,58,42,.08);"><div class="founder-stat-num">18</div><div class="founder-stat-label">Heirloom Paddy<br>Varieties</div></div>
+          <div style="text-align:center;padding:20px 12px;"><div class="founder-stat-num">100%</div><div class="founder-stat-label">Hand-Milled,<br>Chemical-Free</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     WHY CHOOSE US
+═══════════════════════════════════════ -->
+<section id="why-section" class="bg-gradient-to-br from-green-50 to-white py-16 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12 sr" id="sr-why-hdr">
+      <span class="inline-block bg-green-100 text-green-700 text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Our Promise</span>
+      <h2 class="font-display text-3xl sm:text-4xl font-black text-gray-900 mb-3">Why Choose Us</h2>
+      <p class="text-gray-500 max-w-md mx-auto text-sm">Trusted by thousands of farmers and families across India for over a decade.</p>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="why-card bg-white rounded-2xl p-5 sm:p-7 text-center shadow-sm border border-gray-100 sr sd-1" id="sr-why-1">
+        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">[[icon:sprout]]</div>
+        <h3 class="font-bold text-base mb-2">100% Organic</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">9 active certifications including USDA Organic, Non-GMO & Halal.</p>
+      </div>

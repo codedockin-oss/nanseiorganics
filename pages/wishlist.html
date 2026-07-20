@@ -521,27 +521,28 @@ a .nansai-icon,
 <!-- MOB BOTTOM BAR -->
 <nav id="mob-sticky-bar">
   <a href="index.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Home
-  </a>
-  <a href="index.html#products" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="15" width="7" height="7"/><rect x="2" y="15" width="7" height="7"/></svg>
-    Shop
-  </a>
-  <button onclick="openCart()" class="mob-bar-btn primary">
     <div class="mob-bar-icon-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-      <span class="mob-bar-badge" id="mobBarCartCount">0</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </div>
-    Cart
-  </button>
-  <a href="wishlist.html" class="mob-bar-btn active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-    Wishlist
+    <span>Home</span>
   </a>
-  <a href="login.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Account
+  <a href="blog.html" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+    </div>
+    <span>Blog</span>
+  </a>
+  <a href="news.html" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg>
+    </div>
+    <span>News</span>
+  </a>
+  <a href="farm.html" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
+    </div>
+    <span>Farm</span>
   </a>
 </nav>
 
@@ -953,6 +954,10 @@ document.querySelectorAll('.sr').forEach(el=>srObserver.observe(el));
    INIT
 ══════════════════════════════════ */
 /* ════ AUTH NAV ════ */
+(function(){
+  if(typeof Auth !== 'undefined') Auth.requireAuth('login.html');
+})();
+
 (function(){
   const user = JSON.parse(localStorage.getItem('nansai_user')||'null');
   const ordersBtn = document.getElementById('navOrdersBtn');

@@ -32,10 +32,15 @@ const Cart = {
         return (data.items || []).map(i => ({
           id:    i.product._id,
           name:  i.product.name,
-          price: i.product.price,
+          price: i.selectedPrice ?? i.price ?? i.product.price,
           oldPrice: i.product.oldPrice,
           image: i.product.images?.[0] || i.product.image || '',
-          qty:   i.quantity
+          qty:   i.quantity,
+          qtyLabel: i.selectedQuantity,
+          selectedQuantity: i.selectedQuantity,
+          unit: i.selectedUnit,
+          selectedUnit: i.selectedUnit,
+          selectedPrice: i.selectedPrice ?? i.price ?? i.product.price
         }));
       } catch { /* fall through to localStorage */ }
     }
@@ -45,7 +50,11 @@ const Cart = {
   async add(product, qty = 1) {
     if (_isLoggedIn()) {
       try {
-        await CartAPI.add(_safeId(product.id || product._id), qty, product.price || 0);
+        await CartAPI.add(_safeId(product.id || product._id), qty, product.selectedPrice ?? product.price ?? 0, {
+          selectedQuantity: product.selectedQuantity || product.qtyLabel,
+          selectedUnit: product.selectedUnit || product.unit,
+          selectedPrice: product.selectedPrice ?? product.price ?? 0,
+        });
         _updateBadge();
         return;
       } catch { /* fall through */ }
@@ -53,9 +62,10 @@ const Cart = {
     // localStorage
     const safeId = _safeId(product.id);
     const cart = _lcCart();
-    const ex = cart.find(i => i.id === safeId);
+    const selectedQuantity = product.selectedQuantity || product.qtyLabel || String(qty);
+    const ex = cart.find(i => i.id === safeId && (i.selectedQuantity || i.qtyLabel || String(i.qty || 1)) === selectedQuantity);
     if (ex) ex.qty += qty;
-    else cart.push({ id: safeId, name: product.name, price: product.price, oldPrice: product.oldPrice, image: product.image, qty });
+    else cart.push({ id: safeId, name: product.name, price: product.selectedPrice ?? product.price, oldPrice: product.oldPrice, image: product.image, qty, qtyLabel: selectedQuantity, selectedQuantity, unit: product.selectedUnit || product.unit, selectedUnit: product.selectedUnit || product.unit, selectedPrice: product.selectedPrice ?? product.price });
     _saveLC(cart);
     _updateBadge();
   },
