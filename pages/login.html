@@ -4,8 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nansei Organics - Authentication</title>
-<script src="/js/config.js"></script>
-<script src="/frontend/js/api.js"></script>
+<script src="../js/config.js"></script>
+<script src="../frontend/js/api.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -134,7 +134,8 @@ h1{
   align-items:center;
 }
 .auth-card{width:100%}
-.mobile-logo{display:none;width:118px;margin:0 auto 22px}
+.mobile-logo{display:block;width:118px;margin:0 auto 22px}
+@media (min-width:841px){.mobile-logo{display:block}}
 .tabs{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -453,6 +454,6 @@ input.invalid{
   </section>
 </main>
 
-<script src="/js/login.js"></script></body>
+<script src="../js/login.js"></script></body>
 </html>
 

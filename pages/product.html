@@ -2041,6 +2041,10 @@
 
       .info-2 span {
         font-size: .75rem !important;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       /* price */
@@ -2540,7 +2544,7 @@
     /* Review cards grid */
     .rev-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
       gap: 1.25rem;
     }
 
@@ -4533,7 +4537,7 @@
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:120px;flex-shrink:0;">
           <div id="revScoreEl" style="font-family:'Inter',sans-serif;font-size:3.8rem;font-weight:900;color:var(--forest-deep);line-height:1;letter-spacing:-.03em;">—</div>
           <div id="revStarsEl" style="color:#f59e0b;font-size:1rem;letter-spacing:.05em;margin:.3rem 0 .2rem;"></div>
-          <div id="revCntEl" style="font-size:.68rem;color:var(--forest-sage);font-weight:600;">No reviews yet</div>
+          <div id="revCntEl" style="font-size:.68rem;color:var(--forest-sage);font-weight:600;">New</div>
           <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-leaf);margin-top:.4rem;">Verified</div>
         </div>
         <!-- Divider -->
@@ -4542,8 +4546,32 @@
         <div id="barRows" style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:.6rem;min-width:180px;"></div>
       </div>
 
+      <!-- No reviews placeholder (shown when list is empty) -->
+      <div id="noReviewsMsg" style="display:block;text-align:center;padding:2rem 1rem;background:#fff;border:1px solid rgba(26,58,42,.09);border-radius:16px;box-shadow:0 2px 12px rgba(15,34,24,.05);margin-bottom:2rem;box-sizing:border-box;">
+        <div style="font-size:2rem;margin-bottom:.6rem;">&#9733;</div>
+        <p style="font-size:.88rem;font-weight:700;color:var(--forest-deep);margin-bottom:.3rem;">No reviews yet</p>
+        <p style="font-size:.75rem;color:var(--forest-sage);">Be the first to share your experience!</p>
+      </div>
+
       <!-- Review cards -->
       <div id="reviewsList" class="rev-list" style="margin-bottom:2rem;"></div>
+      <script>
+        /* Show/hide "No reviews yet" based on whether reviewsList has content */
+        (function(){
+          const list = document.getElementById('reviewsList');
+          const msg  = document.getElementById('noReviewsMsg');
+          if (!list || !msg) return;
+          const orig = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+          Object.defineProperty(list, 'innerHTML', {
+            set(v) {
+              orig.set.call(this, v);
+              msg.style.display = (v && v.trim()) ? 'none' : 'block';
+            },
+            get() { return orig.get.call(this); },
+            configurable: true
+          });
+        })();
+      </script>
 
       <!-- Write a review form (shown only to verified purchasers) -->
       <div id="revForm" style="display:none;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:18px;padding:1.5rem;margin-top:.5rem;">
@@ -5350,7 +5378,7 @@
 
       function nsRenderReviews() {
         const g = document.getElementById('nsReviewsGrid');
-        if (!g) return;
+        if (!g) return; // legacy grid (unused in this layout)
         g.innerHTML = NS_REVIEWS.map((r, i) => `
     <div class="ns-reveal ns-d${Math.min(i + 1, 5)}" style="background:${i === 0 ? 'var(--forest-deep)' : 'var(--cream)'};border:1.5px solid ${i === 0 ? 'transparent' : 'rgba(26,58,42,.08)'};border-radius:18px;padding:1.25rem;position:relative;overflow:hidden;">
       ${i === 0 ? `<div style="position:absolute;top:0;right:0;background:var(--gold);font-size:.55rem;font-weight:900;padding:.25rem .7rem;border-radius:0 0 0 12px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest-deep);">Featured</div>` : ''}
@@ -7223,8 +7251,8 @@
 
       // Rating
       document.getElementById('pStarsEl').innerHTML = renderStars(p.rating);
-      document.getElementById('pRatingEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : 'No reviews yet';
-      document.getElementById('pReviewsEl').textContent = p.reviews > 0 ? p.reviews + ' reviews' : 'No reviews yet';
+      document.getElementById('pRatingEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : '';
+      document.getElementById('pReviewsEl').textContent = p.reviews > 0 ? p.reviews + ' reviews' : 'New';
       document.getElementById('pSoldEl').textContent = '';
 
       // Price
@@ -7373,9 +7401,9 @@
       </tr>`).join('') + `</tbody>`;
 
       // Reviews
-      document.getElementById('revScoreEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : 'No reviews yet';
+      document.getElementById('revScoreEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : '—';
       document.getElementById('revStarsEl').innerHTML = renderStars(p.rating);
-      document.getElementById('revCntEl').textContent = p.reviews > 0 ? p.reviews + ' ratings' : 'No reviews yet';
+      document.getElementById('revCntEl').textContent = p.reviews > 0 ? p.reviews + ' ratings' : 'New';
 
       const bars = [
         { label: '5★', pct: p.reviews > 0 ? Math.round(p.rating * 15) : 0 },
@@ -7386,7 +7414,7 @@
     <div class="rev-bar-row">
       <span class="rev-bar-label">${b.label}</span>
       <div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:0%" data-pct="${b.pct}"></div></div>
-      <span class="rev-bar-pct">${b.pct}%</span>
+      <span class="rev-bar-pct">${b.pct}</span>
     </div>`).join('');
       // animate bars after paint
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -7411,7 +7439,7 @@
       }
       const listEl = document.getElementById('reviewsList');
       if (!allReviews.length) {
-        listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--forest-sage);font-size:.85rem;">No reviews yet. Be the first to review this product!</div>`;
+        listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--forest-sage);font-size:.85rem;">Be the first to review!</div>`;
       } else {
         listEl.innerHTML = allReviews.slice(0, REVIEWS_LIMIT).map(reviewCardHTML).join('');
         if (allReviews.length > REVIEWS_LIMIT) {
@@ -8082,24 +8110,24 @@
         const count = data.numReviews || 0;
         document.getElementById('revScoreEl').textContent = count > 0 ? Number(rating).toFixed(1) : '\u2014';
         document.getElementById('revStarsEl').innerHTML = count > 0 ? renderStars(rating) : '';
-        document.getElementById('revCntEl').textContent = count > 0 ? count + ' rating' + (count !== 1 ? 's' : '') : 'No reviews yet';
+        document.getElementById('revCntEl').textContent = count > 0 ? count + ' rating' + (count !== 1 ? 's' : '') : 'New';
         document.getElementById('pStarsEl').innerHTML = renderStars(rating);
         document.getElementById('pRatingEl').textContent = count > 0 ? Number(rating).toFixed(1) : '';
-        document.getElementById('pReviewsEl').textContent = count > 0 ? count + ' review' + (count !== 1 ? 's' : '') : 'No reviews yet';
+        document.getElementById('pReviewsEl').textContent = count > 0 ? count + ' review' + (count !== 1 ? 's' : '') : 'New';
         const reviews = data.data || [];
         const counts = [0,0,0,0,0];
         reviews.forEach(r => { if (r.rating >= 1 && r.rating <= 5) counts[r.rating-1]++; });
         const total = reviews.length || 1;
         const bars = [5,4,3,2,1].map(star => ({ label: star + '\u2605', pct: Math.round((counts[star-1]/total)*100) }));
         document.getElementById('barRows').innerHTML = bars.map(b =>
-          '<div class="rev-bar-row"><span class="rev-bar-label">' + b.label + '</span><div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:0%" data-pct="' + b.pct + '"></div></div><span class="rev-bar-pct">' + b.pct + '%</span></div>'
+          '<div class="rev-bar-row"><span class="rev-bar-label">' + b.label + '</span><div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:0%" data-pct="' + b.pct + '"></div></div><span class="rev-bar-pct">' + b.pct + '</span></div>'
         ).join('');
         requestAnimationFrame(() => requestAnimationFrame(() => {
           document.querySelectorAll('.rev-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
         }));
         const listEl = document.getElementById('reviewsList');
         if (!reviews.length) {
-          listEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--forest-sage);font-size:.85rem;">No reviews yet. Be the first to review this product!</div>';
+          listEl.innerHTML = '';
         } else {
           const LIMIT = 5;
           listEl.innerHTML = reviews.slice(0, LIMIT).map(r => {
