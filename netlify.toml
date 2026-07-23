@@ -1,6 +1,24 @@
 [build]
   publish = "."
 
+# ── Static asset rules (must come BEFORE catch-all) ──────────────────────────
+# Serve JS files directly — never redirect them to index.html
+[[redirects]]
+  from = "/js/*"
+  to = "/js/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/frontend/js/*"
+  to = "/frontend/js/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/frontend/*"
+  to = "/frontend/:splat"
+  status = 200
+
+# ── Page routes ───────────────────────────────────────────────────────────────
 [[redirects]]
   from = "/"
   to = "/pages/index.html"
@@ -86,17 +104,21 @@
   to = "/pages/:splat"
   status = 200
 
+# ── API proxy ─────────────────────────────────────────────────────────────────
 [[redirects]]
   from = "/api/*"
   to = "https://nansei-backend.onrender.com/api/:splat"
   status = 200
   force = true
 
+# ── SPA fallback — MUST be last, MUST be status 200 ──────────────────────────
+# status=200 means: only fires when the file does NOT exist on disk
 [[redirects]]
   from = "/*"
   to = "/pages/index.html"
-  status = 404
+  status = 200
 
+# ── Security headers ──────────────────────────────────────────────────────────
 [[headers]]
   for = "/*"
   [headers.values]
@@ -104,9 +126,17 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Explicit MIME types for JS — prevents text/html being served for JS files
 [[headers]]
-  for = "/js/*"
+  for = "/js/*.js"
   [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/frontend/js/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
