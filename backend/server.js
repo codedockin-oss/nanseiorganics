@@ -65,6 +65,8 @@ app.use(compression({ threshold: 1024 }));
 // ── CORS ──
 const ALLOWED_ORIGINS = [
   process.env.FRONTEND_URL,
+  'https://nanseiorg.in',
+  'https://www.nanseiorg.in',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'http://localhost:3000',
@@ -72,13 +74,14 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:5000',
   'http://localhost:5173',
   'null',           // file:// protocol sends origin: null
-].filter(Boolean);
+].filter(Boolean).map(o => o.replace(/\/$/, '')); // strip trailing slashes
 
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);          // same-origin / curl
     if (origin === 'null') return cb(null, true); // file://
-    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    const normalised = origin.replace(/\/$/, '');
+    if (ALLOWED_ORIGINS.includes(normalised)) return cb(null, true);
     if (process.env.NODE_ENV !== 'production') return cb(null, true);
     cb(new Error('Not allowed by CORS'));
   },
