@@ -4,8 +4,45 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nansei Organics - Authentication</title>
-<script src="../js/config.js"></script>
-<script src="../frontend/js/api.js"></script>
+<script>
+(function () {
+  const PRODUCTION_API = '/api';
+  const LOCAL_API      = 'http://localhost:5000/api';
+  const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:';
+  window.SITE_URL = 'https://www.nanseiorg.in';
+  window.API_BASE = isLocal ? LOCAL_API : PRODUCTION_API;
+  window.GOOGLE_CLIENT_ID = '678342525160-ompdqo38pr9hfnjk9vbtv49tshsd5jo8.apps.googleusercontent.com';
+})();
+</script>
+<script>
+const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+const _ALLOWED_PATH = /^\/[a-zA-Z0-9\-_/?:=&%+.]+$/;
+const AUTH_KEYS = ['nansai_token','nansai_user','nansai_activity','token','user','authToken','jwt'];
+function getToken(){return localStorage.getItem('nansai_token')||sessionStorage.getItem('nansai_token');}
+function authHeaders(){return{'Content-Type':'application/json',...(getToken()?{Authorization:`Bearer ${getToken()}`}:{})};}
+async function request(method,path,body=null){
+  if(!_ALLOWED_PATH.test(path))throw new Error('Invalid request path');
+  const res=await fetch(API_BASE+path,{method,headers:authHeaders(),credentials:'include',...(body?{body:JSON.stringify(body)}:{})});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok){if(res.status===401&&typeof Auth!=='undefined')Auth.clearSession();throw new Error(data.message||'Request failed');}
+  return data;
+}
+const Auth={
+  async register(firstName,lastName,email,password){const data=await request('POST','/auth/register',{firstName,lastName,email,password});this.persist(data.token,data.user);return data;},
+  async login(email,password){const data=await request('POST','/auth/login',{email,password});this.persist(data.token,data.user);this.refreshActivity().catch(()=>{});return data;},
+  persist(token,user){localStorage.setItem('nansai_token',token);localStorage.setItem('nansai_user',JSON.stringify(user));},
+  clearSession(){AUTH_KEYS.forEach(k=>{localStorage.removeItem(k);sessionStorage.removeItem(k);});window.NanseiAuthState=null;},
+  async logout(redirectTo='login.html'){try{if(getToken())await request('POST','/auth/logout');}catch{}this.clearSession();window.location.href=redirectTo;},
+  getUser(){try{return JSON.parse(localStorage.getItem('nansai_user')||sessionStorage.getItem('nansai_user')||'null');}catch{return null;}},
+  isLoggedIn(){return Boolean(getToken());},
+  async refreshUser(){if(!getToken())return null;const data=await request('GET','/auth/me');const user=data.user||data.data;if(user)localStorage.setItem('nansai_user',JSON.stringify(user));return user;},
+  requireAuth(loginPath='login.html'){if(!this.isLoggedIn()){this.clearSession();window.location.replace(loginPath);return false;}this.refreshUser().catch(()=>{this.clearSession();window.location.replace(loginPath);});return true;},
+  redirectIfAuthenticated(target='index.html'){if(!this.isLoggedIn())return;const user=this.getUser();window.location.replace(user?.role==='admin'?'admin-panel.html':target);},
+  async forgotPassword(email){return request('POST','/auth/forgot-password',{email});},
+  async refreshActivity(){if(!getToken())return[];const hist=await request('GET','/users/activity');const data=hist.data||[];localStorage.setItem('nansai_activity',JSON.stringify(data));return data;},
+};
+window.Auth=Auth;
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -454,6 +491,161 @@ input.invalid{
   </section>
 </main>
 
-<script src="../js/login.js"></script></body>
+<script>
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let toastTimer;
+
+Auth.redirectIfAuthenticated('index.html');
+
+function showToast(message, isError) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.className = '', 3200);
+}
+
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('loginTab').classList.toggle('active', isLogin);
+  document.getElementById('registerTab').classList.toggle('active', !isLogin);
+  document.getElementById('loginTab').setAttribute('aria-selected', String(isLogin));
+  document.getElementById('registerTab').setAttribute('aria-selected', String(!isLogin));
+  document.getElementById('loginPanel').classList.toggle('active', isLogin);
+  document.getElementById('registerPanel').classList.toggle('active', !isLogin);
+  clearAllErrors();
+  setTimeout(() => document.getElementById(isLogin ? 'loginEmail' : 'firstName').focus(), 60);
+}
+
+function togglePassword(id, button) {
+  const input = document.getElementById(id);
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+}
+
+function setLoading(buttonId, loading, label) {
+  const button = document.getElementById(buttonId);
+  button.disabled = loading;
+  button.innerHTML = loading ? '<span class="spinner"></span> Please wait' : label;
+}
+
+function setFieldError(inputId, errorId, message) {
+  const input = document.getElementById(inputId);
+  const error = document.getElementById(errorId);
+  input.classList.toggle('invalid', Boolean(message));
+  error.textContent = message || '';
+  error.classList.toggle('show', Boolean(message));
+}
+
+function clearAllErrors() {
+  [['loginEmail','loginEmailError'],['loginPassword','loginPasswordError'],['firstName','firstNameError'],
+   ['lastName','lastNameError'],['registerEmail','registerEmailError'],
+   ['registerPassword','registerPasswordError'],['confirmPassword','confirmPasswordError']]
+  .forEach(([input,error]) => setFieldError(input, error, ''));
+}
+
+function validateLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  let valid = true;
+  if (!email) { setFieldError('loginEmail','loginEmailError','Email is required'); valid=false; }
+  else if (!emailPattern.test(email)) { setFieldError('loginEmail','loginEmailError','Enter a valid email address'); valid=false; }
+  if (!password) { setFieldError('loginPassword','loginPasswordError','Password is required'); valid=false; }
+  return valid;
+}
+
+function validateRegister() {
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName  = document.getElementById('lastName').value.trim();
+  const email     = document.getElementById('registerEmail').value.trim();
+  const password  = document.getElementById('registerPassword').value;
+  const confirm   = document.getElementById('confirmPassword').value;
+  let valid = true;
+  if (!firstName) { setFieldError('firstName','firstNameError','First name is required'); valid=false; }
+  if (!lastName)  { setFieldError('lastName','lastNameError','Last name is required'); valid=false; }
+  if (!email) { setFieldError('registerEmail','registerEmailError','Email is required'); valid=false; }
+  else if (!emailPattern.test(email)) { setFieldError('registerEmail','registerEmailError','Enter a valid email address'); valid=false; }
+  if (password.length < 8) { setFieldError('registerPassword','registerPasswordError','Password must be at least 8 characters'); valid=false; }
+  if (confirm !== password) { setFieldError('confirmPassword','confirmPasswordError','Confirm password must match'); valid=false; }
+  return valid;
+}
+
+function updateStrength() {
+  const value = document.getElementById('registerPassword').value;
+  const bar   = document.getElementById('strengthBar');
+  const text  = document.getElementById('strengthText');
+  let score = 0;
+  if (value.length >= 8) score++;
+  if (/[A-Z]/.test(value)) score++;
+  if (/[0-9]/.test(value)) score++;
+  if (/[^A-Za-z0-9]/.test(value)) score++;
+  const labels = ['Weak','Weak','Fair','Good','Strong'];
+  const colors = ['#b83232','#b83232','#d97706','#4a8c5c','#15803d'];
+  bar.style.width = `${Math.max(score, value ? 1 : 0) * 25}%`;
+  bar.style.background = colors[score] || '#b83232';
+  text.textContent = labels[score] || 'Weak';
+}
+
+document.getElementById('loginPanel').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  clearAllErrors();
+  if (!validateLogin()) return;
+  setLoading('loginButton', true, 'Login');
+  try {
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const data = await Auth.login(email, password);
+    showToast('Login successful');
+    const target = data.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
+    setTimeout(() => window.location.replace(target), 650);
+  } catch (error) {
+    showToast(error.message || 'Login failed', true);
+  } finally {
+    setLoading('loginButton', false, 'Login');
+  }
+});
+
+document.getElementById('registerPanel').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  clearAllErrors();
+  if (!validateRegister()) return;
+  setLoading('registerButton', true, 'Create Account');
+  try {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName  = document.getElementById('lastName').value.trim();
+    const email     = document.getElementById('registerEmail').value.trim();
+    const password  = document.getElementById('registerPassword').value;
+    const regData = await Auth.register(firstName, lastName, email, password);
+    showToast('Account created successfully');
+    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
+    setTimeout(() => window.location.replace(regTarget), 650);
+  } catch (error) {
+    showToast(error.message || 'Registration failed', true);
+  } finally {
+    setLoading('registerButton', false, 'Create Account');
+  }
+});
+
+function forgotPassword(event) {
+  event.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  setFieldError('loginEmail', 'loginEmailError', '');
+  if (!email || !emailPattern.test(email)) {
+    setFieldError('loginEmail', 'loginEmailError', 'Enter your email first');
+    return;
+  }
+  showToast('Forgot Password placeholder - reset email flow is ready for backend email delivery');
+}
+
+document.getElementById('registerPassword').addEventListener('input', updateStrength);
+document.querySelectorAll('input').forEach((input) => {
+  input.addEventListener('input', () => {
+    const errorId = input.id + 'Error';
+    if (document.getElementById(errorId)) setFieldError(input.id, errorId, '');
+  });
+});
+document.getElementById('loginEmail').focus();
+</script></body>
 </html>
 
