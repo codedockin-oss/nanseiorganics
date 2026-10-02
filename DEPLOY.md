@@ -3,21 +3,24 @@
 ## Project Structure
 ```
 agri store/
-├── pages/            ← the storefront (index, shop, product, wishlist, checkout + My Orders, track-order,
-│                       about, our-grains, faq, shipping, contact, bulk-orders, blog, login, policies, 404, admin)
-├── js/
-│   ├── store-config.js   ← ★ the one file to edit for phone, email, shipping & return rules, social links
-│   ├── catalog-data.js   ← product list used until the live API answers
-│   ├── store.js          ← product cards, cart, wishlist, search (home + shop)
-│   ├── nansai-ui.js      ← shared header/menus, announcement bar, WhatsApp button, search suggestions
-│   ├── motion.js         ← reveals, preloader, marquee (everything works without it)
-│   └── api.js · auth.js · cart.js · config.js · home.js · icons.js · checkout-premium.js · vendor/
-├── css/              ← nansai-ui.css (shared shell) · nansei.css (design system) · store.css · story.css · checkout-premium.css
-├── images/           ← site images
-├── assets-source/    ← original photos / notes (not served by the site)
+├── pages/            ← THE WHOLE STOREFRONT — this folder is what Netlify publishes
+│   ├── *.html            index, shop, product, wishlist, checkout + My Orders, track-order, about, our-grains, faq,
+│   │                     shipping, contact, bulk-orders, blog, login, policies, 404, admin-panel
+│   ├── js/
+│   │   ├── store-config.js   ← ★ the one file to edit for phone, email, shipping & return rules, social links
+│   │   ├── catalog-data.js   ← product list used until the live API answers
+│   │   ├── store.js          ← product cards, cart, wishlist, search (home + shop)
+│   │   ├── nansai-ui.js      ← shared header/menus, announcement bar, WhatsApp button, search suggestions
+│   │   ├── motion.js         ← reveals, preloader, marquee (everything works without it)
+│   │   └── api.js · auth.js · cart.js · config.js · home.js · icons.js · checkout-premium.js · vendor/
+│   ├── css/              ← nansai-ui.css (shared shell) · nansei.css (design system) · store.css · story.css · checkout-premium.css
+│   ├── images/           ← site images
+│   ├── _redirects        ← clean URLs, real 404 and the /api → Render proxy
+│   └── _headers          ← security + cache headers
+├── assets-source/    ← original photos / notes (never published)
 ├── tests/ui/         ← headless-Chrome checks (see tests/ui/README.md)
-├── backend/          ← Node.js/Express API (Render) — `npm test` runs the shipping tests
-├── netlify.toml      ← Netlify config (publish dir = repo root, clean URLs, real 404)
+├── backend/          ← Node.js/Express API (Render) — `npm test` runs the shipping + auth tests
+├── netlify.toml      ← Netlify config (publish directory = pages)
 └── render.yaml       ← Render config
 ```
 
@@ -32,8 +35,8 @@ agri store/
    `cd backend && node seeders/make-admin.js owner@example.com`.
 3. **Set every variable on Render** (see `backend/.env.example` / `render.yaml`): `MONGODB_URI`, a fresh `JWT_SECRET`, `FRONTEND_URL` (your Netlify address, no trailing
    slash — it is also the CORS allow-list and the link in password-reset e-mails), Razorpay **live** keys, `EMAIL_*` (password-reset e-mails need this), `ADMIN_EMAIL`.
-4. **Confirm the contact details** in `js/store-config.js` (phone, e-mail, address, hours, dispatch / delivery times, GSTIN, FSSAI, Instagram) and the figures on the About page.
-5. **Netlify:** publish directory `.`; `/backend`, `/tests`, `/assets-source` and the project notes are blocked from being served (see `netlify.toml`).
+4. **Confirm the contact details** in `pages/js/store-config.js` (phone, e-mail, address, hours, dispatch / delivery times, GSTIN, FSSAI, Instagram) and the figures on the About page.
+5. **Netlify:** publish directory `pages` (set in `netlify.toml`). Only that folder goes online, so `/backend`, `/tests` and `/assets-source` can never be reached.
 6. **Smoke test the live site** once deployed: register → sign out → sign in → forgot password (check the e-mail arrives and the link works) → add to cart →
    checkout (cash on delivery first, then one small Razorpay payment) → My Orders → admin panel.
 7. Run the automated checks any time: `cd tests/ui && npm test` and `cd backend && npm test`.
@@ -103,7 +106,7 @@ git push -u origin main
 
 1. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import from Git**
 2. Connect your GitHub repo
-3. **Publish directory** → `.` (already set in `netlify.toml`; the pages are reached through the redirects)
+3. **Publish directory** → `pages` (already set in `netlify.toml`; if the Netlify dashboard shows another value, set it to `pages`). `pages/_redirects` proxies `/api/*` to your Render backend — edit that one line if your Render URL differs
 4. Click **Deploy site**
 5. Your site will be live at `https://your-site.netlify.app`
 
@@ -111,7 +114,7 @@ git push -u origin main
 
 ## Step 4 — Wire Frontend to Backend
 
-Open `js/config.js` and confirm the production URL matches your Render service:
+Open `pages/js/config.js` and confirm the production URL matches your Render service:
 
 ```js
 const PRODUCTION_API = 'https://nansei-backend.onrender.com/api';
@@ -195,11 +198,11 @@ npm run dev            # starts on port 5000
 
 ## Frontend notes
 
-- **Settings** - `js/store-config.js` drives the announcement bar, footer, contact / FAQ / shipping text, the WhatsApp button and the policy contact lines. Empty `PHONE` / `PHONE_RAW` hides every phone and WhatsApp link. Lines marked `CONFIG` still need your confirmation (email, dispatch / delivery times, GSTIN, FSSAI, Instagram).
-- **Shared UI layer** - `css/nansai-ui.css` and `js/nansai-ui.js` are linked from every storefront page
+- **Settings** - `pages/js/store-config.js` drives the announcement bar, footer, contact / FAQ / shipping text, the WhatsApp button and the policy contact lines. Empty `PHONE` / `PHONE_RAW` hides every phone and WhatsApp link. Lines marked `CONFIG` still need your confirmation (email, dispatch / delivery times, GSTIN, FSSAI, Instagram).
+- **Shared UI layer** - `pages/css/nansai-ui.css` and `pages/js/nansai-ui.js` are linked from every storefront page
   (progress bar, back-to-top, shared header/footer for the policy pages, image fallbacks, tap-target rules).
   If you change them, bump the `?v=` number on the `<link>`/`<script>` tags so returning visitors pick them up.
-- **Cache headers** - `netlify.toml` makes browsers re-validate our own JS/CSS after an hour; only the
+- **Cache headers** - `pages/_headers` makes browsers re-validate our own JS/CSS after an hour; only the
   version-pinned `js/vendor/lucide-*.js` is cached for a year (rename the file when upgrading Lucide).
 - **Policy pages** - `privacy-policy`, `refund-policy`, `terms-and-conditions` live in `pages/` and are
   linked from every footer. Review the wording and the contact details before launch.

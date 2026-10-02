@@ -1,0 +1,32 @@
+# ── API proxy: the browser talks to /api on this domain, Netlify forwards it to the Render backend ──
+/api/*  https://nansei-backend.onrender.com/api/:splat  200!
+
+# ── Old links that still carry the /pages/ prefix (emails, bookmarks, sitemap) ──
+/pages        /          301
+/pages/       /          301
+/pages/*      /:splat    301
+
+# ── Friendly URLs ──
+/account       /checkout.html?page=orders  200
+/orders        /checkout.html              200
+/admin         /admin-panel.html           200
+/product       /product.html               200
+/login         /login.html                 200
+/wishlist      /wishlist.html              200
+/checkout      /checkout.html              200
+/blog          /blog.html                  200
+/shop          /shop.html                  200
+/about         /about.html                 200
+/faq           /faq.html                   200
+/contact       /contact.html               200
+/shipping      /shipping.html              200
+/bulk-orders   /bulk-orders.html           200
+/track-order   /track-order.html           200
+/our-grains    /our-grains.html            200
+/refund-policy /refund-policy.html         200
+/privacy-policy /privacy-policy.html       200
+/terms-and-conditions /terms-and-conditions.html 200
+/reset-password /reset-password.html       200
+
+# ── Anything else is a real 404 ──
+/*  /404.html  404

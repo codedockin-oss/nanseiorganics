@@ -536,7 +536,7 @@ add('policies: the contents list follows the page and the contact details come f
 add('farm loader: every page opens with the dawn-over-the-paddy screen, no numbers, and it always leaves', async () => {
   for (const pg of ['index', 'shop', 'product', 'wishlist', 'blog', 'about', 'our-grains', 'faq', 'contact', 'shipping', 'track-order', 'bulk-orders', 'privacy-policy', 'refund-policy', 'terms-and-conditions', '404', 'login', 'checkout']) {
     const html = await (await fetch(PAGES_URL + pg + '.html')).text();
-    check(/<head[^>]*>\s*<script src="\.\.\/js\/farm-loader\.js"/.test(html), pg + ': farm-loader.js is not the first script in <head>');
+    check(/<head[^>]*>\s*<script src="js\/farm-loader\.js"/.test(html), pg + ': farm-loader.js is not the first script in <head>');
   }
   for (const [pg, text] of [['login.html', /farm gate/i], ['checkout.html', /harvest/i], ['index.html', /root of nature/i], ['shop.html', /gathering/i]]) {
     const ctx = await browser.createBrowserContext(); const p = await ctx.newPage(); await p.setViewport({ width: 1280, height: 800 });

@@ -3,7 +3,7 @@
    fireflies rise, and the logo catches the light. No numbers.
 
    Include it as the FIRST script in <head> of every page:
-     <script src="../js/farm-loader.js" data-text="Gathering the harvest"></script>
+     <script src="js/farm-loader.js" data-text="Gathering the harvest"></script>
    It plays ONCE per visit (the first page you open). Every page after that opens instantly, with no overlay.
    Options: data-text (the line under the scene) · data-min (ms it stays at least; default 1600).
    Skipped for visitors who prefer reduced motion and for automated browsers.
@@ -85,7 +85,7 @@
     '</svg>';
   var ff = ''; for (var k = 0; k < 14; k++) ff += '<i class="ff" style="left:' + (8 + k * 6.6) + '%;bottom:' + (6 + (k * 17) % 34) + '%;--fx:' + ((k % 2 ? 1 : -1) * (10 + (k * 7) % 28)) + 'px;--fd:' + (3.2 + (k % 5) * .5).toFixed(1) + 's;--fl:' + ((k * 0.23) % 1.8).toFixed(2) + 's"></i>';
 
-  var logo = (me && me.getAttribute('data-logo')) || (me ? me.src.replace(/js\/farm-loader\.js.*$/, 'pages/nansei_org_logo.svg') : 'nansei_org_logo.svg');
+  var logo = (me && me.getAttribute('data-logo')) || (me ? me.src.replace(/js\/farm-loader\.js.*$/, 'nansei_org_logo.svg') : 'nansei_org_logo.svg');
   var el = document.createElement('div');
   el.className = 'nl'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); el.setAttribute('aria-label', text);
   el.style.setProperty('--min', min + 'ms');

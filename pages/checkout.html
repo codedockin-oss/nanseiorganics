@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="../js/farm-loader.js" data-text="Preparing your harvest"></script>
+<script src="js/farm-loader.js" data-text="Preparing your harvest"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="robots" content="noindex,nofollow"/>
@@ -9,8 +9,8 @@
 <title>NANSEI Organics Checkout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script src="../js/config.js"></script>
-<script src="../js/api.js"></script>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Razorpay Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -339,7 +339,7 @@ textarea.inp{resize:none;line-height:1.65}
 }
 </style>
 
-<script src="../js/vendor/lucide-1.49.0.min.js" defer></script>
+<script src="js/vendor/lucide-1.49.0.min.js" defer></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -425,12 +425,12 @@ a .nansai-icon,
 </style>
 
 <link rel="icon" type="image/svg+xml" href="nansei_org_logo.svg"/>
-<script src="../js/store-config.js"></script>
-<script src="../js/icons.js"></script>
-<link rel="stylesheet" href="../css/nansai-ui.css?v=3"/>
-<script src="../js/nansai-ui.js?v=3" defer></script>
-<link rel="stylesheet" href="../css/checkout-premium.css?v=2"/>
-<script src="../js/checkout-premium.js?v=1" defer></script>
+<script src="js/store-config.js"></script>
+<script src="js/icons.js"></script>
+<link rel="stylesheet" href="css/nansai-ui.css?v=3"/>
+<script src="js/nansai-ui.js?v=3" defer></script>
+<link rel="stylesheet" href="css/checkout-premium.css?v=2"/>
+<script src="js/checkout-premium.js?v=1" defer></script>
 </head>
 <body>
 
@@ -1322,7 +1322,7 @@ function renderCartStep() {
     </select>`;
     return `<div class="cart-item" style="animation-delay:${i * .08}s">
       <div style="position:relative;flex-shrink:0;width:120px;min-height:120px;background:var(--fog)">
-        <img src="${item.image}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:120px" onerror="this.src='../images/products/placeholder.svg'"/>
+        <img src="${item.image}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:120px" onerror="this.src='images/products/placeholder.svg'"/>
         ${disc > 0 ? `<div style="position:absolute;top:8px;left:0;background:#ff6161;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:0 4px 4px 0">${disc}% off</div>` : ''}
       </div>
       <div style="flex:1;min-width:0;padding:14px 14px 12px;display:flex;flex-direction:column;justify-content:space-between">
@@ -1475,7 +1475,7 @@ function _populateStep2() {
   document.getElementById('s2Items').innerHTML = cart.map(item => {
     const d = item.oldPrice ? Math.round((1 - item.price / item.oldPrice) * 100) : 0;
     return `<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--fog-2)">
-      <div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='../images/products/placeholder.svg'"/></div>
+      <div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='images/products/placeholder.svg'"/></div>
       <div style="flex:1;min-width:0"><p style="font-size:.88rem;font-weight:600;color:var(--ink)">${item.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Qty: ${item.qty}</p></div>
       <span style="font-size:.92rem;font-weight:800;color:var(--ink)">&#8377;${(item.price * item.qty).toLocaleString()}</span>
     </div>`;
@@ -2084,7 +2084,7 @@ function renderOrderCard(o, idx) {
     <div style="padding:22px 24px;display:flex;flex-wrap:wrap;gap:24px">
       <div style="display:flex;gap:18px;flex:1;min-width:0">
         <div style="position:relative;flex-shrink:0">
-          <img src="${mp.image}" style="width:90px;height:90px;object-fit:cover;border-radius:16px;border:1px solid var(--fog-2)" loading="lazy" onerror="this.src='../images/products/placeholder.svg'"/>
+          <img src="${mp.image}" style="width:90px;height:90px;object-fit:cover;border-radius:16px;border:1px solid var(--fog-2)" loading="lazy" onerror="this.src='images/products/placeholder.svg'"/>
           ${ex > 0 ? `<div style="position:absolute;bottom:-6px;right:-6px;background:var(--ink);color:#fff;font-size:.62rem;font-weight:800;padding:3px 7px;border-radius:99px">+${ex}</div>` : ''}
         </div>
         <div style="flex:1;min-width:0">
@@ -2330,7 +2330,7 @@ function openInvoice(id) {
   document.getElementById('inv-total').innerHTML = '&#8377;' + o.total.toLocaleString();
   document.getElementById('inv-items').innerHTML = `
     <div class="inv-head-row"><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Item</span><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Amount</span></div>
-    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='../images/products/placeholder.svg'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
+    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='images/products/placeholder.svg'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
   openModal('invoiceModal');
 }
 function openReturn(id) { document.querySelectorAll('input[name="returnReason"]').forEach(r => r.checked = false); openModal('returnModal'); }

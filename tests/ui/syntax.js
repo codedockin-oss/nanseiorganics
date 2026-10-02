@@ -19,7 +19,7 @@ for (const f of fs.readdirSync(path.join(root, 'pages')).filter(f => f.endsWith(
     catch (e) { bad++; console.log(`${f} script #${i} (line ${src.slice(0, m.index).split('\n').length}): ${e.message}`); }
   }
 }
-for (const dir of ['js']) {
+for (const dir of ['pages/js']) {
   for (const f of fs.readdirSync(path.join(root, dir)).filter(f => f.endsWith('.js'))) {
     blocks++;
     try { new vm.Script(fs.readFileSync(path.join(root, dir, f), 'utf8'), { filename: `${dir}/${f}` }); }
