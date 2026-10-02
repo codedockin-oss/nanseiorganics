@@ -4,9 +4,6 @@ const Cart = require('../models/Cart');
 const sendEmail = require('../utils/sendEmail');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const DEFAULT_ADMIN_EMAIL = 'anthanyanis@gmail.com';
-const DEFAULT_ADMIN_PASSWORD = '@anthony@';
-const ADMIN_EMAILS = ['anthanyanis@gmail.com', 'athanyanis@gmail.com']; // includes typo variant
 
 function normalizeEmail(email = '') {
   return String(email).trim().toLowerCase();
@@ -101,26 +98,7 @@ exports.login = async (req, res, next) => {
       return jsonError(res, 400, 'Enter a valid email address');
     }
 
-    // Also find by typo variant email
-    let user = await User.findOne({ email: { $in: [email, ...ADMIN_EMAILS] } }).select('+password');
-    // If found with typo email, fix it
-    if (user && user.email !== email && email === DEFAULT_ADMIN_EMAIL) {
-      user.email = DEFAULT_ADMIN_EMAIL;
-      user.role = 'admin';
-      await user.save({ validateBeforeSave: false });
-    }
-    if (!user && email === DEFAULT_ADMIN_EMAIL && password === DEFAULT_ADMIN_PASSWORD) {
-      user = await User.create({
-        firstName: 'Anthony',
-        lastName: 'Admin',
-        name: 'Anthony Admin',
-        email: DEFAULT_ADMIN_EMAIL,
-        password,
-        role: 'admin',
-        emailVerified: true,
-        phoneVerified: true,
-      });
-    }
+    const user = await User.findOne({ email }).select('+password');
     if (!user || !user.password) {
       return jsonError(res, 401, 'Invalid email or password');
     }
@@ -129,11 +107,6 @@ exports.login = async (req, res, next) => {
     if (!isMatch) {
       return jsonError(res, 401, 'Invalid email or password');
     }
-    if (ADMIN_EMAILS.includes(user.email) && user.role !== 'admin') {
-      user.role = 'admin';
-      await user.save({ validateBeforeSave: false });
-    }
-
     await User.findByIdAndUpdate(user._id, {
       $push: {
         activityHistory: {
@@ -214,9 +187,11 @@ exports.forgotPassword = async (req, res, next) => {
       return jsonError(res, 400, 'Enter a valid email address');
     }
 
+    // Same answer whether or not the account exists, so this form cannot be used to find out who has an account.
+    const genericReply = { success: true, message: 'If an account exists for this email, a reset link has been sent' };
     const user = await User.findOne({ email });
     if (!user) {
-      return jsonError(res, 404, 'No account found with this email');
+      return res.status(200).json(genericReply);
     }
 
     const resetToken = crypto.randomBytes(32).toString('hex');
@@ -245,8 +220,7 @@ exports.forgotPassword = async (req, res, next) => {
     }
 
     res.status(200).json({
-      success: true,
-      message: 'Password reset instructions sent',
+      ...genericReply,
       resetToken: process.env.NODE_ENV === 'development' ? resetToken : undefined,
     });
   } catch (error) {

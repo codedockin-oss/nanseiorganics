@@ -1,0 +1,18 @@
+{
+  "name": "nansei-ui-tests",
+  "private": true,
+  "description": "Headless-Chrome checks for the Nansei Organics storefront (page audit + end-to-end flows)",
+  "scripts": {
+    "serve": "node serve.js",
+    "mock": "node mock-api.js",
+    "syntax": "node syntax.js",
+    "qa": "node qa.js",
+    "links": "node links.js",
+    "accounts": "node accounts.js",
+    "flows": "node flows.js",
+    "test": "node syntax.js && node qa.js && node links.js && node accounts.js && node flows.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="../js/farm-loader.js" data-text="Preparing your harvest"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="theme-color" content="#0f2218"/>
 <title>NANSEI Organics Checkout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="../js/config.js"></script>
-<script src="../frontend/js/api.js"></script>
+<script src="../js/api.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Razorpay Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -336,7 +339,7 @@ textarea.inp{resize:none;line-height:1.65}
 }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="../js/vendor/lucide-1.49.0.min.js" defer></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -421,6 +424,13 @@ a .nansai-icon,
 }
 </style>
 
+<link rel="icon" type="image/svg+xml" href="nansei_org_logo.svg"/>
+<script src="../js/store-config.js"></script>
+<script src="../js/icons.js"></script>
+<link rel="stylesheet" href="../css/nansai-ui.css?v=3"/>
+<script src="../js/nansai-ui.js?v=3" defer></script>
+<link rel="stylesheet" href="../css/checkout-premium.css?v=2"/>
+<script src="../js/checkout-premium.js?v=1" defer></script>
 </head>
 <body>
 
@@ -482,6 +492,7 @@ a .nansai-icon,
     <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
       <img src="nansei organics.png" alt="Nansei Organics" style="height:42px;width:auto;"/>
     </a>
+    <div class="ck-navlinks" aria-label="Site"><a href="shop.html">Shop</a><a href="about.html">Farm</a><a href="blog.html">Blogs</a><a href="track-order.html">Track</a></div>
     <div style="display:flex;align-items:center;gap:6px">
       <button id="navCheckout" onclick="showPage('checkout')" style="display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:99px;font-size:.82rem;font-weight:600;letter-spacing:.01em;border:1.5px solid rgba(45,90,61,.3);background:rgba(45,90,61,.1);color:var(--moss);cursor:pointer;transition:var(--t);">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1" stroke="currentColor" stroke-width="2"/><circle cx="19" cy="21" r="1" stroke="currentColor" stroke-width="2"/><path d="M2 2h2l2.66 12.42A2 2 0 0 0 8.64 16h9.78a2 2 0 0 0 1.95-1.57L21.65 7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -533,21 +544,17 @@ a .nansai-icon,
           <div id="cartItems" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px"></div>
           <div id="emptyCart" style="display:none;text-align:center;padding:60px 20px">
             <div class="empty-icon">&#128722;</div>
-            <p style="font-weight:600;color:var(--ink-3)">Your cart is empty</p>
+            <p style="font-weight:600;color:var(--ink-3);margin-bottom:18px">Your cart is empty</p>
+            <a href="index.html#products" class="btn btn-primary" style="display:inline-flex;text-decoration:none">Browse products</a>
           </div>
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
             <div style="width:38px;height:38px;border-radius:12px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0">
               <svg width="17" height="17" fill="none" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="#fff" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="#fff" stroke-width="2"/></svg>
             </div>
-            <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink);letter-spacing:-.02em">Delivery Address</h2>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink);letter-spacing:-.02em">Delivery Details</h2>
           </div>
-          <p class="field-label" style="margin-bottom:14px">Saved Addresses</p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:18px" id="addrGrid"></div>
-          <button onclick="toggleNewAddr()" style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--moss);border:none;background:none;padding:6px 0;margin-bottom:18px;cursor:pointer">
-            <span id="addAddrIcon" style="width:24px;height:24px;border-radius:50%;border:2px solid var(--moss);display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;font-weight:700">+</span>
-            Add New Address
-          </button>
-          <div id="newAddrForm" style="display:none;background:var(--fog);border:1px solid var(--fog-2);border-radius:var(--r);padding:22px;margin-bottom:20px">
+          <p style="font-size:.8rem;color:var(--ink-3);margin:-8px 0 16px">We don't keep your address on file &mdash; enter where this order should go.</p>
+          <div id="newAddrForm" style="display:block;background:var(--fog);border:1px solid var(--fog-2);border-radius:var(--r);padding:22px;margin-bottom:20px">
             <style>
               .co-inp{width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid var(--fog-2);background:#fff;font-family:'Inter',sans-serif;font-size:.88rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
               .co-inp:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(45,90,61,.09)}
@@ -587,19 +594,9 @@ a .nansai-icon,
                   <input type="text" class="co-inp" id="coPin" maxlength="6" autocomplete="postal-code"
                     placeholder="6-digit PIN"
                     oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);coPinLookup(this.value)"/>
-                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking up�</span>
+                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking up&hellip;</span>
                 </div>
                 <p class="co-err-msg" id="coPin-err"></p>
-              </div>
-
-              <!-- Address Type -->
-              <div style="display:flex;flex-direction:column;justify-content:flex-end">
-                <label class="field-label">Address Type</label>
-                <div style="display:flex;gap:6px">
-                  <button onclick="coSetType('Home',this)" id="coTypeHome" class="co-atype-btn co-atype-active"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
-                  <button onclick="coSetType('Work',this)" id="coTypeWork" class="co-atype-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Work</button>
-                  <button onclick="coSetType('Other',this)" id="coTypeOther" class="co-atype-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Other</button>
-                </div>
               </div>
 
               <!-- Address Line 1 -->
@@ -637,7 +634,6 @@ a .nansai-icon,
               </div>
 
             </div>
-            <button onclick="saveNewAddr()" class="btn btn-primary" style="margin-top:18px;padding:11px 24px;border-radius:12px;font-size:.85rem">Save Address</button>
           </div>
           <button onclick="goToPayment()" class="btn btn-primary btn-full">
             Continue to Order Summary
@@ -1014,6 +1010,7 @@ a .nansai-icon,
         <p style="font-weight:700;color:var(--moss)" id="trackETA"></p>
       </div>
       <div id="trackTimeline" style="margin-bottom:20px"></div>
+      <a id="trackLink" target="_blank" rel="noopener" class="btn btn-primary" style="display:none;width:100%;margin-bottom:14px;text-decoration:none">Open live courier tracking &rarr;</a>
       <div style="background:var(--fog);border-radius:14px;padding:16px 18px">
         <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px">Tracking Number</p>
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -1038,7 +1035,7 @@ a .nansai-icon,
     <div class="modal-body">
       <!-- Product info -->
       <div style="display:flex;gap:14px;margin-bottom:20px;align-items:center;background:var(--fog);border-radius:14px;padding:14px">
-        <img id="reviewImg" src="" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid var(--fog-2);flex-shrink:0"/>
+        <img id="reviewImg" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid var(--fog-2);flex-shrink:0"/>
         <div style="flex:1;min-width:0">
           <p style="font-weight:700;font-size:.92rem;color:var(--ink)" id="reviewProductName"></p>
           <p style="font-size:.75rem;color:var(--ink-3);margin-top:3px" id="reviewOrderLabel"></p>
@@ -1117,7 +1114,7 @@ a .nansai-icon,
     </div>
     <div class="modal-body" id="invoiceContent">
       <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:22px">
-        <div><p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--moss)">NANSEI</p><p style="font-size:.78rem;color:var(--ink-3)">nansei.in</p></div>
+        <div><p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--moss)">NANSEI</p><p style="font-size:.78rem;color:var(--ink-3)">nanseiorg.in</p></div>
         <div style="text-align:right">
           <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Invoice</p>
           <p style="font-family:'DM Mono',monospace;font-weight:600;font-size:.88rem;margin-top:2px" id="inv-id"></p>
@@ -1126,8 +1123,8 @@ a .nansai-icon,
       </div>
       <div style="background:var(--fog);border-radius:12px;padding:14px 18px;margin-bottom:20px">
         <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px">Billed To</p>
-        <p style="font-weight:700;font-size:.9rem">Karthikeyan M.</p>
-        <p style="font-size:.82rem;color:var(--ink-3);margin-top:2px">42, Gandhi Nagar 2nd Street, Madurai  625001</p>
+        <p id="inv-name" style="font-weight:700;font-size:.9rem"></p>
+        <p id="inv-addr" style="font-size:.82rem;color:var(--ink-3);margin-top:2px"></p>
       </div>
       <div id="inv-items" class="inv-table" style="margin-bottom:20px"></div>
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -1189,7 +1186,7 @@ window.API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://nansei-backen
 // -- RAZORPAY CONFIGURATION --
 const RZP_MERCHANT_NAME = 'NANSEI Organics';
 const RZP_MERCHANT_LOGO = '';
-let _rzpKeyId = ''; // set from backend response � leave empty until you add real keys
+let _rzpKeyId = ''; // set from backend response - leave empty until you add real keys
 
 // -- AUTH TOKEN HELPERS --
 function _getTok() {
@@ -1241,20 +1238,11 @@ async function _apiReq(m, p, b = null) {
 function _getAddrKey() {
   try { const u = JSON.parse(localStorage.getItem('nansai_user') || 'null'); return u ? 'nansai_addresses_' + u._id : 'nansai_addresses_guest'; } catch { return 'nansai_addresses_guest'; }
 }
-function _loadAddresses() { try { return JSON.parse(localStorage.getItem(_getAddrKey()) || '[]'); } catch { return []; } }
-function _saveAddresses(a) { localStorage.setItem(_getAddrKey(), JSON.stringify(a)); }
+// delivery details are asked for every order and never stored
+function _loadAddresses() { return []; }
+function _saveAddresses() { }
 
-async function _fetchDBAddresses() {
-  if (!_getTok()) return null;
-  try {
-    const res = await _apiReq('GET', '/addresses');
-    return (res.data || []).map(a => ({
-      _id: a._id, name: a.name, tag: a.tag || 'Home',
-      line: a.line1 + (a.line2 ? '\n' + a.line2 : '') + ',\n' + a.city + '  ' + a.pincode,
-      phone: a.phone ? '+91 ' + a.phone : ''
-    }));
-  } catch { return null; }
-}
+async function _fetchDBAddresses() { return null; }
 
 function getOrders() { try { return JSON.parse(localStorage.getItem('mkOrders') || '[]'); } catch { return []; } }
 function saveOrders(o) { localStorage.setItem('mkOrders', JSON.stringify(o)); }
@@ -1309,6 +1297,8 @@ function updateOrdersBadge() {
 // ----------------------------------------------
 function renderCartStep() {
   const c = document.getElementById('cartItems'), e = document.getElementById('emptyCart');
+  const step1 = document.getElementById('step1');
+  if (step1) step1.classList.toggle('is-empty', !cart.length);   // empty cart: hide the delivery form, show only the empty state
   if (!cart.length) { e.style.display = 'block'; c.innerHTML = ''; return; }
   e.style.display = 'none';
   c.innerHTML = cart.map((item, i) => {
@@ -1332,7 +1322,7 @@ function renderCartStep() {
     </select>`;
     return `<div class="cart-item" style="animation-delay:${i * .08}s">
       <div style="position:relative;flex-shrink:0;width:120px;min-height:120px;background:var(--fog)">
-        <img src="${item.image}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:120px" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=200'"/>
+        <img src="${item.image}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:120px" onerror="this.src='../images/products/placeholder.svg'"/>
         ${disc > 0 ? `<div style="position:absolute;top:8px;left:0;background:#ff6161;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:0 4px 4px 0">${disc}% off</div>` : ''}
       </div>
       <div style="flex:1;min-width:0;padding:14px 14px 12px;display:flex;flex-direction:column;justify-content:space-between">
@@ -1427,9 +1417,9 @@ function updateSummary() {
 
   // Step 3 pay now label
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = 'Pay Now ?' + total.toLocaleString();
+  if (pnl) pnl.textContent = 'Pay Now \u20b9' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = 'Pay Now ?' + total.toLocaleString();
+  if (spl) spl.textContent = 'Pay Now \u20b9' + total.toLocaleString();
   const pa = document.getElementById('payableAmount');
   if (pa) pa.innerHTML = '&#8377;' + total.toLocaleString();
 
@@ -1460,7 +1450,9 @@ function updateSummary() {
 // ----------------------------------------------
 function goToPayment() {
   if (!cart.length) { showToast('&#128722; Your cart is empty.'); return; }
-  if (!addresses.length) { showToast('&#128205; Please add a delivery address.'); return; }
+  const na = _readAddressForm();
+  if (!na) return;
+  addresses = [na]; selectedAddrIdx = 0;
   goStep(2);
 }
 function goStep(n) {
@@ -1483,7 +1475,7 @@ function _populateStep2() {
   document.getElementById('s2Items').innerHTML = cart.map(item => {
     const d = item.oldPrice ? Math.round((1 - item.price / item.oldPrice) * 100) : 0;
     return `<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--fog-2)">
-      <div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=100'"/></div>
+      <div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='../images/products/placeholder.svg'"/></div>
       <div style="flex:1;min-width:0"><p style="font-size:.88rem;font-weight:600;color:var(--ink)">${item.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Qty: ${item.qty}</p></div>
       <span style="font-size:.92rem;font-weight:800;color:var(--ink)">&#8377;${(item.price * item.qty).toLocaleString()}</span>
     </div>`;
@@ -1532,62 +1524,10 @@ function updateStepIndicator() {
 // ----------------------------------------------
 //  ADDRESS
 // ----------------------------------------------
-async function loadAndRenderAddrGrid() {
-  const dbAddrs = await _fetchDBAddresses();
-  if (dbAddrs && dbAddrs.length) addresses = dbAddrs;
-  else if (!addresses.length) addresses = _loadAddresses();
-  renderAddrGrid();
-}
-function renderAddrGrid() {
-  const grid = document.getElementById('addrGrid');
-  const tagMap = { 'Home': 'tag-home', 'Office': 'tag-office', 'Other': 'tag-other' };
-  if (!addresses.length) {
-    grid.innerHTML = '';
-    document.getElementById('newAddrForm').style.display = 'block';
-    document.getElementById('addAddrIcon').textContent = '-';
-    return;
-  }
-  grid.innerHTML = addresses.map((a, i) => `
-    <div class="addr-card${i === selectedAddrIdx ? ' selected' : ''}" id="addrCard${i}" onclick="selectAddr(${i})">
-      <div style="display:flex;align-items:start;gap:12px">
-        <div class="sel-radio" style="margin-top:2px;${i === selectedAddrIdx ? 'border-color:var(--moss);background:var(--moss);' : ''}">
-          <div class="sel-radio-dot" style="${i === selectedAddrIdx ? 'opacity:1;transform:scale(1);' : ''}"></div>
-        </div>
-        <div style="flex:1">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <span style="font-weight:700;font-size:.9rem">${a.name}</span>
-            <span class="tag ${tagMap[a.tag] || 'tag-other'}">${a.tag}</span>
-          </div>
-          <p style="font-size:.82rem;color:var(--ink-3);line-height:1.65">${a.line.replace('\n', '<br/>')}</p>
-          <p style="font-size:.78rem;color:var(--sage);margin-top:6px">${a.phone}</p>
-        </div>
-        <button onclick="deleteAddr(${i});event.stopPropagation()" style="background:none;border:none;color:var(--sage);font-size:.8rem;cursor:pointer;padding:2px 6px;border-radius:6px">&#x2715;</button>
-      </div>
-    </div>`).join('');
-}
-function selectAddr(idx) {
-  selectedAddrIdx = idx;
-  document.querySelectorAll('.addr-card').forEach((c, i) => {
-    c.classList.toggle('selected', i === idx);
-    const r = c.querySelector('.sel-radio'), d = c.querySelector('.sel-radio-dot');
-    if (i === idx) { r.style.borderColor = 'var(--moss)'; r.style.background = 'var(--moss)'; if (d) { d.style.opacity = '1'; d.style.transform = 'scale(1)'; } }
-    else { r.style.borderColor = ''; r.style.background = 'transparent'; if (d) { d.style.opacity = '0'; d.style.transform = 'scale(0)'; } }
-  });
-}
-function deleteAddr(idx) {
-  addresses.splice(idx, 1); _saveAddresses(addresses);
-  if (selectedAddrIdx >= addresses.length) selectedAddrIdx = Math.max(0, addresses.length - 1);
-  renderAddrGrid(); showToast('Address removed');
-}
-function toggleNewAddr() {
-  const f = document.getElementById('newAddrForm');
-  const hidden = f.style.display === 'none' || !f.style.display;
-  f.style.display = hidden ? 'block' : 'none';
-  document.getElementById('addAddrIcon').textContent = hidden ? '-' : '+';
-}
+function loadAndRenderAddrGrid() { }
 // -- CHECKOUT ADDRESS: validation rules --
 const _coRules = {
-  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3�50 letters)' },
+  coName:  { test: v => /^[a-zA-Z\s.'-]{3,50}$/.test(v.trim()),  msg: 'Enter a valid full name (3\u201350 letters)' },
   coMobile:{ test: v => /^[6-9]\d{9}$/.test(v),                  msg: 'Enter a valid 10-digit Indian mobile number' },
   coPin:   { test: v => /^[1-9]\d{5}$/.test(v),                  msg: 'Enter a valid 6-digit PIN code' },
   coAddr1: { test: v => v.trim().length >= 5,                     msg: 'Enter at least 5 characters for address' },
@@ -1652,51 +1592,22 @@ function coPinLookup(val) {
   }, 600);
 }
 
-function setAddrType(type, btn) {
-  selectedAddrType = type;
-  document.querySelectorAll('.addr-type-btn').forEach(b => { b.style.borderColor = 'var(--fog-2)'; b.style.background = 'var(--white)'; b.style.color = 'var(--ink-3)'; });
-  btn.style.borderColor = 'var(--moss)'; btn.style.background = 'rgba(45,90,61,.06)'; btn.style.color = 'var(--moss)';
-}
-async function saveNewAddr() {
-  const required = ['coName','coMobile','coPin','coAddr1','coCity'];
+/* validates the form and returns this order's delivery address (or null) */
+function _readAddressForm() {
+  const required = ['coName', 'coMobile', 'coPin', 'coAddr1', 'coCity'];
   let valid = true;
   required.forEach(id => { if (!coValidate(id)) valid = false; });
   const stateEl = document.getElementById('coState');
-  if (!stateEl || !stateEl.value.trim()) {
-    _coShowErr('coPin', 'Enter a valid PIN code to auto-fill state');
-    valid = false;
-  }
+  if (!stateEl || !stateEl.value.trim()) { _coShowErr('coPin', 'Enter a valid PIN code to auto-fill state'); valid = false; }
   if (!valid) {
     const firstErr = document.querySelector('#newAddrForm .co-err');
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    showToast('&#9888; Please fix the errors before saving');
-    return;
+    showToast('&#9888; Please complete your delivery details');
+    return null;
   }
-  const name = document.getElementById('coName').value.trim();
-  const mob  = document.getElementById('coMobile').value.trim();
-  const a1   = document.getElementById('coAddr1').value.trim();
-  const a2   = document.getElementById('coAddr2').value.trim();
-  const city = document.getElementById('coCity').value.trim();
-  const pin  = document.getElementById('coPin').value.trim();
-  const state = stateEl.value.trim();
-  const na = { name, tag: _coAddrType, line: a1 + (a2 ? ', ' + a2 : '') + ',\n' + city + '  ' + pin, phone: '+91 ' + mob };
-  if (_getTok()) {
-    try {
-      await _apiReq('POST', '/addresses', { name, phone: mob, line1: a1, line2: a2, city, state, pincode: pin, addressType: _coAddrType, isDefault: addresses.length === 0 });
-      const dbAddrs = await _fetchDBAddresses();
-      if (dbAddrs) addresses = dbAddrs;
-    } catch { addresses.push(na); _saveAddresses(addresses); }
-  } else { addresses.push(na); _saveAddresses(addresses); }
-  selectedAddrIdx = addresses.length - 1;
-  renderAddrGrid();
-  ['coName','coMobile','coAddr1','coAddr2','coCity','coState','coPin'].forEach(id => {
-    const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('co-ok','co-err'); }
-  });
-  _coAddrType = 'Home';
-  coSetType('Home', document.getElementById('coTypeHome'));
-  document.getElementById('newAddrForm').style.display = 'none';
-  document.getElementById('addAddrIcon').textContent = '+';
-  showToast('&#9989; Address saved!');
+  const v = id => document.getElementById(id).value.trim();
+  const a1 = v('coAddr1'), a2 = v('coAddr2');
+  return { name: v('coName'), tag: 'Delivery', line: a1 + (a2 ? ', ' + a2 : '') + ',\n' + v('coCity') + ' - ' + v('coPin'), phone: '+91 ' + v('coMobile') };
 }
 
 // ----------------------------------------------
@@ -1724,9 +1635,9 @@ function selectGateway(id) {
   // Update Pay Now button label
   const { total } = calcTotal();
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now ?' + total.toLocaleString();
+  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now \u20b9' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now ?' + total.toLocaleString();
+  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now \u20b9' + total.toLocaleString();
 }
 
 function selectBilling(type) {
@@ -1764,9 +1675,9 @@ function toggleMobileSummary() {
 async function initiateRazorpay() {
   if (!cart.length) { showToast('&#128722; Your cart is empty.'); return; }
   if (!addresses.length) { showToast('&#128205; Please add a delivery address.'); return; }
-  if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
+  if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html?next=checkout.html', 1200); return; }
 
-  // COD � place order directly, no payment gateway
+  // COD - place order directly, no payment gateway
   if (selectedGateway === 'cod') {
     _showProcessingOverlay('Placing Order', 'Confirming your Cash on Delivery order');
     return;
@@ -1863,8 +1774,7 @@ async function initiateRazorpay() {
     // Razorpay not loaded or invalid key — show processing simulation
     console.warn('Razorpay load error:', err);
     if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    // Simulate success for demo
-    _showProcessingOverlay('Processing Payment', 'Verifying with Razorpay');
+    showToast('Payment gateway could not be loaded. Please check your connection and try again, or choose Cash on Delivery.');
   }
 }
 
@@ -1877,7 +1787,7 @@ async function _onRazorpaySuccess(response) {
   const addrParts = addrLine.split(',\n');
   const line1 = addrParts[0]?.trim() || addrLine;
   const cityPin = (addrParts[1] || '').trim();
-  const cityMatch = cityPin.match(/^(.+?)\s*[-]\s*(\d{6})$/);
+  const cityMatch = cityPin.match(/^(.*?)[\s,\u2013\u2014-]*(\d{6})$/);
   const city = cityMatch ? cityMatch[1].trim() : cityPin;
   const pincode = cityMatch ? cityMatch[2] : '000000';
   const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
@@ -1940,7 +1850,7 @@ async function _doPlaceOrder() {
   const addrParts = addrLine.split(',\n');
   const line1 = addrParts[0]?.trim() || addrLine;
   const cityPin = (addrParts[1] || '').trim();
-  const cityMatch = cityPin.match(/^(.+?)\s*[-]\s*(\d{6})$/);
+  const cityMatch = cityPin.match(/^(.*?)[\s,\u2013\u2014-]*(\d{6})$/);
   const city = cityMatch ? cityMatch[1].trim() : cityPin;
   const pincode = cityMatch ? cityMatch[2] : '000000';
   const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
@@ -1991,7 +1901,7 @@ function _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d) {
     products: cart.map(c => ({ ...c })),
     timeline: [
       { label: 'Order Placed', date: now, done: true },
-      { label: isCod ? 'COD Confirmed' : 'Payment Confirmed', date: now, done: true },
+      { label: selectedGateway === 'cod' ? 'COD Confirmed' : 'Payment Confirmed', date: now, done: true },
       { label: 'Being Packed', date: 'In progress', done: false },
       { label: 'Dispatched', date: 'Exp. ' + new Date(d.getTime() - 172800000).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }), done: false },
       { label: 'Delivered', date: 'Exp. ' + dstr, done: false },
@@ -2014,6 +1924,8 @@ function spawnConfetti() {
 function resetCheckout() {
   couponDisc = 0; deliveryCost = 0; selectedPay = 'razorpay'; selectedGateway = 'razorpay';
   selectedAddrIdx = 0; selectedDelivery = 'standard'; currentStep = 1;
+  addresses = [];
+  ['coName','coMobile','coAddr1','coAddr2','coCity','coState','coPin'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('co-ok','co-err'); } });
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
   document.getElementById('step3').style.display = 'none';
@@ -2080,6 +1992,9 @@ function sendWhatsAppOrder() {
 function statusColor(s) { return { delivered: 'var(--moss)', shipped: '#1d4ed8', processing: 'var(--amber)', cancelled: 'var(--red)' }[s] || 'var(--ink-3)'; }
 function statusProgress(s) { return { delivered: 100, shipped: 66, processing: 33, cancelled: 0 }[s] || 0; }
 function statusLabel(s) { return { delivered: 'Delivered', shipped: 'Shipped', processing: 'Processing', cancelled: 'Cancelled' }[s] || s; }
+let _orderCache = [];                                   // orders from the last server load, so Track / Invoice / Cancel work on them
+function findOrder(id) { return _orderCache.find(x => x.id === id) || getOrders().find(x => x.id === id); }
+function _escHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 function statusClass(s) { return { delivered: 'sb-delivered', shipped: 'sb-shipped', processing: 'sb-processing', cancelled: 'sb-cancelled' }[s] || ''; }
 
 function setOrderFilter(btn, val) {
@@ -2099,9 +2014,10 @@ function renderOrders() {
           dateObj: o.createdAt, total: o.totalPrice, subtotal: o.itemsPrice, discount: o.discount || 0,
           deliveryCost: o.shippingPrice || 0, codFee: 0,
           status: statusMap[o.orderStatus] || 'processing',
-          trackingNo: o.trackingNumber || 'ORD-TR-' + o._id?.slice(-8),
-          payMethod: o.paymentMethod, eta,
-          address: { name: o.shippingAddress?.fullName, tag: 'Home', line: (o.shippingAddress?.addressLine1 || '') + ',\n' + (o.shippingAddress?.city || '') + '  ' + (o.shippingAddress?.pincode || ''), phone: o.shippingAddress?.phone || '' },
+          trackingNo: o.trackingNumber || '', courier: o.courierService || '', trackUrl: o.trackingUrl || '', shipmentStatus: o.shipmentStatus || '',
+          payMethod: o.paymentMethod,
+          eta: eta ? 'Expected by ' + eta : (o.shipmentStatus ? o.shipmentStatus.charAt(0) + o.shipmentStatus.slice(1).toLowerCase() : (['Pending', 'Processing', 'Packed'].includes(o.orderStatus) ? 'Preparing your order' : '')),
+          address: { name: o.shippingAddress?.fullName, tag: 'Home', line: (o.shippingAddress?.addressLine1 || '') + ',\n' + (o.shippingAddress?.city || '') + ' - ' + (o.shippingAddress?.pincode || ''), phone: o.shippingAddress?.phone || '' },
           products: (o.items || []).map(i => ({ id: i.product?._id || i.product, name: i.name, image: i.image, price: i.price, qty: i.quantity, qtyLabel: i.selectedQuantity, selectedQuantity: i.selectedQuantity, selectedUnit: i.selectedUnit, oldPrice: null })),
           timeline: [
             { label: 'Order Placed', date: d.toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }), done: true },
@@ -2113,6 +2029,7 @@ function renderOrders() {
         };
       });
       // When logged in — show ONLY API orders, ignore localStorage junk
+      _orderCache = apiOrders;
       _renderOrderList(apiOrders);
     }).catch(() => _renderOrderList(getOrders()));
   } else {
@@ -2138,10 +2055,10 @@ function _renderOrderList(list) {
 function renderOrderCard(o, idx) {
   const mp = o.products[0], ex = o.products.length - 1;
   const ic = o.status === 'cancelled', id = o.status === 'delivered', is = o.status === 'shipped', ip = o.status === 'processing';
-  let actions = '', reviewBtns = '';
+  let actions = '';
+  let reviewBtns = '';
   if (id) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReturn('${o.id}')">&#128230; Return</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
   // Per-product review buttons for delivered orders
-  let reviewBtns = '';
   if (id) {
     reviewBtns = o.products.map((p, pi) => {
       const pid = String(p.id);
@@ -2153,7 +2070,7 @@ function renderOrderCard(o, idx) {
     }).join('');
   }
   else if (is) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track Package</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel</button><span style="font-size:.72rem;color:var(--sage);padding:4px 0;display:block">&#128274; Reviews available after delivery</span>`;
-  else if (ip) actions = `<button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel Order</button><span style="font-size:.72rem;color:var(--sage);padding:4px 0;display:block">&#128274; Reviews available after delivery</span>`;
+  else if (ip) actions = `${o.trackingNo ? `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track Package</button>` : ''}<button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button><button class="btn btn-danger-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openCancel('${o.id}')">&times; Cancel Order</button><span style="font-size:.72rem;color:var(--sage);padding:4px 0;display:block">&#128274; Reviews available after delivery</span>`;
   else actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
   const steps = ['Ordered', 'Packed', 'Shipped', 'Delivered'];
   return `<div class="order-card" style="animation-delay:${idx * .06}s">
@@ -2167,7 +2084,7 @@ function renderOrderCard(o, idx) {
     <div style="padding:22px 24px;display:flex;flex-wrap:wrap;gap:24px">
       <div style="display:flex;gap:18px;flex:1;min-width:0">
         <div style="position:relative;flex-shrink:0">
-          <img src="${mp.image}" style="width:90px;height:90px;object-fit:cover;border-radius:16px;border:1px solid var(--fog-2)" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=120'"/>
+          <img src="${mp.image}" style="width:90px;height:90px;object-fit:cover;border-radius:16px;border:1px solid var(--fog-2)" loading="lazy" onerror="this.src='../images/products/placeholder.svg'"/>
           ${ex > 0 ? `<div style="position:absolute;bottom:-6px;right:-6px;background:var(--ink);color:#fff;font-size:.62rem;font-weight:800;padding:3px 7px;border-radius:99px">+${ex}</div>` : ''}
         </div>
         <div style="flex:1;min-width:0">
@@ -2190,28 +2107,54 @@ function renderOrderCard(o, idx) {
 // ----------------------------------------------
 //  MODALS
 // ----------------------------------------------
-function openTrack(id) {
+async function openTrack(id) {
   currentTrackId = id;
-  const o = getOrders().find(x => x.id === id);
+  const o = findOrder(id);
+  if (!o) { showToast('Order not found'); return; }
   document.getElementById('trackOrderIdLabel').textContent = 'Order #' + o.id;
-  document.getElementById('trackNumber').textContent = o.trackingNo;
-  document.getElementById('trackETA').textContent = 'Estimated: ' + o.eta;
-  document.getElementById('trackTimeline').innerHTML = o.timeline.map((step, i, arr) => `
+  _paintTrack(o, null);
+  openModal('trackModal');
+  if (o._dbId && _getTok()) {
+    try {                                                // ask the server for the courier's latest scans
+      const res = await _apiReq('GET', '/shipping/track/' + encodeURIComponent(o._dbId));
+      if (currentTrackId === id) _paintTrack(o, res.data);
+    } catch (e) { /* keep showing what we already know */ }
+  }
+}
+function _paintTrack(o, live) {
+  const t = live || {};
+  const awb = t.awb || o.trackingNo || '';
+  const courier = t.courier || o.courier || '';
+  const url = t.trackingUrl || o.trackUrl || '';
+  const eta = t.estimatedDelivery
+    ? 'Expected by ' + new Date(t.estimatedDelivery).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })
+    : (t.shipmentStatus || o.eta || 'We will update this as soon as your parcel moves');
+  document.getElementById('trackETA').textContent = eta;
+  document.getElementById('trackNumber').textContent = awb ? (courier ? courier + ' \u00b7 ' : '') + awb : 'Assigned once your parcel is booked';
+  const link = document.getElementById('trackLink');
+  if (url) { link.href = url; link.style.display = 'flex'; } else { link.removeAttribute('href'); link.style.display = 'none'; }
+  const events = t.events && t.events.length ? t.events : null;
+  const when = d => new Date(d).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  const rows = events
+    ? events.map((e, i) => ({ label: e.activity || e.status, sub: [e.location, when(e.at)].filter(Boolean).join(' \u00b7 '), done: true, latest: i === 0 }))
+    : o.timeline.map(s => ({ label: s.label, sub: s.date, done: s.done, latest: false }));
+  document.getElementById('trackTimeline').innerHTML = rows.map((step, i, arr) => `
     <div class="timeline-item">
       <div style="display:flex;flex-direction:column;align-items:center">
-        <div class="tl-dot" style="background:${step.done ? statusColor(o.status) : 'var(--fog-2)'}"></div>
+        <div class="tl-dot" style="background:${step.done ? 'var(--moss)' : 'var(--fog-2)'}${step.latest ? ';box-shadow:0 0 0 4px rgba(45,90,61,.15)' : ''}"></div>
         ${i < arr.length - 1 ? `<div class="tl-line"></div>` : ''}
       </div>
       <div style="padding-bottom:${i < arr.length - 1 ? '16px' : '0'}">
-        <p style="font-size:.87rem;font-weight:${step.done ? '700' : '400'};color:${step.done ? 'var(--ink)' : 'var(--sage)'}">${step.label}</p>
-        <p style="font-size:.75rem;color:var(--sage);margin-top:2px">${step.date}</p>
+        <p style="font-size:.87rem;font-weight:${step.done ? '700' : '400'};color:${step.done ? 'var(--ink)' : 'var(--sage)'}">${_escHtml(step.label)}</p>
+        <p style="font-size:.75rem;color:var(--sage);margin-top:2px">${_escHtml(step.sub)}</p>
       </div>
     </div>`).join('');
-  openModal('trackModal');
 }
 function copyTracking() {
-  const o = getOrders().find(x => x.id === currentTrackId);
-  navigator.clipboard.writeText(o.trackingNo).then(() => showToast('&#9989; Copied!')).catch(() => showToast('Tracking: ' + o.trackingNo));
+  const o = findOrder(currentTrackId);
+  const awb = (o && o.trackingNo) || '';
+  if (!awb) { showToast('Tracking number will appear once the parcel is booked'); return; }
+  navigator.clipboard.writeText(awb).then(() => showToast('&#9989; Copied!')).catch(() => showToast('Tracking: ' + awb));
 }
 let _reviewProductIdx = 0;
 let _reviewOrderObj = null;
@@ -2351,9 +2294,18 @@ function openCancel(id) {
   document.getElementById('cancelNote').value = '';
   openModal('cancelModal');
 }
-function confirmCancel() {
+async function confirmCancel() {
   const reason = document.getElementById('cancelReason').value;
   if (!reason) { showToast('&#9888; Please select a cancellation reason'); return; }
+  const live = findOrder(currentCancelId);
+  if (live && live._dbId && _getTok()) {
+    try {
+      await _apiReq('PUT', '/orders/' + live._dbId + '/cancel', { reason });
+      closeModal('cancelModal'); renderOrders();
+      showToast(live.payMethod && live.payMethod !== 'COD' ? 'Order cancelled. Refund within 5-7 business days.' : 'Order cancelled.');
+    } catch (e) { showToast('&#9888; ' + e.message); }
+    return;
+  }
   const orders = getOrders();
   const o = orders.find(x => x.id === currentCancelId);
   if (o) {
@@ -2364,9 +2316,13 @@ function confirmCancel() {
   showToast('Order cancelled. Refund within 5-7 business days.');
 }
 function openInvoice(id) {
-  const o = getOrders().find(x => x.id === id);
+  const o = findOrder(id);
+  if (!o) { showToast('Order not found'); return; }
   document.getElementById('inv-id').textContent = '#' + o.id;
   document.getElementById('inv-date').textContent = o.date;
+  const invAddr = o.address || {};
+  document.getElementById('inv-name').textContent = invAddr.name || 'Customer';
+  document.getElementById('inv-addr').textContent = String(invAddr.line || '').replace(/,?\n/g, ', ').trim();
   const sub = o.subtotal || Math.round(o.total / 1.05), tax = Math.round(o.total * 0.05 / 1.05), del = o.deliveryCost || 0;
   document.getElementById('inv-sub').innerHTML = '&#8377;' + Math.round(sub).toLocaleString();
   document.getElementById('inv-del').innerHTML = del === 0 ? 'FREE' : '&#8377;' + del.toLocaleString();
@@ -2374,7 +2330,7 @@ function openInvoice(id) {
   document.getElementById('inv-total').innerHTML = '&#8377;' + o.total.toLocaleString();
   document.getElementById('inv-items').innerHTML = `
     <div class="inv-head-row"><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Item</span><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Amount</span></div>
-    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=60'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
+    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='../images/products/placeholder.svg'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
   openModal('invoiceModal');
 }
 function openReturn(id) { document.querySelectorAll('input[name="returnReason"]').forEach(r => r.checked = false); openModal('returnModal'); }
@@ -2384,7 +2340,7 @@ function submitReturn() {
   closeModal('returnModal'); showToast("&#128230; Return request submitted. We'll contact you within 24h.");
 }
 function buyAgain(id) {
-  const o = getOrders().find(x => x.id === id);
+  const o = findOrder(id);
   if (o && o.products) {
     const existing = _lcCart();
     o.products.forEach(p => {

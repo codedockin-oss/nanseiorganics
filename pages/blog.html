@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="../js/farm-loader.js" data-text="Opening the journal"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Stories from our farm, kitchen and wellness research &mdash; heritage rice, dried flowers, recipes and sustainable farming."/>
+<meta name="theme-color" content="#0f2218"/>
+<meta property="og:site_name" content="Nansei Organics"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Blog &amp; Stories | Nansei Organics"/>
+<meta property="og:description" content="Stories from our farm, kitchen and wellness research &mdash; heritage rice, dried flowers, recipes and sustainable farming."/>
+<meta property="og:image" content="https://www.nanseiorg.in/pages/nansei%20organics.png"/>
+<meta property="og:url" content="https://www.nanseiorg.in/blog"/>
+<meta name="twitter:card" content="summary"/>
 <title>Blog & Stories | Nansai Organics</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
@@ -250,7 +260,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 .filter-section{
   background:#fff;
   border-bottom:1px solid rgba(26,58,42,.1);
-  position:sticky;top:var(--nav-h);z-index:900;
+  position:sticky;top:var(--ns-header-h,68px);z-index:900;
 }
 .filter-inner{
   max-width:1400px;margin:0 auto;
@@ -890,7 +900,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 .dot-other     { background:#16a34a; }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="../js/vendor/lucide-1.49.0.min.js" defer></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -975,80 +985,91 @@ a .nansai-icon,
 }
 </style>
 
+<link rel="icon" type="image/svg+xml" href="nansei_org_logo.svg"/>
+<script src="../js/store-config.js"></script>
+<script src="../js/icons.js"></script>
+<link rel="stylesheet" href="../css/nansai-ui.css?v=3"/>
+<script src="../js/nansai-ui.js?v=3" defer></script>
 </head>
 <body>
 
 <!-- TOAST -->
 <div id="toast"></div>
+<h1 class="ns-sr-only">Nansai Organics Blog &amp; Stories</h1>
 
 <!-- ═══════════════════════════════════════
      NAVBAR
 ═══════════════════════════════════════ -->
-<header class="site-nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html">
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" onerror="this.style.display='none'"/>
-    </a>
-    <ul class="nav-links">
-      <li><a class="nav-link" href="index.html">Home</a></li>
-      <li><a class="nav-link" href="index.html#products">Shop</a></li>
-      <li><a class="nav-link" href="index.html#why-section">Our Promise</a></li>
-      <li><a class="nav-link active" href="blog.html">Blogs</a></li>
-      <li><a class="nav-link" href="news.html">News</a></li>
-      <li><a class="nav-link" href="index.html#site-footer">About</a></li>
-    </ul>
-    <!-- Search bar -->
-    <div style="position:relative;flex:1;max-width:320px;display:flex;align-items:center;border:1.5px solid rgba(26,58,42,.18);border-radius:8px;overflow:hidden;background:#fff;" class="hidden-mob">
-      <input id="blogSearchInput" type="text" placeholder="Search articles…"
-             oninput="onSearch(this.value)"
-             onkeydown="if(event.key==='Escape'){this.value='';onSearch('')}"
-             style="flex:1;padding:.5rem 1rem;font-size:.79rem;color:var(--forest-deep);font-family:'Inter',sans-serif;border:none;outline:none;background:transparent;"/>
-      <button onclick="onSearch(document.getElementById('blogSearchInput').value)"
-              style="padding:.5rem .85rem;background:var(--forest-deep);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;"
-              onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest-deep)'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-    </div>
-    <div class="nav-actions">
-      <a href="checkoutmyorderpage.html" class="nav-orders-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        My Orders
-      </a>
-      <div class="nav-divider"></div>
-      <a id="navSignInBtn" href="login.html" class="nav-icon-btn" style="gap:5px;width:auto;padding:0 8px;border-radius:20px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span id="navSignInText" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);">Sign In</span>
-      </a>
-      <a href="wishlist.html" class="nav-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-        <span class="nav-badge" id="wishlistCount">0</span>
-      </a>
-      <a href="checkoutmyorderpage.html" class="nav-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-        <span class="nav-badge" id="cartCount">0</span>
-      </a>
-      <button class="mob-ham" id="mobHam" onclick="toggleMobDrawer()">
-        <span></span><span></span><span></span>
-      </button>
+<header class="ns-header" id="nsHeader">
+  <div class="ns-header-inner">
+    <button class="ns-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nsDrawer"><span></span><span></span><span></span></button>
+    <a class="ns-logo" href="index.html" aria-label="Nansei Organics home"><img src="nansei_org_logo.svg" alt="Nansei Organics"/></a>
+    <nav class="ns-links" aria-label="Main">
+      <div class="ns-item">
+        <button class="ns-link" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-shop">Shop<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="ns-mega" id="nsm-shop" role="menu"><div class="ns-mega-in">
+          <div><p class="ns-mega-h">Shop by category</p><ul><li><a href="shop.html?cat=rice" data-ns-cat="rice" role="menuitem"><strong>Rice</strong><span>Heritage &amp; traditional rice from Tamil Nadu</span></a></li><li><a href="shop.html?cat=flowers" data-ns-cat="flowers" role="menuitem"><strong>Dried flowers</strong><span>Sun-dried, aromatic &amp; medicinal flowers</span></a></li><li><a href="shop.html?cat=beverages" data-ns-cat="beverages" role="menuitem"><strong>Beverages</strong><span>Natural drinks crafted with pure ingredients</span></a></li><li><a href="shop.html?cat=flour" data-ns-cat="flour" role="menuitem"><strong>Flour &amp; mixes</strong><span>Hand-pounded &amp; stone-ground flours</span></a></li><li><a href="shop.html?cat=other" data-ns-cat="other" role="menuitem"><strong>More from the farm</strong><span>More goodness from nature</span></a></li></ul></div>
+          <div><p class="ns-mega-h">Collections</p><ul><li><a href="shop.html?cat=new" data-ns-cat="new" role="menuitem"><strong>New arrivals</strong><span>Just landed &mdash; fresh from the farm</span></a></li><li><a href="shop.html?cat=bestseller" data-ns-cat="bestseller" role="menuitem"><strong>Best sellers</strong><span>Most loved by thousands of families</span></a></li><li><a href="shop.html" data-ns-cat="all" role="menuitem"><strong>All products</strong><span>The full organic range</span></a></li></ul><a class="ns-mega-all" href="shop.html" data-ns-cat="all">Shop everything &rarr;</a></div>
+          <a class="ns-mega-promo" href="shop.html?cat=rice" data-ns-cat="rice" style="background-image:url('https://ik.imagekit.io/ueorokkbc/images/field.jpeg')"><span>Farm direct</span><strong>Heritage rice,<br/>grown &amp; milled by hand</strong><span class="cta">Shop rice &rarr;</span></a>
+        </div></div>
+      </div>
+      <div class="ns-item">
+        <button class="ns-link" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-farm">Farm<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="ns-mega" id="nsm-farm" role="menu"><div class="ns-mega-in is-2">
+          <div><p class="ns-mega-h">Our farm</p><ul><li><a href="index.html#mill-heritage-section" role="menuitem"><strong>The hand mill</strong><span>Slow, stone-milled &amp; zero heat</span></a></li><li><a href="index.html#films" role="menuitem"><strong>Films</strong><span>Watch the mill and the farm at work</span></a></li><li><a href="index.html#gallery" role="menuitem"><strong>Farm gallery</strong><span>Moments from our fields</span></a></li></ul></div>
+          <a class="ns-mega-promo" href="index.html#mill-heritage-section" style="background-image:url('https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg')"><span>Traditional knowledge</span><strong>The story behind<br/>our stone mill</strong><span class="cta">Discover &rarr;</span></a>
+        </div></div>
+      </div>
+      <div class="ns-item"><a class="ns-link is-active" href="blog.html">Blogs</a></div>
+      <div class="ns-item">
+        <button class="ns-link" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-help">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="ns-mega" id="nsm-help" role="menu"><div class="ns-mega-in is-2">
+          <div><p class="ns-mega-h">Orders &amp; support</p><ul><li><a href="track-order.html" role="menuitem"><strong>Track my order</strong><span>Live courier updates</span></a></li><li><a href="shipping.html" role="menuitem"><strong>Shipping &amp; delivery</strong><span>How and when your order arrives</span></a></li><li><a href="refund-policy.html" role="menuitem"><strong>Returns &amp; refunds</strong><span>Easy returns and replacements</span></a></li><li><a href="faq.html" role="menuitem"><strong>FAQ</strong><span>Quick answers</span></a></li><li><a href="contact.html" role="menuitem"><strong>Contact us</strong><span>We reply within hours</span></a></li></ul></div>
+          <a class="ns-mega-promo" href="shop.html" style="background-image:url('https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.51%20AM.jpeg')"><span>Free delivery above &#8377;999</span><strong>Fresh from the farm,<br/>to your door</strong><span class="cta">Start shopping &rarr;</span></a>
+        </div></div>
+      </div>
+    </nav>
+    <form class="ns-search" role="search" onsubmit="onSearch(document.getElementById('blogSearchInput').value);return false;"><input id="blogSearchInput" type="search" placeholder="Search articles..." autocomplete="off" aria-label="Search articles" oninput="onSearch(this.value)" onkeydown="if(event.key==='Escape'){this.value='';onSearch('')}"/><button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></form>
+    <div class="ns-actions">
+      <a class="ns-orders" href="checkout.html?page=orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>My Orders</span></a>
+      <div class="ns-item ns-acct">
+        <button class="ns-icon" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-acct" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="ns-acct-label" data-ns-name>Sign in</span></button>
+        <div class="ns-menu" id="nsm-acct" role="menu">
+          <div data-ns-show="in" hidden><div class="ns-menu-head"><p>Hi, <span data-ns-fullname></span></p><span data-ns-email></span></div></div>
+          <div data-ns-show="out"><div class="ns-menu-head"><p>Welcome</p><span>Sign in to track orders and keep your favourites</span></div><a class="ns-menu-primary" href="login.html" role="menuitem">Sign in / Create account</a></div>
+          <a href="checkout.html?page=orders" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>My orders</a>
+          <a href="wishlist.html" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>Wishlist</a>
+          <a data-ns-show="admin" hidden href="admin-panel.html" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Admin panel</a>
+          <div data-ns-show="in" hidden><hr/><button type="button" class="ns-menu-btn" role="menuitem" data-ns-logout><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out</button></div>
+        </div>
+      </div>
+      <a class="ns-icon" href="wishlist.html" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg><span class="ns-badge" id="wishlistCount" data-ns-count="wishlist">0</span></a>
+      <a class="ns-icon" href="checkout.html" data-ns-cart aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg><span class="ns-badge" id="cartCount" data-ns-count="cart">0</span></a>
     </div>
   </div>
+  <div class="ns-msearch"><form onsubmit="onSearch(document.getElementById('blogSearchInputM').value);return false;"><input id="blogSearchInputM" type="search" placeholder="Search articles..." autocomplete="off" enterkeyhint="search" aria-label="Search articles" oninput="onSearch(this.value)"/><button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></form></div>
+  <div class="ns-drawer" id="nsDrawer" hidden>
+    <div class="ns-drawer-scrim" data-ns-close></div>
+    <aside class="ns-drawer-panel" aria-label="Menu">
+      <div class="ns-drawer-head"><a href="index.html" aria-label="Nansei Organics home" style="padding:0;border:0"><img src="nansei_org_logo.svg" alt="Nansei Organics"/></a><button class="ns-drawer-x" type="button" aria-label="Close menu" data-ns-close>&#10005;</button></div>
+      <div class="ns-drawer-user">
+        <div data-ns-show="in" hidden><div class="who"><span class="av" data-ns-initial>?</span><div><p>Hi, <span data-ns-name></span></p><span data-ns-email></span></div></div></div>
+        <div data-ns-show="out"><p>Welcome</p><span>Sign in to track orders and keep your favourites</span><div class="btns"><a href="login.html">Sign in</a><a href="login.html">Register</a></div></div>
+      </div>
+      <nav aria-label="Mobile">
+        <details><summary>Shop<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><a href="shop.html" data-ns-cat="all">All products</a><a href="shop.html?cat=new" data-ns-cat="new">New arrivals</a><a href="shop.html?cat=bestseller" data-ns-cat="bestseller">Best sellers</a><a href="shop.html?cat=rice" data-ns-cat="rice">Rice</a><a href="shop.html?cat=flowers" data-ns-cat="flowers">Dried flowers</a><a href="shop.html?cat=beverages" data-ns-cat="beverages">Beverages</a><a href="shop.html?cat=flour" data-ns-cat="flour">Flour &amp; mixes</a><a href="shop.html?cat=other" data-ns-cat="other">More from the farm</a></details>
+        <details><summary>Farm<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><a href="index.html#mill-heritage-section">The hand mill</a><a href="index.html#films">Films</a><a href="index.html#gallery">Farm gallery</a></details>
+        <a href="blog.html">Blogs</a>
+        <details><summary>Help<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><a href="track-order.html">Track my order</a><a href="shipping.html">Shipping &amp; delivery</a><a href="refund-policy.html">Returns &amp; refunds</a><a href="faq.html">FAQ</a><a href="contact.html">Contact us</a></details>
+        <a href="checkout.html?page=orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>My Orders</a>
+        <a href="wishlist.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>Wishlist</a>
+        <a href="checkout.html" data-ns-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>Cart</a>
+        <a data-ns-show="admin" hidden href="admin-panel.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Admin panel</a>
+      </nav>
+      <div data-ns-show="in" hidden style="display:flex;flex-direction:column"><button type="button" class="ns-drawer-out" data-ns-logout>Sign out</button></div>
+    </aside>
+  </div>
 </header>
-
-<!-- Mobile Drawer -->
-<div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
-  <nav style="display:flex;flex-direction:column;gap:.15rem;">
-    <a href="index.html"             style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] Home</a>
-    <a href="index.html#products"    style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
-    <a href="index.html#why-section" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
-    <a href="blog.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
-    <a href="news.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
-    <a href="index.html#site-footer" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
-    <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
-    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
-    <a href="wishlist.html"          style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
-  </nav>
-</div>
 <!-- ═══════════════════════════════════════
      3D ARTICLE CAROUSEL
 ═══════════════════════════════════════ -->
@@ -1101,50 +1122,45 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════ -->
-<footer class="site-footer">
-  <div class="footer-grid">
-    <div>
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
-      <div class="footer-tagline">Experience the Root of Nature</div>
-      <p class="footer-desc">100% organic & high-quality agricultural products. Trusted by farmers and families across India for over 22 years.</p>
-      <div class="footer-socials">
-        <a href="#" class="footer-social">𝕏</a>
-        <a href="#" class="footer-social">f</a>
-        <a href="#" class="footer-social">in</a>
+<footer class="nf" id="site-footer">
+  <div class="nf__cta"><div class="nf__w nf__cta-in">
+    <div><span class="nf__eyebrow">Talk to us</span><h2>Questions about your <em>order?</em></h2></div>
+    <div class="nf__side">
+      <p>Message the people who grow and pack your order. <span data-cfg="reply">We usually reply within a few hours.</span></p>
+      <div class="nf__btns">
+        <a class="nf__btn" data-cfg-if="phone" data-cfg-href="wa" data-wa-text="Hello, I have a question about my order." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>Chat on WhatsApp</a>
+        <a class="nf__btn nf__btn--ghost" data-cfg-href="mail" data-subject="Question about my order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Email us</a>
       </div>
     </div>
-    <div class="footer-col">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#products">Shop</a></li>
-        <li><a href="blog.html">Blogs</a></li>
-        <li><a href="news.html">News</a></li>
-        <li><a href="index.html#site-footer">About Us</a></li>
-      </ul>
+  </div></div>
+  <div class="nf__w nf__cols">
+    <div class="nf__brand">
+      <img src="nansei_org_logo.svg" alt="Nansei Organics" loading="lazy"/>
+      <p data-cfg="tagline">Experience the Root of Nature</p>
+      <p style="margin-top:10px">Organic rice, dried flowers, beverages and flours from our certified farm in Tamil Nadu &mdash; packed by hand and delivered across India.</p>
+      <div class="nf__social">
+        <a data-cfg-if="insta" data-cfg-href="insta" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+        <a data-cfg-if="phone" data-cfg-href="wa" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg></a>
+        <a data-cfg-href="mail" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+      </div>
     </div>
-    <div class="footer-col">
-      <h3>Support</h3>
-      <ul>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Returns Policy</a></li>
-        <li><a href="#">Shipping Info</a></li>
-        <li><a href="#">Track Order</a></li>
-        <li><a href="#">Certifications</a></li>
-      </ul>
+    <div class="nf__col"><h4>Shop</h4>
+      <a href="shop.html">All products</a><a href="shop.html?cat=rice">Rice</a><a href="shop.html?cat=flowers">Dried flowers</a><a href="shop.html?cat=beverages">Beverages</a><a href="shop.html?cat=flour">Flour &amp; mixes</a><a href="bulk-orders.html">Bulk &amp; gifting</a>
     </div>
-    <div class="footer-col">
-      <h3>Categories</h3>
-      <ul>
-        <li><a href="index.html#products">Rice Varieties</a></li>
-        <li><a href="index.html#products">Dried Flowers</a></li>
-        <li><a href="index.html#products">Beverages</a></li>
-        <li><a href="index.html#products">Flour & Mixes</a></li>
-        <li><a href="index.html#products">Other Products</a></li>
-      </ul>
+    <div class="nf__col"><h4>Help</h4>
+      <a href="track-order.html">Track your order</a><a href="shipping.html">Shipping &amp; delivery</a><a href="refund-policy.html">Returns &amp; refunds</a><a href="faq.html">FAQ</a><a href="contact.html">Contact us</a>
+    </div>
+    <div class="nf__col"><h4>Nansei</h4>
+      <a href="about.html">Our farm</a><a href="our-grains.html">Know your grains</a><a href="blog.html">Blog</a><a href="privacy-policy.html">Privacy policy</a><a href="terms-and-conditions.html">Terms &amp; conditions</a>
+      <span data-cfg-if="phone" style="margin-top:6px"><a data-cfg-href="tel" style="padding:0" data-cfg="phone"></a></span>
+      <span data-cfg="address" style="margin-top:6px;opacity:.7"></span>
     </div>
   </div>
-  <div class="footer-bottom">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
+  <div class="nf__w nf__bottom">
+    <span>&copy; <span data-cfg="year">2026</span> <span data-cfg="legal">Nansei Organics</span>. All rights reserved.<span data-cfg-if="fssai"> &middot; FSSAI <span data-cfg="fssai"></span></span></span>
+    <div class="nf__pay" aria-label="Payment options"><span>UPI</span><span>Cards</span><span>Net banking</span><span>Razorpay secured</span></div>
+    <nav aria-label="Legal"><a href="privacy-policy.html">Privacy</a><a href="terms-and-conditions.html">Terms</a><a href="refund-policy.html">Refunds</a><a href="shipping.html">Shipping</a></nav>
+  </div>
 </footer>
 
 <!-- MOBILE STICKY BOTTOM BAR -->
@@ -1157,11 +1173,13 @@ a .nansai-icon,
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     Blogs
   </a>
-  <a href="news.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-    News
+  <a href="checkout.html?page=orders" class="mob-bar-btn">
+    <div class="mob-bar-icon-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+    </div>
+    <span>Orders</span>
   </a>
-<a href="farm.html" class="mob-bar-btn">
+<a href="index.html#mill-heritage-section" class="mob-bar-btn">
     <div class="mob-bar-icon-wrap">
       <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
     </div>
@@ -1175,7 +1193,7 @@ a .nansai-icon,
 <div id="articleModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box" id="modalBox">
     <button class="modal-close" onclick="closeModal()">[[icon:x]]</button>
-    <img id="modalImg" src="" alt="" class="modal-hero-img"/>
+    <img id="modalImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="modal-hero-img"/>
     <div class="modal-body">
       <span id="modalCat" class="modal-category"></span>
       <h2 id="modalTitle" class="modal-title"></h2>
@@ -1511,7 +1529,7 @@ const BLOGS = [
     excerpt:'The secret to silk-soft idiyappam lies entirely in how the rice was milled. Here is what food science says about the difference.',
     date:'Mar 2, 2026', read:'4 min',
     author:'Chef Meena Sundaram',
-    image:'https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop',
+    image:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=700&auto=format&fit=crop',
     catColor:'#ca8a04',
     content:`<p>Ask any experienced Tamil cook what makes the best idiyappam and they will tell you immediately: the flour. Not the press, not the steaming time, not the accompaniment. The flour. Specifically, the way the rice was milled before becoming flour.</p>
     <h4>The Problem with Industrial Milling</h4>
@@ -1890,38 +1908,12 @@ function showToast(msg) {
   t._t = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-/* ── Mobile Drawer ── */
-function toggleMobDrawer() {
-  const d = document.getElementById('mobDrawer');
-  const h = document.getElementById('mobHam');
-  const open = d.style.display === 'none' || !d.style.display;
-  d.style.display = open ? 'block' : 'none';
-  document.body.style.overflow = open ? 'hidden' : '';
-}
-document.addEventListener('click', e => {
-  const d = document.getElementById('mobDrawer');
-  const h = document.getElementById('mobHam');
-  if (d?.style.display === 'block' && !d.contains(e.target) && !h?.contains(e.target)) {
-    d.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-});
 
 /* ── Scroll reveal ── */
 const srObserver = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
 }, { threshold: 0.08 });
 document.querySelectorAll('.sr').forEach(el => srObserver.observe(el));
-
-/* ── Auth nav ── */
-(function() {
-  const user = JSON.parse(localStorage.getItem('nansai_user') || 'null');
-  if (!user) return;
-  const btn = document.getElementById('navSignInBtn');
-  const txt = document.getElementById('navSignInText');
-  if (btn) btn.href = 'account.html';
-  if (txt) txt.textContent = 'Hi, ' + (user.name || 'User').split(' ')[0];
-})();
 
 /* ── Cart / wishlist counters ── */
 (function() {

@@ -127,7 +127,7 @@ function orderConfirmation(order, user) {
 
     <!-- CTA -->
     <div style="text-align:center;margin-top:8px;">
-      <a href="${BRAND.url}/pages/account.html" style="display:inline-block;background:${BRAND.color};color:#fff;font-size:14px;font-weight:700;padding:14px 36px;border-radius:10px;text-decoration:none;letter-spacing:.02em;">
+      <a href="${BRAND.url}/pages/checkout.html?page=orders" style="display:inline-block;background:${BRAND.color};color:#fff;font-size:14px;font-weight:700;padding:14px 36px;border-radius:10px;text-decoration:none;letter-spacing:.02em;">
         Track My Order →
       </a>
     </div>

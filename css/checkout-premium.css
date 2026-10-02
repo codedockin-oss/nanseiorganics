@@ -1,0 +1,247 @@
+/* ==========================================================================
+   Checkout + My Orders — premium finish
+   Same palette (forest / gold / cream). Loaded after the page's own styles.
+   ========================================================================== */
+
+:root {
+  --ck-gold-grad: linear-gradient(135deg, #e8c97a 0%, #c9a84c 55%, #b8922a 100%);
+  --ck-forest-grad: linear-gradient(135deg, #0f2218 0%, #1a3a2a 55%, #2d5a3d 100%);
+  --ck-ease: cubic-bezier(.22, 1, .36, 1);
+  --ck-lift: 0 18px 44px rgba(15, 34, 24, .13);
+}
+
+/* ---------- page backdrop: soft cream with faint green / gold light ---------- */
+body {
+  background:
+    radial-gradient(900px 480px at 8% -5%, rgba(74, 140, 92, .10), transparent 60%),
+    radial-gradient(800px 420px at 100% 12%, rgba(201, 168, 76, .09), transparent 60%),
+    linear-gradient(180deg, #f3f8f4 0%, #f7f3ec 100%) fixed !important;
+}
+
+/* ---------- top navigation ---------- */
+body > nav {
+  background: rgba(255, 255, 255, .86) !important;
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  transition: box-shadow .3s;
+}
+body > nav.ck-scrolled { box-shadow: 0 10px 30px rgba(10, 30, 15, .09) !important; }
+#navCheckout, #navOrders { position: relative; }
+#navCheckout[style*="rgba(45,90,61,.1)"], #navOrders.is-on { box-shadow: inset 0 -2px 0 var(--gold); }
+
+/* ---------- stepper ---------- */
+.step-wrap { padding: 20px 0 18px !important; box-shadow: 0 6px 20px rgba(10, 30, 15, .04); }
+.step-circle { width: 38px !important; height: 38px !important; font-size: .82rem !important; background: #fff; }
+.step-circle.active {
+  background: var(--ck-forest-grad) !important; border-color: var(--gold) !important; color: #fff !important;
+  box-shadow: 0 0 0 5px rgba(201, 168, 76, .18), 0 8px 18px rgba(15, 34, 24, .22);
+  animation: ckPulse 2.6s ease-in-out infinite;
+}
+.step-circle.done { background: var(--ck-gold-grad) !important; border-color: #b8922a !important; color: #0f2218 !important; }
+.step-circle.done polyline { stroke: #0f2218 !important; }
+.step-label.active { color: var(--ink) !important; }
+.step-connector { height: 2px !important; border-radius: 2px; background: var(--fog-2); position: relative; overflow: hidden; }
+.step-connector::after {
+  content: ''; position: absolute; inset: 0; background: var(--ck-gold-grad);
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform .8s var(--ck-ease);
+}
+.step-connector.done::after, .step-connector[style*="gold"]::after, .step-connector[style*="moss"]::after { transform: scaleX(1); }
+@keyframes ckPulse { 0%, 100% { box-shadow: 0 0 0 5px rgba(201, 168, 76, .18), 0 8px 18px rgba(15, 34, 24, .22); } 50% { box-shadow: 0 0 0 9px rgba(201, 168, 76, .07), 0 8px 18px rgba(15, 34, 24, .22); } }
+
+/* ---------- section headings ---------- */
+#checkoutPage h2, #checkoutPage h3.ck-h { letter-spacing: -.015em; }
+#step1 > div:first-child, #step2 > div:first-child, #step3 > div:first-child { position: relative; }
+#checkoutPage [style*="width:38px;height:38px;border-radius:12px;background:var(--moss)"],
+#ordersPage [style*="width:44px;height:44px;border-radius:14px;background:var(--moss)"] {
+  background: var(--ck-forest-grad) !important; box-shadow: 0 8px 18px rgba(15, 34, 24, .22), inset 0 0 0 1px rgba(232, 201, 122, .35);
+}
+
+/* ---------- cards ---------- */
+.card, .cart-item, .addr-card, .sel-card, .rzp-section, .gateway-card, .billing-opt, .search-bar, .security-strip {
+  transition: transform .35s var(--ck-ease), box-shadow .35s var(--ck-ease), border-color .25s, background .25s !important;
+}
+.cart-item { border-color: rgba(26, 58, 42, .09) !important; box-shadow: 0 2px 14px rgba(15, 34, 24, .06) !important; }
+.cart-item:hover { transform: translateY(-3px); box-shadow: var(--ck-lift) !important; border-color: rgba(201, 168, 76, .55) !important; }
+.cart-item img { transition: transform .7s var(--ck-ease); }
+.cart-item:hover img { transform: scale(1.06); }
+.addr-card:hover, .sel-card:hover, .gateway-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(15, 34, 24, .10); }
+.addr-card.selected, .addr-card.active, .gateway-card.selected, .gateway-card.active, .sel-card.selected, .sel-card.active {
+  border-color: var(--gold) !important; box-shadow: 0 0 0 3px rgba(201, 168, 76, .18), 0 14px 32px rgba(15, 34, 24, .10) !important;
+}
+.rzp-section { border-color: rgba(26, 58, 42, .09); }
+.rzp-section-head { background: linear-gradient(90deg, rgba(201, 168, 76, .10), rgba(45, 90, 61, .03) 60%, transparent) !important; }
+
+/* ---------- inputs ---------- */
+.inp, .co-inp { transition: border-color .2s, background .2s, box-shadow .25s !important; }
+.inp:focus, .co-inp:focus { border-color: var(--moss-l) !important; background: #fff !important; box-shadow: 0 0 0 4px rgba(74, 140, 92, .14), 0 6px 16px rgba(15, 34, 24, .05) !important; }
+
+/* ---------- buttons ---------- */
+.btn-primary, .btn-pay-now, .btn-full.btn-primary {
+  background: var(--ck-forest-grad) !important; position: relative; overflow: hidden; isolation: isolate;
+  box-shadow: 0 10px 26px rgba(15, 34, 24, .28), inset 0 0 0 1px rgba(232, 201, 122, .25) !important;
+}
+.btn-primary::after, .btn-pay-now::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: -70%; width: 50%; z-index: -1;
+  background: linear-gradient(105deg, transparent, rgba(232, 201, 122, .38), transparent);
+  transform: skewX(-18deg); transition: left .8s var(--ck-ease);
+}
+.btn-primary:hover::after, .btn-pay-now:hover::after { left: 130%; }
+.btn-primary:hover, .btn-pay-now:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(15, 34, 24, .34), inset 0 0 0 1px rgba(232, 201, 122, .4) !important; }
+.btn:active { transform: translateY(0) scale(.985); }
+.btn-ghost:hover { border-color: var(--gold) !important; background: rgba(201, 168, 76, .08) !important; color: var(--ink) !important; }
+
+/* ---------- order summary ---------- */
+.summary-sidebar { border-radius: 26px !important; border-color: rgba(201, 168, 76, .28) !important; box-shadow: 0 22px 60px rgba(15, 34, 24, .14) !important; }
+.summary-header { position: relative; background: var(--ck-forest-grad) !important; overflow: hidden; }
+.summary-header::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(260px 120px at 105% -20%, rgba(232, 201, 122, .28), transparent 70%);
+}
+.summary-header::after { content: ''; position: absolute; left: 24px; right: 24px; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(232, 201, 122, .7), transparent); }
+.summary-total-row { padding-top: 4px; }
+.summary-total-row > span:last-child, .summary-total-row [id*="Total"] { font-family: 'Cormorant Garamond', serif; font-variant-numeric: lining-nums; font-size: 1.9rem !important; font-weight: 700 !important; line-height: 1; }
+.summ-item { transition: background .2s; }
+.summ-item:hover { background: rgba(201, 168, 76, .06); }
+.savings-banner { background: linear-gradient(135deg, rgba(201, 168, 76, .14), rgba(45, 90, 61, .06)) !important; border-color: rgba(201, 168, 76, .35) !important; }
+.trust-icon { background: rgba(201, 168, 76, .12) !important; }
+.security-strip { background: rgba(255, 255, 255, .7) !important; backdrop-filter: blur(6px); }
+
+/* ---------- MY ORDERS: hero ---------- */
+#ordersPage > div { padding-top: 28px !important; }
+#ordersPage .ck-ord-hero {
+  position: relative; overflow: hidden; margin: 0 0 34px !important; padding: 34px clamp(20px, 4vw, 40px) 30px !important;
+  border: 0 !important; border-radius: 28px;
+  background: var(--ck-forest-grad);
+  box-shadow: 0 24px 60px rgba(15, 34, 24, .22), inset 0 0 0 1px rgba(232, 201, 122, .18);
+}
+#ordersPage .ck-ord-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(520px 260px at 92% -10%, rgba(232, 201, 122, .26), transparent 65%), radial-gradient(420px 240px at -5% 110%, rgba(74, 140, 92, .35), transparent 65%);
+}
+#ordersPage .ck-ord-hero::after {
+  content: ''; position: absolute; right: -40px; bottom: -50px; width: 220px; height: 220px; opacity: .07; pointer-events: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M10 54C10 54 24 12 54 10C54 10 50 40 10 54Z' fill='white'/></svg>") center / contain no-repeat;
+  animation: ckDrift 11s ease-in-out infinite;
+}
+@keyframes ckDrift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-14px) rotate(9deg); } }
+#ordersPage .ck-ord-hero > * { position: relative; z-index: 1; }
+#ordersPage .ck-ord-hero h1 { color: #fff !important; }
+#ordersPage .ck-ord-hero h1 em { color: #e8c97a; font-style: italic; }
+#ordersPage .ck-ord-hero #orderCountLabel { color: rgba(255, 255, 255, .68) !important; }
+#ordersPage .ck-ord-hero [style*="background:var(--moss)"] { background: rgba(255, 255, 255, .12) !important; box-shadow: inset 0 0 0 1px rgba(232, 201, 122, .45) !important; }
+.ck-eyebrow { display: inline-flex; align-items: center; gap: .6rem; margin-bottom: .55rem; font-size: .6rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: #e8c97a; }
+.ck-eyebrow::before { content: ''; width: 1.6rem; height: 1px; background: var(--gold); }
+.ck-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 26px; max-width: 560px; }
+.ck-stat { padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .13); backdrop-filter: blur(6px); }
+.ck-stat b { display: block; font-family: 'Cormorant Garamond', serif; font-size: 2rem; line-height: 1; color: #e8c97a; font-weight: 700; font-variant-numeric: lining-nums; }
+.ck-stat span { display: block; margin-top: 5px; font-size: .58rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: rgba(255, 255, 255, .62); }
+
+/* ---------- MY ORDERS: cards ---------- */
+#ordersList { gap: 26px !important; }
+.order-card {
+  position: relative; border-radius: 22px !important; border-color: rgba(26, 58, 42, .09) !important;
+  box-shadow: 0 4px 22px rgba(15, 34, 24, .07) !important; animation: none !important;
+  transition: transform .4s var(--ck-ease), box-shadow .4s var(--ck-ease) !important;
+}
+.order-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--sage-l); z-index: 2; }
+.order-card:has(.sb-delivered)::before { background: linear-gradient(180deg, #4a8c5c, #2d5a3d); }
+.order-card:has(.sb-shipped)::before { background: linear-gradient(180deg, #3b82f6, #1d4ed8); }
+.order-card:has(.sb-processing)::before { background: var(--ck-gold-grad); }
+.order-card:has(.sb-cancelled)::before { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+.order-card:hover { transform: translateY(-4px); box-shadow: var(--ck-lift) !important; }
+.order-header-bar { background: linear-gradient(90deg, #f7f3ec, #fbf9f4) !important; padding: 16px 26px 16px 28px !important; }
+.order-meta-val { font-variant-numeric: lining-nums; }
+.status-badge { box-shadow: inset 0 0 0 1px currentColor; box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 22%, transparent); }
+.order-card img { transition: transform .6s var(--ck-ease); }
+.order-card:hover img { transform: scale(1.05) rotate(-1deg); }
+.progress-track { height: 6px !important; background: #efe9dd !important; }
+.progress-bar { position: relative; overflow: hidden; }
+.progress-bar::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent); transform: translateX(-100%); animation: ckShine 2.6s ease-in-out infinite; }
+@keyframes ckShine { 0% { transform: translateX(-100%); } 60%, 100% { transform: translateX(100%); } }
+.order-action-row .btn { transition: transform .25s var(--ck-ease), box-shadow .25s, border-color .2s, background .2s; }
+.order-action-row .btn:hover { transform: translateY(-2px); }
+#ordersEmpty .empty-icon { background: linear-gradient(135deg, rgba(201, 168, 76, .16), rgba(74, 140, 92, .10)); box-shadow: 0 14px 34px rgba(15, 34, 24, .10); animation: ckFloat 4s ease-in-out infinite; }
+@keyframes ckFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+/* ---------- modals ---------- */
+.modal-box { border-radius: 26px !important; border: 1px solid rgba(201, 168, 76, .25); }
+.modal-head { background: linear-gradient(90deg, rgba(201, 168, 76, .10), transparent 70%); }
+.timeline-item .tl-dot { box-shadow: 0 0 0 4px rgba(201, 168, 76, .18); }
+
+/* ---------- scroll reveal ---------- */
+/* minimal: a short fade + 14px rise, applied page-wide */
+.ck-rv { opacity: 0; transform: translate3d(0, 14px, 0); transition: opacity .55s var(--ck-ease), transform .55s var(--ck-ease); transition-delay: var(--ck-d, 0s); animation: none !important; will-change: opacity, transform; }
+.ck-rv.ck-right { transform: translate3d(14px, 0, 0); }
+.ck-rv.ck-in { opacity: 1; transform: none; }
+.ck-rv.ck-done { will-change: auto; transition-delay: 0s; }
+/* order progress bars fill when their card scrolls into view */
+.order-card.ck-rv:not(.ck-in) .progress-bar { width: 0 !important; }
+
+@media (max-width: 720px) {
+  .ck-stats { gap: 8px; }
+  .ck-stat { padding: 11px 12px; }
+  .ck-stat b { font-size: 1.6rem; }
+  #ordersPage .ck-ord-hero { border-radius: 22px; padding: 26px 18px 22px !important; }
+  .order-header-bar { gap: 14px 18px !important; padding: 14px 18px 14px 22px !important; }
+  .cart-item:hover, .order-card:hover, .addr-card:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck-rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .step-circle.active, .progress-bar, #ordersEmpty .empty-icon, #ordersPage .ck-ord-hero::after { animation: none !important; }
+  .btn-primary::after, .btn-pay-now::after { display: none; }
+}
+
+/* greeting + sign out in the My Orders banner */
+.ck-who { position: absolute !important; top: 22px; right: clamp(18px, 3vw, 34px); display: flex; align-items: center; gap: 12px; font-size: .82rem; color: rgba(255,255,255,.85); }
+.ck-who button { padding: 7px 16px; border-radius: 99px; border: 1px solid rgba(232,201,122,.55); background: rgba(255,255,255,.08); color: #e8c97a; font: 600 .74rem 'Inter', sans-serif; letter-spacing: .04em; transition: background .2s, color .2s; }
+.ck-who button:hover { background: #e8c97a; color: #0f2218; }
+@media (max-width: 720px) { .ck-who { position: static !important; margin-top: 16px; } }
+
+/* ---------- Mamaearth-style flat layer: clean white cards, compact rows, solid CTAs ---------- */
+body { background: #f6f4ee !important; }
+.cart-item, .order-card, .co-card, .summary-card {
+  box-shadow: none !important; border: 1px solid #e7e3d8 !important; border-radius: 12px !important; background: #fff !important;
+}
+.cart-item:hover, .order-card:hover { transform: none !important; box-shadow: none !important; border-color: #cfd8cf !important; }
+.cart-item { padding: 12px !important; gap: 14px !important; margin-bottom: 10px !important; }
+.cart-item img { border-radius: 8px !important; }
+.btn-primary {
+  background: var(--forest-deep, #0f2218) !important; border-radius: 8px !important; box-shadow: none !important;
+  font-weight: 700 !important; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem !important; padding: 15px 24px !important;
+}
+.btn-primary:hover { background: #2d5a3d !important; transform: none !important; box-shadow: none !important; }
+input, select, textarea { border-radius: 8px !important; }
+/* order summary: sticky, light header instead of dark gradient */
+.summary-sidebar { box-shadow: none !important; border: 1px solid #e7e3d8 !important; border-radius: 12px !important; }
+.summary-header { background: #faf8f2 !important; border-bottom: 1px solid #e7e3d8 !important; }
+.summary-header::before, .summary-header::after { display: none !important; }
+.summary-header, .summary-header * { color: var(--forest-deep, #0f2218) !important; }
+/* orders: light meta strip, small caps labels, flat status chips */
+.order-header-bar { background: #faf8f2 !important; border-bottom: 1px solid #e7e3d8 !important; padding: 12px 18px !important; gap: 22px !important; }
+.order-meta-label { text-transform: uppercase !important; font-size: .62rem !important; letter-spacing: .1em !important; color: #8a9a8e !important; }
+.order-meta-val { font-size: .86rem !important; font-weight: 700 !important; }
+.status-badge { border-radius: 6px !important; font-size: .68rem !important; text-transform: uppercase; letter-spacing: .06em; padding: 5px 10px !important; }
+.order-card .progress-track { height: 4px !important; border-radius: 2px !important; }
+.order-action-row button, .order-action-row a { border-radius: 8px !important; }
+/* My Orders header: plain, compact */
+#ordersPage .ck-ord-hero { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; padding: 8px 0 18px !important; margin-bottom: 8px !important; }
+#ordersPage .ck-ord-hero::before, #ordersPage .ck-ord-hero::after { display: none !important; }
+#ordersPage .ck-ord-hero h1 { color: var(--forest-deep, #0f2218) !important; font-size: 1.7rem !important; }
+#ordersPage .ck-ord-hero #orderCountLabel { color: #7a9980 !important; }
+#ordersPage .ck-ord-hero [style*="background:var(--moss)"], .ck-eyebrow { display: none !important; }
+.ck-stats { margin-top: 14px !important; max-width: 520px; }
+.ck-stat { background: #fff !important; border: 1px solid #e7e3d8 !important; border-radius: 10px !important; padding: 10px 14px !important; }
+.ck-stat b { color: var(--forest-deep, #0f2218) !important; font-size: 1.4rem !important; }
+.ck-stat span { color: #8a9a8e !important; }
+.ck-who { top: 8px !important; right: 0 !important; }
+.ck-who, .ck-who span { color: var(--forest-deep, #0f2218) !important; }
+.ck-who button { color: var(--forest-deep, #0f2218) !important; border-color: #cfd8cf !important; background: #fff !important; }
+
+/* empty cart: only the empty state is shown (no delivery form without items) */
+#step1.is-empty > :not(#cartItems):not(#emptyCart):not(:first-child) { display: none !important; }
+
+/* site links beside the logo (hidden on small screens, where the page's own Checkout / Orders switch is enough) */
+.ck-navlinks { display: flex; gap: 1.6rem; margin: 0 auto 0 2.2rem; }
+.ck-navlinks a { font: 600 .7rem 'Inter', sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--forest-deep, #0f2218); text-decoration: none; padding: .4rem 0; border-bottom: 1px solid transparent; transition: border-color .3s, color .3s; }
+.ck-navlinks a:hover { color: var(--forest-mid, #2d5a3d); border-bottom-color: var(--gold, #c9a84c); }
+@media (max-width: 760px) { .ck-navlinks { display: none; } }

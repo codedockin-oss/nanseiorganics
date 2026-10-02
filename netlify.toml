@@ -1,6 +1,55 @@
 [build]
   publish = "."
 
+# ── Never publish server code, tests, source art or project notes (the site is published from the repo root) ──
+[[redirects]]
+  from = "/backend/*"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tests/*"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/assets-source/*"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/DEPLOY.md"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/SECURITY.md"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/render.yaml"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/pages/404.html"
+  status = 404
+  force = true
+
 # ── Static asset rules (must come BEFORE catch-all) ──────────────────────────
 # Serve JS files directly — never redirect them to index.html
 [[redirects]]
@@ -9,13 +58,13 @@
   status = 200
 
 [[redirects]]
-  from = "/frontend/js/*"
-  to = "/frontend/js/:splat"
+  from = "/css/*"
+  to = "/css/:splat"
   status = 200
 
 [[redirects]]
-  from = "/frontend/*"
-  to = "/frontend/:splat"
+  from = "/images/*"
+  to = "/images/:splat"
   status = 200
 
 # ── Page routes ───────────────────────────────────────────────────────────────
@@ -31,7 +80,7 @@
 
 [[redirects]]
   from = "/account"
-  to = "/pages/account.html"
+  to = "/pages/checkout.html?page=orders"
   status = 200
 
 [[redirects]]
@@ -50,18 +99,18 @@
   status = 200
 
 [[redirects]]
+  from = "/checkout"
+  to = "/pages/checkout.html"
+  status = 200
+
+[[redirects]]
   from = "/orders"
-  to = "/pages/checkoutmyorderpage.html"
+  to = "/pages/checkout.html"
   status = 200
 
 [[redirects]]
   from = "/blog"
   to = "/pages/blog.html"
-  status = 200
-
-[[redirects]]
-  from = "/news"
-  to = "/pages/news.html"
   status = 200
 
 [[redirects]]
@@ -100,6 +149,91 @@
   status = 200
 
 [[redirects]]
+  from = "/shop"
+  to = "/pages/shop.html"
+  status = 200
+
+[[redirects]]
+  from = "/shop.html"
+  to = "/pages/shop.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/pages/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/about.html"
+  to = "/pages/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/faq"
+  to = "/pages/faq.html"
+  status = 200
+
+[[redirects]]
+  from = "/faq.html"
+  to = "/pages/faq.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/pages/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact.html"
+  to = "/pages/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/shipping"
+  to = "/pages/shipping.html"
+  status = 200
+
+[[redirects]]
+  from = "/shipping.html"
+  to = "/pages/shipping.html"
+  status = 200
+
+[[redirects]]
+  from = "/bulk-orders"
+  to = "/pages/bulk-orders.html"
+  status = 200
+
+[[redirects]]
+  from = "/bulk-orders.html"
+  to = "/pages/bulk-orders.html"
+  status = 200
+
+[[redirects]]
+  from = "/track-order"
+  to = "/pages/track-order.html"
+  status = 200
+
+[[redirects]]
+  from = "/track-order.html"
+  to = "/pages/track-order.html"
+  status = 200
+
+[[redirects]]
+  from = "/our-grains"
+  to = "/pages/our-grains.html"
+  status = 200
+
+[[redirects]]
+  from = "/our-grains.html"
+  to = "/pages/our-grains.html"
+  status = 200
+
+[[redirects]]
+  from = "/index.html"
+  to = "/pages/index.html"
+  status = 200
+
+[[redirects]]
   from = "/pages/*"
   to = "/pages/:splat"
   status = 200
@@ -111,12 +245,11 @@
   status = 200
   force = true
 
-# ── SPA fallback — MUST be last, MUST be status 200 ──────────────────────────
-# status=200 means: only fires when the file does NOT exist on disk
+# ── Anything else is a real 404 (the store has no client-side routing, so there is no reason to serve the home page for unknown URLs)
 [[redirects]]
   from = "/*"
-  to = "/pages/index.html"
-  status = 200
+  to = "/pages/404.html"
+  status = 404
 
 # ── Security headers ──────────────────────────────────────────────────────────
 [[headers]]
@@ -127,17 +260,30 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 # Explicit MIME types for JS — prevents text/html being served for JS files
+# Site scripts/styles change between deploys, so browsers must re-check them (cheap 304s).
+# Only the version-pinned vendor bundle is cached "forever".
 [[headers]]
   for = "/js/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/js/vendor/*"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/frontend/js/*.js"
+  for = "/css/*"
   [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
 
 [[headers]]
   for = "/*.html"

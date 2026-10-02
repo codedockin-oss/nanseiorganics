@@ -9,6 +9,7 @@ const router             = express.Router();
 const { protect, authorize } = require('../middleware/auth');
 const Order = require('../models/Order');
 const Cart  = require('../models/Cart');
+const shippingService = require('../utils/shippingService');
 
 // ─────────────────────────────────────────────────────────
 //  HELPERS
@@ -43,6 +44,12 @@ function getRazorpay() {
     key_id:     process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
   });
+}
+
+/** Books the courier for a new order without ever delaying or failing the order itself. */
+function shipInBackground(orderId) {
+  shippingService.autoShip({ Order, User: require('../models/User'), orderId })
+    .catch(err => console.warn('[Shipping] background ship failed:', err.message));
 }
 
 // Escape special regex characters to prevent ReDoS
@@ -162,6 +169,7 @@ router.post('/razorpay/verify', optionalAuth, async (req, res) => {
       const User = require('../models/User');
       const userDoc = await User.findById(req.user.id).select('name email').lean();
       sendOrderEmails(order, userDoc); // fire-and-forget
+      shipInBackground(order._id);
       return res.json({ success: true, verified: true, data: order });
     }
 
@@ -270,6 +278,7 @@ router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
       .populate('user', 'name email phone')
       .populate('items.product', 'name images');
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+    if (status === 'Cancelled') shippingService.cancelForOrder(order);   // release the courier booking
     res.json({ success: true, data: order });
   } catch (err) {
     console.error('[Orders] PUT /:id/status error:', err.message);
@@ -308,9 +317,38 @@ router.post('/', protect, async (req, res) => {
     const User = require('../models/User');
     const userDoc = await User.findById(req.user.id).select('name email').lean();
     sendOrderEmails(order, userDoc); // fire-and-forget
+    shipInBackground(order._id);
     res.status(201).json({ success: true, data: order });
   } catch (err) {
     console.error('[Orders] POST / error:', err.message);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+/**
+ * PUT /api/orders/:id/cancel — a customer cancels their own order while it hasn't been dispatched yet.
+ * Also releases the Shiprocket booking. Online payments are flagged for a manual refund.
+ */
+router.put('/:id/cancel', protect, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+    if (String(order.user) !== String(req.user.id) && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+    if (!['Pending', 'Processing', 'Packed'].includes(order.orderStatus)) {
+      const why = order.orderStatus === 'Shipped' ? 'it has already been dispatched' : 'it is already ' + String(order.orderStatus).toLowerCase();
+      return res.status(400).json({ success: false, message: 'This order can no longer be cancelled because ' + why });
+    }
+    order.orderStatus = 'Cancelled';
+    order.cancelledAt = new Date();
+    order.cancellationReason = String((req.body && req.body.reason) || '').slice(0, 200);
+    if (order.isPaid) order.notes = ((order.notes || '') + ' [Refund pending: cancelled by customer after online payment]').trim();
+    await order.save();
+    shippingService.cancelForOrder(order);        // fire-and-forget
+    res.json({ success: true, data: order });
+  } catch (err) {
+    console.error('[Orders] PUT /:id/cancel error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });

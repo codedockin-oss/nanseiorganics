@@ -1,0 +1,179 @@
+/* Nansei Organics — story sections of the home page: farm gallery + lightbox, hand mill, films. */
+#gallery { position: relative; background: var(--paper-2); }
+#gallery .sec-head { margin-bottom: clamp(32px, 4vw, 56px); }
+/* gallery lightbox base */
+#lightbox { display: none; position: fixed; inset: 0; background: rgba(6, 14, 9, .96); z-index: 2050; align-items: center; justify-content: center; padding: 24px; }
+#lightbox.open { display: flex; }
+#lightbox img { max-width: 90vw; max-height: 82vh; object-fit: contain; }
+#lightbox-caption { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; max-width: 80vw; }
+/* =====================================================================
+   GALLERY — editorial mosaic, always-on captions, quiet hover
+   ===================================================================== */
+#gallery .bento-grid {
+  display: grid; gap: 12px; grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: clamp(150px, 17vw, 240px);
+}
+#gallery .bento-item { grid-column: span 4; grid-row: span 2; border-radius: 4px; overflow: hidden; position: relative; cursor: zoom-in; background: var(--forest-deep); isolation: isolate; }
+#gallery .bento-item:nth-child(1) { grid-column: span 7; grid-row: span 2; }
+#gallery .bento-item:nth-child(2), #gallery .bento-item:nth-child(3) { grid-column: span 5; grid-row: span 1; }
+#gallery .bento-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.4s var(--ns-ease), filter .6s; }
+#gallery .bento-item:hover img { transform: scale(1.06); }
+#gallery .bento-item::before {
+  content: '+'; position: absolute; top: 14px; right: 14px; z-index: 3; width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font: 300 1.5rem/1 'Inter', sans-serif; color: #fff;
+  background: rgba(8,18,12,.38); border: 1px solid rgba(255,255,255,.4); backdrop-filter: blur(6px);
+  opacity: 0; transform: scale(.85); transition: opacity .4s, transform .4s var(--ns-ease);
+}
+#gallery .bento-item:hover::before, #gallery .bento-item:focus-visible::before { opacity: 1; transform: none; }
+#gallery .bento-item::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); pointer-events: none; }
+#gallery .bento-caption {
+  position: absolute; inset: 0; z-index: 2; display: flex; align-items: flex-end; gap: .8rem; padding: 1.3rem 1.4rem; pointer-events: none;
+  background: linear-gradient(0deg, rgba(8,18,12,.78) 0%, rgba(8,18,12,.2) 38%, transparent 62%); opacity: 1;
+}
+#gallery .bento-num { font: 600 .72rem 'Inter', sans-serif; letter-spacing: .2em; color: var(--gold-lt); padding-bottom: .22rem; border-bottom: 1px solid rgba(232,201,122,.55); }
+#gallery .bento-caption-text { font: 600 1.15rem/1.2 'Cormorant Garamond', serif; letter-spacing: .01em; color: #fff; transform: none; }
+#gallery .bento-item:hover .bento-caption-text { transform: none; }
+@media (max-width: 1023px) {
+  #gallery .bento-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: clamp(140px, 24vw, 200px); }
+  #gallery .bento-item { grid-column: span 2; }
+  #gallery .bento-item:nth-child(1) { grid-column: span 6; }
+  #gallery .bento-item:nth-child(2), #gallery .bento-item:nth-child(3) { grid-column: span 3; grid-row: span 1; }
+}
+@media (max-width: 599px) {
+  #gallery .bento-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 150px; gap: 8px; }
+  #gallery .bento-item { grid-column: span 1; grid-row: span 2; }
+  #gallery .bento-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  #gallery .bento-item:nth-child(2), #gallery .bento-item:nth-child(3) { grid-column: span 1; grid-row: span 1; }
+  #gallery .bento-item:nth-child(4) { grid-column: span 2; grid-row: span 2; }
+  #gallery .bento-caption { padding: .9rem; }
+  #gallery .bento-caption-text { font-size: .98rem; }
+  #gallery .bento-item::before { display: none; }
+}
+
+/* lightbox */
+#lightbox { background: rgba(6,14,9,.96); backdrop-filter: blur(6px); }
+#lightbox img { border-radius: 2px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+#lightbox-close, #lightbox-prev, #lightbox-next {
+  position: absolute; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.06);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .9rem; transition: background .25s, border-color .25s, color .25s;
+}
+#lightbox-close { top: 22px; right: 24px; }
+#lightbox-prev { left: clamp(.6rem, 2.4vw, 2rem); top: 50%; transform: translateY(-50%); }
+#lightbox-next { right: clamp(.6rem, 2.4vw, 2rem); top: 50%; transform: translateY(-50%); }
+#lightbox-close:hover, #lightbox-prev:hover, #lightbox-next:hover { background: var(--gold); border-color: var(--gold); color: var(--forest-deep); }
+#lightbox-count { position: absolute; top: 30px; left: 28px; font: 600 .78rem 'Inter', sans-serif; letter-spacing: .22em; color: rgba(255,255,255,.65); }
+#lightbox-caption { font: 600 1.2rem 'Cormorant Garamond', serif; letter-spacing: .02em; color: #fff; bottom: 26px; }
+@media (max-width: 640px) { #lightbox-prev, #lightbox-next { top: auto; bottom: 18px; transform: none; } #lightbox-caption { bottom: 84px; } }
+
+/* =====================================================================
+   THE TRADITIONAL HAND MILL — dark, editorial, cinematic
+   ===================================================================== */
+#mill-heritage-section {
+  position: relative; overflow: hidden; color: #fff;
+  padding: clamp(4.5rem, 9vw, 8rem) 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 12% 0%, rgba(201,168,76,.13), transparent 70%),
+    radial-gradient(ellipse 55% 55% at 100% 100%, rgba(74,140,92,.2), transparent 70%),
+    var(--forest-deep);
+}
+#mill-heritage-section::before {        /* faint stone-grain texture */
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 4px 4px;
+}
+.mh-wrap { position: relative; max-width: 1200px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2rem); }
+
+.mh-head { text-align: center; margin-bottom: clamp(3rem, 6vw, 5rem); }
+.mh-eyebrow { display: inline-flex; align-items: center; gap: .9rem; font: 700 .7rem 'Inter', sans-serif; letter-spacing: .3em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 1.1rem; }
+.mh-eyebrow span { width: 2rem; height: 1px; background: var(--gold); opacity: .8; }
+.mh-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(2.5rem, 5.4vw, 4.4rem); line-height: 1.05; letter-spacing: -.01em; color: #fff; margin-bottom: 1.4rem; }
+.mh-title em { font-style: italic; color: var(--gold-lt); }
+.mh-lead { max-width: 660px; margin: 0 auto; font: 400 1rem/1.8 'Inter', sans-serif; color: rgba(255,255,255,.68); }
+
+.mh-grid { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(2.5rem, 7vw, 6rem); align-items: center; margin-bottom: clamp(3.5rem, 7vw, 6rem); }
+.mh-figure { margin: 0 0 18px; position: relative; }
+.mh-figure::before { content: ''; position: absolute; top: 18px; left: -18px; right: 18px; bottom: -18px; border: 1px solid rgba(201,168,76,.5); pointer-events: none; }
+.mh-frame { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #0b1a11; box-shadow: 0 30px 70px rgba(0,0,0,.45); }
+.mh-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.6s var(--ns-ease); }
+.mh-figure:hover .mh-frame img { transform: scale(1.05); }
+.mh-figure figcaption { position: relative; margin-top: 2.2rem; display: flex; align-items: center; gap: .9rem; font: 500 .82rem 'Inter', sans-serif; letter-spacing: .06em; color: rgba(255,255,255,.62); }
+.mh-figure figcaption span { font-weight: 700; letter-spacing: .22em; text-transform: uppercase; font-size: .68rem; color: var(--gold-lt); padding-right: .9rem; border-right: 1px solid rgba(255,255,255,.2); }
+
+.mh-kicker { font: 700 .7rem 'Inter', sans-serif; letter-spacing: .28em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 1rem; }
+.mh-copy h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(1.9rem, 3.3vw, 3rem); line-height: 1.1; color: #fff; margin-bottom: 1.2rem; }
+.mh-copy h3 em { font-style: italic; color: var(--gold-lt); }
+.mh-text { font: 400 1rem/1.85 'Inter', sans-serif; color: rgba(255,255,255,.7); max-width: 540px; }
+.mh-points { list-style: none; margin: 2.2rem 0 0; padding: 0; max-width: 560px; }
+.mh-points li { display: grid; grid-template-columns: 3.4rem 1fr; gap: 1rem; padding: 1.35rem 0; border-top: 1px solid rgba(255,255,255,.13); }
+.mh-points li:last-child { border-bottom: 1px solid rgba(255,255,255,.13); }
+.mh-n { font: 600 1.7rem/1 'Cormorant Garamond', serif; color: var(--gold); }
+.mh-points h4 { font: 600 1.02rem 'Inter', sans-serif; color: #fff; margin: 0 0 .3rem; }
+.mh-points p { font: 400 .9rem/1.65 'Inter', sans-serif; color: rgba(255,255,255,.6); margin: 0; }
+
+/* featured film */
+#mill-heritage-section .mh-film { position: relative; display: block; height: auto; aspect-ratio: 16 / 9; border-radius: 2px; overflow: hidden; cursor: pointer; background: #07120b; box-shadow: 0 34px 80px rgba(0,0,0,.5); isolation: isolate; }
+.mh-film img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; transition: transform 1.6s var(--ns-ease); }
+.mh-film:hover img { transform: scale(1.04); }
+.mh-film::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); pointer-events: none; z-index: 3; }
+.mh-film-shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, rgba(5,12,8,.92) 0%, rgba(5,12,8,.45) 42%, rgba(5,12,8,.1) 100%); }
+.mh-film-body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: flex-end; gap: 1.6rem; padding: clamp(1.2rem, 3.2vw, 2.6rem); }
+.mh-play { position: absolute; z-index: 2; top: 50%; left: 50%; margin: -54px 0 0 -54px; width: 108px; height: 108px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--gold); color: var(--forest-deep); box-shadow: 0 10px 30px rgba(0,0,0,.4); transition: transform .4s var(--ns-ease), background .3s; }
+.mh-play svg { margin-left: 4px; }
+.mh-play::before { content: ''; position: absolute; inset: -9px; border-radius: 50%; border: 1px solid rgba(232,201,122,.55); transition: inset .4s var(--ns-ease), opacity .4s; }
+.mh-film:hover .mh-play { transform: scale(1.07); background: var(--gold-lt); }
+.mh-film:hover .mh-play::before { inset: -14px; opacity: .5; }
+.mh-film-label { font: 700 .66rem 'Inter', sans-serif; letter-spacing: .26em; text-transform: uppercase; color: var(--gold-lt); margin: 0 0 .45rem; }
+.mh-film-body h4 { font: 600 clamp(1.4rem, 2.8vw, 2.3rem)/1.15 'Cormorant Garamond', serif; color: #fff; margin: 0; }
+.mh-film-sub { font: 400 .92rem/1.6 'Inter', sans-serif; color: rgba(255,255,255,.7); margin: .55rem 0 0; max-width: 560px; }
+
+@media (max-width: 900px) {
+  .mh-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .mh-figure { max-width: 440px; margin-left: auto; margin-right: auto; width: calc(100% - 24px); }
+  .mh-frame { aspect-ratio: 5 / 4; }
+  .mh-copy { text-align: left; }
+  #mill-heritage-section .mh-film { aspect-ratio: 16 / 9; }
+}
+@media (max-width: 600px) {
+  .mh-film-body { gap: 1rem; align-items: flex-end; }
+  .mh-play { width: 76px; height: 76px; margin: -38px 0 0 -38px; } .mh-play svg { width: 20px; height: 20px; }
+  .mh-film-sub { display: none; }
+  .mh-points li { grid-template-columns: 2.8rem 1fr; padding: 1.1rem 0; }
+}
+
+.mh-copy .nb { white-space: nowrap; }
+
+/* ---- Hand Mill: featured film + extra films ---- */
+.mh-films { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+.mh-films:not(:has(.mh-side)) { max-width: 920px; margin: 0 auto; }
+.mh-films:has(.mh-side) { grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); align-items: stretch; }
+#mill-heritage-section .mh-films:has(.mh-side) .mh-film { aspect-ratio: auto; min-height: 320px; }
+.mh-film img { background: #07120b; }
+.mh-side { display: grid; gap: 1.5rem; align-content: start; }
+.mh-vcard {
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 2px; overflow: hidden;
+  cursor: pointer; text-align: left; background: #07120b; color: #fff; isolation: isolate; box-shadow: 0 24px 60px rgba(0,0,0,.45); font: inherit;
+}
+.mh-vcard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ns-ease); }
+.mh-vcard:hover img { transform: scale(1.05); }
+.mh-vcard::after { content: ''; position: absolute; inset: 0; z-index: 3; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); pointer-events: none; }
+.mh-vshade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, rgba(5,12,8,.9) 0%, rgba(5,12,8,.35) 48%, rgba(5,12,8,.05) 100%); }
+.mh-vplay {
+  position: absolute; z-index: 2; top: 50%; left: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; background: var(--gold); color: var(--forest-deep); box-shadow: 0 8px 22px rgba(0,0,0,.4);
+  transition: transform .4s var(--ns-ease), background .3s;
+}
+.mh-vplay svg { margin-left: 2px; }
+.mh-vcard:hover .mh-vplay { transform: scale(1.08); background: var(--gold-lt); }
+.mh-vmeta { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; padding: 1rem 1.15rem; display: block; }
+.mh-vlabel { display: block; font: 700 .6rem 'Inter', sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: .3rem; }
+.mh-vtitle { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font: 600 1.08rem/1.25 'Cormorant Garamond', serif; color: #fff; }
+.mh-vtitle:empty::before { content: 'Loading…'; opacity: .5; }
+
+@media (max-width: 900px) {
+  .mh-films:has(.mh-side) { grid-template-columns: minmax(0, 1fr); }
+  #mill-heritage-section .mh-films:has(.mh-side) .mh-film { aspect-ratio: 16 / 9; min-height: 0; }
+  .mh-side { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+}
+@media (max-width: 560px) {
+  .mh-side { grid-template-columns: minmax(0, 1fr); }
+  .mh-vtitle { font-size: 1rem; }
+}

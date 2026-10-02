@@ -138,6 +138,7 @@ app.use('/api/categories',publicLimiter,  categoryRoutes);
 app.use('/api/combos',    publicLimiter,  comboRoutes);
 app.use('/api/cart',      writeLimiter,   cartRoutes);
 app.use('/api/orders',    writeLimiter,   orderRoutes);
+app.use('/api/shipping',  publicLimiter,  require('./routes/shippingRoutes')());   // Shiprocket webhook + tracking
 app.use('/api/wishlist',  writeLimiter,   wishlistRoutes);
 app.use('/api/reviews',   writeLimiter,   reviewRoutes);
 app.use('/api/users',     adminLimiter,   userRoutes);

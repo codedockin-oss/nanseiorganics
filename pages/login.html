@@ -1,8 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="../js/farm-loader.js" data-text="Opening the farm gate"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="theme-color" content="#0f2218"/>
 <title>Nansei Organics - Authentication</title>
 <script>
 (function () {
@@ -116,9 +119,13 @@ button,input{font:inherit}
 .brand-logo{
   position:relative;
   z-index:1;
-  width:132px;
+  width:104px;
   height:auto;
-  filter:drop-shadow(0 8px 22px rgba(0,0,0,.18));
+  box-sizing:content-box;
+  padding:12px 18px;
+  background:rgba(253,250,245,.96);
+  border-radius:16px;
+  box-shadow:0 12px 32px rgba(0,0,0,.25);
 }
 .brand-copy{position:relative;z-index:1;max-width:470px}
 .eyebrow{
@@ -380,6 +387,7 @@ input.invalid{
   input,.submit{min-height:47px}
 }
 </style>
+<link rel="icon" type="image/svg+xml" href="nansei_org_logo.svg"/>
 </head>
 <body>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -429,7 +437,7 @@ input.invalid{
           <div class="error" id="loginPasswordError"></div>
         </div>
 
-        <a class="forgot" href="#" onclick="forgotPassword(event)">Forgot Password</a>
+        <a class="forgot" href="login.html" onclick="forgotPassword(event)">Forgot Password</a>
         <button class="submit" id="loginButton" type="submit">Login</button>
 
         <p class="switch">Don't have an account? <button type="button" onclick="switchTab('register')">Create one</button></p>
@@ -495,7 +503,13 @@ input.invalid{
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 let toastTimer;
 
-Auth.redirectIfAuthenticated('index.html');
+/* where to go after signing in: ?next=checkout.html (only plain page names on this site are accepted) */
+const NEXT = (function () {
+  const n = new URLSearchParams(location.search).get('next') || '';
+  return /^(?!login|reset-password|admin)[a-z0-9-]+\.html(\?[a-z0-9=&_-]*)?$/i.test(n) ? n : 'index.html';
+})();
+
+Auth.redirectIfAuthenticated(NEXT);
 
 function showToast(message, isError) {
   const toast = document.getElementById('toast');
@@ -587,6 +601,7 @@ function updateStrength() {
   text.textContent = labels[score] || 'Weak';
 }
 
+
 document.getElementById('loginPanel').addEventListener('submit', async (event) => {
   event.preventDefault();
   clearAllErrors();
@@ -597,7 +612,7 @@ document.getElementById('loginPanel').addEventListener('submit', async (event) =
     const password = document.getElementById('loginPassword').value;
     const data = await Auth.login(email, password);
     showToast('Login successful');
-    const target = data.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
+    const target = data.user?.role === 'admin' ? 'admin-panel.html' : NEXT;
     setTimeout(() => window.location.replace(target), 650);
   } catch (error) {
     showToast(error.message || 'Login failed', true);
@@ -618,7 +633,7 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
     const password  = document.getElementById('registerPassword').value;
     const regData = await Auth.register(firstName, lastName, email, password);
     showToast('Account created successfully');
-    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
+    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : NEXT;
     setTimeout(() => window.location.replace(regTarget), 650);
   } catch (error) {
     showToast(error.message || 'Registration failed', true);
@@ -627,7 +642,7 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
   }
 });
 
-function forgotPassword(event) {
+async function forgotPassword(event) {
   event.preventDefault();
   const email = document.getElementById('loginEmail').value.trim();
   setFieldError('loginEmail', 'loginEmailError', '');
@@ -635,7 +650,12 @@ function forgotPassword(event) {
     setFieldError('loginEmail', 'loginEmailError', 'Enter your email first');
     return;
   }
-  showToast('Forgot Password placeholder - reset email flow is ready for backend email delivery');
+  try {
+    await Auth.forgotPassword(email);
+    showToast('If an account exists for ' + email + ', a password reset link is on its way.');
+  } catch (error) {
+    showToast(error.message || 'Could not send the reset link. Please try again.', true);
+  }
 }
 
 document.getElementById('registerPassword').addEventListener('input', updateStrength);

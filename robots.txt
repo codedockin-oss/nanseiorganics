@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout
+Disallow: /login
+Disallow: /api/
+
+Sitemap: https://nansaiorganics.netlify.app/sitemap.xml

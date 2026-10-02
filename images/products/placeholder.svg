@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Product photo coming soon">
+  <rect width="120" height="120" rx="14" fill="#f0f7f2"/>
+  <path d="M34 86C34 86 44 40 88 34C88 34 84 74 34 86Z" fill="#4a8c5c" fill-opacity=".55"/>
+  <path d="M34 86C46 66 60 52 80 42" stroke="#1a3a2a" stroke-opacity=".35" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>

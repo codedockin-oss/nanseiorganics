@@ -108,6 +108,20 @@ const orderSchema = new mongoose.Schema({
   trackingNumber: String,
   courierService: String,
   estimatedDelivery: Date,
+  // Shiprocket shipping (filled in automatically — see utils/shippingService.js)
+  shiprocketOrderId: String,
+  shiprocketShipmentId: String,
+  trackingUrl: String,
+  shipmentStatus: String,            // courier's own wording, e.g. "IN TRANSIT"
+  shippingError: String,             // last automatic-shipping failure (cleared on success)
+  lastTrackingSync: Date,
+  trackingEvents: [{
+    _id: false,
+    at: Date,
+    status: String,
+    activity: String,
+    location: String
+  }],
   notes: String,
   couponCode: String
 }, {

@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="../js/farm-loader.js" data-text="Fetching your favourites"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="theme-color" content="#0f2218"/>
 <title>Wishlist — Nansai Organics</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="../js/config.js"></script>
-<script src="../frontend/js/api.js"></script>
+<script src="../js/api.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -204,7 +207,9 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.6rem; font-weight: 700; color: var(--gold-lt); line-height: 1;
 }
-.stat-label { font-size: .52rem; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-top: 2px; }
+.stat-label { font-size: .56rem; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-top: 3px; }
+#wishSearchInput::placeholder, #wishSearchMob::placeholder { color: rgba(255,255,255,.5); }
+#wishSearchInput:focus, #wishSearchMob:focus { background: rgba(255,255,255,.16); border-color: var(--gold-lt); }
 
 /* FILTER PILLS */
 .fpill {
@@ -306,7 +311,8 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
   .wish-card-img { height: 170px; }
   .nav-inner { padding: 0 1rem; gap: .6rem; }
   .wish-mob-search { display: block !important; }
-  #wishSearchInput { display: none; }
+  .wish-desk-search { display: none; }
+  .stats-bar { width: 100%; justify-content: space-between; gap: .75rem; padding: .8rem 1rem; }
 }
 
 /* SHARE MODAL */
@@ -338,7 +344,7 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="../js/vendor/lucide-1.49.0.min.js" defer></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -423,13 +429,125 @@ a .nansai-icon,
 }
 </style>
 
+<link rel="icon" type="image/svg+xml" href="nansei_org_logo.svg"/>
+<script src="../js/store-config.js"></script>
+<script src="../js/icons.js"></script>
+<link rel="stylesheet" href="../css/nansai-ui.css?v=3"/>
+<script src="../js/nansai-ui.js?v=3" defer></script>
 </head>
 <body>
 
 <!-- TOAST -->
 <div id="toast"></div>
 
-<div style="background:#fff;border-bottom:1px solid rgba(26,58,42,.07);padding:.9rem 1.5rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(10,30,15,.04);">
+<header class="ns-header" id="nsHeader">
+  <div class="ns-header-inner">
+    <button class="ns-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nsDrawer"><span></span><span></span><span></span></button>
+    <a class="ns-logo" href="index.html" aria-label="Nansei Organics home"><img src="nansei_org_logo.svg" alt="Nansei Organics"/></a>
+    <nav class="ns-links" aria-label="Main">
+      <div class="ns-item">
+        <button class="ns-link" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-shop">Shop<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="ns-mega" id="nsm-shop" role="menu"><div class="ns-mega-in">
+          <div><p class="ns-mega-h">Shop by category</p><ul><li><a href="shop.html?cat=rice" data-ns-cat="rice" role="menuitem"><strong>Rice</strong><span>Heritage &amp; traditional rice from Tamil Nadu</span></a></li><li><a href="shop.html?cat=flowers" data-ns-cat="flowers" role="menuitem"><strong>Dried flowers</strong><span>Sun-dried, aromatic &amp; medicinal flowers</span></a></li><li><a href="shop.html?cat=beverages" data-ns-cat="beverages" role="menuitem"><strong>Beverages</strong><span>Natural drinks crafted with pure ingredients</span></a></li><li><a href="shop.html?cat=flour" data-ns-cat="flour" role="menuitem"><strong>Flour &amp; mixes</strong><span>Hand-pounded &amp; stone-ground flours</span></a></li><li><a href="shop.html?cat=other" data-ns-cat="other" role="menuitem"><strong>More from the farm</strong><span>More goodness from nature</span></a></li></ul></div>
+          <div><p class="ns-mega-h">Collections</p><ul><li><a href="shop.html?cat=new" data-ns-cat="new" role="menuitem"><strong>New arrivals</strong><span>Just landed &mdash; fresh from the farm</span></a></li><li><a href="shop.html?cat=bestseller" data-ns-cat="bestseller" role="menuitem"><strong>Best sellers</strong><span>Most loved by thousands of families</span></a></li><li><a href="shop.html" data-ns-cat="all" role="menuitem"><strong>All products</strong><span>The full organic range</span></a></li></ul><a class="ns-mega-all" href="shop.html" data-ns-cat="all">Shop everything &rarr;</a></div>
+          <a class="ns-mega-promo" href="shop.html?cat=rice" data-ns-cat="rice" style="background-image:url('https://ik.imagekit.io/ueorokkbc/images/field.jpeg')"><span>Farm direct</span><strong>Heritage rice,<br/>grown &amp; milled by hand</strong><span class="cta">Shop rice &rarr;</span></a>
+        </div></div>
+      </div>
+      <div class="ns-item">
+        <button class="ns-link" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-farm">Farm<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="ns-mega" id="nsm-farm" role="menu"><div class="ns-mega-in is-2">
+          <div><p class="ns-mega-h">Our farm</p><ul><li><a href="index.html#mill-heritage-section" role="menuitem"><strong>The hand mill</strong><span>Slow, stone-milled &amp; zero heat</span></a></li><li><a href="index.html#films" role="menuitem"><strong>Films</strong><span>Watch the mill and the farm at work</span></a></li><li><a href="index.html#gallery" role="menuitem"><strong>Farm gallery</strong><span>Moments from our fields</span></a></li></ul></div>
+          <a class="ns-mega-promo" href="index.html#mill-heritage-section" style="background-image:url('https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg')"><span>Traditional knowledge</span><strong>The story behind<br/>our stone mill</strong><span class="cta">Discover &rarr;</span></a>
+        </div></div>
+      </div>
+      <div class="ns-item"><a class="ns-link" href="blog.html">Blogs</a></div>
+      <div class="ns-item">
+        <button class="ns-link" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-help">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="ns-mega" id="nsm-help" role="menu"><div class="ns-mega-in is-2">
+          <div><p class="ns-mega-h">Orders &amp; support</p><ul><li><a href="track-order.html" role="menuitem"><strong>Track my order</strong><span>Live courier updates</span></a></li><li><a href="shipping.html" role="menuitem"><strong>Shipping &amp; delivery</strong><span>How and when your order arrives</span></a></li><li><a href="refund-policy.html" role="menuitem"><strong>Returns &amp; refunds</strong><span>Easy returns and replacements</span></a></li><li><a href="faq.html" role="menuitem"><strong>FAQ</strong><span>Quick answers</span></a></li><li><a href="contact.html" role="menuitem"><strong>Contact us</strong><span>We reply within hours</span></a></li></ul></div>
+          <a class="ns-mega-promo" href="shop.html" style="background-image:url('https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.51%20AM.jpeg')"><span>Free delivery above &#8377;999</span><strong>Fresh from the farm,<br/>to your door</strong><span class="cta">Start shopping &rarr;</span></a>
+        </div></div>
+      </div>
+    </nav>
+    <form class="ns-search" action="shop.html" method="get" role="search"><input name="search" type="search" placeholder="Search products..." autocomplete="off" aria-label="Search products"/><button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></form>
+    <div class="ns-actions">
+      <a class="ns-orders" href="checkout.html?page=orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>My Orders</span></a>
+      <div class="ns-item ns-acct">
+        <button class="ns-icon" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nsm-acct" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="ns-acct-label" data-ns-name>Sign in</span></button>
+        <div class="ns-menu" id="nsm-acct" role="menu">
+          <div data-ns-show="in" hidden><div class="ns-menu-head"><p>Hi, <span data-ns-fullname></span></p><span data-ns-email></span></div></div>
+          <div data-ns-show="out"><div class="ns-menu-head"><p>Welcome</p><span>Sign in to track orders and keep your favourites</span></div><a class="ns-menu-primary" href="login.html" role="menuitem">Sign in / Create account</a></div>
+          <a href="checkout.html?page=orders" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>My orders</a>
+          <a href="wishlist.html" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>Wishlist</a>
+          <a data-ns-show="admin" hidden href="admin-panel.html" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Admin panel</a>
+          <div data-ns-show="in" hidden><hr/><button type="button" class="ns-menu-btn" role="menuitem" data-ns-logout><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out</button></div>
+        </div>
+      </div>
+      <a class="ns-icon" href="wishlist.html" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg><span class="ns-badge" id="wishlistCount" data-ns-count="wishlist">0</span></a>
+      <a class="ns-icon" href="checkout.html" data-ns-cart aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg><span class="ns-badge" id="cartCount" data-ns-count="cart">0</span></a>
+    </div>
+  </div>
+  <div class="ns-msearch"><form action="shop.html" method="get" role="search"><input name="search" type="search" placeholder="Search products..." autocomplete="off" enterkeyhint="search" aria-label="Search products"/><button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></form></div>
+  <div class="ns-drawer" id="nsDrawer" hidden>
+    <div class="ns-drawer-scrim" data-ns-close></div>
+    <aside class="ns-drawer-panel" aria-label="Menu">
+      <div class="ns-drawer-head"><a href="index.html" aria-label="Nansei Organics home" style="padding:0;border:0"><img src="nansei_org_logo.svg" alt="Nansei Organics"/></a><button class="ns-drawer-x" type="button" aria-label="Close menu" data-ns-close>&#10005;</button></div>
+      <div class="ns-drawer-user">
+        <div data-ns-show="in" hidden><div class="who"><span class="av" data-ns-initial>?</span><div><p>Hi, <span data-ns-name></span></p><span data-ns-email></span></div></div></div>
+        <div data-ns-show="out"><p>Welcome</p><span>Sign in to track orders and keep your favourites</span><div class="btns"><a href="login.html">Sign in</a><a href="login.html">Register</a></div></div>
+      </div>
+      <nav aria-label="Mobile">
+        <details><summary>Shop<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><a href="shop.html" data-ns-cat="all">All products</a><a href="shop.html?cat=new" data-ns-cat="new">New arrivals</a><a href="shop.html?cat=bestseller" data-ns-cat="bestseller">Best sellers</a><a href="shop.html?cat=rice" data-ns-cat="rice">Rice</a><a href="shop.html?cat=flowers" data-ns-cat="flowers">Dried flowers</a><a href="shop.html?cat=beverages" data-ns-cat="beverages">Beverages</a><a href="shop.html?cat=flour" data-ns-cat="flour">Flour &amp; mixes</a><a href="shop.html?cat=other" data-ns-cat="other">More from the farm</a></details>
+        <details><summary>Farm<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><a href="index.html#mill-heritage-section">The hand mill</a><a href="index.html#films">Films</a><a href="index.html#gallery">Farm gallery</a></details>
+        <a href="blog.html">Blogs</a>
+        <details><summary>Help<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><a href="track-order.html">Track my order</a><a href="shipping.html">Shipping &amp; delivery</a><a href="refund-policy.html">Returns &amp; refunds</a><a href="faq.html">FAQ</a><a href="contact.html">Contact us</a></details>
+        <a href="checkout.html?page=orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>My Orders</a>
+        <a href="wishlist.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>Wishlist</a>
+        <a href="checkout.html" data-ns-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>Cart</a>
+        <a data-ns-show="admin" hidden href="admin-panel.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Admin panel</a>
+      </nav>
+      <div data-ns-show="in" hidden style="display:flex;flex-direction:column"><button type="button" class="ns-drawer-out" data-ns-logout>Sign out</button></div>
+    </aside>
+  </div>
+</header>
+
+<!-- HERO + STATS -->
+<section class="wish-hero" aria-labelledby="wishTitle">
+  <div class="wish-hero-leaf" style="top:-10px;right:6%;animation:leafDrift 9s ease-in-out infinite;"><svg width="120" height="120" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="#fff"/></svg></div>
+  <div class="wish-hero-leaf" style="bottom:-30px;left:3%;opacity:.07;animation:leafDrift 11s ease-in-out infinite;animation-delay:2s;transform:rotate(120deg);"><svg width="120" height="120" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="#fff"/></svg></div>
+  <div style="position:relative;max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem 2rem;flex-wrap:wrap;">
+    <div style="min-width:0;flex:1 1 320px;">
+      <div style="display:inline-flex;align-items:center;gap:.6rem;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.75rem;">
+        <span style="width:1.6rem;height:1px;background:var(--gold);"></span>Saved for later
+      </div>
+      <h1 id="wishTitle" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.2vw,3.2rem);font-weight:700;color:#fff;line-height:1.05;margin-bottom:.6rem;">My <em style="color:var(--gold-lt);font-style:italic;">Wishlist</em></h1>
+      <p style="font-size:.88rem;color:rgba(255,255,255,.62);max-width:460px;line-height:1.65;">Your farm-fresh favourites, kept safe until you&rsquo;re ready to bring them home.</p>
+      <div style="position:relative;max-width:340px;margin-top:1.1rem;" class="wish-desk-search">
+        <input id="wishSearchInput" type="search" placeholder="Search your wishlist..." autocomplete="off" aria-label="Search your wishlist" oninput="searchWishlist(this.value)" style="width:100%;padding:.6rem 1rem .6rem 2.4rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;font:500 .8rem 'Inter',sans-serif;outline:none;-webkit-appearance:none;appearance:none;"/>
+        <svg style="position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.55);pointer-events:none;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <div class="wish-mob-search" style="display:none;position:relative;margin-top:1rem;">
+        <input id="wishSearchMob" type="search" placeholder="Search your wishlist..." autocomplete="off" aria-label="Search your wishlist" oninput="searchWishlist(this.value)" style="width:100%;padding:.7rem 1rem .7rem 2.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;color:#fff;font:500 16px 'Inter',sans-serif;outline:none;-webkit-appearance:none;appearance:none;"/>
+        <svg style="position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.55);pointer-events:none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+    </div>
+    <div style="flex:0 1 auto;min-width:0;max-width:100%;">
+      <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num" id="statCount">0</div><div class="stat-label">Items</div></div>
+        <div class="stat-item"><div class="stat-num" id="statTotal">&#8377;0</div><div class="stat-label">Total value</div></div>
+        <div class="stat-item"><div class="stat-num" id="statSavings">&#8377;0</div><div class="stat-label">You save</div></div>
+      </div>
+      <div id="savingsGoalWrap" style="display:none;margin-top:.85rem;">
+        <div style="display:flex;justify-content:space-between;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);">
+          <span>Savings goal &middot; &#8377;500</span><span id="savingsGoalPct" style="color:var(--gold-lt);">0%</span>
+        </div>
+        <div class="savings-track" style="background:rgba(255,255,255,.16);"><div class="savings-fill" id="savingsFill" style="width:0%;"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="background:#fff;border-bottom:1px solid rgba(26,58,42,.07);padding:.9rem 1.5rem;position:sticky;top:var(--ns-header-h,68px);z-index:90;box-shadow:0 2px 12px rgba(10,30,15,.04);">
   <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
     <!-- Filter Pills -->
     <div style="display:flex;align-items:center;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;" id="filterRow">
@@ -519,6 +637,47 @@ a .nansai-icon,
 </div>
 
 <!-- MOB BOTTOM BAR -->
+<footer class="nf" id="site-footer">
+  <div class="nf__cta"><div class="nf__w nf__cta-in">
+    <div><span class="nf__eyebrow">Talk to us</span><h2>Questions about your <em>order?</em></h2></div>
+    <div class="nf__side">
+      <p>Message the people who grow and pack your order. <span data-cfg="reply">We usually reply within a few hours.</span></p>
+      <div class="nf__btns">
+        <a class="nf__btn" data-cfg-if="phone" data-cfg-href="wa" data-wa-text="Hello, I have a question about my order." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>Chat on WhatsApp</a>
+        <a class="nf__btn nf__btn--ghost" data-cfg-href="mail" data-subject="Question about my order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Email us</a>
+      </div>
+    </div>
+  </div></div>
+  <div class="nf__w nf__cols">
+    <div class="nf__brand">
+      <img src="nansei_org_logo.svg" alt="Nansei Organics" loading="lazy"/>
+      <p data-cfg="tagline">Experience the Root of Nature</p>
+      <p style="margin-top:10px">Organic rice, dried flowers, beverages and flours from our certified farm in Tamil Nadu &mdash; packed by hand and delivered across India.</p>
+      <div class="nf__social">
+        <a data-cfg-if="insta" data-cfg-href="insta" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+        <a data-cfg-if="phone" data-cfg-href="wa" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg></a>
+        <a data-cfg-href="mail" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+      </div>
+    </div>
+    <div class="nf__col"><h4>Shop</h4>
+      <a href="shop.html">All products</a><a href="shop.html?cat=rice">Rice</a><a href="shop.html?cat=flowers">Dried flowers</a><a href="shop.html?cat=beverages">Beverages</a><a href="shop.html?cat=flour">Flour &amp; mixes</a><a href="bulk-orders.html">Bulk &amp; gifting</a>
+    </div>
+    <div class="nf__col"><h4>Help</h4>
+      <a href="track-order.html">Track your order</a><a href="shipping.html">Shipping &amp; delivery</a><a href="refund-policy.html">Returns &amp; refunds</a><a href="faq.html">FAQ</a><a href="contact.html">Contact us</a>
+    </div>
+    <div class="nf__col"><h4>Nansei</h4>
+      <a href="about.html">Our farm</a><a href="our-grains.html">Know your grains</a><a href="blog.html">Blog</a><a href="privacy-policy.html">Privacy policy</a><a href="terms-and-conditions.html">Terms &amp; conditions</a>
+      <span data-cfg-if="phone" style="margin-top:6px"><a data-cfg-href="tel" style="padding:0" data-cfg="phone"></a></span>
+      <span data-cfg="address" style="margin-top:6px;opacity:.7"></span>
+    </div>
+  </div>
+  <div class="nf__w nf__bottom">
+    <span>&copy; <span data-cfg="year">2026</span> <span data-cfg="legal">Nansei Organics</span>. All rights reserved.<span data-cfg-if="fssai"> &middot; FSSAI <span data-cfg="fssai"></span></span></span>
+    <div class="nf__pay" aria-label="Payment options"><span>UPI</span><span>Cards</span><span>Net banking</span><span>Razorpay secured</span></div>
+    <nav aria-label="Legal"><a href="privacy-policy.html">Privacy</a><a href="terms-and-conditions.html">Terms</a><a href="refund-policy.html">Refunds</a><a href="shipping.html">Shipping</a></nav>
+  </div>
+</footer>
+
 <nav id="mob-sticky-bar">
   <a href="index.html" class="mob-bar-btn">
     <div class="mob-bar-icon-wrap">
@@ -532,13 +691,13 @@ a .nansai-icon,
     </div>
     <span>Blog</span>
   </a>
-  <a href="news.html" class="mob-bar-btn">
+  <a href="checkout.html?page=orders" class="mob-bar-btn">
     <div class="mob-bar-icon-wrap">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
     </div>
-    <span>News</span>
+    <span>Orders</span>
   </a>
-  <a href="farm.html" class="mob-bar-btn">
+  <a href="index.html#mill-heritage-section" class="mob-bar-btn">
     <div class="mob-bar-icon-wrap">
       <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
     </div>
@@ -551,22 +710,23 @@ a .nansai-icon,
    DATA — matches index.html
 ══════════════════════════════════ */
 const products = [
-  {id:1,  name:"Karunguruvai Rice",      category:"rice",      price:180, oldPrice:220, rating:4.7, reviews:142, badge:"hot",  image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop"},
-  {id:2,  name:"Karuppu Kavuni Rice",    category:"rice",      price:220, oldPrice:270, rating:4.8, reviews:198, badge:"hot",  image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
-  {id:3,  name:"Arubatham Kuruvai Rice", category:"rice",      price:160, oldPrice:200, rating:4.5, reviews:87,  badge:"new",  image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
-  {id:4,  name:"Poongar Rice",           category:"rice",      price:200, oldPrice:250, rating:4.6, reviews:113, badge:"sale", image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:5,  name:"Mappillai Samba Rice",   category:"rice",      price:210, oldPrice:260, rating:4.7, reviews:156, badge:"hot",  image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
-  {id:6,  name:"Iluppai Poo Samba Rice", category:"rice",      price:195, oldPrice:240, rating:4.5, reviews:74,  badge:"new",  image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
-  {id:7,  name:"Vellai Kavuni Rice",     category:"rice",      price:190, oldPrice:235, rating:4.6, reviews:91,  badge:"new",  image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
-  {id:8,  name:"Paneer Rose",            category:"flowers",   price:150, oldPrice:190, rating:4.8, reviews:204, badge:"hot",  image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
-  {id:9,  name:"Hibiscus Flower",        category:"flowers",   price:120, oldPrice:155, rating:4.6, reviews:167, badge:"sale", image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
-  {id:10, name:"Aavaram Flower",         category:"flowers",   price:110, oldPrice:145, rating:4.5, reviews:88,  badge:"new",  image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
-  {id:11, name:"Butterfly Pea Flower",   category:"flowers",   price:180, oldPrice:220, rating:4.7, reviews:132, badge:"hot",  image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
-  {id:12, name:"Organic Rose Milk",      category:"beverages", price:140, oldPrice:175, rating:4.7, reviews:219, badge:"hot",  image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
-  {id:13, name:"Hibiscus Sherbet",       category:"beverages", price:130, oldPrice:165, rating:4.6, reviews:143, badge:"sale", image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
-  {id:14, name:"Idiyappam Flour",        category:"flour",     price:160, oldPrice:200, rating:4.8, reviews:178, badge:"hot",  image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:15, name:"Health Mix Powder",      category:"flour",     price:175, oldPrice:215, rating:4.6, reviews:94,  badge:"new",  image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
-  {id:16, name:"Country Fig Powder",     category:"other",     price:200, oldPrice:250, rating:4.7, reviews:61,  badge:"new",  image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
+  {id:1, name:"Karunguruvai Rice",                 category:"rice",     price:180,oldPrice:220,rating:4.7,reviews:142,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602"},
+  {id:2, name:"Karuppu Kavuni Rice",               category:"rice",     price:220,oldPrice:270,rating:4.8,reviews:198,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741"},
+  {id:3, name:"Arubatham Kuruvai Rice",            category:"rice",     price:160,oldPrice:200,rating:4.5,reviews:87, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png"},
+  {id:4, name:"Poongar Rice",                      category:"rice",     price:200,oldPrice:250,rating:4.6,reviews:113,badge:"sale",section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674"},
+  {id:5, name:"Mappillai Samba Rice",              category:"rice",     price:210,oldPrice:260,rating:4.7,reviews:156,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png"},
+  {id:6, name:"Iluppai Poo Samba Rice",            category:"rice",     price:195,oldPrice:240,rating:4.5,reviews:74, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667"},
+  {id:7, name:"Vellai Kavuni Rice",                category:"rice",     price:190,oldPrice:235,rating:4.6,reviews:91, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240"},
+  {id:8, name:"Paneer Rose",                       category:"flowers",  price:150,oldPrice:190,rating:4.8,reviews:204,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png"},
+  {id:9, name:"Hibiscus Flower",                   category:"flowers",  price:120,oldPrice:155,rating:4.6,reviews:167,badge:"sale",section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png"},
+  {id:10,name:"Aavaram Flower",                    category:"flowers",  price:110,oldPrice:145,rating:4.5,reviews:88, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png"},
+  {id:11,name:"Sangupoo",                          category:"flowers",  price:180,oldPrice:220,rating:4.7,reviews:132,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png"},
+  {id:12,name:"Organic Rose Milk",                 category:"beverages",price:140,oldPrice:175,rating:4.7,reviews:219,badge:"hot", section:"bestseller",image:"../images/products/rose-milk.svg"},
+  {id:13,name:"Hibiscus Sherbet",                  category:"beverages",price:130,oldPrice:165,rating:4.6,reviews:143,badge:"sale",section:"bestseller",image:"../images/products/hibiscus-sherbet.svg"},
+  {id:14,name:"Hand-pounded Rice Idiyappam Flour", category:"flour",    price:160,oldPrice:200,rating:4.8,reviews:178,badge:"hot", section:"bestseller",image:"../images/products/idiyappam-flour.svg"},
+  {id:15,name:"Natural Fig Powder",                category:"flour",    price:175,oldPrice:215,rating:4.6,reviews:94, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png"},
+  {id:17,name:"Black Urad Dal Health Mix Powder",  category:"flour",    price:175,oldPrice:215,rating:4.6,reviews:94, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png"},
+  {id:16,name:"Natural Fig Powder",                category:"other",    price:200,oldPrice:250,rating:4.7,reviews:61, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png"},
 ];
 
 const QTY_CFG = {
@@ -921,7 +1081,7 @@ function renderCartDrawer(){
   }).join('');
   if(footer){
     footer.style.display='block';
-    footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">₹${total}</span></div><a href="checkoutmyorderpage.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout →</a>`;
+    footer.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;"><span style="font-size:.82rem;font-weight:600;color:#6b7280;">Subtotal</span><span style="font-size:1rem;font-weight:800;color:#166534;">₹${total}</span></div><a href="checkout.html" style="display:block;text-align:center;background:var(--forest-deep);color:#fff;padding:.75rem;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Proceed to Checkout →</a>`;
   }
 }
 function cartQty(idx,delta){ const i=cart[idx]; if(!i)return; i.qty=Math.max(1,(i.qty||1)+delta); if(i.basePrice&&i.qtyVal&&i.unit){const m=i.unit==='ml'?i.qtyVal/1000:i.qtyVal;i.price=Math.round(i.basePrice*m);} saveCart(); renderCartDrawer(); }
@@ -955,7 +1115,7 @@ document.querySelectorAll('.sr').forEach(el=>srObserver.observe(el));
 ══════════════════════════════════ */
 /* ════ AUTH NAV ════ */
 (function(){
-  if(typeof Auth !== 'undefined') Auth.requireAuth('login.html');
+  if(typeof Auth !== 'undefined') Auth.requireAuth('login.html?next=wishlist.html');
 })();
 
 (function(){
@@ -965,11 +1125,31 @@ document.querySelectorAll('.sr').forEach(el=>srObserver.observe(el));
   if(ordersBtn) ordersBtn.style.display = 'flex';
   if(!user || user.role==='admin') return;
   const firstName = (user.name||'').split(' ')[0]||'User';
-  if(accountBtn){ accountBtn.href='account.html'; accountBtn.title='Hi, '+firstName; }
+  if(accountBtn){ accountBtn.href='checkout.html?page=orders'; accountBtn.title='Hi, '+firstName; }
 })();
 
 renderWishlist();
 syncCounters();
+// Use the live catalogue when the API is reachable (static list above is the fallback)
+(function(){
+  const base = window.API_BASE || '/api';
+  fetch(base + '/products?limit=100')
+    .then(r => r.json())
+    .then(data => {
+      if (!data.success || !data.products?.length) return;
+      const live = data.products.map(p => ({
+        id: p._id, name: p.name, category: p.category, price: p.price,
+        oldPrice: p.oldPrice || Math.round(p.price * 1.25),
+        rating: Number(p.numReviews || 0) > 0 ? Number(p.rating || 0) : 0,
+        reviews: p.numReviews || 0, badge: p.badge || 'new',
+        image: p.images?.[0]?.url || p.image || ''
+      }));
+      products.length = 0;
+      live.forEach(p => products.push(p));
+      renderWishlist();
+    })
+    .catch(() => {});
+})();
 // Sync wishlist from backend if logged in
 (function(){
   const token=localStorage.getItem('nansai_token');

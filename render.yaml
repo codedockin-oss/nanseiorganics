@@ -40,4 +40,13 @@ services:
         sync: false
       - key: ADMIN_EMAIL
         value: admin@nansaiorganics.com
+      # Shiprocket (automatic shipping + tracking) — optional, see DEPLOY.md step 7
+      - key: SHIPROCKET_EMAIL
+        sync: false
+      - key: SHIPROCKET_PASSWORD
+        sync: false
+      - key: SHIPROCKET_PICKUP_LOCATION
+        value: Primary
+      - key: SHIPROCKET_WEBHOOK_TOKEN
+        sync: false
     healthCheckPath: /api/health
