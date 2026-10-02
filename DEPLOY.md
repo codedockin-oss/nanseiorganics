@@ -97,8 +97,8 @@ git push -u origin main
 | `EMAIL_FROM` | `Nansai Organics <your-gmail@gmail.com>` |
 | `ADMIN_EMAIL` | `admin@nansaiorganics.com` |
 
-7. Click **Deploy** — your API will be live at `https://nansei-backend.onrender.com`
-8. Test it: `https://nansei-backend.onrender.com/api/health`
+7. Click **Deploy** — your API will be live at `https://nanseiorganics.onrender.com`
+8. Test it: `https://nanseiorganics.onrender.com/api/health`
 
 ---
 
@@ -117,7 +117,7 @@ git push -u origin main
 Open `pages/js/config.js` and confirm the production URL matches your Render service:
 
 ```js
-const PRODUCTION_API = 'https://nansei-backend.onrender.com/api';
+const PRODUCTION_API = 'https://nanseiorganics.onrender.com/api';
 ```
 
 Then go back to Render → Environment → set `FRONTEND_URL` to your Netlify URL.

@@ -1,5 +1,5 @@
 # ── API proxy: the browser talks to /api on this domain, Netlify forwards it to the Render backend ──
-/api/*  https://nansei-backend.onrender.com/api/:splat  200!
+/api/*  https://nanseiorganics.onrender.com/api/:splat  200!
 
 # ── Old links that still carry the /pages/ prefix (emails, bookmarks, sitemap) ──
 /pages        /          301
