@@ -248,7 +248,7 @@ add('home mobile: drawer, back-to-top, no sideways scroll, hero fits', async () 
   const p = await newPage(390); await go(p, 'index.html');
   check((await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 1, 'horizontal scroll on mobile');
   const hero = await p.$eval('#hero', e => e.getBoundingClientRect().height);
-  check(hero > 380 && hero < 640, 'hero height odd on a phone: ' + hero);
+  check(hero > 250 && hero < 430, 'hero height odd on a phone: ' + hero);
   await p.click('.ns-burger'); await sleep(400);
   check(await p.$eval('.ns-drawer', e => !e.hidden), 'drawer not open');
   await p.click('.ns-drawer-x'); await sleep(300);
@@ -330,17 +330,19 @@ add('product: tabs switch, removed sections stay removed', async () => {
 });
 
 /* ---------------- WISHLIST / CHECKOUT / ACCOUNT ---------------- */
-add('wishlist: render, filter, add all, remove', async () => {
+add('wishlist: simple page - saved items only, add all, un-heart removes, clear all', async () => {
   const p = await newPage(1440, { auth: true, storage: { wishlist: ['1', '8', '12'] } }); await go(p, 'wishlist.html');
-  check((await p.$$eval('#wishGrid .wish-card', e => e.length)) === 3, 'expected 3 cards');
-  check(await text(p, '#statCount') === '3', 'stat count wrong');
-  await p.click('#filterRow .fpill[data-cat="flowers"]'); await sleep(400);
-  check((await p.$$eval('#wishGrid .wish-card', e => e.length)) === 1, 'flower filter wrong');
-  await p.click('#filterRow .fpill[data-cat="all"]'); await sleep(300);
-  await p.evaluate(() => addAllToCart()); await sleep(300);
+  const cards = () => p.$$eval('#wlGrid .prod-card', e => e.length);
+  check(await cards() === 3, 'expected 3 saved cards, got ' + await cards());
+  check(/3 saved items/.test(await text(p, '#wlCount')), 'count line wrong: ' + await text(p, '#wlCount'));
+  check(!(await p.$('#wishGrid, .stats-bar, #recSection, #filterRow')), 'old wishlist clutter is back');
+  await p.click('#wlAll'); await sleep(300);
   check((await ls(p, 'cart')).length === 3, 'add-all did not add 3 items');
-  await p.evaluate(() => removeFromWishlist('1')); await sleep(700);
-  check((await p.$$eval('#wishGrid .wish-card', e => e.length)) === 2, 'remove did not update grid');
+  await p.click('#wlGrid .prod-card .pc-wish'); await sleep(700);
+  check(await cards() === 2, 'un-hearting did not remove the card');
+  p.on('dialog', d => d.accept());
+  await p.click('#wlClear'); await sleep(400);
+  check(await cards() === 0 && await p.$eval('#wlEmpty', e => !e.hidden), 'empty state not shown after clearing');
   await done(p);
 });
 add('checkout: cart step shows totals, no damaged text', async () => {
@@ -380,7 +382,7 @@ add('checkout: COD order reaches the API with the right pincode/city, address is
   await done(p);
 });
 add('my orders: only orders, greets the user, scroll reveal on, sign out works', async () => {
-  const p = await newPage(1440, { auth: true }); await go(p, 'checkout.html?page=orders');
+  const p = await newPage(1440, { auth: true }); await go(p, 'orders.html');
   check(await p.$eval('#ordersPage', e => e.classList.contains('active')), 'orders view not active');
   check(!(await p.$('#page-addresses, #page-profile, #page-security')), 'account sections are back');
   check(/Hi,\s*Test/.test(await p.evaluate(() => document.body.innerText)), 'greeting missing');
@@ -392,7 +394,7 @@ add('my orders: only orders, greets the user, scroll reveal on, sign out works',
 const resetMock = () => fetch(`http://127.0.0.1:${API_PORT}/api/__reset`, { method: 'POST' });
 add('my orders: Track Package shows the courier scans, tracking number and a live link', async () => {
   await resetMock();
-  const p = await newPage(1440, { auth: true }); await go(p, 'checkout.html?page=orders');
+  const p = await newPage(1440, { auth: true }); await go(p, 'orders.html');
   check(/track package/i.test(await p.evaluate(() => document.getElementById('ordersList').innerText)), 'no Track Package button on the shipped order');
   await p.evaluate(() => openTrack('NO-1003')); await sleep(900);
   const info = await p.evaluate(() => ({
@@ -408,7 +410,7 @@ add('my orders: Track Package shows the courier scans, tracking number and a liv
 });
 add('my orders: invoice opens and cancel works on real orders; a dispatched order cannot be cancelled', async () => {
   await resetMock();
-  const p = await newPage(1440, { auth: true }); await go(p, 'checkout.html?page=orders');
+  const p = await newPage(1440, { auth: true }); await go(p, 'orders.html');
   await p.evaluate(() => openInvoice('NO-1002')); await sleep(300);
   check(await p.$eval('#invoiceModal', e => e.classList.contains('open')) && /NO-1002/.test(await text(p, '#inv-id')), 'invoice did not open for a server order');
   await p.evaluate(() => closeModal('invoiceModal'));
@@ -467,7 +469,7 @@ add('checkout: empty cart shows only the empty state with a way back to the shop
   await done(p);
 });
 add('my orders mobile: header fits, cards fit, no sideways scroll', async () => {
-  const p = await newPage(390, { auth: true }); await go(p, 'checkout.html?page=orders');
+  const p = await newPage(390, { auth: true }); await go(p, 'orders.html');
   check((await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 1, 'sideways scroll');
   const r = await p.evaluate(() => { const t = document.querySelector('#ordersPage h1').getBoundingClientRect(), w = document.querySelector('.ck-who').getBoundingClientRect(); return { overlap: !(t.right <= w.left || w.right <= t.left || t.bottom <= w.top || w.bottom <= t.top) }; });
   check(!r.overlap, 'Sign out overlaps the My Orders title');

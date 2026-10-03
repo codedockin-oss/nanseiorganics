@@ -16,7 +16,7 @@ function template(order, kind) {
     ? `<p style="margin:22px 0 0;"><a href="${esc(order.trackingUrl)}" style="background:#0f2218;color:#e8c97a;text-decoration:none;padding:13px 26px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;display:inline-block;">Track your parcel</a></p>` : '';
   const awb = order.trackingNumber
     ? `<p style="margin:14px 0 0;font-size:13px;color:#5d6b60;">${esc(order.courierService || 'Courier')} &middot; Tracking number <strong style="color:#0f2218;">${esc(order.trackingNumber)}</strong></p>` : '';
-  const orders = `${FRONTEND()}/pages/checkout.html?page=orders`;
+  const orders = `${FRONTEND()}/orders.html`;
   return `<!DOCTYPE html><html><body style="margin:0;background:#f4f6f0;font-family:Helvetica,Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="padding:28px 14px;"><tr><td align="center">
 <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#fff;">

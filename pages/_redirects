@@ -7,8 +7,8 @@
 /pages/*      /:splat    301
 
 # ── Friendly URLs ──
-/account       /checkout.html?page=orders  200
-/orders        /checkout.html              200
+/account       /orders.html  200
+/orders        /orders.html                200
 /admin         /admin-panel.html           200
 /product       /product.html               200
 /login         /login.html                 200

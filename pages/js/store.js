@@ -13,7 +13,7 @@
     '<div id="cartBackdrop" onclick="closeCart()" style="display:none;position:fixed;inset:0;background:rgba(8,18,12,.5);z-index:1400;backdrop-filter:blur(2px);"></div>' +
     '<div id="cartDrawer" role="dialog" aria-label="Your cart" style="position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);background:#fff;z-index:1401;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.18,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.18);">' +
     '<div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(201,168,76,.35);">' +
-    '<h2 style="font-family:\'Cormorant Garamond\',serif;font-size:1.6rem;font-weight:700;color:#0f2218;margin:0;">Your Cart</h2>' +
+    '<h2 style="font-family:-apple-system,\'Segoe UI\',Roboto,sans-serif;font-size:1.6rem;font-weight:700;color:#0f2218;margin:0;">Your Cart</h2>' +
     '<button onclick="closeCart()" aria-label="Close cart" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(15,34,24,.18);background:none;cursor:pointer;font-size:1rem;color:#0f2218;display:flex;align-items:center;justify-content:center;">&#10005;</button></div>' +
     '<div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>' +
     '<div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(15,34,24,.1);"></div></div>';
@@ -31,7 +31,7 @@ function showToast(msg){
 /* ---- PRODUCTS (shared catalogue: js/catalog-data.js) ---- */
 const products=(window.NS_PRODUCTS||[]).map(function(p){return Object.assign({},p);});
 
-let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]');
+let wishlist=(function(){try{return JSON.parse(localStorage.getItem('wishlist')||'[]').map(function(x){return isNaN(x)?x:Number(x);});}catch(e){return [];}})();   // ids are numbers (older saves used strings)
 let cart=JSON.parse(localStorage.getItem('cart')||'[]');
 
 function stars(r){
@@ -68,38 +68,37 @@ function syncCounters(){
 
 /* ---- PRODUCT CARD HTML ---- */
 const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4','prod-float-5','prod-float-6'];
+const CART_ICON='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>';
+function addBtnHTML(id){
+  return `<button id="cartbtn-${id}" class="pc-add" type="button" onclick="startQtySelect(${id},this);event.preventDefault();event.stopPropagation()">${CART_ICON}<span>Add to cart</span></button>`;
+}
 function prodCardHTML(p,i){
   const d=disc(p);
   const isW=wishlist.includes(p.id);
   const badgeEl=p.badge==='hot'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${nanseiIcon('flame').replace('<svg','<svg width="11" height="11" style="vertical-align:-1px"')} HOT</span>`
+    ?`<span class="pc-badge pc-hot">${nanseiIcon('flame').replace('<svg','<svg width="11" height="11"')} Best seller</span>`
     :p.badge==='new'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${nanseiIcon('sparkle').replace('<svg','<svg width="11" height="11" style="vertical-align:-1px"')} NEW</span>`
-    :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
+    ?`<span class="pc-badge pc-new">${nanseiIcon('sparkle').replace('<svg','<svg width="11" height="11"')} New</span>`
+    :`<span class="pc-badge pc-sale">${d}% off</span>`;
   const fc=floatClasses[i%floatClasses.length];
-  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:100%;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
-    <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
+  return `<div class="prod-card pc ${fc}" style="flex-shrink:0;width:100%;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
+    <div class="prod-img-wrap">
       ${badgeEl}
-      <button onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:8px;right:8px;width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.18);border:none;cursor:pointer;z-index:10;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="${isW?'#ef4444':'none'}" stroke="${isW?'#ef4444':'#ef4444'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:fill .2s,stroke .2s;"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
+      <button class="pc-wish" type="button" aria-label="Add to wishlist" onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="${isW?'#ef4444':'none'}" stroke="${isW?'#ef4444':'#9ca3af'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
       </button>
       <img src="${p.image}" alt="${p.name}" loading="lazy" class="prod-img"/>
     </div>
-    <div class="prod-info" style="overflow:visible;">
-      <span style="font-size:.68rem;font-weight:400;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;">${p.category}</span>
-      <h3 style="font-size:.95rem;font-weight:700;color:#1a2416;line-height:1.3;font-family:'Inter',sans-serif;">${p.name}</h3>
-      <div style="display:flex;align-items:center;gap:3px;overflow:hidden;"><span style="display:flex;align-items:center;gap:1px;flex-shrink:0;">${stars(p.rating)}</span><span style="color:#9ca3af;font-size:.72rem;margin-left:2px;font-family:'Inter',sans-serif;" class="rating-text">${ratingText(p)}</span></div>
-      <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:2px;">
-        <span data-card-price style="color:#166534;font-weight:900;font-size:1.1rem;font-family:'Inter',sans-serif;">₹${p.price}</span>
-        <span data-card-old style="color:#9ca3af;font-size:.78rem;text-decoration:line-through;font-family:'Inter',sans-serif;">₹${p.oldPrice}</span>
-        <span data-card-disc style="background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px;font-family:'Inter',sans-serif;">${d}% off</span>
+    <div class="prod-info">
+      <span class="pc-cat">${p.category}</span>
+      <h3 class="pc-name">${p.name}</h3>
+      <div class="pc-rate"><span class="pc-stars">${stars(p.rating)}</span><span class="rating-text">${ratingText(p)}</span></div>
+      <div class="pc-price">
+        <span data-card-price class="pc-now">₹${p.price}</span>
+        <span data-card-old class="pc-old">₹${p.oldPrice}</span>
+        <span data-card-disc class="pc-off">${d}% off</span>
       </div>
-      <div id="cardbtn-area-${p.id}" class="prod-btn-area" style="margin-top:auto;">
-        <button id="cartbtn-${p.id}" onclick="startQtySelect(${p.id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-          Add to Cart
-        </button>
-      </div>
+      <div id="cardbtn-area-${p.id}" class="prod-btn-area">${addBtnHTML(p.id)}</div>
     </div>
   </div>`;
 }
@@ -163,7 +162,7 @@ function startQtySelect(id,triggerBtn){
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
     </button>
   </div>
-  <a href="product.html?id=${p.id}" onclick="event.stopPropagation()" style="display:block;width:100%;text-align:center;font-size:.68rem;font-weight:600;color:var(--forest-leaf);padding:5px 0 2px;text-decoration:none;letter-spacing:.03em;border-top:1px solid rgba(26,58,42,.07);margin-top:5px;transition:color .2s;" onmouseover="this.style.color='var(--forest-deep)'" onmouseout="this.style.color='var(--forest-leaf)'">View Product &rarr;</a>`;
+  <a class="pc-view" href="product.html?id=${p.id}" onclick="event.stopPropagation()">View product &rarr;</a>`;
 }
 
 function selectPill(id,val,btn){
@@ -211,10 +210,7 @@ function confirmAddToCart(id,triggerBtn){
       card.style.zIndex='1';
       if(card._floatClass) card.classList.add(card._floatClass);
     }
-    area.innerHTML=`<button id="cartbtn-${id}" onclick="startQtySelect(${id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-      Add to Cart
-    </button>`;
+    area.innerHTML=addBtnHTML(id);
   },1600);
 }
 

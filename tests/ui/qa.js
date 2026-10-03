@@ -15,7 +15,7 @@ const vwArg = (args.find(a => a.startsWith('--vw=')) || '').slice(5);
 const VIEWPORTS = (vwArg ? vwArg.split(',').map(Number) : [1440, 768, 390]).map(w => ({ w, h: w < 500 ? 844 : 900 }));
 const PAGES = [
   'index.html', 'shop.html', 'shop.html?cat=rice', 'about.html', 'our-grains.html', 'faq.html', 'shipping.html', 'contact.html', 'bulk-orders.html', 'track-order.html', '404.html', 'product.html?id=1', 'product.html?id=8', 'product.html?id=12', 'wishlist.html',
-  'checkout.html', 'checkout.html?page=orders', 'blog.html',
+  'checkout.html', 'orders.html', 'blog.html',
   'login.html', 'reset-password.html?token=demo', 'admin-panel.html',
   'privacy-policy.html', 'refund-policy.html', 'terms-and-conditions.html',
 ].filter(p => !filter || p.includes(filter));

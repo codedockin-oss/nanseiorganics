@@ -1,6 +1,6 @@
 /* ==========================================================================
    Nansei Organics — design system v2
-   Forest green ink, warm cream paper, harvest gold. Headings: Cormorant Garamond · Body: Inter.
+   Forest green ink, warm cream paper, harvest gold. Type: one system sans for headings and body.
    Used by the home, shop and information pages (add class="n" to <body>).
    ========================================================================== */
 
@@ -26,8 +26,8 @@
   --ok: #2d6a4a;
   --err: #b83232;
   --wa: #25d366;
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;
+  --sans: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;
   --ease: cubic-bezier(.22, 1, .36, 1);
   --ease-io: cubic-bezier(.76, 0, .24, 1);
   --ease-back: cubic-bezier(.34, 1.56, .64, 1);
@@ -338,14 +338,14 @@ n-icon svg { width: 100%; height: 100%; }
 .hb.is-paused .hb__dots button.is-on i { animation-play-state: paused; }
 @keyframes hb-dot { to { transform: scaleX(1); } }
 @media (max-width: 760px) {
-  .hb { height: min(122vw, 580px); }
+  .hb { height: min(84vw, 360px); }
   .hb__bg { display: none; }
   .hb__img { width: 100%; -webkit-mask-image: none; mask-image: none; }
   .hb__slide::after { background: linear-gradient(180deg, rgba(8, 18, 12, .18) 0%, rgba(8, 18, 12, .4) 38%, rgba(8, 18, 12, .86) 100%); }
-  .hb__text { justify-content: flex-end; align-items: center; text-align: center; padding-bottom: 58px; }
-  .hb__l1 { letter-spacing: .12em; margin-right: -.12em; font-size: 40px; }
-  .hb__l2 { margin: -.02em 0 0 .8em; font-size: 70px; }
-  .hb__cta { height: 44px; padding: 0 22px; font-size: 12px; margin-top: 18px; }
+  .hb__text { justify-content: flex-end; align-items: center; text-align: center; padding-bottom: 40px; }
+  .hb__l1 { letter-spacing: .12em; margin-right: -.12em; font-size: 30px; }
+  .hb__l2 { margin: -.02em 0 0 .8em; font-size: 50px; }
+  .hb__cta { height: 40px; padding: 0 20px; font-size: 11px; margin-top: 12px; }
   .hb__arrow { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .hb__slide { transition: none; } }
@@ -498,3 +498,7 @@ n-icon svg { width: 100%; height: 100%; }
 .track-card { max-width: 760px; margin: calc(-1 * clamp(24px, 4vw, 48px)) auto 0; }
 .faq-group h3 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); }
 @media (max-width: 560px) { .ns-doc--in .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .ns-doc--in .summary-card { padding: 16px 10px; } .ns-doc--in .summary-card .value { font-size: 1.15rem; } }
+
+/* One sans family everywhere (offduty.in style): tighter, slightly lighter headlines than the old serif */
+.display-xl, .display, .h-xl, .h-lg, .h-md, .h-sm { letter-spacing: -.025em; font-weight: 700; }
+.display em, .h-xl em, .h-lg em, .h-md em { font-style: normal; }

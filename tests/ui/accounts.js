@@ -253,7 +253,7 @@ add('reset password: bad links and weak passwords are explained; a good link sig
   check(/do not match/i.test(await text(p, '#confirmErr')), 'mismatch not explained');
   await fill(p, '#confirm', 'Brand#New123'); await p.click('#submitBtn'); await sleep(500);
   check(/password updated/i.test(await toast(p)), 'success message missing: ' + await toast(p));
-  check(await waitUrl(p, /checkout\.html\?page=orders/, 5000), 'should continue to My Orders: ' + p.url());
+  check(await waitUrl(p, /orders\.html/, 5000), 'should continue to My Orders: ' + p.url());
   check((await ls(p, 'nansai_token')) === 'tok:u1', 'should be signed in after a reset');
   await p.__ctx.close();
 
