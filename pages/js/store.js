@@ -92,11 +92,13 @@ function prodCardHTML(p,i){
     <div class="prod-info">
       <span class="pc-cat">${p.category}</span>
       <h3 class="pc-name">${p.name}</h3>
-      <div class="pc-rate"><span class="pc-stars">${stars(p.rating)}</span><span class="rating-text">${ratingText(p)}</span></div>
-      <div class="pc-price">
-        <span data-card-price class="pc-now">₹${p.price}</span>
-        <span data-card-old class="pc-old">₹${p.oldPrice}</span>
-        <span data-card-disc class="pc-off">${d}% off</span>
+      <div class="pc-meta">
+        <div class="pc-rate"><span class="pc-stars">${stars(p.rating)}</span><span class="rating-text">${ratingText(p)}</span></div>
+        <div class="pc-price">
+          <span data-card-price class="pc-now">₹${p.price}</span>
+          <span data-card-old class="pc-old">₹${p.oldPrice}</span>
+          <span data-card-disc class="pc-off">${d}% off</span>
+      </div>
       </div>
       <div id="cardbtn-area-${p.id}" class="prod-btn-area">${addBtnHTML(p.id)}</div>
     </div>
