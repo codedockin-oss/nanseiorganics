@@ -99,7 +99,7 @@ body > nav.ck-scrolled { box-shadow: 0 10px 30px rgba(10, 30, 15, .09) !importan
 }
 .summary-header::after { content: ''; position: absolute; left: 24px; right: 24px; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(232, 201, 122, .7), transparent); }
 .summary-total-row { padding-top: 4px; }
-.summary-total-row > span:last-child, .summary-total-row [id*="Total"] { font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; font-variant-numeric: lining-nums; font-size: 1.9rem !important; font-weight: 700 !important; line-height: 1; }
+.summary-total-row > span:last-child, .summary-total-row [id*="Total"] { font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-variant-numeric: lining-nums; font-size: 1.9rem !important; font-weight: 700 !important; line-height: 1; }
 .summ-item { transition: background .2s; }
 .summ-item:hover { background: rgba(201, 168, 76, .06); }
 .savings-banner { background: linear-gradient(135deg, rgba(201, 168, 76, .14), rgba(45, 90, 61, .06)) !important; border-color: rgba(201, 168, 76, .35) !important; }
@@ -133,7 +133,7 @@ body > nav.ck-scrolled { box-shadow: 0 10px 30px rgba(10, 30, 15, .09) !importan
 .ck-eyebrow::before { content: ''; width: 1.6rem; height: 1px; background: var(--gold); }
 .ck-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 26px; max-width: 560px; }
 .ck-stat { padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .13); backdrop-filter: blur(6px); }
-.ck-stat b { display: block; font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; font-size: 2rem; line-height: 1; color: #e8c97a; font-weight: 700; font-variant-numeric: lining-nums; }
+.ck-stat b { display: block; font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 2rem; line-height: 1; color: #e8c97a; font-weight: 700; font-variant-numeric: lining-nums; }
 .ck-stat span { display: block; margin-top: 5px; font-size: .58rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: rgba(255, 255, 255, .62); }
 
 /* ---------- MY ORDERS: cards ---------- */
@@ -193,7 +193,7 @@ body > nav.ck-scrolled { box-shadow: 0 10px 30px rgba(10, 30, 15, .09) !importan
 
 /* greeting + sign out in the My Orders banner */
 .ck-who { position: absolute !important; top: 22px; right: clamp(18px, 3vw, 34px); display: flex; align-items: center; gap: 12px; font-size: .82rem; color: rgba(255,255,255,.85); }
-.ck-who button { padding: 7px 16px; border-radius: 99px; border: 1px solid rgba(232,201,122,.55); background: rgba(255,255,255,.08); color: #e8c97a; font: 600 .74rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .04em; transition: background .2s, color .2s; }
+.ck-who button { padding: 7px 16px; border-radius: 99px; border: 1px solid rgba(232,201,122,.55); background: rgba(255,255,255,.08); color: #e8c97a; font: 600 .74rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .04em; transition: background .2s, color .2s; }
 .ck-who button:hover { background: #e8c97a; color: #0f2218; }
 @media (max-width: 720px) { .ck-who { position: static !important; margin-top: 16px; } }
 
@@ -242,6 +242,6 @@ input, select, textarea { border-radius: 8px !important; }
 
 /* site links beside the logo (hidden on small screens, where the page's own Checkout / Orders switch is enough) */
 .ck-navlinks { display: flex; gap: 1.6rem; margin: 0 auto 0 2.2rem; }
-.ck-navlinks a { font: 600 .7rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--forest-deep, #0f2218); text-decoration: none; padding: .4rem 0; border-bottom: 1px solid transparent; transition: border-color .3s, color .3s; }
+.ck-navlinks a { font: 600 .7rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--forest-deep, #0f2218); text-decoration: none; padding: .4rem 0; border-bottom: 1px solid transparent; transition: border-color .3s, color .3s; }
 .ck-navlinks a:hover { color: var(--forest-mid, #2d5a3d); border-bottom-color: var(--gold, #c9a84c); }
 @media (max-width: 760px) { .ck-navlinks { display: none; } }

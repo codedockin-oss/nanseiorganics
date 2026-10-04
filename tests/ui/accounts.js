@@ -270,34 +270,30 @@ add('reset password: bad links and weak passwords are explained; a good link sig
 });
 
 /* ------------------------------------------------------------------- guest -> sign in -> back */
-add('guest checkout: asked to sign in, comes back to checkout with the cart intact, and the order goes through', async () => {
+add('guest checkout: asked to sign in, comes back to checkout with the cart and details intact, and the order goes through', async () => {
   await resetMock();
   const cart = [{ id: 1, name: 'Karunguruvai Rice', price: 180, basePrice: 180, image: '', qty: 2, qtyVal: 1, qtyLabel: '1kg', unit: 'kg' }];
-  const p = await newPage(1280, { storage: { cart } }); await go(p, 'checkout.html');
-  await p.evaluate(() => {
-    const set = (id, v) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('blur', { bubbles: true })); };
-    set('coName', 'Asha Raman'); set('coMobile', '9876543210'); set('coAddr1', '12 Farm Road'); set('coCity', 'Thanjavur'); set('coPin', '613001'); set('coState', 'Tamil Nadu');
+  const fill = (p) => p.evaluate(() => {
+    const set = (id, v) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); };
+    set('cPhone', '9876543210'); set('cEmail', 'asha@example.com'); set('dFirst', 'Asha'); set('dLast', 'Raman'); set('dAddr', '12 Farm Road'); set('dCity', 'Thanjavur'); set('dPin', '613001');
   });
-  await sleep(1500);
-  await p.evaluate(() => { document.getElementById('coState').value = 'Tamil Nadu'; document.getElementById('coCity').value = 'Thanjavur'; goToPayment(); }); await sleep(800);
-  await p.evaluate(() => { goStep(3); selectGateway('cod'); initiateRazorpay(); }); await sleep(600);
-  check(/login/i.test(await toast(p)) || /login\.html/.test(p.url()), 'a guest should be asked to sign in: ' + await toast(p));
+  const p = await newPage(1280, { storage: { cart } }); await go(p, 'checkout.html');
+  await fill(p); await sleep(300);
+  await p.evaluate(() => { document.querySelector('input[name="pay"][value="cod"]').click(); });
+  await p.click('#placeBtn'); await sleep(500);
+  check(/sign in/i.test(await toast(p)) || /login\.html/.test(p.url()), 'a guest should be asked to sign in: ' + await toast(p));
   check(await waitUrl(p, /login\.html\?next=checkout\.html/, 4000), 'sign-in link should remember checkout: ' + p.url());
   await signInUi(p, 'test@example.com', 'Test@12345');
   check(await waitUrl(p, /checkout\.html/, 5000), 'should return to checkout after signing in: ' + p.url());
-  await sleep(1500);
+  await sleep(1200);
   check(/₹360/.test(await p.evaluate(() => document.body.innerText)), 'the cart should still be there after signing in');
-  check(!!(await p.$('#newAddrForm')) && await p.$eval('#coName', e => e.value === ''), 'address is asked again and not stored');
-  await p.evaluate(() => {
-    const set = (id, v) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('blur', { bubbles: true })); };
-    set('coName', 'Asha Raman'); set('coMobile', '9876543210'); set('coAddr1', '12 Farm Road'); set('coCity', 'Thanjavur'); set('coPin', '613001'); set('coState', 'Tamil Nadu');
-  });
-  await sleep(1500);
-  await p.evaluate(() => { document.getElementById('coState').value = 'Tamil Nadu'; document.getElementById('coCity').value = 'Thanjavur'; goToPayment(); }); await sleep(900);
-  await p.evaluate(() => { goStep(3); selectGateway('cod'); initiateRazorpay(); }); await sleep(4400);
+  check(await p.$eval('#dAddr', e => e.value === '12 Farm Road') && await p.$eval('#dPin', e => e.value === '613001'), 'the details typed before signing in should be restored');
+  check(!(await p.evaluate(() => Object.keys(localStorage).some(k => /addr/i.test(k)))), 'address must not be stored on the device');
+  await p.evaluate(() => { document.querySelector('input[name="pay"][value="cod"]').click(); });
+  await p.click('#placeBtn'); await sleep(1800);
   const order = await (await fetch(API + '/__last_order')).json();
   check(order.shippingAddress && order.shippingAddress.pincode === '613001', 'the order did not reach the server: ' + JSON.stringify(order).slice(0, 120));
-  check(await p.evaluate(() => document.getElementById('successOverlay').classList.contains('show')), 'order success screen not shown');
+  check(await p.$eval('#success', e => e.classList.contains('is-on')), 'order success screen not shown');
   await done(p);
 });
 

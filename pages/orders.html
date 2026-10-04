@@ -4,6 +4,10 @@
 <script src="js/farm-loader.js?v=20261002" data-text="Fetching your orders"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+
+
 <meta name="robots" content="noindex,nofollow"/>
 <meta name="theme-color" content="#0f2218"/>
 <title>My Orders — NANSEI Organics</title>
@@ -50,7 +54,7 @@
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
-body{font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;background:#f0f7f2;color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;background:#f0f7f2;color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -81,13 +85,13 @@ button,a,[onclick],label[for],select,input[type=radio],input[type=checkbox]{curs
 .card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--fog-2);box-shadow:var(--shadow)}
 
 .field-label{font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:8px}
-.inp{width:100%;padding:12px 16px;border-radius:14px;border:1.5px solid var(--fog-2);background:var(--fog);font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:.9rem;font-weight:400;color:var(--ink);outline:none;transition:border-color .2s,background .2s,box-shadow .2s;}
+.inp{width:100%;padding:12px 16px;border-radius:14px;border:1.5px solid var(--fog-2);background:var(--fog);font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:.9rem;font-weight:400;color:var(--ink);outline:none;transition:border-color .2s,background .2s,box-shadow .2s;}
 .inp::placeholder{color:var(--sage)}
 .inp:focus{border-color:var(--moss);background:#fff;box-shadow:0 0 0 4px rgba(45,90,61,.09)}
 select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%234a6350' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
 textarea.inp{resize:none;line-height:1.65}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-weight:700;letter-spacing:.01em;border:none;border-radius:14px;cursor:pointer;transition:var(--t);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-weight:700;letter-spacing:.01em;border:none;border-radius:14px;cursor:pointer;transition:var(--t);white-space:nowrap}
 .btn-primary{background:var(--moss);color:#fff;padding:14px 28px;font-size:.92rem;box-shadow:0 4px 20px rgba(45,90,61,.28)}
 .btn-primary:hover{background:var(--moss-l);transform:translateY(-1px);box-shadow:0 8px 28px rgba(45,90,61,.35)}
 .btn-primary:active{transform:translateY(0)}
@@ -167,7 +171,7 @@ textarea.inp{resize:none;line-height:1.65}
 .btn-pay-now{
   width:100%;padding:15px 24px;
   background:#FFD814;
-  color:#111;font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:.95rem;font-weight:700;
+  color:#111;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:.95rem;font-weight:700;
   border:1px solid #FFA41C;border-radius:8px;cursor:pointer;
   transition:background .15s,border-color .15s;
   box-shadow:0 2px 5px rgba(213,217,217,.5);
@@ -271,7 +275,7 @@ textarea.inp{resize:none;line-height:1.65}
 
 .search-bar{display:flex;align-items:center;gap:10px;background:var(--white);border:1.5px solid var(--fog-2);border-radius:14px;padding:10px 16px;transition:border-color .2s,box-shadow .2s}
 .search-bar:focus-within{border-color:var(--moss);box-shadow:0 0 0 4px rgba(45,90,61,.09)}
-.search-bar input{border:none;background:transparent;outline:none;font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:.88rem;color:var(--ink);flex:1;font-weight:400}
+.search-bar input{border:none;background:transparent;outline:none;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:.88rem;color:var(--ink);flex:1;font-weight:400}
 .search-bar input::placeholder{color:var(--sage)}
 
 .tag{display:inline-block;padding:2px 10px;border-radius:6px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -469,7 +473,7 @@ a .nansai-icon,
           <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#fff" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div>
-          <h1 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1;">My Orders</h1>
+          <h1 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1;">My Orders</h1>
           <p style="font-size:.85rem;color:var(--ink-3);margin-top:4px;" id="orderCountLabel"></p>
         </div>
       </div>
@@ -483,7 +487,7 @@ a .nansai-icon,
 
     <div id="ordersEmpty" style="display:none;" class="empty-state">
       <div class="empty-icon">&#128230;</div>
-      <h3 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:8px;">No orders yet</h3>
+      <h3 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:8px;">No orders yet</h3>
       <p style="font-size:.88rem;color:var(--ink-3);max-width:280px;margin:0 auto 28px;">Place your first order and it will appear here.</p>
       <button onclick="showPage('checkout')" class="btn btn-primary" style="padding:12px 32px;">Start Shopping</button>
     </div>
@@ -497,7 +501,7 @@ a .nansai-icon,
 <div class="modal-back" id="trackModal">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
-      <div><h2 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Track Package</h2><p style="font-size:.78rem;color:var(--ink-3);margin-top:2px" id="trackOrderIdLabel"></p></div>
+      <div><h2 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Track Package</h2><p style="font-size:.78rem;color:var(--ink-3);margin-top:2px" id="trackOrderIdLabel"></p></div>
       <button class="modal-close" onclick="closeModal('trackModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
@@ -523,7 +527,7 @@ a .nansai-icon,
   <div class="modal-box" onclick="event.stopPropagation()" style="max-width:520px">
     <div class="modal-head">
       <div>
-        <h2 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)" id="reviewModalTitle">Write a Review</h2>
+        <h2 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)" id="reviewModalTitle">Write a Review</h2>
         <p style="font-size:.75rem;color:var(--ink-3);margin-top:2px" id="reviewModalSub">Share your experience with this product</p>
       </div>
       <button class="modal-close" onclick="closeModal('reviewModal')">&#x2715;</button>
@@ -539,7 +543,7 @@ a .nansai-icon,
         </div>
       </div>
       <!-- Product selector for multi-item orders -->
-      <select id="reviewProductSelect" style="display:none;width:100%;padding:10px 14px;border:1.5px solid var(--fog-2);border-radius:12px;font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:.85rem;color:var(--ink);background:var(--fog);outline:none;margin-bottom:16px;cursor:pointer"></select>
+      <select id="reviewProductSelect" style="display:none;width:100%;padding:10px 14px;border:1.5px solid var(--fog-2);border-radius:12px;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:.85rem;color:var(--ink);background:var(--fog);outline:none;margin-bottom:16px;cursor:pointer"></select>
       <!-- Star rating -->
       <p style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px">Your Rating <span style="color:#ef4444">*</span></p>
       <div style="display:flex;gap:4px;margin-bottom:6px" id="starRow">
@@ -575,7 +579,7 @@ a .nansai-icon,
 <div class="modal-back" id="cancelModal">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
-      <h2 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Cancel Order</h2>
+      <h2 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Cancel Order</h2>
       <button class="modal-close" onclick="closeModal('cancelModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
@@ -602,7 +606,7 @@ a .nansai-icon,
 <div class="modal-back" id="invoiceModal">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
-      <h2 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Invoice</h2>
+      <h2 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Invoice</h2>
       <div style="display:flex;gap:8px;align-items:center">
         <button onclick="window.print()" class="btn btn-ghost" style="padding:7px 16px;border-radius:10px;font-size:.8rem">&#128424; Print</button>
         <button class="modal-close" onclick="closeModal('invoiceModal')">&#x2715;</button>
@@ -610,7 +614,7 @@ a .nansai-icon,
     </div>
     <div class="modal-body" id="invoiceContent">
       <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:22px">
-        <div><p style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--moss)">NANSEI</p><p style="font-size:.78rem;color:var(--ink-3)">nanseiorg.in</p></div>
+        <div><p style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--moss)">NANSEI</p><p style="font-size:.78rem;color:var(--ink-3)">nanseiorg.in</p></div>
         <div style="text-align:right">
           <p style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Invoice</p>
           <p style="font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-weight:600;font-size:.88rem;margin-top:2px" id="inv-id"></p>
@@ -639,7 +643,7 @@ a .nansai-icon,
 <div class="modal-back" id="returnModal">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
-      <h2 style="font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Return & Refund</h2>
+      <h2 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Return & Refund</h2>
       <button class="modal-close" onclick="closeModal('returnModal')">&#x2715;</button>
     </div>
     <div class="modal-body">

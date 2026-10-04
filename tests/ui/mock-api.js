@@ -43,6 +43,7 @@ function staticResponse(url) {
 
 const addressesDb = [];
 let lastOrder = null;
+let orderPosts = 0, verifyCalls = 0;
 const readBody = req => new Promise(resolve => { let b = ''; req.on('data', c => { b += c; }); req.on('end', () => { try { resolve(JSON.parse(b || '{}')); } catch (e) { resolve({}); } }); });
 
 
@@ -120,9 +121,19 @@ http.createServer(async (req, res) => {
     const b = await readBody(req); const a = Object.assign({ _id: 'a' + (addressesDb.length + 1) }, b); addressesDb.push(a);
     payload = { success: true, data: a };
   } else if (path === '/addresses' && req.method === 'GET') payload = { success: true, data: addressesDb, addresses: addressesDb };
-  else if (path === '/orders' && req.method === 'POST') {
-    lastOrder = await readBody(req);
-    payload = { success: true, data: { _id: 'o99', orderNumber: 'NO-9999', createdAt: new Date().toISOString(), orderStatus: 'processing', totalPrice: lastOrder.totalPrice || 0, items: lastOrder.items || [], shippingAddress: lastOrder.shippingAddress || {} } };
+  else if (path === '/orders/razorpay/create' && req.method === 'POST') {
+    const b = await readBody(req);
+    payload = { success: true, data: { orderId: 'order_test123', amount: Math.round((b.amount || 0) * 100), currency: 'INR', keyId: 'rzp_test_local' } };
+  } else if (path === '/orders/razorpay/verify' && req.method === 'POST') {
+    const b = await readBody(req); verifyCalls++; lastOrder = b.orderPayload || {};
+    payload = { success: true, verified: true, data: { _id: 'o98', orderNumber: 'NO-9998', isPaid: true, createdAt: new Date().toISOString(), orderStatus: 'Processing', totalPrice: lastOrder.totalPrice || 0, items: lastOrder.items || [], shippingAddress: lastOrder.shippingAddress || {} } };
+  } else if (path === '/coupons/validate' && req.method === 'POST') {
+    const b = await readBody(req);
+    if (String(b.code || '').toUpperCase() === 'WELCOME10') payload = { success: true, data: { code: 'WELCOME10', discountType: 'percentage', discountValue: 10, minOrderAmount: 0 } };
+    else { res.writeHead(404, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ success: false, message: 'Invalid or expired coupon' })); }
+  } else if (path === '/orders' && req.method === 'POST') {
+    orderPosts++; lastOrder = await readBody(req);
+    payload = { success: true, data: { _id: 'o99', orderNumber: 'NO-9999', isPaid: false, createdAt: new Date().toISOString(), orderStatus: 'processing', totalPrice: lastOrder.totalPrice || 0, items: lastOrder.items || [], shippingAddress: lastOrder.shippingAddress || {} } };
   } else if (path === '/shipping/lookup' && req.method === 'POST') {
     const b = await readBody(req); const num = String(b.orderNumber || '').replace(/^#/, '').trim();
     const o = sampleOrders.find(x => x.orderNumber === num || x._id === num);
@@ -138,7 +149,8 @@ http.createServer(async (req, res) => {
     if (!o) payload = { success: false, message: 'Order not found' };
     else if (!['Pending', 'Processing', 'Packed'].includes(o.orderStatus)) { res.writeHead(400, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ success: false, message: 'This order can no longer be cancelled because it has already been dispatched' })); }
     else { o.orderStatus = 'Cancelled'; payload = { success: true, data: o }; }
-  } else if (path === '/__reset') { sampleOrders.forEach(o => { o.orderStatus = o.__s0; }); payload = { success: true };
+  } else if (path === '/__order_counts') { payload = { posts: orderPosts, verifies: verifyCalls };
+  } else if (path === '/__reset') { sampleOrders.forEach(o => { o.orderStatus = o.__s0; }); orderPosts = 0; verifyCalls = 0; lastOrder = null; payload = { success: true };
   } else if (path === '/__last_order') payload = lastOrder || {};
   else payload = staticResponse(req.url);
   res.writeHead(200, { 'Content-Type': 'application/json' });

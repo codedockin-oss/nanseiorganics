@@ -13,7 +13,7 @@
     '<div id="cartBackdrop" onclick="closeCart()" style="display:none;position:fixed;inset:0;background:rgba(8,18,12,.5);z-index:1400;backdrop-filter:blur(2px);"></div>' +
     '<div id="cartDrawer" role="dialog" aria-label="Your cart" style="position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);background:#fff;z-index:1401;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.18,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.18);">' +
     '<div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(201,168,76,.35);">' +
-    '<h2 style="font-family:-apple-system,\'Segoe UI\',Roboto,sans-serif;font-size:1.6rem;font-weight:700;color:#0f2218;margin:0;">Your Cart</h2>' +
+    '<h2 style="font-family:\'Inter\',\'Inter\',\'Inter\',\'Inter\',-apple-system,\'Segoe UI\',Roboto,sans-serif;font-size:1.6rem;font-weight:700;color:#0f2218;margin:0;">Your Cart</h2>' +
     '<button onclick="closeCart()" aria-label="Close cart" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(15,34,24,.18);background:none;cursor:pointer;font-size:1rem;color:#0f2218;display:flex;align-items:center;justify-content:center;">&#10005;</button></div>' +
     '<div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>' +
     '<div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(15,34,24,.1);"></div></div>';

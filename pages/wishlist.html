@@ -4,6 +4,10 @@
 <script src="js/farm-loader.js?v=20261002" data-text="Just a moment"></script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+
+
 <title>Wishlist — Nansei Organics</title>
 <meta name="description" content="The products you have saved from Nansei Organics."/>
 <meta name="theme-color" content="#0f2218"/>
@@ -22,12 +26,12 @@
 .wl-hero .crumbs, .wl-hero .crumbs a, .wl-hero .crumbs span { color: rgba(255, 255, 255, .7); }
 .wl-hero .lead { margin-top: 10px; max-width: 34em; color: rgba(255, 255, 255, .7); }
 .wl-body { padding-top: clamp(20px, 3vw, 36px); }
-.wl-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; font: 600 .78rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #5d6b60; }
+.wl-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; font: 600 .78rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #5d6b60; }
 .wl-bar[hidden], .empty[hidden] { display: none; }
 .wl-bar__btns { display: flex; align-items: center; gap: 14px; }
 .wl-link { background: none; border: 0; padding: 8px 2px; font: inherit; letter-spacing: .08em; color: #8a9a8e; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .wl-link:hover { color: #9b2c2c; }
-.wl-all { height: 42px; padding: 0 20px; border: 0; border-radius: 999px; background: #0f2218; color: #e8c97a; font: 700 .68rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+.wl-all { height: 42px; padding: 0 20px; border: 0; border-radius: 999px; background: #0f2218; color: #e8c97a; font: 700 .68rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
 .wl-all:hover { background: #1a3a2a; }
 @media (max-width: 480px) { .wl-bar { font-size: .68rem; } .wl-all { padding: 0 14px; height: 40px; font-size: .62rem; } }
 </style>
@@ -180,6 +184,7 @@
 <script src="js/store.js?v=20261002"></script>
 <script>
 window.NS_MANUAL_RENDER = true;
+if (typeof Auth !== 'undefined' && Auth.requireAuth) Auth.requireAuth('login.html?next=wishlist.html');   // saved items belong to an account
 (function () {
   var $ = function (s) { return document.querySelector(s); };
   function saved() { var ids = wishlist.map(String); return products.filter(function (p) { return ids.indexOf(String(p.id)) > -1; }); }

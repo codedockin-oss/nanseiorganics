@@ -214,3 +214,9 @@ npm run serve                   # terminal 1
 npm run mock                    # terminal 2 (fake backend, never touches MongoDB)
 npm test                        # terminal 3: syntax + every page x 3 widths + user flows
 ```
+
+## Checkout & My Orders
+
+- `checkout.html` is one page (contact, delivery, payment + a dark order summary). `orders.html` is a separate **My Orders** page; old `checkout.html?page=orders` links redirect to it.
+- The server prices every order itself (`backend/utils/orderGuard.js`): totals, GST (5%), promo codes and a price floor are recomputed, and customers cannot set the paid flag, status or tracking. `POST /api/orders` accepts Cash on Delivery only; online payments are saved once, by `/api/orders/razorpay/verify`, after the Razorpay signature **and the paid amount** match.
+- Delivery fee: leave `SHIPPING_FEE` at 0 for always-free delivery. To charge a fee under the free-shipping amount set it in **two** places: `SHIPPING_FEE` in `pages/js/store-config.js` and the `SHIPPING_FEE` (and optionally `FREE_SHIPPING_ABOVE`) environment variables on Render.

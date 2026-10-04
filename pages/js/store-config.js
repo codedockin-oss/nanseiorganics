@@ -24,6 +24,7 @@ window.NANSEI_CONFIG = {
   REPLY_TIME: 'We usually reply within a few hours.', // CONFIG
 
   // Shipping & returns (shown on the announcement bar, FAQ, policy summaries)
+  SHIPPING_FEE: 0,                                    // CONFIG: ₹ delivery charge under the free-shipping amount (0 = delivery is always free). Keep the same value as SHIPPING_FEE on the server
   FREE_SHIPPING_ABOVE: 999,                           // ₹ — free delivery on orders at or above this amount
   RETURN_DAYS: 7,                                     // days to request a return / replacement
   COURIER_NOTE: 'Tracked couriers, delivered across India',

@@ -33,7 +33,7 @@
   padding:6px 2px; border-radius:5px; font-size:.6rem; font-weight:700;
   border:1.5px solid rgba(26,58,42,.18); background:#f8faf8; color:var(--forest-deep);
   cursor:pointer; transition:all .18s ease-in-out; text-align:center;
-  font-family:-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; line-height:1; width:100%;
+  font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height:1; width:100%;
 }
 .qty-pill:hover { border-color:var(--forest-leaf); background:rgba(74,140,92,.08); }
 .qty-pill.selected { background:var(--forest-deep); color:#fff; border-color:var(--forest-deep); }
@@ -72,7 +72,7 @@
 @keyframes qtyFadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 .qty-selector-area { animation:qtyFadeIn 260ms ease-out both; }
 
-#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: #0f2218; color: #f7f3ec; font-size: .8rem; font-weight: 600; padding: .6rem 1.4rem; border-radius: 30px; opacity: 0; pointer-events: none; white-space: nowrap; z-index: 9999; box-shadow: 0 8px 28px rgba(10, 30, 15, .3); border: 1px solid rgba(201, 168, 76, .3); transition: opacity .3s, transform .3s; font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; }
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: #0f2218; color: #f7f3ec; font-size: .8rem; font-weight: 600; padding: .6rem 1.4rem; border-radius: 30px; opacity: 0; pointer-events: none; white-space: nowrap; z-index: 9999; box-shadow: 0 8px 28px rgba(10, 30, 15, .3); border: 1px solid rgba(201, 168, 76, .3); transition: opacity .3s, transform .3s; font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 @media (max-width: 768px) {
   #toast { bottom: 84px; font-size: .74rem; max-width: 90vw; overflow: hidden; text-overflow: ellipsis; }
@@ -85,24 +85,24 @@
 .pc .prod-img-wrap { height: auto; aspect-ratio: 1 / 1; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, #f7f3ec, #efe8d8); overflow: hidden; }
 .pc.card-lifted .prod-img-wrap { height: auto; aspect-ratio: 1 / .78; }
 .pc .prod-img { object-fit: cover; }
-.pc-badge { position: absolute; top: 10px; left: 10px; z-index: 10; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font: 700 .6rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; }
+.pc-badge { position: absolute; top: 10px; left: 10px; z-index: 10; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font: 700 .6rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; }
 .pc-hot { background: #c9a84c; color: #0f2218; }
 .pc-new { background: #0f2218; color: #e8c97a; }
 .pc-sale { background: rgba(255, 255, 255, .92); color: #0f2218; border: 1px solid rgba(201, 168, 76, .6); }
 .pc-wish { position: absolute; top: 8px; right: 8px; z-index: 10; width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .94); box-shadow: 0 2px 10px rgba(0, 0, 0, .14); cursor: pointer; transition: transform .2s; }
 .pc-wish:hover { transform: scale(1.12); }
 .pc .prod-info { padding: .95rem 1rem 1rem; gap: 4px; }
-.pc-cat { font: 600 .62rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #b8922a; }
-.pc-name { font: 600 1.18rem/1.2 -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif !important; color: #0f2218 !important; min-height: 2.4em; letter-spacing: .005em; }
+.pc-cat { font: 600 .62rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #b8922a; }
+.pc-name { font: 600 1.18rem/1.2 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important; color: #0f2218 !important; min-height: 2.4em; letter-spacing: .005em; }
 .pc-rate { display: flex; align-items: center; gap: 6px; }
 .pc-stars { display: inline-flex; gap: 1px; flex: 0 0 auto; }
-.rating-text { color: #8a9a8e; font: 500 .72rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rating-text { color: #8a9a8e; font: 500 .72rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pc-price { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; margin: 4px 0 10px; }
-.pc-now { font: 700 1.3rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; color: #0f2218; letter-spacing: -.01em; }
-.pc-old { font: 400 .8rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; color: #9aa89e; text-decoration: line-through; }
-.pc-off { font: 700 .62rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .04em; color: #7a5e12; background: rgba(201, 168, 76, .2); padding: 3px 8px; border-radius: 999px; }
+.pc-now { font: 700 1.3rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #0f2218; letter-spacing: -.01em; }
+.pc-old { font: 400 .8rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #9aa89e; text-decoration: line-through; }
+.pc-off { font: 700 .62rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .04em; color: #7a5e12; background: rgba(201, 168, 76, .2); padding: 3px 8px; border-radius: 999px; }
 .pc .prod-btn-area { margin-top: auto; }
-.pc-add { width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 12px; background: #0f2218; color: #e8c97a; font: 700 .7rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 14px rgba(15, 34, 24, .22); }
+.pc-add { width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 12px; background: #0f2218; color: #e8c97a; font: 700 .7rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 14px rgba(15, 34, 24, .22); }
 .pc-add:hover { background: #1a3a2a; transform: translateY(-1px); }
 .pc-add:active { transform: scale(.98); }
 .pc .qty-pill { border-radius: 8px; font-size: .64rem; padding: 8px 2px; }
@@ -110,7 +110,7 @@
 .pc .qty-cart-btn { width: 52px; border-radius: 12px; background: #0f2218; color: #e8c97a; }
 .pc .qty-cart-btn:hover { background: #1a3a2a; }
 .pc .qty-cart-btn.done { background: #2d5a3d; }
-.pc-view { display: block; text-align: center; padding: 8px 0 0; margin-top: 6px; border-top: 1px solid rgba(15, 34, 24, .07); font: 600 .68rem -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #5d6b60; text-decoration: none; }
+.pc-view { display: block; text-align: center; padding: 8px 0 0; margin-top: 6px; border-top: 1px solid rgba(15, 34, 24, .07); font: 600 .68rem 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #5d6b60; text-decoration: none; }
 .pc-view:hover { color: #0f2218; }
 @media (max-width: 768px) {
   .pc { border-radius: 14px; }

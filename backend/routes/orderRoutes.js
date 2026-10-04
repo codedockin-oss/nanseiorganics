@@ -10,6 +10,20 @@ const { protect, authorize } = require('../middleware/auth');
 const Order = require('../models/Order');
 const Cart  = require('../models/Cart');
 const shippingService = require('../utils/shippingService');
+const { buildOrder, codOnly, OrderError } = require('../utils/orderGuard');
+
+/** The two look-ups the order guard needs (real database; replaced by fakes in tests). */
+function guardContext(method) {
+  return {
+    method,
+    findProducts: async ids => {
+      const mongoose = require('mongoose');
+      const real = ids.filter(id => mongoose.Types.ObjectId.isValid(id));
+      return real.length ? require('../models/Product').find({ _id: { $in: real } }).select('price').lean() : [];
+    },
+    findCoupon: code => require('../models/Coupon').findOne({ code }),
+  };
+}
 
 // ─────────────────────────────────────────────────────────
 //  HELPERS
@@ -152,20 +166,30 @@ router.post('/razorpay/verify', optionalAuth, async (req, res) => {
       return res.status(400).json({ success: false, verified: false, message: 'Invalid payment signature' });
     }
 
-    // Signature valid — persist order if user is authenticated
+    // Signature valid — persist the order if the user is signed in.
     if (orderPayload && req.user?.id) {
-      const payMethodMap = { razorpay: 'Razorpay', payu: 'PayU', cod: 'COD' };
-      const body = {
-        ...orderPayload,
+      // a retry / double submit of the same payment returns the order we already saved
+      const existing = await Order.findOne({ 'paymentInfo.id': razorpay_payment_id });
+      if (existing) return res.json({ success: true, verified: true, data: existing, duplicate: true });
+
+      const doc = await buildOrder(orderPayload, guardContext('Razorpay'));
+      // what the customer actually paid must be what the order costs
+      try {
+        const rzpOrder = await getRazorpay().orders.fetch(razorpay_order_id);
+        if (rzpOrder && Number(rzpOrder.amount) !== Math.round(doc.totalPrice * 100)) {
+          console.error('[Razorpay] AMOUNT MISMATCH payment', razorpay_payment_id, 'paid', rzpOrder.amount, 'order', doc.totalPrice * 100);
+          return res.status(409).json({ success: false, verified: true, message: 'Your payment (' + razorpay_payment_id + ') does not match the order total. Please contact us with this payment number and we will sort it out right away.' });
+        }
+      } catch (e) { console.warn('[Razorpay] could not double-check the paid amount:', rzpErrMsg(e)); }
+
+      const order = await Order.create({
+        ...doc,
         user:        req.user.id,
         isPaid:      true,
         paidAt:      new Date(),
         paymentInfo: { id: razorpay_payment_id, status: 'completed', paidAt: new Date() },
-        paymentMethod: payMethodMap[(orderPayload.paymentMethod || '').toLowerCase()] || orderPayload.paymentMethod,
-      };
-      const order = await Order.create(body);
+      });
       await Cart.findOneAndDelete({ user: req.user.id });
-      // fetch user for email
       const User = require('../models/User');
       const userDoc = await User.findById(req.user.id).select('name email').lean();
       sendOrderEmails(order, userDoc); // fire-and-forget
@@ -175,6 +199,7 @@ router.post('/razorpay/verify', optionalAuth, async (req, res) => {
 
     res.json({ success: true, verified: true, paymentId: razorpay_payment_id });
   } catch (err) {
+    if (err instanceof OrderError) return res.status(err.status).json({ success: false, verified: true, message: err.message });
     const msg = rzpErrMsg(err);
     console.error('[Razorpay] verify error:', msg);
     res.status(500).json({ success: false, message: msg });
@@ -303,16 +328,11 @@ router.get('/my-orders', protect, async (req, res) => {
   }
 });
 
-/** POST /api/orders — create order (authenticated users only) */
+/** POST /api/orders — place a Cash on Delivery order (online payments are saved by /razorpay/verify after the payment is confirmed) */
 router.post('/', protect, async (req, res) => {
   try {
-    const payMethodMap = { razorpay: 'Razorpay', payu: 'PayU', cod: 'COD', upi: 'UPI', stripe: 'Stripe' };
-    const body = {
-      ...req.body,
-      user: req.user.id,
-      paymentMethod: payMethodMap[(req.body.paymentMethod || '').toLowerCase()] || req.body.paymentMethod,
-    };
-    const order = await Order.create(body);
+    const doc = await buildOrder(req.body, guardContext(codOnly(req.body && req.body.paymentMethod)));
+    const order = await Order.create({ ...doc, user: req.user.id, isPaid: false });
     await Cart.findOneAndDelete({ user: req.user.id });
     const User = require('../models/User');
     const userDoc = await User.findById(req.user.id).select('name email').lean();
@@ -320,6 +340,7 @@ router.post('/', protect, async (req, res) => {
     shipInBackground(order._id);
     res.status(201).json({ success: true, data: order });
   } catch (err) {
+    if (err instanceof OrderError) return res.status(err.status).json({ success: false, message: err.message });
     console.error('[Orders] POST / error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }

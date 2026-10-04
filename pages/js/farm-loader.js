@@ -22,7 +22,7 @@
   if (!forced && (reduced || seen || (navigator.webdriver && !auto))) { done(); return; }
 
   var css = '' +
-    '.nl{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:#fff;font-family:-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;' +
+    '.nl{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:#fff;font-family:Outfit,Inter,-apple-system,Segoe UI,Roboto,Arial,sans-serif;' +
       'background:radial-gradient(ellipse 70% 55% at 50% 78%,#2c5a3f 0%,rgba(31,66,48,0) 70%),linear-gradient(180deg,#07130c 0%,#0f2218 55%,#173826 100%);transition:opacity .7s ease .05s,visibility .7s,transform .9s cubic-bezier(.7,0,.2,1)}' +
     '.nl.is-out{opacity:0;visibility:hidden;transform:scale(1.04)}' +
     '.nl__glow{position:absolute;left:50%;top:56%;width:min(900px,120vw);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(232,201,122,.34),rgba(201,168,76,.12) 45%,transparent 72%);opacity:0;animation:nl-glow 2.6s ease-out .1s forwards}' +

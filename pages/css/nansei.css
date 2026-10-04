@@ -26,8 +26,8 @@
   --ok: #2d6a4a;
   --err: #b83232;
   --wa: #25d366;
-  --serif: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;
-  --sans: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;
+  --serif: 'Outfit', 'Inter', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --sans: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --ease: cubic-bezier(.22, 1, .36, 1);
   --ease-io: cubic-bezier(.76, 0, .24, 1);
   --ease-back: cubic-bezier(.34, 1.56, .64, 1);
@@ -502,3 +502,9 @@ n-icon svg { width: 100%; height: 100%; }
 /* One sans family everywhere (offduty.in style): tighter, slightly lighter headlines than the old serif */
 .display-xl, .display, .h-xl, .h-lg, .h-md, .h-sm { letter-spacing: -.025em; font-weight: 700; }
 .display em, .h-xl em, .h-lg em, .h-md em { font-style: normal; }
+
+/* muams type: Outfit for headlines, Inter for text, Allura for the script accent */
+h1, h2, h3, h4, .display, .display-xl, .h-xl, .h-lg, .h-md, .h-sm, .pc-name, .stat-num, .ns-menu-head p, .ns-drawer-user p { font-family: 'Outfit', 'Inter', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important; }
+.hb__l2 { font-family: 'Allura', 'Brush Script MT', cursive !important; font-style: normal; font-weight: 400; letter-spacing: 0; }
+.hb__l2 { font-size: clamp(62px, 8.6vw, 142px); line-height: .72; }
+@media (max-width: 760px) { .hb__l2 { font-size: 74px; line-height: .78; } }

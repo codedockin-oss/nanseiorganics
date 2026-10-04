@@ -345,40 +345,75 @@ add('wishlist: simple page - saved items only, add all, un-heart removes, clear 
   check(await cards() === 0 && await p.$eval('#wlEmpty', e => !e.hidden), 'empty state not shown after clearing');
   await done(p);
 });
-add('checkout: cart step shows totals, no damaged text', async () => {
+add('checkout: summary shows the cart and totals, no damaged text', async () => {
   const cart = [{ id: 1, name: 'Karunguruvai Rice', price: 180, basePrice: 180, image: '', qty: 2, qtyVal: 1, qtyLabel: '1kg', unit: 'kg' }];
   const p = await newPage(1440, { auth: true, storage: { cart } }); await go(p, 'checkout.html');
   const body = await p.evaluate(() => document.body.innerText);
   check(body.includes('₹360'), 'subtotal 360 not shown');
-  check(!/Pay Now \?/.test(body), 'damaged "Pay Now ?" text');
+  check(/Pay ₹378 securely/i.test(body), 'pay button should show the total incl. GST: ' + body.slice(body.indexOf('PAY'), body.indexOf('PAY') + 30));
+  check(!/undefined|NaN|\[object/.test(body), 'broken text on checkout');
+  check(await p.$('.co-sum') && await p.$('#cardContact') && await p.$('#cardDelivery') && await p.$('#cardPay'), 'checkout cards missing');
   await done(p);
 });
 const CART_1 = [{ id: 1, name: 'Karunguruvai Rice', price: 180, basePrice: 180, image: '', qty: 2, qtyVal: 1, qtyLabel: '1kg', unit: 'kg' }];
-const fillAddress = (p) => p.evaluate(() => {
-  const set = (id, v) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('blur', { bubbles: true })); };
-  set('coName', 'Asha Raman'); set('coMobile', '9876543210'); set('coAddr1', '12 Farm Road'); set('coCity', 'Thanjavur'); set('coPin', '613001'); set('coState', 'Tamil Nadu');
-});
-add('checkout: asks for the address every time (no saved addresses UI)', async () => {
+const fillAddress = (p, over = {}) => p.evaluate((over) => {
+  const set = (id, v) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('change', { bubbles: true })); };
+  const v = Object.assign({ cPhone: '9876543210', cEmail: 'asha@example.com', dFirst: 'Asha', dLast: 'Raman', dAddr: '12 Farm Road', dCity: 'Thanjavur', dPin: '613001', dState: 'Tamil Nadu' }, over);
+  Object.keys(v).forEach(k => set(k, v[k]));
+}, over);
+const orderCounts = async () => (await (await fetch(`http://127.0.0.1:${API_PORT}/api/__order_counts`)).json());
+add('checkout: asks for the address every time and will not submit an empty form', async () => {
   const p = await newPage(1440, { auth: true, storage: { cart: CART_1 } }); await go(p, 'checkout.html');
-  check(await p.$eval('#newAddrForm', e => getComputedStyle(e).display !== 'none'), 'address form is not visible');
-  check(!(await p.$('#addrGrid')), 'saved-address grid is back');
-  await p.evaluate(() => goToPayment()); await sleep(300);
-  check(await p.evaluate(() => !document.getElementById('step2') || !document.getElementById('step2').classList.contains('active')), 'moved on without an address');
+  check(await p.$eval('#dAddr', e => e.value === '') && await p.$eval('#dPin', e => e.value === ''), 'address fields should start empty');
+  check(!(await p.$('#addrGrid')) && !(await p.$('#saveAddr')), 'saved-address UI is back');
+  await fetch(`http://127.0.0.1:${API_PORT}/api/__reset`);
+  await p.click('#placeBtn'); await sleep(900);
+  check((await p.$$eval('.field.invalid', e => e.length)) >= 3, 'empty form did not flag the missing fields');
+  check((await orderCounts()).posts === 0, 'an order was sent with an empty form');
   await done(p);
 });
-add('checkout: COD order reaches the API with the right pincode/city, address is not stored', async () => {
+add('checkout: COD order reaches the API once, with the right pincode/city/state; address is not stored', async () => {
   const p = await newPage(1440, { auth: true, storage: { cart: CART_1 } }); await go(p, 'checkout.html');
-  await fillAddress(p); await sleep(1500);
-  await p.evaluate(() => { document.getElementById('coState').value = 'Tamil Nadu'; document.getElementById('coCity').value = 'Thanjavur'; });
-  await p.evaluate(() => goToPayment()); await sleep(900);
-  await p.evaluate(() => { goStep(3); selectGateway('cod'); initiateRazorpay(); }); await sleep(4300);
+  await fetch(`http://127.0.0.1:${API_PORT}/api/__reset`);
+  await fillAddress(p); await p.evaluate(() => { document.querySelector('input[name="pay"][value="cod"]').click(); }); await sleep(200);
+  check(/Place order/i.test(await text(p, '#placeLabel')), 'COD button label wrong: ' + await text(p, '#placeLabel'));
+  await p.click('#placeBtn'); await sleep(1800);
   const order = await (await fetch(`http://127.0.0.1:${API_PORT}/api/__last_order`)).json();
   const sa = order.shippingAddress || {};
-  check(sa.pincode === '613001', 'pincode sent to API was ' + sa.pincode);
-  check(/^thanjavur$/i.test(sa.city || ''), 'city sent to API was ' + sa.city);
-  check(await p.evaluate(() => document.getElementById('successOverlay').classList.contains('show')), 'order success screen not shown');
+  check(sa.pincode === '613001' && /^thanjavur$/i.test(sa.city || '') && sa.state === 'Tamil Nadu', 'address sent to API was ' + JSON.stringify(sa));
+  check(order.paymentMethod === 'COD' && !('isPaid' in order) && !('paymentInfo' in order), 'COD payload should not claim payment: ' + JSON.stringify(order).slice(0, 160));
+  check(order.totalPrice === 378 && order.itemsPrice === 360 && order.taxPrice === 18, 'totals sent: ' + [order.itemsPrice, order.taxPrice, order.totalPrice]);
+  check(await p.$eval('#success', e => e.classList.contains('is-on')), 'order success screen not shown');
+  check((await orderCounts()).posts === 1, 'COD should create exactly one order');
+  check((await ls(p, 'cart')).length === 0, 'cart was not cleared after the order');
   const keys = await p.evaluate(() => Object.keys(localStorage).filter(k => /addr/i.test(k)));
   check(keys.length === 0, 'address was saved to storage: ' + keys.join(','));
+  await done(p);
+});
+add('checkout: online payment saves the order exactly once (verify only, no second order)', async () => {
+  const p = await newPage(1440, { auth: true, storage: { cart: CART_1 } }); await go(p, 'checkout.html');
+  await fetch(`http://127.0.0.1:${API_PORT}/api/__reset`);
+  await p.evaluate(() => { window.Razorpay = function (o) { this.on = function () {}; this.open = function () { setTimeout(function () { o.handler({ razorpay_order_id: o.order_id, razorpay_payment_id: 'pay_test', razorpay_signature: 'sig' }); }, 120); }; }; });
+  await fillAddress(p); await sleep(200);
+  await p.click('#placeBtn'); await sleep(2200);
+  const c = await orderCounts();
+  check(c.verifies === 1 && c.posts === 0, 'online payment should save once through verify: ' + JSON.stringify(c));
+  check(await p.$eval('#success', e => e.classList.contains('is-on')), 'order success screen not shown');
+  check(/paid|received/i.test(await text(p, '#okText')), 'success text should say payment was received: ' + await text(p, '#okText'));
+  await done(p);
+});
+add('checkout: promo code applies, quantity edits recalculate, remove empties the page', async () => {
+  const p = await newPage(1440, { auth: true, storage: { cart: CART_1 } }); await go(p, 'checkout.html');
+  await p.type('#promoIn', 'welcome10'); await p.click('#promoForm button'); await sleep(900);
+  check(/WELCOME10/.test(await text(p, '#promoMsg')), 'promo message: ' + await text(p, '#promoMsg'));
+  check(await text(p, '#coTotal') === '₹340', 'total after 10% promo should be ₹340, was ' + await text(p, '#coTotal'));
+  await p.type('#promoIn', 'x'); await p.evaluate(() => { document.getElementById('promoIn').value = 'NOPE'; }); await p.click('#promoForm button'); await sleep(700);
+  check(/invalid|expired/i.test(await text(p, '#promoMsg')), 'bad code should be explained: ' + await text(p, '#promoMsg'));
+  await p.click('[data-q="-1"]'); await sleep(300);
+  check(await text(p, '#coTotal') === '₹189', 'total for 1 kg should be ₹189, was ' + await text(p, '#coTotal'));
+  await p.click('[data-rm]'); await sleep(300);
+  check(!!(await p.$('.co-empty')), 'empty state not shown after removing the last item');
+  check((await ls(p, 'cart')).length === 0, 'cart not emptied');
   await done(p);
 });
 add('my orders: only orders, greets the user, scroll reveal on, sign out works', async () => {
@@ -442,30 +477,25 @@ add('shop: product cards keep the float + hover-lift effect', async () => {
   check((await p.$$('#productGrid .prod-card:nth-child(2) .qty-pill')).length === 4, 'quantity pills missing');
   await done(p);
 });
-add('checkout mobile: validation, 3 steps, no sideways scroll', async () => {
-  const cart = [{ id: 1, name: 'Karunguruvai Rice', price: 180, basePrice: 180, image: '', qty: 2, qtyVal: 1, qtyLabel: '1kg', unit: 'kg' }];
-  const p = await newPage(390, { auth: true, storage: { cart } }); await go(p, 'checkout.html');
+add('checkout mobile: three cards, summary, validation, no sideways scroll', async () => {
+  const p = await newPage(390, { auth: true, storage: { cart: CART_1 } }); await go(p, 'checkout.html');
   const sx = () => p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-  check((await sx()) <= 1, 'sideways scroll on step 1');
-  await p.evaluate(() => goToPayment()); await sleep(400);
-  check((await p.$$eval('#newAddrForm .co-err-msg', e => e.filter(x => getComputedStyle(x).display !== 'none' && x.textContent.trim()).length)) >= 4, 'empty form did not show the field errors');
-  check(await p.evaluate(() => getComputedStyle(document.getElementById('step1')).display !== 'none'), 'moved on with an empty form');
-  await fillAddress(p); await sleep(1500);
-  await p.evaluate(() => { document.getElementById('coState').value = 'Tamil Nadu'; document.getElementById('coCity').value = 'Thanjavur'; });
-  await p.evaluate(() => goToPayment()); await sleep(900);
-  check(await p.evaluate(() => getComputedStyle(document.getElementById('step2')).display !== 'none'), 'step 2 did not open');
-  check((await sx()) <= 1, 'sideways scroll on step 2');
-  const body2 = await p.evaluate(() => document.getElementById('step2').innerText);
-  check(/Asha Raman/.test(body2) && /613001/.test(body2) && /Thanjavur/i.test(body2), 'step 2 does not show the entered address');
-  await p.evaluate(() => goStep(3)); await sleep(700);
-  check((await sx()) <= 1, 'sideways scroll on step 3');
+  check((await sx()) <= 1, 'sideways scroll on checkout');
+  check((await p.$$eval('.co-card', e => e.length)) === 3 && !!(await p.$('.co-sum')), 'cards or summary missing');
+  const tops = await p.evaluate(() => ['#cardContact', '#cardDelivery', '#cardPay', '.co-sum'].map(s => document.querySelector(s).getBoundingClientRect().top));
+  check(tops[0] < tops[1] && tops[1] < tops[2], 'cards are not stacked in order');
+  await p.click('#placeBtn'); await sleep(800);
+  check((await p.$$eval('.field.invalid', e => e.length)) >= 3, 'empty form did not flag fields');
+  await fillAddress(p); await sleep(300);
+  check((await p.$$eval('.co__step.is-done', e => e.length)) === 3, 'all three steps should be marked done once the form is valid');
+  check((await sx()) <= 1, 'sideways scroll after filling the form');
   await done(p);
 });
 add('checkout: empty cart shows only the empty state with a way back to the shop', async () => {
   const p = await newPage(1440, { auth: true, storage: { cart: [] } }); await go(p, 'checkout.html');
-  check(await p.$eval('#emptyCart', e => getComputedStyle(e).display !== 'none'), 'empty state missing');
-  check(await p.$eval('#newAddrForm', e => getComputedStyle(e).display === 'none'), 'delivery form shown with an empty cart');
-  check(await p.$eval('#emptyCart a[href*="index.html"]', e => e.getBoundingClientRect().width > 0), 'no link back to the shop');
+  check(!!(await p.$('.co-empty')), 'empty state missing');
+  check(!(await p.$('#coForm')), 'delivery form shown with an empty cart');
+  check(await p.$eval('.co-empty a[href*="shop.html"]', e => e.getBoundingClientRect().width > 0), 'no link back to the shop');
   await done(p);
 });
 add('my orders mobile: header fits, cards fit, no sideways scroll', async () => {
