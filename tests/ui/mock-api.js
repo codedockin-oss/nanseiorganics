@@ -5,6 +5,9 @@
 const http = require('http');
 
 const PORT = Number(process.env.MOCK_API_PORT || 5000);
+const ST = require('../../backend/utils/settings');
+const { cleanSettings } = require('../../backend/routes/settingsRoutes');
+let savedSettings = null;
 const user = { _id: 'u1', id: 'u1', name: 'Test User', firstName: 'Test', lastName: 'User', email: 'test@example.com', phone: '9876543210', role: 'admin', createdAt: '2026-01-10T10:00:00Z' };
 const addr = { fullName: 'Test User', phone: '9876543210', addressLine1: '12 Farm Road', city: 'Thanjavur', state: 'Tamil Nadu', pincode: '613001', country: 'India' };
 const sampleOrders = [
@@ -117,6 +120,15 @@ http.createServer(async (req, res) => {
   const path = req.url.split('?')[0].replace(/^\/api/, '');
   if (await handleAuth(req, res, path)) return;
   let payload;
+  // store settings: the real cleaning/merging code from the backend, kept in memory here
+  if (path === '/settings' && req.method === 'GET') return send(res, 200, { success: true, data: ST.publicSettings(ST.merge(ST.defaults(), savedSettings)) });
+  if (path === '/settings/admin' && req.method === 'GET') return send(res, 200, { success: true, data: savedSettings || {}, effective: ST.merge(ST.defaults(), savedSettings) });
+  if (path === '/settings' && req.method === 'PUT') {
+    try { savedSettings = Object.assign(cleanSettings(await readBody(req)), { updatedAt: new Date().toISOString() }); }
+    catch (e) { return send(res, 400, { success: false, message: e.message }); }
+    return send(res, 200, { success: true, data: savedSettings, effective: ST.merge(ST.defaults(), savedSettings) });
+  }
+  if (path === '/orders/pricing') return send(res, 200, { success: true, data: ST.pricingFrom(ST.merge(ST.defaults(), savedSettings)) });
   if (path === '/addresses' && req.method === 'POST') {
     const b = await readBody(req); const a = Object.assign({ _id: 'a' + (addressesDb.length + 1) }, b); addressesDb.push(a);
     payload = { success: true, data: a };

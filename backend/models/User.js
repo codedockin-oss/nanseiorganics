@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
+  loginAttempts: { type: Number, default: 0, select: true },
+  lockUntil: { type: Date },
   firstName: {
     type: String,
     required: [true, 'First name is required'],
@@ -132,7 +134,8 @@ userSchema.methods.generateToken = function() {
   return jwt.sign(
     { id: this._id, userId: this._id, email: this.email, role },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRE || '7d' }
+    // admin sign-ins expire after 12 hours; customers stay signed in longer
+    { expiresIn: role === 'admin' ? (process.env.ADMIN_JWT_EXPIRE || '12h') : (process.env.JWT_EXPIRE || '7d') }
   );
 };
 

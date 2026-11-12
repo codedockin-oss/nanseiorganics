@@ -103,10 +103,20 @@ exports.login = async (req, res, next) => {
       return jsonError(res, 401, 'Invalid email or password');
     }
 
+    // after 5 wrong passwords the account waits 15 minutes (stops password guessing, even from many addresses)
+    const MAX_TRIES = 5, LOCK_MS = 15 * 60 * 1000;
+    if (user.lockUntil && new Date(user.lockUntil).getTime() > Date.now()) {
+      return jsonError(res, 429, 'Too many wrong passwords. Please wait 15 minutes, or reset your password.');
+    }
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
+      const tries = (Number(user.loginAttempts) || 0) + 1;
+      await User.findByIdAndUpdate(user._id, tries >= MAX_TRIES
+        ? { loginAttempts: 0, lockUntil: new Date(Date.now() + LOCK_MS) }
+        : { loginAttempts: tries });
       return jsonError(res, 401, 'Invalid email or password');
     }
+    if (user.loginAttempts || user.lockUntil) await User.findByIdAndUpdate(user._id, { loginAttempts: 0, lockUntil: null });
     await User.findByIdAndUpdate(user._id, {
       $push: {
         activityHistory: {

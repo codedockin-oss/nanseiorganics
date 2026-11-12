@@ -10,7 +10,8 @@ const { protect, authorize } = require('../middleware/auth');
 const Order = require('../models/Order');
 const Cart  = require('../models/Cart');
 const shippingService = require('../utils/shippingService');
-const { buildOrder, codOnly, OrderError } = require('../utils/orderGuard');
+const { buildOrder, codOnly, pricingRules, OrderError } = require('../utils/orderGuard');
+const { takeStock, returnStock } = require('../utils/stock');
 
 /** The two look-ups the order guard needs (real database; replaced by fakes in tests). */
 function guardContext(method) {
@@ -18,10 +19,16 @@ function guardContext(method) {
     method,
     findProducts: async ids => {
       const mongoose = require('mongoose');
-      const real = ids.filter(id => mongoose.Types.ObjectId.isValid(id));
-      return real.length ? require('../models/Product').find({ _id: { $in: real } }).select('price').lean() : [];
+      const real = ids.filter(id => mongoose.Types.ObjectId.isValid(id) && String(id).length === 24);
+      const legacy = ids.filter(id => /^\d{1,6}$/.test(String(id))).map(Number);
+      const or = [];
+      if (real.length) or.push({ _id: { $in: real } });
+      if (legacy.length) or.push({ legacyId: { $in: legacy } });
+      return or.length ? require('../models/Product').find({ $or: or }).select('name price sizes legacyId isActive').lean() : [];
     },
     findCoupon: code => require('../models/Coupon').findOne({ code }),
+    // delivery charge, free-delivery threshold, COD on/off and COD fee come from the admin's store settings
+    getRules: async () => { const st = require('../utils/settings'); return st.pricingFrom(await st.getStoreSettings()); },
   };
 }
 
@@ -182,6 +189,7 @@ router.post('/razorpay/verify', optionalAuth, async (req, res) => {
         }
       } catch (e) { console.warn('[Razorpay] could not double-check the paid amount:', rzpErrMsg(e)); }
 
+      await takeStock(doc.items, { strict: false });
       const order = await Order.create({
         ...doc,
         user:        req.user.id,
@@ -299,10 +307,13 @@ router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
     if (status === 'Delivered') { update.isDelivered = true; update.deliveredAt = new Date(); }
     if (status === 'Cancelled') { update.cancelledAt = new Date(); }
 
+    const before = await Order.findById(req.params.id).select('orderStatus items').lean();
+    if (!before) return res.status(404).json({ success: false, message: 'Order not found' });
     const order = await Order.findByIdAndUpdate(req.params.id, update, { new: true })
       .populate('user', 'name email phone')
       .populate('items.product', 'name images');
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+    if (status === 'Cancelled' && before.orderStatus !== 'Cancelled') await returnStock(before.items);
     if (status === 'Cancelled') shippingService.cancelForOrder(order);   // release the courier booking
     res.json({ success: true, data: order });
   } catch (err) {
@@ -314,6 +325,12 @@ router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
 // ─────────────────────────────────────────────────────────
 //  USER ROUTES
 // ─────────────────────────────────────────────────────────
+
+/** GET /api/orders/pricing — public: GST rate, free-delivery threshold and delivery fee used for every order */
+router.get('/pricing', async (req, res) => {
+  const st = require('../utils/settings');
+  res.json({ success: true, data: pricingRules(st.pricingFrom(await st.getStoreSettings())) });
+});
 
 router.get('/my-orders', protect, async (req, res) => {
   try {
@@ -332,7 +349,10 @@ router.get('/my-orders', protect, async (req, res) => {
 router.post('/', protect, async (req, res) => {
   try {
     const doc = await buildOrder(req.body, guardContext(codOnly(req.body && req.body.paymentMethod)));
-    const order = await Order.create({ ...doc, user: req.user.id, isPaid: false });
+    await takeStock(doc.items, { strict: true });
+    let order;
+    try { order = await Order.create({ ...doc, user: req.user.id, isPaid: false }); }
+    catch (e) { await returnStock(doc.items); throw e; }
     await Cart.findOneAndDelete({ user: req.user.id });
     const User = require('../models/User');
     const userDoc = await User.findById(req.user.id).select('name email').lean();
@@ -340,7 +360,7 @@ router.post('/', protect, async (req, res) => {
     shipInBackground(order._id);
     res.status(201).json({ success: true, data: order });
   } catch (err) {
-    if (err instanceof OrderError) return res.status(err.status).json({ success: false, message: err.message });
+    if (err instanceof OrderError || err.status === 409) return res.status(err.status).json({ success: false, message: err.message });
     console.error('[Orders] POST / error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }
@@ -363,6 +383,7 @@ router.put('/:id/cancel', protect, async (req, res) => {
     }
     order.orderStatus = 'Cancelled';
     order.cancelledAt = new Date();
+    await returnStock(order.items);
     order.cancellationReason = String((req.body && req.body.reason) || '').slice(0, 200);
     if (order.isPaid) order.notes = ((order.notes || '') + ' [Refund pending: cancelled by customer after online payment]').trim();
     await order.save();

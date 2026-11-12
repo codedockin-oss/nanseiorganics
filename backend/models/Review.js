@@ -46,7 +46,16 @@ const reviewSchema = new mongoose.Schema({
   isApproved: {
     type: Boolean,
     default: true
-  }
+  },
+  // set when the store hides a review (spam, abuse, personal data) — never because it is negative
+  hiddenReason: { type: String, trim: true, maxlength: 200, default: '' },
+  hiddenAt: Date,
+  // the store's public reply, shown under the review
+  reply: {
+    text: { type: String, trim: true, maxlength: 1000 },
+    at: Date
+  },
+  editedAt: Date
 }, {
   timestamps: true
 });

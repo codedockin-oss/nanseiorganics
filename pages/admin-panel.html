@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nansai Admin — Farm Dashboard</title>
+  <meta name="robots" content="noindex" />
 <script src="../js/config.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -136,7 +137,7 @@
   .topnav-shadow { box-shadow: 0 2px 12px rgba(0,0,0,.08); }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -221,6 +222,19 @@ a .nansai-icon,
 }
 </style>
 
+<style>
+  /* store settings page */
+  .set-card{margin-bottom:16px;padding:20px 22px}
+  .set-h{margin:0 0 4px;font-size:16px;color:#0f172a}
+  .set-help{margin:0 0 14px;font-size:13px;color:#64748b;line-height:1.5}
+  .set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px 16px}
+  .set-grid .form-label,.set-card>.form-label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#334155}
+  .set-wide{grid-column:1/-1}
+  .set-card .set-check{flex-direction:row!important;align-items:center;gap:8px!important;font-weight:500!important;margin:6px 0 10px}
+  .ann-row{display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:8px;margin-bottom:8px}
+  .set-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin:8px 0 30px}
+  @media (max-width:700px){.ann-row{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
@@ -501,7 +515,68 @@ a .nansai-icon,
       </div>
 
       <div id="page-settings" class="page">
-        <div class="stat-card"><p style="margin:0;color:#64748B;font-size:14px;">Settings ready for store configuration.</p></div>
+        <form id="settings-form" onsubmit="saveSettings(event)" autocomplete="off">
+          <div class="stat-card set-card">
+            <h3 class="set-h">Contact details</h3>
+            <p class="set-help">Shown in the footer of every page and used for the WhatsApp links.</p>
+            <div class="set-grid">
+              <label class="form-label">Store name<input class="form-input" name="storeName" maxlength="80"></label>
+              <label class="form-label">Phone<input class="form-input" name="contact.phone" maxlength="20" placeholder="+91 63821 42578"></label>
+              <label class="form-label">WhatsApp number<input class="form-input" name="contact.whatsapp" maxlength="20" placeholder="916382142578"></label>
+              <label class="form-label">Email<input class="form-input" name="contact.email" type="email" maxlength="120"></label>
+              <label class="form-label set-wide">Address<input class="form-input" name="contact.address" maxlength="300" placeholder="Village, district, state, PIN"></label>
+            </div>
+          </div>
+
+          <div class="stat-card set-card">
+            <h3 class="set-h">Business and licence details</h3>
+            <p class="set-help">The FSSAI licence number is shown in the footer once you add it. Leave a field empty if you do not have it.</p>
+            <div class="set-grid">
+              <label class="form-label">Registered business name<input class="form-input" name="legal.businessName" maxlength="120"></label>
+              <label class="form-label">GSTIN<input class="form-input" name="legal.gstin" maxlength="15" placeholder="15 characters"></label>
+              <label class="form-label">FSSAI licence number<input class="form-input" name="legal.fssai" maxlength="20" placeholder="14 digits"></label>
+              <label class="form-label">Grievance officer name<input class="form-input" name="legal.grievanceName" maxlength="80"></label>
+              <label class="form-label">Grievance officer email<input class="form-input" name="legal.grievanceEmail" type="email" maxlength="120"></label>
+              <label class="form-label">Grievance officer phone<input class="form-input" name="legal.grievancePhone" maxlength="20"></label>
+            </div>
+            <p class="set-help" style="margin-top:10px">India's e-commerce rules ask online sellers to show a grievance officer customers can contact. It appears in the footer once filled in.</p>
+          </div>
+
+          <div class="stat-card set-card">
+            <h3 class="set-h">Delivery and cash on delivery</h3>
+            <p class="set-help">Checkout and the server both use these numbers, so the total a customer sees is the total they pay.</p>
+            <div class="set-grid">
+              <label class="form-label">Free delivery on orders of (₹)<input class="form-input" name="shipping.freeShippingAbove" type="number" min="0" step="1"></label>
+              <label class="form-label">Delivery charge below that (₹)<input class="form-input" name="shipping.shippingFee" type="number" min="0" step="1"></label>
+              <label class="form-label set-check"><input type="checkbox" name="shipping.codEnabled"> Offer cash on delivery</label>
+              <label class="form-label">Cash on delivery fee (₹)<input class="form-input" name="shipping.codFee" type="number" min="0" step="1"></label>
+              <label class="form-label set-wide">Dispatch note (optional)<input class="form-input" name="shipping.dispatchNote" maxlength="160" placeholder="e.g. Packed and dispatched within 2 working days"></label>
+            </div>
+          </div>
+
+          <div class="stat-card set-card">
+            <h3 class="set-h">Announcement bar</h3>
+            <p class="set-help">The moving bar at the top of the home page. Add up to 8 lines; a promo code is optional and customers can tap it to copy. Leave the list empty to keep the current text.</p>
+            <label class="form-label set-check"><input type="checkbox" name="announcement.enabled"> Show the announcement bar</label>
+            <div id="ann-rows"></div>
+            <button type="button" class="btn btn-sm" onclick="addAnnRow()">Add a line</button>
+          </div>
+
+          <div class="stat-card set-card">
+            <h3 class="set-h">Social links</h3>
+            <p class="set-help">Full links starting with https://. Empty links are not shown.</p>
+            <div class="set-grid">
+              <label class="form-label">Instagram<input class="form-input" name="social.instagram" maxlength="300" placeholder="https://instagram.com/..."></label>
+              <label class="form-label">Facebook<input class="form-input" name="social.facebook" maxlength="300"></label>
+              <label class="form-label">YouTube<input class="form-input" name="social.youtube" maxlength="300"></label>
+            </div>
+          </div>
+
+          <div class="set-actions">
+            <span id="settings-status" class="set-help"></span>
+            <button type="submit" class="btn btn-primary" id="settings-save">Save settings</button>
+          </div>
+        </form>
       </div>
 
       <!-- ===== NEWS PAGE ===== -->
@@ -941,7 +1016,7 @@ async function loadData() {
   }
 
   if (orderRes.success) {
-    Store.orders = (orderRes.data || []).map(o => ({
+    Store.orders = escDeep(orderRes.data || []).map(o => ({
       ...o,
       id:            o.orderNumber || o._id,
       _id:           o._id,
@@ -969,7 +1044,7 @@ async function loadData() {
   }
 
   if (custRes.success) {
-    Store.customers = (custRes.data || []).map(c => ({
+    Store.customers = escDeep(custRes.data || []).map(c => ({
       ...c,
       id:    c._id || c.id,
       city:  c.city || (c.addresses?.[0]?.city) || '—',
@@ -1010,6 +1085,7 @@ function navigate(page) {
   if (page === 'news') renderNews();
   if (page === 'blogs') renderBlogs();
   if (page === 'reviews') renderReviews();
+  if (page === 'settings') renderSettings();
 }
 
 // ============================================================
@@ -1689,7 +1765,7 @@ function payBadge(pay) {
 
 async function renderOrders() {
   const res = await API.get('/orders');
-  if (res.success) Store.orders = (res.data || []).map(o => ({
+  if (res.success) Store.orders = escDeep(res.data || []).map(o => ({
     ...o,
     id:            o.orderNumber || o._id,
     _id:           o._id,
@@ -1870,7 +1946,7 @@ function closeOrderModal() { document.getElementById('order-modal').style.displa
 // ============================================================
 async function renderCustomers() {
   const res = await API.get('/users');
-  if (res.success) Store.customers = (res.data || []).map(c => ({
+  if (res.success) Store.customers = escDeep(res.data || []).map(c => ({
     ...c,
     id:    c._id || c.id,
     city:  c.city || c.addresses?.[0]?.city || '—',
@@ -1990,6 +2066,22 @@ document.addEventListener('keydown', e => {
 // ============================================================
 // REVIEWS (ADMIN)
 // ============================================================
+/* Orders and customer records contain text typed by customers (names, addresses, notes).
+   Escape every string once when it arrives, so no view can turn it into markup or script. */
+function escDeep(v) {
+  if (typeof v === 'string') return escAdmin(v);
+  if (Array.isArray(v)) return v.map(escDeep);
+  if (v && typeof v === 'object' && !(v instanceof Date)) { const o = {}; for (const k in v) o[k] = escDeep(v[k]); return o; }
+  return v;
+}
+function escAdmin(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+async function reviewRequest(method, endpoint, body) {
+  const r = await fetch(API.base + endpoint, { method, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }, body: JSON.stringify(body || {}) });
+  if (r.status === 401) { doLogout(); return { success: false }; }
+  return r.json();
+}
 async function renderReviews() {
   const res = await API.get('/reviews/admin/all');
   if (!res.success) { document.getElementById('reviews-body').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">Failed to load reviews</td></tr>'; return; }
@@ -1999,20 +2091,114 @@ async function renderReviews() {
   const countEl = document.getElementById('review-count');
   if (countEl) countEl.textContent = filtered.length + ' review' + (filtered.length !== 1 ? 's' : '');
   const stars = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+  // Customer text is always escaped. Reviews are hidden (with a reason) rather than edited or deleted;
+  // negative reviews stay up — reply to them instead.
   document.getElementById('reviews-body').innerHTML = filtered.length ? filtered.map(r => {
+    const id = escAdmin(r._id);
     const date = new Date(r.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-    const pName = r.product?.name || '—';
-    const cName = r.user?.name || r.user?.firstName || '—';
-    const comment = (r.comment||'').slice(0,80) + ((r.comment||'').length > 80 ? '…' : '');
-    const titleHtml = r.title ? '<strong>' + r.title + '</strong> — ' : '';
-    return '<tr><td style="font-size:13px;font-weight:500;">' + pName + '</td><td style="font-size:13px;">' + cName + '</td><td><span style="color:#f59e0b;font-size:14px;">' + stars(r.rating) + '</span> <span style="font-size:11px;color:#64748B;">(' + r.rating + ')</span></td><td style="font-size:12px;color:#475569;max-width:220px;">' + titleHtml + comment + '</td><td>' + (r.isVerifiedPurchase ? '<span class="badge badge-delivered">✓ Verified</span>' : '<span class="badge badge-unpaid">Unverified</span>') + '</td><td style="font-size:12px;color:#64748B;">' + date + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteReview(\'' + r._id + '\')" >Delete</button></td></tr>';
+    const pName = escAdmin(r.product?.name || '—');
+    const cName = escAdmin(r.user?.name || r.user?.firstName || '—');
+    const full = (r.comment || '');
+    const comment = escAdmin(full.slice(0, 120) + (full.length > 120 ? '…' : ''));
+    const titleHtml = r.title ? '<strong>' + escAdmin(r.title) + '</strong> — ' : '';
+    const replyHtml = r.reply && r.reply.text ? '<div style="margin-top:6px;padding:6px 8px;background:#fdf8ec;border-left:3px solid #c9a84c;font-size:11px;color:#334155;"><b>Your reply:</b> ' + escAdmin(r.reply.text) + '</div>' : '';
+    const hidden = r.isApproved === false;
+    const status = (r.isVerifiedPurchase ? '<span class="badge badge-delivered">Verified buyer</span>' : '<span class="badge badge-unpaid">Not verified</span>') +
+      (hidden ? '<div style="margin-top:4px;"><span class="badge badge-unpaid">Hidden</span> <span style="font-size:11px;color:#64748B;">' + escAdmin(r.hiddenReason || '') + '</span></div>' : '');
+    const needsReply = !hidden && r.rating <= 3 && !(r.reply && r.reply.text);
+    return '<tr' + (hidden ? ' style="opacity:.6"' : '') + '><td style="font-size:13px;font-weight:500;">' + pName + '</td><td style="font-size:13px;">' + cName + '</td>' +
+      '<td><span style="color:#f59e0b;font-size:14px;">' + stars(r.rating) + '</span> <span style="font-size:11px;color:#64748B;">(' + Number(r.rating) + ')</span>' +
+      (needsReply ? '<div style="font-size:11px;color:#b45309;margin-top:2px;">Needs a reply</div>' : '') + '</td>' +
+      '<td style="font-size:12px;color:#475569;max-width:260px;">' + titleHtml + comment + replyHtml + '</td><td>' + status + '</td><td style="font-size:12px;color:#64748B;">' + date + '</td>' +
+      '<td style="white-space:nowrap;"><button class="btn btn-sm" onclick="replyReview(\'' + id + '\')">' + (r.reply && r.reply.text ? 'Edit reply' : 'Reply') + '</button> ' +
+      (hidden ? '<button class="btn btn-sm" onclick="setReviewHidden(\'' + id + '\', false)">Show again</button>'
+              : '<button class="btn btn-sm" onclick="setReviewHidden(\'' + id + '\', true)">Hide</button>') + '</td></tr>';
   }).join('') : '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94A3B8;">No reviews found</td></tr>';
 }
+async function replyReview(id) {
+  const text = prompt('Your public reply (leave empty to remove it):');
+  if (text === null) return;
+  const res = await reviewRequest('PUT', '/reviews/' + id + '/reply', { text });
+  if (!res.success) { toast(res.message || 'Could not save the reply', 'error'); return; }
+  toast(text.trim() ? 'Reply posted' : 'Reply removed', 'info'); renderReviews();
+}
+async function setReviewHidden(id, hidden) {
+  let reason = '';
+  if (hidden) {
+    reason = prompt('Why hide this review? (for example: spam, abusive language, personal details). Do not hide a review only because it is negative.');
+    if (reason === null) return;
+    if (!reason.trim()) { toast('Please give a reason', 'error'); return; }
+  }
+  const res = await reviewRequest('PATCH', '/reviews/' + id + '/visibility', { hidden, reason });
+  if (!res.success) { toast(res.message || 'Could not update the review', 'error'); return; }
+  toast(hidden ? 'Review hidden' : 'Review shown again', 'info'); renderReviews();
+}
 async function deleteReview(id) {
-  if (!confirm('Delete this review?')) return;
+  if (!confirm('Delete this review permanently? Hiding it is usually better.')) return;
   const res = await API.delete('/reviews/' + id);
   if (!res.success) { toast(res.message || 'Failed to delete review', 'error'); return; }
   toast('Review deleted', 'info'); renderReviews();
+}
+
+// ============================================================
+// STORE SETTINGS
+// ============================================================
+function _setVal(form, name, v) {
+  const el = form.elements[name]; if (!el) return;
+  if (el.type === 'checkbox') el.checked = !!v; else el.value = v == null ? '' : v;
+}
+function addAnnRow(item) {
+  const wrap = document.getElementById('ann-rows');
+  if (wrap.children.length >= 8) { toast('Up to 8 lines', 'error'); return; }
+  const row = document.createElement('div');
+  row.className = 'ann-row';
+  row.innerHTML = '<input class="form-input" data-k="text" maxlength="140" placeholder="Text, e.g. Free delivery on orders above ₹999">' +
+    '<input class="form-input" data-k="code" maxlength="30" placeholder="Promo code (optional)">' +
+    '<input class="form-input" data-k="link" maxlength="300" placeholder="Link (optional)">' +
+    '<button type="button" class="btn btn-sm" onclick="this.parentElement.remove()" aria-label="Remove line">Remove</button>';
+  if (item) row.querySelectorAll('input').forEach(i => { i.value = item[i.dataset.k] || ''; });
+  wrap.appendChild(row);
+}
+async function renderSettings() {
+  const form = document.getElementById('settings-form');
+  const status = document.getElementById('settings-status');
+  status.textContent = 'Loading…';
+  const res = await API.get('/settings/admin');
+  if (!res.success) { status.textContent = 'Could not load the settings.'; return; }
+  const e = res.effective || {};
+  const flat = {
+    storeName: e.storeName, 'contact.phone': e.contact?.phone, 'contact.whatsapp': e.contact?.whatsapp, 'contact.email': e.contact?.email,
+    'contact.address': e.contact?.address, 'legal.businessName': e.legal?.businessName, 'legal.gstin': e.legal?.gstin, 'legal.fssai': e.legal?.fssai, 'legal.grievanceName': e.legal?.grievanceName, 'legal.grievanceEmail': e.legal?.grievanceEmail, 'legal.grievancePhone': e.legal?.grievancePhone,
+    'shipping.freeShippingAbove': e.shipping?.freeShippingAbove, 'shipping.shippingFee': e.shipping?.shippingFee,
+    'shipping.codEnabled': e.shipping?.codEnabled !== false, 'shipping.codFee': e.shipping?.codFee, 'shipping.dispatchNote': e.shipping?.dispatchNote,
+    'announcement.enabled': e.announcement?.enabled !== false,
+    'social.instagram': e.social?.instagram, 'social.facebook': e.social?.facebook, 'social.youtube': e.social?.youtube,
+  };
+  Object.entries(flat).forEach(([k, v]) => _setVal(form, k, v));
+  const wrap = document.getElementById('ann-rows'); wrap.innerHTML = '';
+  (e.announcement?.items || []).forEach(addAnnRow);
+  status.textContent = res.data && res.data.updatedAt ? 'Last saved ' + new Date(res.data.updatedAt).toLocaleString('en-IN') : 'Not saved yet: the store is using the defaults shown.';
+}
+async function saveSettings(ev) {
+  ev.preventDefault();
+  const form = document.getElementById('settings-form');
+  const body = { contact: {}, legal: {}, shipping: {}, announcement: {}, social: {} };
+  Array.from(form.elements).forEach(el => {
+    if (!el.name) return;
+    const v = el.type === 'checkbox' ? el.checked : el.value.trim();
+    const [a, b] = el.name.split('.');
+    if (b) body[a][b] = v; else body[a] = v;
+  });
+  body.announcement.items = Array.from(document.querySelectorAll('#ann-rows .ann-row')).map(r => {
+    const o = {}; r.querySelectorAll('input').forEach(i => { o[i.dataset.k] = i.value.trim(); }); return o;
+  }).filter(o => o.text);
+  const btn = document.getElementById('settings-save');
+  btn.disabled = true;
+  const res = await API.put('/settings', body);
+  btn.disabled = false;
+  if (!res.success) { toast(res.message || 'Could not save the settings', 'error'); return; }
+  toast('Settings saved. The shop uses them within a minute.', 'info');
+  renderSettings();
 }
 window.onload = async () => {
   const token = localStorage.getItem('admin_token') || localStorage.getItem('nansai_token');

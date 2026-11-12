@@ -6,6 +6,40 @@ const Review = require('../models/Review');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 
+// Reviews are plain text: drop any HTML tags and control characters before saving.
+function cleanText(v, max) {
+  return String(v || '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .trim()
+    .slice(0, max);
+}
+
+// Shown publicly as "Priya S." — first name and last initial, never the full name or email.
+function publicName(user) {
+  if (!user) return 'Customer';
+  const first = String(user.firstName || '').trim();
+  const last = String(user.lastName || '').trim();
+  const full = String(user.name || '').trim().split(/\s+/).filter(Boolean);
+  const f = first || full[0] || 'Customer';
+  const l = last || (full.length > 1 ? full[full.length - 1] : '');
+  return l ? `${f} ${l[0].toUpperCase()}.` : f;
+}
+
+function publicReview(r) {
+  return {
+    _id: r._id,
+    rating: r.rating,
+    title: r.title || '',
+    comment: r.comment,
+    isVerifiedPurchase: !!r.isVerifiedPurchase,
+    createdAt: r.createdAt,
+    editedAt: r.editedAt || null,
+    name: publicName(r.user),
+    reply: r.reply && r.reply.text ? { text: r.reply.text, at: r.reply.at } : null
+  };
+}
+
 async function refreshProductRating(productId) {
   const stats = await Review.aggregate([
     { $match: { product: new mongoose.Types.ObjectId(productId), isApproved: true } },
@@ -27,9 +61,14 @@ router.get('/product/:productId', async (req, res) => {
   try {
     const reviews = await Review.find({ product: req.params.productId, isApproved: true })
       .populate('user', 'name firstName lastName')
-      .sort('-createdAt');
-    const product = await Product.findById(req.params.productId).select('rating numReviews').lean();
-    res.json({ success: true, data: reviews, rating: product?.rating || 0, numReviews: product?.numReviews || 0 });
+      .sort('-createdAt')
+      .lean();
+    const histogram = [0, 0, 0, 0, 0];
+    reviews.forEach(r => { if (r.rating >= 1 && r.rating <= 5) histogram[r.rating - 1]++; });
+    const count = reviews.length;
+    const avg = count ? Math.round((reviews.reduce((t, r) => t + r.rating, 0) / count) * 10) / 10 : 0;
+    // rating and count come from the published reviews themselves, not from stored product fields
+    res.json({ success: true, data: reviews.map(publicReview), rating: avg, numReviews: count, histogram });
   } catch (error) {
     console.error('[Reviews] GET /product/:id error:', error.message);
     res.status(500).json({ success: false, message: 'Server error' });
@@ -39,7 +78,7 @@ router.get('/product/:productId', async (req, res) => {
 // GET /api/reviews/my-reviews — get current user's reviews
 router.get('/my-reviews', protect, async (req, res) => {
   try {
-    const reviews = await Review.find({ user: req.user.id }).select('product orderId rating').lean();
+    const reviews = await Review.find({ user: req.user.id }).select('product orderId rating title comment isApproved').lean();
     res.json({ success: true, data: reviews });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
@@ -79,8 +118,11 @@ router.post('/', protect, async (req, res) => {
       return res.status(400).json({ success: false, message: 'You have already reviewed this product' });
     }
 
-    const sanitizedTitle = title ? title.trim().slice(0, 100) : '';
-    const sanitizedComment = comment.trim().slice(0, 1000);
+    const sanitizedTitle = cleanText(title, 100);
+    const sanitizedComment = cleanText(comment, 1000);
+    if (sanitizedComment.length < 3) {
+      return res.status(400).json({ success: false, message: 'Comment is too short' });
+    }
 
     const review = await Review.create({
       product,
@@ -118,11 +160,13 @@ router.patch('/:id', protect, async (req, res) => {
       }
       review.rating = ratingNum;
     }
-    if (title !== undefined) review.title = title.trim().slice(0, 100);
+    if (title !== undefined) review.title = cleanText(title, 100);
     if (comment !== undefined) {
-      if (comment.trim().length < 3) return res.status(400).json({ success: false, message: 'Comment is too short' });
-      review.comment = comment.trim().slice(0, 1000);
+      const c = cleanText(comment, 1000);
+      if (c.length < 3) return res.status(400).json({ success: false, message: 'Comment is too short' });
+      review.comment = c;
     }
+    review.editedAt = new Date();
     await review.save();
     const summary = await refreshProductRating(review.product);
     res.json({ success: true, data: review, summary });
@@ -138,8 +182,8 @@ router.put('/:id', protect, async (req, res) => {
     const { rating, title, comment } = req.body;
     const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
-    if (review.user.toString() !== req.user.id && req.user.role !== 'admin') {
-      return res.status(403).json({ success: false, message: 'Not authorized to edit this review' });
+    if (review.user.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Only the customer who wrote this review can edit it' });
     }
     if (rating !== undefined) {
       const ratingNum = Number(rating);
@@ -148,8 +192,13 @@ router.put('/:id', protect, async (req, res) => {
       }
       review.rating = ratingNum;
     }
-    if (title !== undefined) review.title = title.trim().slice(0, 100);
-    if (comment !== undefined) review.comment = comment.trim().slice(0, 1000);
+    if (title !== undefined) review.title = cleanText(title, 100);
+    if (comment !== undefined) {
+      const c = cleanText(comment, 1000);
+      if (c.length < 3) return res.status(400).json({ success: false, message: 'Comment is too short' });
+      review.comment = c;
+    }
+    review.editedAt = new Date();
     await review.save();
     const summary = await refreshProductRating(review.product);
     res.json({ success: true, data: review, summary });
@@ -177,6 +226,41 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 
+// PATCH /api/reviews/:id/visibility — admin: hide (with a reason) or restore a review
+router.patch('/:id/visibility', protect, admin, async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+    if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+    const hide = !!req.body.hidden;
+    const reason = cleanText(req.body.reason, 200);
+    if (hide && !reason) return res.status(400).json({ success: false, message: 'Please give a reason for hiding this review' });
+    review.isApproved = !hide;
+    review.hiddenReason = hide ? reason : '';
+    review.hiddenAt = hide ? new Date() : undefined;
+    await review.save();
+    const summary = await refreshProductRating(review.product);
+    res.json({ success: true, data: review, summary });
+  } catch (error) {
+    console.error('[Reviews] PATCH /:id/visibility error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// PUT /api/reviews/:id/reply — admin: add, change or remove (empty text) the store's public reply
+router.put('/:id/reply', protect, admin, async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+    if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+    const text = cleanText(req.body.text, 1000);
+    review.reply = text ? { text, at: new Date() } : undefined;
+    await review.save();
+    res.json({ success: true, data: review });
+  } catch (error) {
+    console.error('[Reviews] PUT /:id/reply error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // GET /api/reviews/admin/all — admin: list all reviews
 router.get('/admin/all', protect, admin, async (req, res) => {
   try {
@@ -192,3 +276,5 @@ router.get('/admin/all', protect, admin, async (req, res) => {
 });
 
 module.exports = router;
+module.exports.cleanText = cleanText;
+module.exports.publicName = publicName;

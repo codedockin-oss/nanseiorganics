@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /pages/admin-panel.html
+Disallow: /pages/checkoutmyorderpage.html
+Disallow: /pages/account.html

@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+  <script>/* ImageKit photos: ask for a copy about twice the size it is shown at, instead of the full upload */window.ikThumb=function(u,w){if(!u||u.indexOf('ik.imagekit.io')<0||/[?&]tr=/.test(u))return u||'';return u+(u.indexOf('?')<0?'?':'&')+'tr=w-'+w;};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>NANSEI Organics Checkout</title>
+  <meta name="robots" content="noindex" />
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="../js/config.js"></script>
@@ -336,7 +338,7 @@ textarea.inp{resize:none;line-height:1.65}
 }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -421,550 +423,320 @@ a .nansai-icon,
 }
 </style>
 
+<style>
+/* ---------- Checkout (rebuilt): brand palette, one page, three sections ---------- */
+body{background:#f7f3ec}
+.ck-wrap{max-width:1120px;margin:0 auto;padding:28px 20px 48px;font-family:'Inter',system-ui,sans-serif;color:#1a2416}
+.ck-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px}
+.ck-head h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.2rem;font-weight:700;color:#0f2218;margin:0;line-height:1.1}
+.ck-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items:start}
+.ck-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.ck-card{background:#fff;border:1px solid rgba(26,58,42,.12);border-radius:12px;padding:20px 22px}
+.ck-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ck-card h2{display:flex;align-items:center;gap:10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.45rem;font-weight:700;color:#0f2218;margin:0}
+.ck-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;border:1.5px solid #1a3a2a;font:600 .78rem/1 'Inter',sans-serif;color:#1a3a2a}
+.ck-muted{color:#6b7f70;font-size:.82rem}
+.ck-link{background:none;border:0;padding:0;font:600 .85rem/1.4 'Inter',sans-serif;color:#2d5a3d;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.ck-link:hover{color:#0f2218}
+.ck-small{font-size:.75rem;font-weight:500}
+.ck-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:8px;border:1.5px solid #0f2218;background:#0f2218;color:#fff;font:600 .95rem/1 'Inter',sans-serif;cursor:pointer;text-decoration:none;transition:background .15s}
+.ck-btn:hover{background:#1a3a2a}
+.ck-btn:disabled{opacity:.6;cursor:not-allowed}
+.ck-btn-line{background:#fff;color:#0f2218}
+.ck-btn-line:hover{background:#f0f5f1}
+.ck-signin{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid #c9a84c;border-left-width:4px;border-radius:10px;padding:14px 18px}
+.ck-signin b{font-size:.95rem;color:#0f2218}
+.ck-signin p{margin:2px 0 0;font-size:.84rem;color:#4d6152}
+/* items */
+.ck-item{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-top:1px solid rgba(26,58,42,.08)}
+.ck-item:first-child{border-top:0;padding-top:4px}
+.ck-item img{width:64px;height:64px;object-fit:cover;border-radius:8px;background:#f2efe7}
+.ck-item-name{font-weight:600;font-size:.95rem;color:#0f2218;text-decoration:none;line-height:1.35}
+.ck-item-name:hover{text-decoration:underline}
+.ck-item-meta{font-size:.82rem;color:#6b7f70;margin-top:2px}
+.ck-item-ctrl{display:flex;align-items:center;gap:14px;margin-top:8px}
+.ck-qty{display:inline-flex;align-items:center;border:1px solid rgba(26,58,42,.22);border-radius:8px;overflow:hidden}
+.ck-qty button{width:34px;height:32px;border:0;background:#fff;font-size:1.05rem;color:#0f2218;cursor:pointer}
+.ck-qty button:hover{background:#f0f5f1}
+.ck-qty span{min-width:30px;text-align:center;font-weight:600;font-size:.9rem}
+.ck-item-price{text-align:right;font-weight:700;font-size:.98rem;color:#0f2218;white-space:nowrap}
+.ck-item-price s{display:block;font-weight:400;font-size:.78rem;color:#8a978d}
+.ck-empty{text-align:center;padding:18px 0 6px}
+.ck-empty p{margin:0 0 12px;color:#4d6152}
+.ck-note{margin:12px 0 0;padding:10px 12px;background:#f7f3ec;border-radius:8px;font-size:.84rem;color:#4d6152}
+/* addresses */
+.ck-addr-list{display:flex;flex-direction:column;gap:10px}
+.ck-addr{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1.5px solid rgba(26,58,42,.15);border-radius:10px;cursor:pointer;background:#fff}
+.ck-addr.selected{border-color:#1a3a2a;background:#f6f9f6}
+.ck-addr input{margin-top:3px;accent-color:#1a3a2a;width:18px;height:18px;flex-shrink:0}
+.ck-addr-body{flex:1;min-width:0;font-size:.88rem;line-height:1.55;color:#33453a}
+.ck-addr-body b{color:#0f2218;font-size:.92rem}
+.ck-tag{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:20px;background:#efe9da;color:#6f5410;font-size:.7rem;font-weight:600;vertical-align:1px}
+.ck-addr-del{background:none;border:0;color:#8a978d;font-size:.8rem;cursor:pointer;text-decoration:underline}
+.ck-form{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin-top:14px;padding-top:14px;border-top:1px dashed rgba(26,58,42,.15)}
+.ck-span2{grid-column:1/-1}
+.ck-field label,.ck-label{display:block;font-size:.82rem;font-weight:600;color:#1a3a2a;margin-bottom:6px}
+.ck-field input{width:100%;height:46px;padding:0 12px;border:1px solid rgba(26,58,42,.25);border-radius:8px;background:#fff;font:400 16px/1.2 'Inter',sans-serif;color:#0f2218;outline:none}
+.ck-field input:focus{border-color:#2d5a3d;box-shadow:0 0 0 3px rgba(45,90,61,.15)}
+.ck-field input.co-err{border-color:#b83232}
+.ck-phone{display:flex}
+.ck-phone span{display:flex;align-items:center;padding:0 12px;border:1px solid rgba(26,58,42,.25);border-right:0;border-radius:8px 0 0 8px;background:#f7f3ec;font-size:.9rem;color:#33453a}
+.ck-phone input{border-radius:0 8px 8px 0}
+.co-err-msg{display:none;margin:5px 0 0;font-size:.78rem;color:#b83232}
+.ck-chips{display:flex;gap:8px}
+.ck-chips .co-atype-btn{height:34px;padding:0 14px;border:1px solid rgba(26,58,42,.25);border-radius:20px;background:#fff;font:500 .84rem/1 'Inter',sans-serif;color:#33453a;cursor:pointer}
+.ck-chips .co-atype-btn.co-atype-active{border-color:#1a3a2a;background:#1a3a2a;color:#fff}
+.ck-form-actions{display:flex;align-items:center;gap:16px}
+/* payment */
+.ck-pay-list{display:flex;flex-direction:column;gap:10px}
+.ck-pay{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1.5px solid rgba(26,58,42,.15);border-radius:10px;cursor:pointer}
+.ck-pay:has(input:checked){border-color:#1a3a2a;background:#f6f9f6}
+.ck-pay input{margin-top:3px;accent-color:#1a3a2a;width:18px;height:18px;flex-shrink:0}
+.ck-pay b{display:block;font-size:.95rem;color:#0f2218}
+.ck-pay small{display:block;font-size:.82rem;color:#5b6f60;margin-top:2px}
+/* summary */
+.ck-side{position:sticky;top:84px}
+.ck-summary{background:#fff;border:1px solid rgba(26,58,42,.12);border-radius:12px;padding:20px 22px}
+.ck-summary h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.45rem;font-weight:700;color:#0f2218;margin:0 0 12px}
+.ck-sum-items{display:flex;flex-direction:column;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(26,58,42,.1);font-size:.86rem}
+.ck-sum-item{display:flex;justify-content:space-between;gap:12px;color:#33453a}
+.ck-sum-item span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-rows{padding:12px 0;font-size:.9rem}
+.ck-row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;color:#33453a}
+.ck-total{margin-top:6px;padding-top:10px;border-top:1px solid rgba(26,58,42,.12);font-size:1.08rem;font-weight:700;color:#0f2218}
+.ck-save{margin:6px 0 0;font-size:.8rem;color:#6f5410}
+.ck-promo{padding:10px 0 14px;border-top:1px solid rgba(26,58,42,.1)}
+.ck-promo-row{display:flex;gap:8px;margin-top:10px}
+.ck-promo-row input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid rgba(26,58,42,.25);border-radius:8px;font:500 16px/1 'Inter',sans-serif;text-transform:uppercase}
+.ck-promo-row .ck-btn{min-height:42px;padding:0 16px}
+.ck-pay-btn{width:100%;min-height:52px;font-size:1rem}
+.ck-facts{list-style:none;margin:14px 0 0;padding:0;font-size:.78rem;line-height:1.5;color:#5b6f60}
+.ck-facts li{padding:3px 0}
+.ck-facts a{color:#2d5a3d}
+.ck-mtotal,.ck-mbar{display:none}
+/* the page fade-in leaves a transform that would pin the mobile pay bar to the page instead of the screen */
+#checkoutPage{animation:none!important;transform:none!important}
+.ck-card-head{flex-wrap:wrap}
+.ck-card h2{white-space:nowrap}
+@media (max-width:900px){
+  .ck-wrap{padding:16px 14px 110px}
+  .ck-head h1{font-size:1.8rem}
+  .ck-grid{grid-template-columns:1fr;gap:16px}
+  .ck-side{position:static;order:-1}
+  .ck-summary{display:none}
+  .ck-summary.open{display:block}
+  .ck-summary .ck-pay-btn{display:none}
+  .ck-mtotal{display:flex;width:100%;align-items:center;gap:10px;margin:0 0 12px;padding:12px 14px;background:#fff;border:1px solid rgba(26,58,42,.12);border-radius:10px;font:500 .9rem/1.2 'Inter',sans-serif;color:#33453a;cursor:pointer}
+  .ck-mtotal b{font-size:1.05rem;color:#0f2218}
+  .ck-mtotal-hint{margin-left:auto;font-size:.8rem;color:#2d5a3d;text-decoration:underline}
+  .ck-card{padding:16px}
+  .ck-form{grid-template-columns:1fr}
+  .ck-item{grid-template-columns:56px minmax(0,1fr);}
+  .ck-item img{width:56px;height:56px}
+  .ck-item-price{grid-column:2;text-align:left}
+  .ck-item-price s{display:inline;margin-left:6px}
+  .ck-signin{flex-direction:column;align-items:flex-start}
+  .ck-mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:900;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid rgba(26,58,42,.15)}
+  .ck-mbar div{display:flex;flex-direction:column;font-size:.75rem;color:#5b6f60}
+  .ck-mbar b{font-size:1.15rem;color:#0f2218}
+  .ck-mbar .ck-btn{flex:1;max-width:240px}
+}
+#ordersPage.active ~ .ck-mbar,body.ck-orders .ck-mbar{display:none}
+/* overlays */
+#processingOverlay{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;background:rgba(15,34,24,.55)}
+#processingOverlay.show{display:flex}
+.ck-proc{background:#fff;border-radius:12px;padding:22px 26px;font-family:'Inter',sans-serif;text-align:center;min-width:240px}
+.ck-proc b{display:block;color:#0f2218;margin-bottom:4px}
+.ck-proc span{font-size:.85rem;color:#5b6f60}
+#successOverlay{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,34,24,.55)}
+#successOverlay.show{display:flex}
+.ck-done{width:min(440px,100%);background:#fff;border-radius:14px;padding:28px 26px;font-family:'Inter',sans-serif;color:#33453a}
+.ck-done h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.9rem;color:#0f2218;margin:0 0 6px}
+.ck-done p{margin:0 0 6px;font-size:.92rem;line-height:1.55}
+.ck-done .ck-ordno{display:inline-block;margin:8px 0 14px;padding:6px 12px;background:#f7f3ec;border-radius:8px;font-weight:700;color:#0f2218;letter-spacing:.02em}
+.ck-done-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.ck-done-actions .ck-btn{width:100%}
+</style>
 </head>
 <body>
 
 <!-- ------------------ PROCESSING OVERLAY ------------------ -->
-<div id="processingOverlay">
-  <div class="proc-logo">
-    <svg width="30" height="30" fill="none" viewBox="0 0 24 24">
-      <rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
-      <line x1="1" y1="10" x2="23" y2="10" stroke="#fff" stroke-width="2"/>
-      <circle cx="6" cy="15" r="1.5" fill="#fff"/>
-    </svg>
-  </div>
-  <p style="font-size:1rem;font-weight:700;color:#0f1111" id="procTitle">Processing Payment</p>
-  <p style="font-size:.82rem;color:#565959" id="procSub">Please do not press back or refresh</p>
-  <div class="proc-bar-wrap"><div class="proc-bar" id="procBar"></div></div>
-  <p style="font-size:.72rem;color:#aaa;margin-top:4px">&#128274; Secured by Razorpay &nbsp; 256-bit encryption</p>
-</div>
+<div id="processingOverlay" role="status" aria-live="polite"><div class="ck-proc"><b id="procTitle">Placing your order</b><span id="procSub">Please don't close this page.</span><div id="procBar" hidden></div></div></div>
 
 <!-- ------------------ SUCCESS OVERLAY ------------------ -->
-<div id="successOverlay">
-  <div class="success-box" onclick="event.stopPropagation()">
-    <div class="success-band">
-      <div id="confettiBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
-      <div class="check-ring">
-        <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
-          <path class="check-path" d="M9 19l7 7 13-13" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px">Order Confirmed!</p>
-      <p style="color:rgba(255,255,255,.65);font-size:.87rem">Thank you for choosing NANSEI Organics</p>
-    </div>
-    <div style="padding:28px 32px">
-      <p style="font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:4px">Order Reference</p>
-      <p style="font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:500;color:var(--ink);margin-bottom:20px" id="successOrderId"></p>
-      <div style="background:var(--fog);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:24px">
-        <div style="width:40px;height:40px;border-radius:12px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M3 7h13v10H3z" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M16 10h3l2 3v4h-5z" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="7.5" cy="17.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="17.5" r="1.5" fill="#fff"/></svg>
-        </div>
-        <div>
-          <p style="font-size:.78rem;font-weight:600;color:var(--ink-3);margin-bottom:2px">Expected Delivery</p>
-          <p style="font-weight:700;color:var(--moss);font-size:.95rem" id="successDelivDate"></p>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <button onclick="sendWhatsAppOrder()" style="width:100%;padding:14px 24px;background:#25D366;color:#fff;border:none;border-radius:14px;font-family:'Roboto',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2px;" onmouseover="this.style.background='#1ebe5d'" onmouseout="this.style.background='#25D366'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Send Order to WhatsApp
-        </button>
-        <button class="btn btn-primary btn-full" onclick="goToOrders()">View My Orders</button>
-        <button class="btn btn-ghost btn-full" onclick="handleSuccessClose()">Continue Shopping</button>
-      </div>
-    </div>
+<div id="successOverlay"><div class="ck-done" role="dialog" aria-modal="true" aria-labelledby="ckDoneH">
+  <h2 id="ckDoneH">Thank you, your order is placed</h2>
+  <p>Your order number</p>
+  <span class="ck-ordno" id="successOrderId"></span>
+  <p id="ckDonePay"></p>
+  <p>We will email you when it is packed and again when it ships, with a tracking link.</p>
+  <span id="successDelivDate" hidden></span>
+  <div class="ck-done-actions">
+    <button type="button" class="ck-btn" onclick="goToOrders()">View my order</button>
+    <button type="button" class="ck-btn ck-btn-line" onclick="handleSuccessClose()">Continue shopping</button>
+    <button type="button" class="ck-link" onclick="sendWhatsAppOrder()">Send the order details to my WhatsApp</button>
   </div>
-</div>
+</div></div>
 
 <!-- ------------------ NAVBAR ------------------ -->
-<nav style="position:sticky;top:0;z-index:200;background:#fff;backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid rgba(26,58,42,.12);box-shadow:0 2px 8px rgba(10,30,15,.06);height:68px;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 20px;height:100%;display:flex;align-items:center;justify-content:space-between">
-    <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
-      <img src="nansei organics.png" alt="Nansei Organics" style="height:42px;width:auto;"/>
-    </a>
-    <div style="display:flex;align-items:center;gap:6px">
-      <button id="navCheckout" onclick="showPage('checkout')" style="display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:99px;font-size:.82rem;font-weight:600;letter-spacing:.01em;border:1.5px solid rgba(45,90,61,.3);background:rgba(45,90,61,.1);color:var(--moss);cursor:pointer;transition:var(--t);">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1" stroke="currentColor" stroke-width="2"/><circle cx="19" cy="21" r="1" stroke="currentColor" stroke-width="2"/><path d="M2 2h2l2.66 12.42A2 2 0 0 0 8.64 16h9.78a2 2 0 0 0 1.95-1.57L21.65 7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Checkout
-      </button>
-      <button id="navOrders" onclick="showPage('orders')" style="display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:99px;font-size:.82rem;font-weight:600;letter-spacing:.01em;border:1.5px solid transparent;background:transparent;color:var(--ink-3);cursor:pointer;transition:var(--t);">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Orders
-        <span id="ordersBadge" class="badge-pill" style="display:none"></span>
-      </button>
-      <a href="wishlist.html" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;color:var(--ink-3);text-decoration:none;transition:var(--t);position:relative;" onmouseover="this.style.color='#ef4444';this.style.background='rgba(239,68,68,.08)'" onmouseout="this.style.color='var(--ink-3)';this.style.background='transparent'" title="Wishlist" class="checkout-wish-btn">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-        <span id="checkoutWishCount" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;font-size:.5rem;font-weight:800;min-width:14px;height:14px;padding:0 3px;border-radius:20px;display:none;align-items:center;justify-content:center;border:1.5px solid #fff;">0</span>
-      </a>
-    </div>
-  </div>
-</nav>
+<script src="../js/site-shell.js?v=20261112" data-part="header" data-bottom-bar="off"></script>
 
-<div class="progress-stripe"><div id="topProgressBar" class="progress-fill-bar" style="width:20%"></div></div>
+
 
 <!-- ------------------ CHECKOUT PAGE ------------------ -->
 <div id="checkoutPage" class="pg active">
+  <div class="ck-wrap">
+    <div class="ck-head">
+      <h1>Checkout</h1>
+      <a href="index.html#products" class="ck-link">Continue shopping</a>
+    </div>
 
-  <!-- Step Indicator -->
-  <div class="step-wrap">
-    <div style="max-width:620px;margin:0 auto;padding:0 20px;display:flex;align-items:flex-start">
-      <div class="step-node"><div class="step-circle active" id="sc1">1</div><span class="step-label active" id="sl1">Cart & Address</span></div>
-      <div class="step-connector" id="line1"></div>
-      <div class="step-node"><div class="step-circle" id="sc2">2</div><span class="step-label" id="sl2">Order Summary</span></div>
-      <div class="step-connector" id="line2"></div>
-      <div class="step-node"><div class="step-circle" id="sc3">3</div><span class="step-label" id="sl3">Payment</span></div>
+    <!-- mobile: total at the top, details on tap -->
+    <button type="button" class="ck-mtotal" id="ckMobileTotal" onclick="ckToggleSummary()" aria-expanded="false" aria-controls="ckSummary">
+      <span>Order total</span><b id="ckMobileTotalAmt">₹0</b><span class="ck-mtotal-hint" id="ckMobileTotalHint">Show details</span>
+    </button>
+
+    <div class="ck-grid">
+      <div class="ck-main">
+
+        <div class="ck-signin" id="ckSignin" style="display:none">
+          <div>
+            <b>Sign in to place your order</b>
+            <p>Your cart is kept. After signing in you come straight back here.</p>
+          </div>
+          <a class="ck-btn ck-btn-line" href="login.html?next=checkoutmyorderpage.html">Sign in</a>
+        </div>
+
+        <!-- 1. Items -->
+        <section class="ck-card" aria-labelledby="ckItemsH">
+          <div class="ck-card-head"><h2 id="ckItemsH"><span class="ck-num">1</span>Your items</h2><span class="ck-muted" id="ckItemCount"></span></div>
+          <div id="cartItems"></div>
+          <div id="emptyCart" class="ck-empty" style="display:none">
+            <p>Your cart is empty.</p>
+            <a class="ck-btn ck-btn-line" href="index.html#products">Browse products</a>
+          </div>
+          <p class="ck-note" id="ckFreeShipNote" style="display:none"></p>
+        </section>
+
+        <!-- 2. Delivery -->
+        <section class="ck-card" aria-labelledby="ckAddrH">
+          <div class="ck-card-head"><h2 id="ckAddrH"><span class="ck-num">2</span>Delivery address</h2>
+            <button type="button" class="ck-link" id="addAddrToggle" onclick="toggleNewAddr()"><span id="addAddrIcon">+</span> Add a new address</button></div>
+          <div id="addrGrid" class="ck-addr-list" role="radiogroup" aria-label="Saved addresses"></div>
+
+          <div id="newAddrForm" class="ck-form" style="display:none">
+            <div class="ck-field ck-span2">
+              <label for="coMobile">Mobile number</label>
+              <div class="ck-phone"><span>+91</span><input type="tel" id="coMobile" maxlength="10" inputmode="numeric" autocomplete="tel-national" placeholder="10-digit mobile number" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10);coValidate('coMobile')"/></div>
+              <p class="co-err-msg" id="coMobile-err"></p>
+            </div>
+            <div class="ck-field ck-span2">
+              <label for="coName">Full name</label>
+              <input type="text" id="coName" autocomplete="name" oninput="coValidate('coName')"/>
+              <p class="co-err-msg" id="coName-err"></p>
+            </div>
+            <div class="ck-field">
+              <label for="coPin">PIN code</label>
+              <input type="text" id="coPin" maxlength="6" inputmode="numeric" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);coPinLookup(this.value)"/>
+              <span id="coPinSpinner" class="ck-muted" style="display:none">Looking up…</span>
+              <p class="co-err-msg" id="coPin-err"></p>
+            </div>
+            <div class="ck-field">
+              <label for="coCity">City / district</label>
+              <input type="text" id="coCity" autocomplete="address-level2" oninput="coValidate('coCity')"/>
+              <p class="co-err-msg" id="coCity-err"></p>
+            </div>
+            <div class="ck-field ck-span2">
+              <label for="coAddr1">House / flat, street</label>
+              <input type="text" id="coAddr1" autocomplete="address-line1" oninput="coValidate('coAddr1')"/>
+              <p class="co-err-msg" id="coAddr1-err"></p>
+            </div>
+            <div class="ck-field">
+              <label for="coAddr2">Area, landmark <span class="ck-muted">(optional)</span></label>
+              <input type="text" id="coAddr2" autocomplete="address-line2"/>
+            </div>
+            <div class="ck-field">
+              <label for="coState">State</label>
+              <input type="text" id="coState" autocomplete="address-level1"/>
+              <p class="co-err-msg" id="coState-err"></p>
+            </div>
+            <div class="ck-field ck-span2">
+              <span class="ck-label">Save as</span>
+              <div class="ck-chips">
+                <button type="button" id="coTypeHome" class="co-atype-btn co-atype-active" onclick="coSetType('Home',this)">Home</button>
+                <button type="button" id="coTypeWork" class="co-atype-btn" onclick="coSetType('Work',this)">Work</button>
+                <button type="button" id="coTypeOther" class="co-atype-btn" onclick="coSetType('Other',this)">Other</button>
+              </div>
+            </div>
+            <div class="ck-span2 ck-form-actions">
+              <button type="button" class="ck-btn" onclick="saveNewAddr()">Save address</button>
+              <button type="button" class="ck-link" id="ckCancelAddr" onclick="toggleNewAddr()">Cancel</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Payment -->
+        <section class="ck-card" aria-labelledby="ckPayH">
+          <div class="ck-card-head"><h2 id="ckPayH"><span class="ck-num">3</span>Payment</h2></div>
+          <div class="ck-pay-list" role="radiogroup" aria-label="Payment method">
+            <label class="ck-pay" id="gwRazorpay">
+              <input type="radio" name="ckPay" value="razorpay" checked onchange="selectGateway('razorpay')"/>
+              <span><b>Pay online</b><small>UPI, cards, net banking or wallets, in the Razorpay window</small></span>
+            </label>
+            <label class="ck-pay" id="gwCod">
+              <input type="radio" name="ckPay" value="cod" onchange="selectGateway('cod')"/>
+              <span><b>Cash on delivery</b><small>Pay by cash or UPI when the parcel arrives</small></span>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <!-- Summary -->
+      <aside class="ck-side">
+        <div class="ck-summary" id="ckSummary">
+          <h2>Order summary</h2>
+          <div id="ckSumItems" class="ck-sum-items"></div>
+          <div class="ck-rows">
+            <div class="ck-row"><span>Items</span><span id="ckSub">₹0</span></div>
+            <div class="ck-row" id="ckCouponRow" style="display:none"><span>Promo <span id="ckCouponCode"></span> <button type="button" class="ck-link ck-small" onclick="ckRemoveCoupon()">remove</button></span><span id="ckCouponAmt">−₹0</span></div>
+            <div class="ck-row"><span>Delivery</span><span id="ckShip">Free</span></div>
+            <div class="ck-row"><span>GST (5%)</span><span id="ckGst">₹0</span></div>
+            <div class="ck-row" id="ckCodRow" style="display:none"><span>Cash on delivery fee</span><span id="ckCodFee">₹0</span></div>
+            <div class="ck-row ck-total"><span>Total</span><span id="ckTotal">₹0</span></div>
+            <p class="ck-save" id="ckSave" style="display:none"></p>
+          </div>
+
+          <div class="ck-promo">
+            <button type="button" class="ck-link" id="ckPromoToggle" onclick="ckTogglePromo()">Have a promo code?</button>
+            <div id="ckPromoBox" style="display:none">
+              <div class="ck-promo-row">
+                <input type="text" id="ckPromoInput" placeholder="Enter code" autocomplete="off" aria-label="Promo code" onkeydown="if(event.key==='Enter')ckApplyCoupon()"/>
+                <button type="button" class="ck-btn ck-btn-line" onclick="ckApplyCoupon()">Apply</button>
+              </div>
+              <p class="co-err-msg" id="ckPromoMsg"></p>
+            </div>
+          </div>
+
+          <button type="button" class="ck-btn ck-pay-btn" id="btnPayNow" onclick="initiateRazorpay()">Pay ₹0 securely</button>
+          <ul class="ck-facts">
+            <li>Online payments are handled by Razorpay. We never see your card or UPI details.</li>
+            <li>Questions about your order? <a href="https://wa.me/916382142578" target="_blank" rel="noopener">WhatsApp +91 63821 42578</a></li>
+            <li><a href="refund-policy.html">Returns and refunds</a></li>
+          </ul>
+        </div>
+      </aside>
     </div>
   </div>
 
-  <div style="max-width:1100px;margin:0 auto;padding:32px 20px">
-    <div style="display:grid;grid-template-columns:1fr;gap:28px" id="layoutGrid">
-
-      <!-- LEFT COLUMN -->
-      <div id="leftCol">
-
-        <!-- -- STEP 1: CART & ADDRESS -- -->
-        <div id="step1">
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
-            <div style="width:38px;height:38px;border-radius:12px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="17" height="17" fill="none" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1" stroke="#fff" stroke-width="2"/><circle cx="19" cy="21" r="1" stroke="#fff" stroke-width="2"/><path d="M2 2h2l2.66 12.42A2 2 0 0 0 8.64 16h9.78a2 2 0 0 0 1.95-1.57L21.65 7H5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-            </div>
-            <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink);letter-spacing:-.02em">Your Cart</h2>
-          </div>
-          <div id="cartItems" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px"></div>
-          <div id="emptyCart" style="display:none;text-align:center;padding:60px 20px">
-            <div class="empty-icon">&#128722;</div>
-            <p style="font-weight:600;color:var(--ink-3)">Your cart is empty</p>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
-            <div style="width:38px;height:38px;border-radius:12px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="17" height="17" fill="none" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="#fff" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="#fff" stroke-width="2"/></svg>
-            </div>
-            <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink);letter-spacing:-.02em">Delivery Address</h2>
-          </div>
-          <p class="field-label" style="margin-bottom:14px">Saved Addresses</p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:18px" id="addrGrid"></div>
-          <button onclick="toggleNewAddr()" style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--moss);border:none;background:none;padding:6px 0;margin-bottom:18px;cursor:pointer">
-            <span id="addAddrIcon" style="width:24px;height:24px;border-radius:50%;border:2px solid var(--moss);display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;font-weight:700">+</span>
-            Add New Address
-          </button>
-          <div id="newAddrForm" style="display:none;background:var(--fog);border:1px solid var(--fog-2);border-radius:var(--r);padding:22px;margin-bottom:20px">
-            <style>
-              .co-inp{width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid var(--fog-2);background:#fff;font-family:'Inter',sans-serif;font-size:.88rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
-              .co-inp:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(45,90,61,.09)}
-              .co-inp.co-err{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.09)}
-              .co-inp.co-ok{border-color:var(--moss)}
-              .co-inp::placeholder{color:var(--sage)}
-              .co-err-msg{font-size:.7rem;color:#ef4444;margin-top:4px;font-weight:500;display:none}
-              .co-atype-btn{flex:1;padding:10px 6px;border-radius:10px;border:2px solid var(--fog-2);background:var(--white);color:var(--ink-3);font-size:.8rem;font-weight:700;cursor:pointer;transition:all .18s}
-              .co-atype-btn.co-atype-active{border-color:var(--moss);background:rgba(45,90,61,.07);color:var(--moss)}
-            </style>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-
-              <!-- Full Name -->
-              <div style="grid-column:span 2">
-                <label class="field-label">Full Name <span style="color:#ef4444">*</span></label>
-                <input type="text" class="co-inp" id="coName" autocomplete="name" placeholder="e.g. Arjun Mehta"
-                  oninput="coValidate('coName')"/>
-                <p class="co-err-msg" id="coName-err"></p>
-              </div>
-
-              <!-- Mobile -->
-              <div style="grid-column:span 2">
-                <label class="field-label">Mobile Number <span style="color:#ef4444">*</span></label>
-                <div style="display:flex;gap:8px">
-                  <div style="padding:11px 14px;background:var(--white);border:1.5px solid var(--fog-2);border-radius:12px;font-size:.85rem;font-weight:700;color:var(--ink-3);flex-shrink:0;user-select:none">+91</div>
-                  <input type="tel" class="co-inp" id="coMobile" maxlength="10" autocomplete="tel"
-                    placeholder="10-digit mobile number"
-                    oninput="this.value=this.value.replace(/\D/g,'').slice(0,10);coValidate('coMobile')"/>
-                </div>
-                <p class="co-err-msg" id="coMobile-err"></p>
-              </div>
-
-              <!-- PIN Code -->
-              <div>
-                <label class="field-label">PIN Code <span style="color:#ef4444">*</span></label>
-                <div style="position:relative">
-                  <input type="text" class="co-inp" id="coPin" maxlength="6" autocomplete="postal-code"
-                    placeholder="6-digit PIN"
-                    oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);coPinLookup(this.value)"/>
-                  <span id="coPinSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;color:var(--sage)">Looking up�</span>
-                </div>
-                <p class="co-err-msg" id="coPin-err"></p>
-              </div>
-
-              <!-- Address Type -->
-              <div style="display:flex;flex-direction:column;justify-content:flex-end">
-                <label class="field-label">Address Type</label>
-                <div style="display:flex;gap:6px">
-                  <button onclick="coSetType('Home',this)" id="coTypeHome" class="co-atype-btn co-atype-active"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
-                  <button onclick="coSetType('Work',this)" id="coTypeWork" class="co-atype-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Work</button>
-                  <button onclick="coSetType('Other',this)" id="coTypeOther" class="co-atype-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Other</button>
-                </div>
-              </div>
-
-              <!-- Address Line 1 -->
-              <div style="grid-column:span 2">
-                <label class="field-label">Flat, House no., Building <span style="color:#ef4444">*</span></label>
-                <input type="text" class="co-inp" id="coAddr1" autocomplete="address-line1"
-                  placeholder="e.g. Flat 4B, Sunrise Apartments"
-                  oninput="coValidate('coAddr1')"/>
-                <p class="co-err-msg" id="coAddr1-err"></p>
-              </div>
-
-              <!-- Area / Street -->
-              <div style="grid-column:span 2">
-                <label class="field-label">Area, Street, Colony <span style="font-size:.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--sage)">(optional)</span></label>
-                <input type="text" class="co-inp" id="coAddr2" autocomplete="address-line2"
-                  placeholder="e.g. MG Road, Koramangala"/>
-              </div>
-
-              <!-- City -->
-              <div>
-                <label class="field-label">City / District <span style="color:#ef4444">*</span></label>
-                <input type="text" class="co-inp" id="coCity" autocomplete="address-level2"
-                  placeholder="Auto-filled from PIN"
-                  oninput="coValidate('coCity')"/>
-                <p class="co-err-msg" id="coCity-err"></p>
-              </div>
-
-              <!-- State (read-only) -->
-              <div>
-                <label class="field-label">State <span style="color:#ef4444">*</span></label>
-                <input type="text" class="co-inp" id="coState" readonly autocomplete="address-level1"
-                  placeholder="Auto-filled from PIN"
-                  style="background:var(--fog);cursor:not-allowed"/>
-                <p style="font-size:.67rem;color:var(--sage);margin-top:3px">Filled automatically from PIN</p>
-              </div>
-
-            </div>
-            <button onclick="saveNewAddr()" class="btn btn-primary" style="margin-top:18px;padding:11px 24px;border-radius:12px;font-size:.85rem">Save Address</button>
-          </div>
-          <button onclick="goToPayment()" class="btn btn-primary btn-full">
-            Continue to Order Summary
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-
-        <!-- -- STEP 2: ORDER SUMMARY -- -->
-        <div id="step2" style="display:none">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <div style="width:38px;height:38px;border-radius:12px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg width="17" height="17" fill="none" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M9 12h6M9 16h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-              </div>
-              <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Order Summary</h2>
-            </div>
-            <button class="btn-back" onclick="goStep(1)">&larr; Back</button>
-          </div>
-          <div style="background:var(--white);border:1px solid var(--fog-2);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px">
-            <div style="padding:12px 20px;border-bottom:1px solid var(--fog-2);background:var(--fog)">
-              <p style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Items in your order</p>
-            </div>
-            <div id="s2Items"></div>
-          </div>
-          <div style="background:var(--white);border:1px solid var(--fog-2);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-              <p style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Delivering to</p>
-              <button onclick="goStep(1)" style="font-size:.78rem;font-weight:600;color:var(--moss);border:none;background:none;cursor:pointer">Change</button>
-            </div>
-            <div id="s2Address"></div>
-          </div>
-          <div style="background:var(--white);border:1px solid var(--fog-2);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--shadow);margin-bottom:20px">
-            <p style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px">Price Details</p>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div class="summary-row"><span style="color:var(--ink-3)">Subtotal</span><span style="font-weight:600" id="s2Subtotal">&#8377;0</span></div>
-              <div class="summary-row"><span style="color:var(--ink-3)">Discount</span><span style="font-weight:600;color:var(--moss)" id="s2Discount">-&#8377;0</span></div>
-              <div class="summary-row"><span style="color:var(--ink-3)">Delivery</span><span style="font-weight:700;color:var(--moss)" id="s2Delivery">FREE</span></div>
-            </div>
-            <div class="divider"></div>
-            <div class="summary-total-row">
-              <span style="font-weight:800;font-size:1rem">Total</span>
-              <span style="font-weight:800;font-size:1.3rem;color:var(--gold)" id="s2Total">&#8377;0</span>
-            </div>
-          </div>
-          <button onclick="goStep(3)" class="btn btn-primary btn-full">
-            Proceed to Payment
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-
-        <!-- -- STEP 3: PAYMENT (RAZORPAY STYLE) -- -->
-        <div id="step3" style="display:none">
-
-          <!-- Header -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <div style="width:38px;height:38px;border-radius:12px;background:var(--moss);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#fff"/></svg>
-              </div>
-              <div>
-                <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.1">Secure Payment</h2>
-                <p style="font-size:.75rem;color:var(--ink-3);margin-top:2px;font-weight:500">Your payment is protected by bank-level security</p>
-              </div>
-            </div>
-            <button class="btn-back" onclick="goStep(2)">&larr; Back</button>
-          </div>
-
-          <!-- -- PAYMENT GATEWAY SELECTION -- -->
-          <div class="rzp-section" style="margin-bottom:20px">
-            <div class="rzp-section-head">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" stroke="var(--moss)" stroke-width="2"/><line x1="1" y1="10" x2="23" y2="10" stroke="var(--moss)" stroke-width="2"/></svg>
-              <div>
-                <p class="rzp-section-title">Payment Gateway</p>
-                <p class="rzp-section-sub">Choose your preferred payment provider</p>
-              </div>
-            </div>
-            <div style="padding:20px;display:flex;flex-direction:column;gap:12px">
-
-              <!-- Razorpay Option -->
-              <div class="gateway-card selected" id="gwRazorpay" onclick="selectGateway('razorpay')">
-                <div class="recommended-badge">Recommended</div>
-                <div style="display:flex;align-items:flex-start;gap:14px">
-                  <div class="gw-radio" id="grRazorpay"><div class="gw-radio-dot"></div></div>
-                  <div style="flex:1">
-                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-                      <!-- Razorpay brand mark -->
-                      <div style="display:flex;align-items:center;gap:6px">
-                        <div style="width:28px;height:28px;border-radius:8px;background:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                          <svg width="16" height="16" fill="none" viewBox="0 0 20 20"><path d="M10 2L3 7.5V18h14V7.5L10 2z" fill="#fff" fill-opacity=".9"/><path d="M7 11h6M7 14h4" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round"/></svg>
-                        </div>
-                        <span style="font-size:.92rem;font-weight:800;color:#1e293b;letter-spacing:-.01em">Razorpay</span>
-                        <span style="font-weight:400;color:#64748b">Secure</span>
-                      </div>
-                    </div>
-                    <p style="font-size:.8rem;color:#475569;margin-bottom:12px;line-height:1.55">You will be redirected to Razorpay's secure payment gateway to complete your purchase using UPI, Cards, Wallets, Net Banking, or EMI.</p>
-                    <!-- Payment method icons -->
-                    <div class="pay-icon-strip">
-                      <!-- UPI -->
-                      <div class="pay-icon-placeholder" style="background:linear-gradient(135deg,#5f259f,#7c3aed);color:#fff;border:none;font-size:.52rem;font-weight:900;letter-spacing:.04em">UPI</div>
-                      <!-- Visa -->
-                      <div class="pay-icon-placeholder" style="background:#1a1f71;color:#fff;border:none;font-size:.58rem;font-weight:900;font-style:italic;letter-spacing:.02em">VISA</div>
-                      <!-- Mastercard -->
-                      <div style="height:22px;width:36px;border-radius:5px;border:1px solid rgba(0,0,0,.08);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:2px 4px">
-                        <svg viewBox="0 0 48 30" height="18" fill="none"><circle cx="18" cy="15" r="12" fill="#eb001b"/><circle cx="30" cy="15" r="12" fill="#f79e1b"/><path d="M24 6.5a12 12 0 0 1 0 17A12 12 0 0 1 24 6.5z" fill="#ff5f00"/></svg>
-                      </div>
-                      <!-- RuPay -->
-                      <div class="pay-icon-placeholder" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;font-size:.5rem;font-weight:900;letter-spacing:.02em">RuPay</div>
-                      <!-- GPay -->
-                      <div class="pay-icon-placeholder" style="background:#4285f4;color:#fff;border:none;font-size:.58rem;font-weight:900">G Pay</div>
-                      <!-- PhonePe -->
-                      <div class="pay-icon-placeholder" style="background:#5f259f;color:#fff;border:none;font-size:.5rem;font-weight:900">PhonePe</div>
-                      <!-- Net Banking -->
-                      <div class="pay-icon-placeholder" style="background:#0f766e;color:#fff;border:none;font-size:.5rem;font-weight:800">Net Banking</div>
-                      <!-- EMI -->
-                      <div class="pay-icon-placeholder" style="background:#166534;color:#fff;border:none;font-size:.52rem;font-weight:800">EMI</div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:6px;margin-top:12px;padding:8px 12px;background:rgba(45,90,61,.06);border-radius:8px;border:1px solid rgba(45,90,61,.12)">
-                      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="var(--moss)"/></svg>
-                      <p style="font-size:.72rem;font-weight:600;color:var(--moss)">256-bit SSL encrypted &middot; PCI-DSS Level 1 Compliant</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- COD Option -->
-              <div class="gateway-card" id="gwCod" onclick="selectGateway('cod')">
-                <div style="display:flex;align-items:flex-start;gap:14px">
-                  <div class="gw-radio" id="grCod"><div class="gw-radio-dot"></div></div>
-                  <div style="flex:1">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                      <div style="width:28px;height:28px;border-radius:8px;background:#166534;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2" stroke="#fff" stroke-width="2"/><path d="M2 10h20" stroke="#fff" stroke-width="2"/><circle cx="7" cy="15" r="1.5" fill="#fff"/></svg>
-                      </div>
-                      <span style="font-size:.92rem;font-weight:800;color:#1e293b">Cash on Delivery</span>
-                      <span style="font-weight:400;color:#64748b">COD</span>
-                    </div>
-                    <p style="font-size:.8rem;color:#475569;margin-bottom:10px;line-height:1.55">Pay in cash when your order arrives at your doorstep. No online payment required.</p>
-                    <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(22,101,52,.06);border-radius:8px;border:1px solid rgba(22,101,52,.15)">
-                      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#166534" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#166534" stroke-width="2"/></svg>
-                      <p style="font-size:.72rem;font-weight:600;color:#166534">Available &middot; No extra charges &middot; Pay on delivery</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- -- BILLING ADDRESS -- -->
-          <div class="rzp-section" style="margin-bottom:20px">
-            <div class="rzp-section-head">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="var(--moss)" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="var(--moss)" stroke-width="2"/></svg>
-              <div>
-                <p class="rzp-section-title">Billing Address</p>
-                <p class="rzp-section-sub">Where should we send the invoice?</p>
-              </div>
-            </div>
-            <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
-
-              <!-- Same as shipping -->
-              <div class="billing-opt selected" id="billSame" onclick="selectBilling('same')">
-                <div class="billing-radio" id="brSame"><div class="billing-radio-dot"></div></div>
-                <div style="flex:1">
-                  <p style="font-size:.88rem;font-weight:700;color:var(--ink)">Same as shipping address</p>
-                  <p id="billAddrPreview" style="font-size:.75rem;color:var(--ink-3);margin-top:3px;line-height:1.5"></p>
-                </div>
-                <div style="background:rgba(45,90,61,.08);border-radius:8px;padding:4px 10px">
-                  <p style="font-size:.65rem;font-weight:700;color:var(--moss);letter-spacing:.03em">DEFAULT</p>
-                </div>
-              </div>
-
-              <!-- Different billing address -->
-              <div class="billing-opt" id="billDiff" onclick="selectBilling('different')">
-                <div class="billing-radio" id="brDiff"><div class="billing-radio-dot"></div></div>
-                <div style="flex:1">
-                  <p style="font-size:.88rem;font-weight:700;color:var(--ink)">Use different billing address</p>
-                  <p style="font-size:.75rem;color:var(--ink-3);margin-top:3px">Enter a separate billing address for this order</p>
-                </div>
-              </div>
-
-              <!-- Billing address form (hidden by default) -->
-              <div id="billingForm" style="display:none;background:var(--fog);border:1px solid var(--fog-2);border-radius:14px;padding:18px;margin-top:4px">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <div><label class="field-label">First Name</label><input type="text" class="inp" id="bFName" placeholder="First name"/></div>
-                  <div><label class="field-label">Last Name</label><input type="text" class="inp" id="bLName" placeholder="Last name"/></div>
-                  <div style="grid-column:span 2"><label class="field-label">Address Line</label><input type="text" class="inp" id="bAddr" placeholder="Street, area"/></div>
-                  <div><label class="field-label">City</label><input type="text" class="inp" id="bCity" placeholder="City"/></div>
-                  <div><label class="field-label">PIN Code</label><input type="text" class="inp" id="bPin" placeholder="PIN code" maxlength="6"/></div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- -- ORDER CONFIRMATION SUMMARY (mobile-visible inline) -- -->
-          <div class="rzp-section" style="margin-bottom:20px;display:none" id="mobileOrderConfirm">
-            <button class="summ-collapse-btn" onclick="toggleMobileSummary()">
-              <span>Order Summary  <span id="mobileTotal" style="color:var(--moss)">&#8377;0</span></span>
-              <svg id="mobileChevron" width="16" height="16" fill="none" viewBox="0 0 24 24" style="transition:transform .2s"><path d="M6 9l6 6 6-6" stroke="var(--moss)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div id="summaryCollapsible">
-              <div id="mobileSummaryItems" style="border-top:1px solid var(--fog-2)"></div>
-              <div style="padding:16px 20px">
-                <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
-                  <div class="summary-row"><span style="color:var(--ink-3);font-size:.82rem">Subtotal</span><span style="font-weight:600;font-size:.82rem" id="mSubtotal">&#8377;0</span></div>
-                  <div class="summary-row"><span style="color:var(--ink-3);font-size:.82rem">Discount</span><span style="font-weight:600;font-size:.82rem;color:var(--moss)" id="mDiscount">-&#8377;0</span></div>
-                  <div class="summary-row"><span style="color:var(--ink-3);font-size:.82rem">GST (5%)</span><span style="font-weight:600;font-size:.82rem" id="mGst">&#8377;0</span></div>
-                  <div class="summary-row"><span style="color:var(--ink-3);font-size:.82rem">Delivery</span><span style="font-weight:700;font-size:.82rem;color:var(--moss)">FREE</span></div>
-                </div>
-                <div class="divider"></div>
-                <div class="summary-total-row">
-                  <span style="font-weight:800">Total Payable</span>
-                  <span style="font-weight:800;font-size:1.2rem;color:var(--gold)" id="mTotal">&#8377;0</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- -- PAY NOW BUTTON + SECURITY -- -->
-          <div id="payNowSection">
-            <!-- Amount display -->
-            <div style="background:linear-gradient(135deg,rgba(45,90,61,.06),rgba(45,90,61,.02));border:1px solid rgba(45,90,61,.15);border-radius:16px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
-              <div>
-                <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Amount Payable</p>
-                <p style="font-size:1.6rem;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-top:2px" id="payableAmount">&#8377;</p>
-              </div>
-              <div style="text-align:right">
-                <p style="font-size:.72rem;color:var(--ink-3);margin-bottom:4px">via <span id="gatewayLabel" style="font-weight:700;color:var(--moss)">Razorpay</span></p>
-                <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
-                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#16a34a"/></svg>
-                  <span style="font-size:.72rem;font-weight:600;color:#16a34a">SSL Secured</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pay Now Button — hidden on mobile (sticky bar handles it) -->
-            <button class="btn-pay-now" id="btnPayNow" onclick="initiateRazorpay()" style="border-radius:8px">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#555"/></svg>
-              <span id="payNowLabel">Pay Now</span>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="#555" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-
-            <!-- Security strip -->
-            <div class="security-strip">
-              <div class="security-item">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#16a34a"/></svg>
-                256-bit SSL
-              </div>
-              <span class="security-dot">&middot;</span>
-              <div class="security-item">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#475569" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#475569" stroke-width="2" stroke-linecap="round"/></svg>
-                PCI DSS Level 1
-              </div>
-              <span class="security-dot">&middot;</span>
-              <div class="security-item">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#475569" stroke-width="2" stroke-linecap="round"/><rect x="3" y="3" width="18" height="18" rx="2" stroke="#475569" stroke-width="2"/></svg>
-                RBI Compliant
-              </div>
-              <span class="security-dot">&middot;</span>
-              <div class="security-item">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="#475569" stroke-width="2"/><path d="M12 8v4l3 3" stroke="#475569" stroke-width="2" stroke-linecap="round"/></svg>
-                Instant Confirmation
-              </div>
-            </div>
-
-            <p style="text-align:center;font-size:.72rem;color:#94a3b8;margin-top:14px;line-height:1.6">
-              By placing your order, you agree to our 
-              <span style="color:var(--moss);font-weight:600;cursor:pointer">Terms & Conditions</span> and 
-              <span style="color:var(--moss);font-weight:600;cursor:pointer">Privacy Policy</span>.
-              <br/>Your card info is never stored on our servers.
-            </p>
-          </div>
-
-        </div><!-- /step3 -->
-
-      </div><!-- /leftCol -->
-
-      <!-- -- RIGHT SIDEBAR (Order Summary) -- -->
-      <div id="rightCol">
-        <div class="summary-sidebar">
-          <div class="summary-header">
-            <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:4px">Order Summary</p>
-            <p style="font-size:.78rem;color:rgba(255,255,255,.6)" id="summaryItemCount">0 items</p>
-          </div>
-          <div id="summaryItems" style="max-height:260px;overflow-y:auto;border-bottom:1px solid var(--fog-2)"></div>
-          <div style="padding:20px 22px">
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div class="summary-row"><span style="color:var(--ink-3)">Subtotal</span><span style="font-weight:600" id="summSubtotal">&#8377;0</span></div>
-              <div class="summary-row"><span style="color:var(--ink-3)">Discount</span><span style="font-weight:600;color:var(--moss)" id="summDiscount">-&#8377;0</span></div>
-              <div class="summary-row"><span style="color:var(--ink-3)">Delivery</span><span id="summDelivery" style="font-weight:700;color:var(--moss)">FREE</span></div>
-              <div class="summary-row"><span style="color:var(--ink-3)">GST (5%)</span><span style="font-weight:600" id="summGst">&#8377;0</span></div>
-            </div>
-            <div class="divider"></div>
-            <div class="summary-total-row">
-              <span style="font-weight:800;font-size:1rem">Total</span>
-              <span style="font-weight:800;font-size:1.3rem;color:var(--gold)" id="summTotal">&#8377;0</span>
-            </div>
-            <div id="savingsBanner" class="savings-banner" style="display:none;margin-top:14px">
-              <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">&#127991;</div>
-              <div><p style="font-size:.72rem;font-weight:700;color:var(--gold-dk)">You're saving</p><p style="font-size:.88rem;font-weight:800;color:var(--gold-dk)" id="savingsAmt"></p></div>
-            </div>
-          </div>
-          <div style="padding:0 22px 22px;display:flex;flex-direction:column;gap:8px">
-            <div class="trust-pill"><div class="trust-icon">&#128274;</div>100% secure encrypted checkout</div>
-            <div class="trust-pill"><div class="trust-icon">&#128666;</div>Free delivery on orders above &#8377;999</div>
-            <div class="trust-pill"><div class="trust-icon">&#8617;</div>7-day hassle-free returns</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px">
-              <div style="background:var(--fog);border-radius:12px;padding:10px 8px;text-align:center;border:1px solid var(--fog-2)"><div style="font-size:1.2rem;margin-bottom:4px">&#127807;</div><p style="font-size:.65rem;font-weight:700;color:var(--ink-3)">100% Organic</p></div>
-              <div style="background:var(--fog);border-radius:12px;padding:10px 8px;text-align:center;border:1px solid var(--fog-2)"><div style="font-size:1.2rem;margin-bottom:4px">&#128737;</div><p style="font-size:.65rem;font-weight:700;color:var(--ink-3)">Buyer Protected</p></div>
-              <div style="background:var(--fog);border-radius:12px;padding:10px 8px;text-align:center;border:1px solid var(--fog-2)"><div style="font-size:1.2rem;margin-bottom:4px">&#9989;</div><p style="font-size:.65rem;font-weight:700;color:var(--ink-3)">FSSAI Certified</p></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /layoutGrid -->
+  <!-- mobile: total and button always in reach -->
+  <div class="ck-mbar" id="stickyPayWrap">
+    <div><span>Total</span><b id="ckBarTotal">₹0</b></div>
+    <button type="button" class="ck-btn" id="ckBarBtn" onclick="initiateRazorpay()">Pay securely</button>
   </div>
 </div><!-- /checkoutPage -->
 
 <!-- -- MOBILE STICKY PAY BUTTON -- -->
-<div class="sticky-pay-wrap" id="stickyPayWrap" style="display:none">
-  <button class="btn-pay-now" onclick="initiateRazorpay()" style="border-radius:14px">
-    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg>
-    <span id="stickyPayLabel">Pay Now &#8377;</span>
-  </button>
-  <p style="text-align:center;font-size:.65rem;color:#94a3b8;margin-top:6px">&#128274; Secured by Razorpay</p>
-</div>
+
 
 <!-- ------------------ ORDERS PAGE ------------------ -->
 <div id="ordersPage" class="pg">
@@ -1006,7 +778,7 @@ a .nansai-icon,
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
       <div><h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Track Package</h2><p style="font-size:.78rem;color:var(--ink-3);margin-top:2px" id="trackOrderIdLabel"></p></div>
-      <button class="modal-close" onclick="closeModal('trackModal')">&#x2715;</button>
+      <button aria-label="Close" class="modal-close" onclick="closeModal('trackModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
       <div style="background:linear-gradient(135deg,var(--fog),rgba(45,90,61,.08));border-radius:16px;padding:24px;text-align:center;margin-bottom:22px">
@@ -1033,7 +805,7 @@ a .nansai-icon,
         <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)" id="reviewModalTitle">Write a Review</h2>
         <p style="font-size:.75rem;color:var(--ink-3);margin-top:2px" id="reviewModalSub">Share your experience with this product</p>
       </div>
-      <button class="modal-close" onclick="closeModal('reviewModal')">&#x2715;</button>
+      <button aria-label="Close" class="modal-close" onclick="closeModal('reviewModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
       <!-- Product info -->
@@ -1050,25 +822,25 @@ a .nansai-icon,
       <!-- Star rating -->
       <p style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px">Your Rating <span style="color:#ef4444">*</span></p>
       <div style="display:flex;gap:4px;margin-bottom:6px" id="starRow">
-        <button class="star-btn" data-v="1" onclick="setStars(1)">&#9733;</button>
-        <button class="star-btn" data-v="2" onclick="setStars(2)">&#9733;</button>
-        <button class="star-btn" data-v="3" onclick="setStars(3)">&#9733;</button>
-        <button class="star-btn" data-v="4" onclick="setStars(4)">&#9733;</button>
-        <button class="star-btn" data-v="5" onclick="setStars(5)">&#9733;</button>
+        <button aria-label="1 star" class="star-btn" data-v="1" onclick="setStars(1)">&#9733;</button>
+        <button aria-label="2 stars" class="star-btn" data-v="2" onclick="setStars(2)">&#9733;</button>
+        <button aria-label="3 stars" class="star-btn" data-v="3" onclick="setStars(3)">&#9733;</button>
+        <button aria-label="4 stars" class="star-btn" data-v="4" onclick="setStars(4)">&#9733;</button>
+        <button aria-label="5 stars" class="star-btn" data-v="5" onclick="setStars(5)">&#9733;</button>
       </div>
       <p id="starLabel" style="font-size:.78rem;color:var(--amber);font-weight:600;min-height:1.2em;margin-bottom:16px"></p>
       <!-- Title (optional) -->
-      <label class="field-label" style="margin-bottom:8px">Review Title <span style="font-size:.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--sage)">(optional)</span></label>
+      <label for="reviewTitle" class="field-label" style="margin-bottom:8px">Review Title <span style="font-size:.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--sage)">(optional)</span></label>
       <input type="text" id="reviewTitle" class="inp" placeholder="e.g. Great quality rice!" maxlength="100" style="margin-bottom:14px"/>
       <!-- Comment -->
-      <label class="field-label" style="margin-bottom:8px">Your Review <span style="color:#ef4444">*</span></label>
+      <label for="reviewText" class="field-label" style="margin-bottom:8px">Your Review <span style="color:#ef4444">*</span></label>
       <textarea id="reviewText" class="inp" rows="4" placeholder="Share your experience with this product..." maxlength="1000" style="margin-bottom:6px"></textarea>
       <p id="reviewCharCount" style="font-size:.68rem;color:var(--sage);text-align:right;margin-bottom:16px">0 / 1000</p>
       <!-- Error message -->
       <p id="reviewError" style="display:none;font-size:.78rem;color:#ef4444;font-weight:600;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px"></p>
       <!-- Buttons -->
       <div style="display:flex;gap:10px">
-        <button onclick="closeModal('reviewModal')" class="btn btn-ghost" style="flex:1;border-radius:12px">Cancel</button>
+        <button aria-label="Close" onclick="closeModal('reviewModal')" class="btn btn-ghost" style="flex:1;border-radius:12px">Cancel</button>
         <button onclick="submitReview()" class="btn btn-primary" style="flex:2;border-radius:12px" id="reviewSubmitBtn">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
           Submit Review
@@ -1083,14 +855,14 @@ a .nansai-icon,
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Cancel Order</h2>
-      <button class="modal-close" onclick="closeModal('cancelModal')">&#x2715;</button>
+      <button aria-label="Close" class="modal-close" onclick="closeModal('cancelModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
       <div style="background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.15);border-radius:14px;padding:16px;display:flex;gap:12px;margin-bottom:22px">
         <span style="font-size:1.2rem;flex-shrink:0">&#9888;</span>
         <p style="font-size:.85rem;color:var(--red);line-height:1.6">Cancelling will initiate a refund within 5-7 business days to your original payment method.</p>
       </div>
-      <label class="field-label" style="margin-bottom:8px">Reason for cancellation</label>
+      <label for="cancelReason" class="field-label" style="margin-bottom:8px">Reason for cancellation</label>
       <select id="cancelReason" class="inp" style="margin-bottom:14px">
         <option value="">Select a reason</option>
         <option>Changed my mind</option><option>Found a better price</option>
@@ -1098,7 +870,7 @@ a .nansai-icon,
       </select>
       <textarea id="cancelNote" class="inp" rows="3" placeholder="Additional notes (optional)" style="margin-bottom:20px"></textarea>
       <div style="display:flex;gap:10px">
-        <button onclick="closeModal('cancelModal')" class="btn btn-ghost" style="flex:1;border-radius:12px">Keep Order</button>
+        <button aria-label="Close" onclick="closeModal('cancelModal')" class="btn btn-ghost" style="flex:1;border-radius:12px">Keep Order</button>
         <button onclick="confirmCancel()" class="btn btn-danger-ghost" style="flex:1;border-radius:12px">Confirm Cancel</button>
       </div>
     </div>
@@ -1112,7 +884,7 @@ a .nansai-icon,
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Invoice</h2>
       <div style="display:flex;gap:8px;align-items:center">
         <button onclick="window.print()" class="btn btn-ghost" style="padding:7px 16px;border-radius:10px;font-size:.8rem">&#128424; Print</button>
-        <button class="modal-close" onclick="closeModal('invoiceModal')">&#x2715;</button>
+        <button aria-label="Close" class="modal-close" onclick="closeModal('invoiceModal')">&#x2715;</button>
       </div>
     </div>
     <div class="modal-body" id="invoiceContent">
@@ -1147,7 +919,7 @@ a .nansai-icon,
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-head">
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink)">Return & Refund</h2>
-      <button class="modal-close" onclick="closeModal('returnModal')">&#x2715;</button>
+      <button aria-label="Close" class="modal-close" onclick="closeModal('returnModal')">&#x2715;</button>
     </div>
     <div class="modal-body">
       <p style="font-size:.85rem;font-weight:600;margin-bottom:12px">What's the issue?</p>
@@ -1166,16 +938,7 @@ a .nansai-icon,
 </div>
 
 <!-- FOOTER -->
-<footer style="background:#111827;color:#d1d5db;margin-top:60px">
-  <div style="max-width:1100px;margin:0 auto;padding:3rem 1.75rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2.5rem">
-    <div>
-      <img src="nansei organics.png" class="h-16 w-auto mb-4 brightness-0 invert" alt="Nansei Organics"/>
-      <p style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-bottom:1rem">100% organic & high-quality agricultural products. Trusted by farmers and families.</p>
-    </div>
-    </div>
-  </div>
-  <div style="border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.75rem;text-align:center;font-size:.72rem;color:#6b7280">&copy; 2026 NANSEI Organics. All Rights Reserved. Made with &#128154;</div>
-</footer>
+<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 
 <div id="toast"></div>
 
@@ -1184,7 +947,7 @@ a .nansai-icon,
 //  STATE & INIT
 // ----------------------------------------------
 const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:';
-window.API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://nansei-backend.onrender.com/api';
+window.API_BASE = isLocal ? 'http://localhost:5000/api' : '/api'; // same-origin; Netlify forwards /api to the backend
 
 // -- RAZORPAY CONFIGURATION --
 const RZP_MERCHANT_NAME = 'NANSEI Organics';
@@ -1225,8 +988,7 @@ function applyLayout() {
     }
   }
 }
-window.addEventListener('resize', applyLayout);
-applyLayout();
+// (old step layout removed)
 
 // -- API HELPERS --
 function _aH() { return { 'Content-Type': 'application/json', ...(_getTok() ? { Authorization: 'Bearer ' + _getTok() } : {}) }; }
@@ -1250,6 +1012,7 @@ async function _fetchDBAddresses() {
     const res = await _apiReq('GET', '/addresses');
     return (res.data || []).map(a => ({
       _id: a._id, name: a.name, tag: a.tag || 'Home',
+      line1: a.line1, line2: a.line2 || '', city: a.city, state: a.state || '', pincode: a.pincode,
       line: a.line1 + (a.line2 ? '\n' + a.line2 : '') + ',\n' + a.city + '  ' + a.pincode,
       phone: a.phone ? '+91 ' + a.phone : ''
     }));
@@ -1288,7 +1051,8 @@ function showPage(name) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
   document.getElementById(name + 'Page').classList.add('active');
   const co = document.getElementById('navCheckout'), or = document.getElementById('navOrders');
-  if (name === 'checkout') {
+  if (!co || !or) { /* the old Checkout/Orders buttons are gone */ }
+  else if (name === 'checkout') {
     co.style.background = 'rgba(45,90,61,.1)'; co.style.color = 'var(--moss)'; co.style.borderColor = 'rgba(45,90,61,.3)';
     or.style.background = 'transparent'; or.style.color = 'var(--ink-3)'; or.style.borderColor = 'transparent';
   } else {
@@ -1301,6 +1065,7 @@ function showPage(name) {
 }
 function updateOrdersBadge() {
   const n = getOrders().length, b = document.getElementById('ordersBadge');
+  if (!b) return;
   if (n > 0) { b.textContent = n; b.style.display = 'inline-flex'; } else b.style.display = 'none';
 }
 
@@ -1332,7 +1097,7 @@ function renderCartStep() {
     </select>`;
     return `<div class="cart-item" style="animation-delay:${i * .08}s">
       <div style="position:relative;flex-shrink:0;width:120px;min-height:120px;background:var(--fog)">
-        <img src="${item.image}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:120px" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=200'"/>
+        <img src="${ikThumb(item.image,300)}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:120px" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=200'"/>
         ${disc > 0 ? `<div style="position:absolute;top:8px;left:0;background:#ff6161;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:0 4px 4px 0">${disc}% off</div>` : ''}
       </div>
       <div style="flex:1;min-width:0;padding:14px 14px 12px;display:flex;flex-direction:column;justify-content:space-between">
@@ -1420,16 +1185,16 @@ function updateSummary() {
   // Summary items list
   document.getElementById('summaryItems').innerHTML = cart.map(item => `
     <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--fog-2)">
-      <div style="width:38px;height:38px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>
+      <div style="width:38px;height:38px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${ikThumb(item.image,160)}" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>
       <div style="flex:1;min-width:0"><p style="font-size:.8rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</p><p style="font-size:.72rem;color:var(--ink-3);margin-top:2px">${item.qtyLabel || item.qty}</p></div>
       <span style="font-size:.82rem;font-weight:800;color:var(--ink);flex-shrink:0">&#8377;${(item.price * item.qty).toLocaleString()}</span>
     </div>`).join('');
 
   // Step 3 pay now label
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = 'Pay Now ?' + total.toLocaleString();
+  if (pnl) pnl.textContent = 'Pay Now ₹' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = 'Pay Now ?' + total.toLocaleString();
+  if (spl) spl.textContent = 'Pay Now ₹' + total.toLocaleString();
   const pa = document.getElementById('payableAmount');
   if (pa) pa.innerHTML = '&#8377;' + total.toLocaleString();
 
@@ -1449,7 +1214,7 @@ function updateSummary() {
   const msi = document.getElementById('mobileSummaryItems');
   if (msi) msi.innerHTML = cart.map(item => `
     <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--fog-2)">
-      <div style="width:34px;height:34px;border-radius:8px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>
+      <div style="width:34px;height:34px;border-radius:8px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${ikThumb(item.image,160)}" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>
       <div style="flex:1;min-width:0"><p style="font-size:.78rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</p><p style="font-size:.68rem;color:var(--ink-3)">${item.qtyLabel || item.selectedQuantity || item.qty}</p></div>
       <span style="font-size:.78rem;font-weight:700;color:var(--ink)">&#8377;${(item.price * item.qty).toLocaleString()}</span>
     </div>`).join('');
@@ -1483,7 +1248,7 @@ function _populateStep2() {
   document.getElementById('s2Items').innerHTML = cart.map(item => {
     const d = item.oldPrice ? Math.round((1 - item.price / item.oldPrice) * 100) : 0;
     return `<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--fog-2)">
-      <div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=100'"/></div>
+      <div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--fog);flex-shrink:0"><img src="${ikThumb(item.image,160)}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=100'"/></div>
       <div style="flex:1;min-width:0"><p style="font-size:.88rem;font-weight:600;color:var(--ink)">${item.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Qty: ${item.qty}</p></div>
       <span style="font-size:.92rem;font-weight:800;color:var(--ink)">&#8377;${(item.price * item.qty).toLocaleString()}</span>
     </div>`;
@@ -1679,7 +1444,7 @@ async function saveNewAddr() {
   const city = document.getElementById('coCity').value.trim();
   const pin  = document.getElementById('coPin').value.trim();
   const state = stateEl.value.trim();
-  const na = { name, tag: _coAddrType, line: a1 + (a2 ? ', ' + a2 : '') + ',\n' + city + '  ' + pin, phone: '+91 ' + mob };
+  const na = { name, tag: _coAddrType, line1: a1, line2: a2, city, state, pincode: pin, line: a1 + (a2 ? ', ' + a2 : '') + ',\n' + city + '  ' + pin, phone: '+91 ' + mob };
   if (_getTok()) {
     try {
       await _apiReq('POST', '/addresses', { name, phone: mob, line1: a1, line2: a2, city, state, pincode: pin, addressType: _coAddrType, isDefault: addresses.length === 0 });
@@ -1724,9 +1489,9 @@ function selectGateway(id) {
   // Update Pay Now button label
   const { total } = calcTotal();
   const pnl = document.getElementById('payNowLabel');
-  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now ?' + total.toLocaleString();
+  if (pnl) pnl.textContent = id === 'cod' ? 'Place Order (Pay on Delivery)' : 'Pay Now ₹' + total.toLocaleString();
   const spl = document.getElementById('stickyPayLabel');
-  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now ?' + total.toLocaleString();
+  if (spl) spl.textContent = id === 'cod' ? 'Place Order (COD)' : 'Pay Now ₹' + total.toLocaleString();
 }
 
 function selectBilling(type) {
@@ -1764,7 +1529,7 @@ function toggleMobileSummary() {
 async function initiateRazorpay() {
   if (!cart.length) { showToast('&#128722; Your cart is empty.'); return; }
   if (!addresses.length) { showToast('&#128205; Please add a delivery address.'); return; }
-  if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
+  if (!_getTok()) { showToast('&#128274; Please login to place an order.'); setTimeout(() => window.location.href = 'login.html?next=checkoutmyorderpage.html', 1200); return; }
 
   // COD � place order directly, no payment gateway
   if (selectedGateway === 'cod') {
@@ -1774,7 +1539,7 @@ async function initiateRazorpay() {
 
   const { total } = calcTotal();
   const addr = addresses[selectedAddrIdx];
-  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
+  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10);
 
   const btn = document.getElementById('btnPayNow');
   if (btn) { btn.disabled = true; btn.innerHTML = `<svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Opening Gateway...`; }
@@ -1782,15 +1547,7 @@ async function initiateRazorpay() {
   if (selectedGateway === 'payu') {
     setTimeout(() => {
       if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-      showToast('PayU gateway - configure your PayU merchant key.');
-    }, 800);
-    return;
-  }
-
-  if (selectedGateway === 'payu') {
-    setTimeout(() => {
-      if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-      showToast('PayU gateway - configure your PayU merchant key.');
+      showToast('PayU is not available right now. Please pay with Razorpay or choose Cash on Delivery.');
     }, 800);
     return;
   }
@@ -1811,7 +1568,7 @@ async function initiateRazorpay() {
   } catch(e) {
     console.error('Razorpay order creation failed:', e.message);
     if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    showToast('&#10060; ' + (e.message || 'Could not connect to payment server. Is the backend running?'));
+    showToast('&#10060; Could not start the payment. Please check your connection and try again, or choose Cash on Delivery.');
     return;
   }
 
@@ -1827,7 +1584,7 @@ async function initiateRazorpay() {
     prefill: {
       name: addr?.name || '',
       email: '',
-      contact: '+91' + phone,
+      contact: phone ? '+91' + phone : '',
     },
     notes: {
       address: addr?.line || '',
@@ -1863,35 +1620,51 @@ async function initiateRazorpay() {
     // Razorpay not loaded or invalid key — show processing simulation
     console.warn('Razorpay load error:', err);
     if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    // Simulate success for demo
-    _showProcessingOverlay('Processing Payment', 'Verifying with Razorpay');
+    showToast('&#9888; The payment window could not open. Please try again, or choose Cash on Delivery.');
   }
 }
 
+// Address fields for an order. Older saved addresses only have the display text
+// ("line,\ncity  123456"), so fall back to reading the city and pincode from it.
+function _orderAddress(addr) {
+  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+  let line1 = addr?.line1, city = addr?.city, pincode = addr?.pincode, state = addr?.state;
+  if (!line1 || !city || !pincode) {
+    const parts = (addr?.line || '').split(',\n');
+    const m = (parts[1] || '').trim().match(/^(.*?)[\s,-]*(\d{6})$/);
+    line1 = line1 || (parts[0] || '').trim();
+    city = city || (m ? m[1].trim() : (parts[1] || '').trim());
+    pincode = pincode || (m ? m[2] : '');
+  }
+  if (addr?.line2 && line1 && !line1.includes(addr.line2)) line1 += ', ' + addr.line2;
+  return { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: state || 'Tamil Nadu', pincode, country: 'India' };
+}
+function _orderItems() {
+  return cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price }));
+}
+function _resetPayBtn() {
+  const btn = document.getElementById('btnPayNow');
+  if (!btn) return;
+  const { total } = calcTotal();
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
 async function _onRazorpaySuccess(response) {
-  _showProcessingOverlay('Verifying Payment', 'Confirming with Razorpay');
+  _showProcessingOverlay('Verifying Payment', 'Confirming with Razorpay', true);
 
   const { sub, disc, gst, total } = calcTotal();
-  const addr = addresses[selectedAddrIdx];
-  const addrLine = addr?.line || '';
-  const addrParts = addrLine.split(',\n');
-  const line1 = addrParts[0]?.trim() || addrLine;
-  const cityPin = (addrParts[1] || '').trim();
-  const cityMatch = cityPin.match(/^(.+?)\s*[-]\s*(\d{6})$/);
-  const city = cityMatch ? cityMatch[1].trim() : cityPin;
-  const pincode = cityMatch ? cityMatch[2] : '000000';
-  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
   const d = new Date(); d.setDate(d.getDate() + 5);
-
   const orderPayload = {
-    items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price })),
-    shippingAddress: { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: 'Tamil Nadu', pincode, country: 'India' },
+    items: _orderItems(),
+    shippingAddress: _orderAddress(addresses[selectedAddrIdx]),
     paymentMethod: 'Razorpay',
-    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc + couponDisc, totalPrice: total,
+    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: couponDisc, couponCode: window._ckCouponCode ? window._ckCouponCode() : undefined, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
 
-  // Verify signature on backend (works for both guests and logged-in users)
+  // The backend checks the payment signature and saves the order in one step.
+  let saved = null, problem = '';
   try {
     const verifyRes = await fetch(window.API_BASE + '/orders/razorpay/verify', {
       method: 'POST',
@@ -1904,16 +1677,20 @@ async function _onRazorpaySuccess(response) {
       })
     });
     const verifyData = await verifyRes.json();
-    if (!verifyData.success || !verifyData.verified) {
-      console.error('Signature verification failed:', verifyData.message);
-    }
-  } catch(e) {
-    console.warn('Verify call failed, order saved locally:', e.message);
-  }
-  // _showProcessingOverlay already schedules _doPlaceOrder after 2.8s
+    if (verifyData.success && verifyData.verified) saved = verifyData.data || {};
+    else problem = verifyData.message || '';
+  } catch (e) { /* network error: handled below */ }
+  _hideProcessingOverlay();
+  if (saved) { _finishOrder(saved.orderNumber || (saved._id || '').slice(-8) || response.razorpay_payment_id); return; }
+  _resetPayBtn();
+  showToast('&#9888; ' + (problem || ('We received your payment but could not confirm the order. Please contact us with payment ID ' + response.razorpay_payment_id + '.')));
 }
 
-function _showProcessingOverlay(title, sub) {
+function _hideProcessingOverlay() {
+  document.getElementById('processingOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function _showProcessingOverlay(title, sub, manual) {
   title = title || 'Processing Payment';
   sub = sub || 'Please do not press back or refresh';
   document.getElementById('procSub').textContent = sub;
@@ -1923,7 +1700,7 @@ function _showProcessingOverlay(title, sub) {
   ov.classList.add('show');
   document.body.style.overflow = 'hidden';
   setTimeout(() => { document.getElementById('procTitle').textContent = 'Confirming your order'; document.getElementById('procSub').textContent = 'Almost there, hang tight!'; }, 1400);
-  setTimeout(() => { ov.classList.remove('show'); document.body.style.overflow = ''; _doPlaceOrder(); }, 2800);
+  if (!manual) setTimeout(() => { _hideProcessingOverlay(); _doPlaceOrder(); }, 2800);
 }
 
 // ----------------------------------------------
@@ -1936,25 +1713,12 @@ async function _doPlaceOrder() {
   const addr = addresses[selectedAddrIdx];
   const now = new Date().toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  const addrLine = addr?.line || '';
-  const addrParts = addrLine.split(',\n');
-  const line1 = addrParts[0]?.trim() || addrLine;
-  const cityPin = (addrParts[1] || '').trim();
-  const cityMatch = cityPin.match(/^(.+?)\s*[-]\s*(\d{6})$/);
-  const city = cityMatch ? cityMatch[1].trim() : cityPin;
-  const pincode = cityMatch ? cityMatch[2] : '000000';
-  const phone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10) || '9999999999';
-
-  const isCod = selectedGateway === 'cod';
-  const payMethodMap = { razorpay: 'Razorpay', payu: 'PayU', cod: 'COD' };
+  // Only Cash on Delivery orders are placed here; paid orders are saved by the payment check above
   const payload = {
-    items: cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price })),
-    shippingAddress: { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: 'Tamil Nadu', pincode, country: 'India' },
-    paymentMethod: payMethodMap[selectedGateway] || 'Razorpay',
-    isPaid: !isCod,
-    paidAt: isCod ? undefined : new Date().toISOString(),
-    paymentInfo: isCod ? undefined : { id: 'PAY' + Date.now(), status: 'completed', paidAt: new Date().toISOString() },
-    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: disc + couponDisc, totalPrice: total,
+    items: _orderItems(),
+    shippingAddress: _orderAddress(addr),
+    paymentMethod: 'COD',
+    itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: couponDisc, couponCode: window._ckCouponCode ? window._ckCouponCode() : undefined, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
 
@@ -1967,13 +1731,21 @@ async function _doPlaceOrder() {
       oid = o.orderNumber || o._id?.slice(-8) || oid;
       _apiReq('DELETE', '/cart/clear').catch(() => { });
     } catch (err) {
-      console.warn('Order API failed, saving locally:', err.message);
-      _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d);
+      // The order did not reach us: say so and keep the cart, rather than showing a success screen
+      _resetPayBtn();
+      showToast('&#9888; ' + (err.message || 'Could not place your order. Please check your connection and try again.'));
+      return;
     }
   } else {
     _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d);
   }
+  _finishOrder(oid, dstr);
+}
 
+function _finishOrder(oid, dstr) {
+  if (!dstr) { const d = new Date(); d.setDate(d.getDate() + 5); dstr = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }); }
+  // keep what was ordered for the WhatsApp receipt, which is sent after the cart is emptied
+  window._lastOrder = { cart: cart.slice(), totals: calcTotal() };
   _saveLC([]); cart = [];
   document.getElementById('successOrderId').textContent = oid;
   document.getElementById('successDelivDate').textContent = dstr;
@@ -1991,7 +1763,7 @@ function _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d) {
     products: cart.map(c => ({ ...c })),
     timeline: [
       { label: 'Order Placed', date: now, done: true },
-      { label: isCod ? 'COD Confirmed' : 'Payment Confirmed', date: now, done: true },
+      { label: selectedGateway === 'cod' ? 'COD Confirmed' : 'Payment Confirmed', date: now, done: true },
       { label: 'Being Packed', date: 'In progress', done: false },
       { label: 'Dispatched', date: 'Exp. ' + new Date(d.getTime() - 172800000).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }), done: false },
       { label: 'Delivered', date: 'Exp. ' + dstr, done: false },
@@ -2031,14 +1803,16 @@ function sendWhatsAppOrder() {
   const orderId   = document.getElementById('successOrderId').textContent;
   const delivDate = document.getElementById('successDelivDate').textContent;
   const addr      = addresses[selectedAddrIdx];
-  const { total, sub, disc, gst } = calcTotal();
+  const last = window._lastOrder || { cart, totals: calcTotal() };
+  const items = last.cart;
+  const { total, sub, disc, gst } = last.totals;
 
   // Get customer phone from address
   const customerPhone = (addr?.phone || '').replace(/[^0-9]/g, '').slice(-10);
   const waNumber = customerPhone ? '91' + customerPhone : '';
 
-  const itemLines = cart.length
-    ? cart.map((c, i) => `  ${i+1}. ${c.name} x${c.qty} - Rs.${(c.price * c.qty).toLocaleString()}`).join('%0A')
+  const itemLines = items.length
+    ? items.map((c, i) => `  ${i+1}. ${c.name} x${c.qty} - Rs.${(c.price * c.qty).toLocaleString()}`).join('%0A')
     : '  (items cleared after order)';
 
   const msg = [
@@ -2141,7 +1915,6 @@ function renderOrderCard(o, idx) {
   let actions = '', reviewBtns = '';
   if (id) actions = `<button class="btn btn-primary" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="buyAgain('${o.id}')">&#128260; Buy Again</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openTrack('${o.id}')">&#128666; Track</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openReturn('${o.id}')">&#128230; Return</button><button class="btn btn-ghost" style="font-size:.8rem;padding:9px 16px;border-radius:10px" onclick="openInvoice('${o.id}')">&#129534; Invoice</button>`;
   // Per-product review buttons for delivered orders
-  let reviewBtns = '';
   if (id) {
     reviewBtns = o.products.map((p, pi) => {
       const pid = String(p.id);
@@ -2167,7 +1940,7 @@ function renderOrderCard(o, idx) {
     <div style="padding:22px 24px;display:flex;flex-wrap:wrap;gap:24px">
       <div style="display:flex;gap:18px;flex:1;min-width:0">
         <div style="position:relative;flex-shrink:0">
-          <img src="${mp.image}" style="width:90px;height:90px;object-fit:cover;border-radius:16px;border:1px solid var(--fog-2)" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=120'"/>
+          <img src="${ikThumb(mp.image,200)}" style="width:90px;height:90px;object-fit:cover;border-radius:16px;border:1px solid var(--fog-2)" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=120'"/>
           ${ex > 0 ? `<div style="position:absolute;bottom:-6px;right:-6px;background:var(--ink);color:#fff;font-size:.62rem;font-weight:800;padding:3px 7px;border-radius:99px">+${ex}</div>` : ''}
         </div>
         <div style="flex:1;min-width:0">
@@ -2283,6 +2056,9 @@ function _renderReviewProduct(o, idx) {
     document.getElementById('reviewModalSub').textContent = 'Update your experience with this product';
     document.getElementById('reviewSubmitBtn').innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Update Review';
     reviewStars = alreadyReviewed.rating;
+    document.getElementById('reviewText').value = alreadyReviewed.comment || '';
+    document.getElementById('reviewTitle').value = alreadyReviewed.title || '';
+    document.getElementById('reviewCharCount').textContent = (alreadyReviewed.comment || '').length + ' / 1000';
     document.querySelectorAll('.star-btn').forEach(s => s.classList.toggle('lit', parseInt(s.dataset.v) <= reviewStars));
     _updateStarLabel(reviewStars);
   } else {
@@ -2315,9 +2091,9 @@ document.addEventListener('DOMContentLoaded', () => {
 async function submitReview() {
   const errEl = document.getElementById('reviewError');
   errEl.style.display = 'none';
-  if (!reviewStars) { errEl.textContent = '&#11088; Please select a star rating'; errEl.style.display = 'block'; return; }
+  if (!reviewStars) { errEl.textContent = 'Please choose a star rating'; errEl.style.display = 'block'; return; }
   const comment = document.getElementById('reviewText').value.trim();
-  if (!comment) { errEl.textContent = '&#9999; Please write your review comment'; errEl.style.display = 'block'; return; }
+  if (!comment) { errEl.textContent = 'Please write a few words about the product'; errEl.style.display = 'block'; return; }
   if (comment.length < 3) { errEl.textContent = 'Review comment is too short'; errEl.style.display = 'block'; return; }
   if (!_reviewOrderObj) return;
   const p = _reviewOrderObj.products[_reviewProductIdx];
@@ -2374,7 +2150,7 @@ function openInvoice(id) {
   document.getElementById('inv-total').innerHTML = '&#8377;' + o.total.toLocaleString();
   document.getElementById('inv-items').innerHTML = `
     <div class="inv-head-row"><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Item</span><span style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Amount</span></div>
-    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${p.image}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=60'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
+    ${o.products.map(p => `<div class="inv-row"><div style="display:flex;align-items:center;gap:12px"><img src="${ikThumb(p.image,120)}" style="width:36px;height:36px;border-radius:10px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1611843467160-25afb8df1074?w=60'"/><div><p style="font-size:.87rem;font-weight:600">${p.name}</p><p style="font-size:.75rem;color:var(--ink-3)">Quantity: ${p.qtyLabel || p.selectedQuantity || p.qty}</p></div></div><span style="font-weight:700;font-size:.9rem">&#8377;${(p.price*p.qty).toLocaleString()}</span></div>`).join('')}`
   openModal('invoiceModal');
 }
 function openReturn(id) { document.querySelectorAll('input[name="returnReason"]').forEach(r => r.checked = false); openModal('returnModal'); }
@@ -2411,6 +2187,247 @@ function showToast(msg, dur = 2800) {
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => t.classList.remove('show'), dur);
 }
+</script>
+<script>
+/* ================================================================
+   CHECKOUT (rebuilt) — one page: items, delivery address, payment.
+   Totals use the server's own rules (GET /orders/pricing), so the
+   amount shown is always the amount the server accepts.
+   Reuses the order, payment and address code above.
+   ================================================================ */
+const CK = { rules: { gstRate: 0.05, freeShippingAbove: 999, shippingFee: 0, codEnabled: true, codFee: 0 }, coupon: null };
+const rupee = n => '₹' + Math.round(Number(n) || 0).toLocaleString('en-IN');
+const ckEsc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function ckCouponOff(sub) {
+  const c = CK.coupon;
+  if (!c) return 0;
+  if (c.minOrderAmount && sub < c.minOrderAmount) return 0;
+  let d = c.discountType === 'percentage' ? sub * c.discountValue / 100 : c.discountValue;
+  if (c.maxDiscount) d = Math.min(d, c.maxDiscount);
+  return Math.round(Math.min(d, sub));
+}
+
+/* same arithmetic as backend/utils/orderGuard.js priceOrder() */
+function calcTotal() {
+  const sub = subtotal();
+  const orig = origTotal();
+  const couponOff = ckCouponOff(sub);
+  const taxable = Math.max(0, sub - couponOff);
+  const gst = Math.round(taxable * CK.rules.gstRate);
+  const shipping = sub >= CK.rules.freeShippingAbove ? 0 : CK.rules.shippingFee;
+  const codFee = selectedGateway === 'cod' ? (Number(CK.rules.codFee) || 0) : 0;
+  couponDisc = couponOff;
+  deliveryCost = shipping;
+  return { sub, orig, disc: Math.max(0, orig - sub), couponOff, discountTotal: couponOff, gst, shipping, codFee, total: taxable + gst + shipping + codFee };
+}
+
+function renderCartStep() {
+  const list = document.getElementById('cartItems'), empty = document.getElementById('emptyCart');
+  const count = cart.reduce((n, i) => n + (Number(i.qty) || 1), 0);
+  document.getElementById('ckItemCount').textContent = count ? count + ' item' + (count !== 1 ? 's' : '') : '';
+  if (!cart.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = cart.map((item, i) => {
+    const qty = Number(item.qty) || 1;
+    const size = item.qtyLabel || item.selectedQuantity || '';
+    return '<div class="ck-item">' +
+      '<img src="' + ckEsc(ikThumb(item.image, 160)) + '" alt="" loading="lazy"/>' +
+      '<div><a class="ck-item-name" href="product.html?id=' + encodeURIComponent(item.id) + '">' + ckEsc(item.name) + '</a>' +
+      '<div class="ck-item-meta">' + (size ? ckEsc(size) + ' · ' : '') + rupee(item.price) + ' each</div>' +
+      '<div class="ck-item-ctrl"><span class="ck-qty"><button type="button" aria-label="One less" onclick="cartQty(' + i + ',-1)">−</button><span aria-live="polite">' + qty + '</span><button type="button" aria-label="One more" onclick="cartQty(' + i + ',1)">+</button></span>' +
+      '<button type="button" class="ck-link ck-small" onclick="removeCartItem(' + i + ')">Remove</button></div></div>' +
+      '<div class="ck-item-price">' + rupee(item.price * qty) + (item.oldPrice && item.oldPrice > item.price ? '<s>' + rupee(item.oldPrice * qty) + '</s>' : '') + '</div>' +
+      '</div>';
+  }).join('');
+}
+function cartQty(i, d) {
+  if (!cart[i]) return;
+  cart[i].qty = Math.max(1, (Number(cart[i].qty) || 1) + d);
+  _saveLC(cart); renderCartStep(); updateSummary();
+}
+
+function updateSummary() {
+  const t = calcTotal();
+  document.getElementById('ckSumItems').innerHTML = cart.map(i =>
+    '<div class="ck-sum-item"><span>' + ckEsc(i.name) + (i.qtyLabel ? ' · ' + ckEsc(i.qtyLabel) : '') + ' × ' + (Number(i.qty) || 1) + '</span><span>' + rupee(i.price * (Number(i.qty) || 1)) + '</span></div>'
+  ).join('') || '<div class="ck-muted">No items yet</div>';
+  document.getElementById('ckSub').textContent = rupee(t.sub);
+  document.getElementById('ckShip').textContent = t.shipping ? rupee(t.shipping) : 'Free';
+  document.getElementById('ckGst').textContent = rupee(t.gst);
+  document.getElementById('ckCodRow').style.display = t.codFee ? 'flex' : 'none';
+  document.getElementById('ckCodFee').textContent = rupee(t.codFee);
+  const codOpt = document.getElementById('gwCod');
+  if (codOpt) {
+    codOpt.style.display = CK.rules.codEnabled === false ? 'none' : '';
+    const small = codOpt.querySelector('small');
+    if (small) small.textContent = 'Pay by cash or UPI when the parcel arrives' + (CK.rules.codFee ? ' (' + rupee(CK.rules.codFee) + ' extra)' : '');
+  }
+  if (CK.rules.codEnabled === false && selectedGateway === 'cod') { selectGateway('razorpay'); return; }
+  document.getElementById('ckTotal').textContent = rupee(t.total);
+  const cr = document.getElementById('ckCouponRow');
+  if (CK.coupon && t.couponOff) {
+    cr.style.display = 'flex';
+    document.getElementById('ckCouponCode').textContent = CK.coupon.code;
+    document.getElementById('ckCouponAmt').textContent = '−' + rupee(t.couponOff);
+  } else cr.style.display = 'none';
+  const save = document.getElementById('ckSave');
+  const saved = t.disc + t.couponOff;
+  save.style.display = saved > 0 ? 'block' : 'none';
+  save.textContent = 'You save ' + rupee(saved) + ' on the printed price.';
+  const note = document.getElementById('ckFreeShipNote');
+  const short = CK.rules.freeShippingAbove - t.sub;
+  if (cart.length && CK.rules.shippingFee > 0 && short > 0) {
+    note.style.display = 'block';
+    note.textContent = 'Add ' + rupee(short) + ' more for free delivery (orders of ' + rupee(CK.rules.freeShippingAbove) + ' and above).';
+  } else note.style.display = 'none';
+  document.getElementById('ckMobileTotalAmt').textContent = rupee(t.total);
+  document.getElementById('ckBarTotal').textContent = rupee(t.total);
+  updatePayButtons();
+}
+
+function updatePayButtons() {
+  const { total } = calcTotal();
+  const signedIn = !!_getTok();
+  document.getElementById('ckSignin').style.display = signedIn ? 'none' : 'flex';
+  let label, disabled = false;
+  if (!cart.length) { label = 'Your cart is empty'; disabled = true; }
+  else if (!signedIn) label = 'Sign in to place your order';
+  else if (selectedGateway === 'cod') label = 'Place order · pay ' + rupee(total) + ' on delivery';
+  else label = 'Pay ' + rupee(total) + ' securely';
+  [document.getElementById('btnPayNow'), document.getElementById('ckBarBtn')].forEach(b => {
+    if (!b) return;
+    b.disabled = disabled;
+    b.textContent = b.id === 'ckBarBtn' && label.length > 24 ? (selectedGateway === 'cod' ? 'Place order' : (signedIn ? 'Pay securely' : 'Sign in')) : label;
+  });
+}
+function _resetPayBtn() { updatePayButtons(); }
+
+function selectGateway(id) {
+  selectedGateway = id === 'cod' ? 'cod' : 'razorpay';
+  selectedPay = selectedGateway;
+  document.querySelectorAll('input[name="ckPay"]').forEach(r => { r.checked = r.value === selectedGateway; });
+  updateSummary();
+}
+function _ckGatewayChanged() { updateSummary(); }
+
+/* ---------- addresses ---------- */
+function renderAddrGrid() {
+  const grid = document.getElementById('addrGrid');
+  const form = document.getElementById('newAddrForm');
+  if (!addresses.length) {
+    grid.innerHTML = '';
+    form.style.display = 'grid';
+    document.getElementById('addAddrToggle').style.display = 'none';
+    document.getElementById('ckCancelAddr').style.display = 'none';
+    return;
+  }
+  document.getElementById('addAddrToggle').style.display = '';
+  document.getElementById('ckCancelAddr').style.display = '';
+  if (selectedAddrIdx >= addresses.length) selectedAddrIdx = 0;
+  grid.innerHTML = addresses.map((a, i) =>
+    '<label class="ck-addr' + (i === selectedAddrIdx ? ' selected' : '') + '">' +
+    '<input type="radio" name="ckAddr" ' + (i === selectedAddrIdx ? 'checked ' : '') + 'onchange="selectAddr(' + i + ')"/>' +
+    '<span class="ck-addr-body"><b>' + ckEsc(a.name) + '</b><span class="ck-tag">' + ckEsc(a.tag || 'Home') + '</span><br/>' +
+    ckEsc(a.line || '').replace(/\n/g, '<br/>') + (a.state ? ', ' + ckEsc(a.state) : '') + '<br/>' + ckEsc(a.phone || '') + '</span>' +
+    '<button type="button" class="ck-addr-del" onclick="event.preventDefault();deleteAddr(' + i + ')">Remove</button></label>'
+  ).join('');
+}
+function selectAddr(idx) {
+  selectedAddrIdx = idx;
+  document.querySelectorAll('.ck-addr').forEach((c, i) => c.classList.toggle('selected', i === idx));
+}
+async function deleteAddr(idx) {
+  const a = addresses[idx];
+  if (!a || !confirm('Remove this address?')) return;
+  if (a._id && _getTok()) { try { await _apiReq('DELETE', '/addresses/' + a._id); } catch (e) { /* removed locally below */ } }
+  addresses.splice(idx, 1); _saveAddresses(addresses);
+  if (selectedAddrIdx >= addresses.length) selectedAddrIdx = Math.max(0, addresses.length - 1);
+  renderAddrGrid(); showToast('Address removed');
+}
+function toggleNewAddr(force) {
+  const f = document.getElementById('newAddrForm');
+  const open = typeof force === 'boolean' ? force : f.style.display === 'none' || !f.style.display;
+  f.style.display = open ? 'grid' : 'none';
+  if (open) setTimeout(() => document.getElementById('coMobile')?.focus(), 50);
+}
+
+/* ---------- promo code (checked by the server; the server applies it again when the order is placed) ---------- */
+function ckTogglePromo() {
+  const b = document.getElementById('ckPromoBox');
+  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+  if (b.style.display === 'block') document.getElementById('ckPromoInput').focus();
+}
+async function ckApplyCoupon() {
+  const input = document.getElementById('ckPromoInput'), msg = document.getElementById('ckPromoMsg');
+  const code = input.value.trim().toUpperCase();
+  msg.style.display = 'none';
+  if (!code) return;
+  if (!_getTok()) { msg.textContent = 'Please sign in to use a promo code.'; msg.style.display = 'block'; return; }
+  try {
+    const res = await _apiReq('POST', '/coupons/validate', { code });
+    const c = res.data;
+    if (c.minOrderAmount && subtotal() < c.minOrderAmount) {
+      msg.textContent = code + ' needs an order of ' + rupee(c.minOrderAmount) + ' or more.'; msg.style.display = 'block'; return;
+    }
+    CK.coupon = { code: c.code, discountType: c.discountType, discountValue: c.discountValue, minOrderAmount: c.minOrderAmount, maxDiscount: c.maxDiscount };
+    document.getElementById('ckPromoBox').style.display = 'none';
+    input.value = '';
+    updateSummary();
+    showToast(c.code + ' applied');
+  } catch (e) {
+    msg.textContent = e.message || 'That code is not valid.'; msg.style.display = 'block';
+  }
+}
+function ckRemoveCoupon() { CK.coupon = null; updateSummary(); }
+window._ckCouponCode = () => (CK.coupon ? CK.coupon.code : undefined);
+
+/* ---------- mobile summary ---------- */
+function ckToggleSummary() {
+  const s = document.getElementById('ckSummary'), b = document.getElementById('ckMobileTotal');
+  const open = !s.classList.contains('open');
+  s.classList.toggle('open', open);
+  b.setAttribute('aria-expanded', String(open));
+  document.getElementById('ckMobileTotalHint').textContent = open ? 'Hide details' : 'Show details';
+}
+
+/* ---------- placing the order ---------- */
+function _hideProcessingOverlay() { document.getElementById('processingOverlay').classList.remove('show'); }
+function _showProcessingOverlay(title, sub, manual) {
+  document.getElementById('procTitle').textContent = title === 'Placing Order' ? 'Placing your order' : (title || 'Please wait');
+  document.getElementById('procSub').textContent = 'Please don’t close this page.';
+  document.getElementById('processingOverlay').classList.add('show');
+  if (!manual) (async () => { try { await _doPlaceOrder(); } finally { _hideProcessingOverlay(); } })();
+}
+function _finishOrder(oid) {
+  const t = calcTotal();
+  window._lastOrder = { cart: cart.slice(), totals: t };
+  const cod = selectedGateway === 'cod';
+  _saveLC([]); cart = []; CK.coupon = null;
+  _hideProcessingOverlay();
+  document.getElementById('successOrderId').textContent = '#' + oid;
+  document.getElementById('ckDonePay').textContent = cod
+    ? 'Please keep ' + rupee(t.total) + ' ready. You can pay by cash or UPI when the parcel arrives.'
+    : 'We have received your payment of ' + rupee(t.total) + '.';
+  document.getElementById('successOverlay').classList.add('show');
+  renderCartStep(); updateSummary(); updateOrdersBadge();
+}
+function resetCheckout() { cart = _lcCart(); renderCartStep(); updateSummary(); }
+function spawnConfetti() {}
+function goStep() {} function goToPayment() {} function updateStepIndicator() {}
+function _populateStep2() {} function _populateStep3() {} function toggleMobileSummary() { ckToggleSummary(); }
+function selectBilling() {} function applyLayout() {}
+
+/* ---------- start ---------- */
+document.addEventListener('DOMContentLoaded', async () => {
+  selectGateway('razorpay');
+  updateSummary();
+  try {
+    const r = await fetch(window.API_BASE + '/orders/pricing');
+    const d = await r.json();
+    if (d && d.success && d.data) { CK.rules = Object.assign(CK.rules, d.data); updateSummary(); }
+  } catch (e) { /* defaults match the server's defaults */ }
+});
 </script>
 </body>
 </html>

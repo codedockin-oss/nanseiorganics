@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+  <script>/* ImageKit photos: ask for a copy about twice the size it is shown at, instead of the full upload */window.ikThumb=function(u,w){if(!u||u.indexOf('ik.imagekit.io')<0||/[?&]tr=/.test(u))return u||'';return u+(u.indexOf('?')<0?'?':'&')+'tr=w-'+w;};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Wishlist — Nansai Organics</title>
+  <meta name="robots" content="noindex" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="../js/config.js"></script>
 <script src="../frontend/js/api.js"></script>
@@ -338,7 +340,7 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -425,6 +427,7 @@ a .nansai-icon,
 
 </head>
 <body>
+<script src="../js/site-shell.js?v=20261112" data-part="header"></script>
 
 <!-- TOAST -->
 <div id="toast"></div>
@@ -508,65 +511,41 @@ a .nansai-icon,
 </div>
 
 <!-- CART DRAWER -->
+<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 <div id="cartBackdrop" onclick="closeCart()"></div>
 <div id="cartDrawer">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid rgba(26,58,42,.1);">
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--forest-deep);">Your Cart</h2>
-    <button onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">[[icon:x]]</button>
+    <button aria-label="Close cart" onclick="closeCart()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(26,58,42,.15);background:none;cursor:pointer;font-size:1rem;color:var(--forest-deep);display:flex;align-items:center;justify-content:center;">[[icon:x]]</button>
   </div>
   <div id="cartBody" style="flex:1;overflow-y:auto;padding:0 1.25rem;"></div>
   <div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(26,58,42,.1);"></div>
 </div>
 
 <!-- MOB BOTTOM BAR -->
-<nav id="mob-sticky-bar">
-  <a href="index.html" class="mob-bar-btn">
-    <div class="mob-bar-icon-wrap">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </div>
-    <span>Home</span>
-  </a>
-  <a href="blog.html" class="mob-bar-btn">
-    <div class="mob-bar-icon-wrap">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-    </div>
-    <span>Blog</span>
-  </a>
-  <a href="news.html" class="mob-bar-btn">
-    <div class="mob-bar-icon-wrap">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg>
-    </div>
-    <span>News</span>
-  </a>
-  <a href="farm.html" class="mob-bar-btn">
-    <div class="mob-bar-icon-wrap">
-      <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
-    </div>
-    <span>Farm</span>
-  </a>
-</nav>
+
 
 <script>
 /* ══════════════════════════════════
    DATA — matches index.html
 ══════════════════════════════════ */
 const products = [
-  {id:1,  name:"Karunguruvai Rice",      category:"rice",      price:180, oldPrice:220, rating:4.7, reviews:142, badge:"hot",  image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop"},
-  {id:2,  name:"Karuppu Kavuni Rice",    category:"rice",      price:220, oldPrice:270, rating:4.8, reviews:198, badge:"hot",  image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
-  {id:3,  name:"Arubatham Kuruvai Rice", category:"rice",      price:160, oldPrice:200, rating:4.5, reviews:87,  badge:"new",  image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
-  {id:4,  name:"Poongar Rice",           category:"rice",      price:200, oldPrice:250, rating:4.6, reviews:113, badge:"sale", image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:5,  name:"Mappillai Samba Rice",   category:"rice",      price:210, oldPrice:260, rating:4.7, reviews:156, badge:"hot",  image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
-  {id:6,  name:"Iluppai Poo Samba Rice", category:"rice",      price:195, oldPrice:240, rating:4.5, reviews:74,  badge:"new",  image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
-  {id:7,  name:"Vellai Kavuni Rice",     category:"rice",      price:190, oldPrice:235, rating:4.6, reviews:91,  badge:"new",  image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
-  {id:8,  name:"Paneer Rose",            category:"flowers",   price:150, oldPrice:190, rating:4.8, reviews:204, badge:"hot",  image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
-  {id:9,  name:"Hibiscus Flower",        category:"flowers",   price:120, oldPrice:155, rating:4.6, reviews:167, badge:"sale", image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
-  {id:10, name:"Aavaram Flower",         category:"flowers",   price:110, oldPrice:145, rating:4.5, reviews:88,  badge:"new",  image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
-  {id:11, name:"Butterfly Pea Flower",   category:"flowers",   price:180, oldPrice:220, rating:4.7, reviews:132, badge:"hot",  image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
-  {id:12, name:"Organic Rose Milk",      category:"beverages", price:140, oldPrice:175, rating:4.7, reviews:219, badge:"hot",  image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
-  {id:13, name:"Hibiscus Sherbet",       category:"beverages", price:130, oldPrice:165, rating:4.6, reviews:143, badge:"sale", image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
-  {id:14, name:"Idiyappam Flour",        category:"flour",     price:160, oldPrice:200, rating:4.8, reviews:178, badge:"hot",  image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:15, name:"Health Mix Powder",      category:"flour",     price:175, oldPrice:215, rating:4.6, reviews:94,  badge:"new",  image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
-  {id:16, name:"Country Fig Powder",     category:"other",     price:200, oldPrice:250, rating:4.7, reviews:61,  badge:"new",  image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
+  {id:1,  name:"Karunguruvai Rice",      category:"rice",      price:180, oldPrice:220, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop"},
+  {id:2,  name:"Karuppu Kavuni Rice",    category:"rice",      price:220, oldPrice:270, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
+  {id:3,  name:"Arubatham Kuruvai Rice", category:"rice",      price:160, oldPrice:200, rating: 0, reviews: 0,  badge:"new",  image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
+  {id:4,  name:"Poongar Rice",           category:"rice",      price:200, oldPrice:250, rating: 0, reviews: 0, badge:"sale", image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:5,  name:"Mappillai Samba Rice",   category:"rice",      price:210, oldPrice:260, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
+  {id:6,  name:"Iluppai Poo Samba Rice", category:"rice",      price:195, oldPrice:240, rating: 0, reviews: 0,  badge:"new",  image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:7,  name:"Vellai Kavuni Rice",     category:"rice",      price:190, oldPrice:235, rating: 0, reviews: 0,  badge:"new",  image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
+  {id:8,  name:"Paneer Rose",            category:"flowers",   price:150, oldPrice:190, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:9,  name:"Hibiscus Flower",        category:"flowers",   price:120, oldPrice:155, rating: 0, reviews: 0, badge:"sale", image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
+  {id:10, name:"Aavaram Flower",         category:"flowers",   price:110, oldPrice:145, rating: 0, reviews: 0,  badge:"new",  image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:11, name:"Butterfly Pea Flower",   category:"flowers",   price:180, oldPrice:220, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:12, name:"Organic Rose Milk",      category:"beverages", price:140, oldPrice:175, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
+  {id:13, name:"Hibiscus Sherbet",       category:"beverages", price:130, oldPrice:165, rating: 0, reviews: 0, badge:"sale", image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:14, name:"Idiyappam Flour",        category:"flour",     price:160, oldPrice:200, rating: 0, reviews: 0, badge:"hot",  image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:15, name:"Health Mix Powder",      category:"flour",     price:175, oldPrice:215, rating: 0, reviews: 0,  badge:"new",  image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:16, name:"Country Fig Powder",     category:"other",     price:200, oldPrice:250, rating: 0, reviews: 0,  badge:"new",  image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
 ];
 
 const QTY_CFG = {
@@ -622,14 +601,14 @@ function updateStats(){
   const total = items.reduce((s,p)=>s+p.price,0);
   const savings = items.reduce((s,p)=>s+(p.oldPrice-p.price),0);
 
-  document.getElementById('statCount').textContent = items.length;
-  document.getElementById('statTotal').textContent = '₹'+total;
-  document.getElementById('statSavings').textContent = '₹'+savings;
+  const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setTxt('statCount', items.length); setTxt('statTotal', '₹'+total); setTxt('statSavings', '₹'+savings);
 
   const goalWrap = document.getElementById('savingsGoalWrap');
   const fill = document.getElementById('savingsFill');
   const pctEl = document.getElementById('savingsGoalPct');
   const GOAL = 500;
+  if (!goalWrap || !fill || !pctEl) return; // the savings-goal box is not on this page
   if(savings > 0){
     goalWrap.style.display = 'block';
     const pct = Math.min(100, Math.round((savings/GOAL)*100));
@@ -781,7 +760,7 @@ function wishCardHTML(p, delay){
       <button class="remove-btn" onclick="removeFromWishlist(${p.id})" title="Remove">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <img src="${p.image}" alt="${p.name}" loading="lazy"/>
+      <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy"/>
       <!-- heart overlay on hover -->
       <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;background:rgba(15,34,24,.18);" class="card-hover-overlay" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0">
         <span style="font-size:2rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,.35));">[[icon:heart]]</span>
@@ -791,8 +770,8 @@ function wishCardHTML(p, delay){
       <span style="font-size:.62rem;font-weight:600;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;">${p.category}</span>
       <h3 style="font-size:.95rem;font-weight:700;color:var(--text-dk);line-height:1.3;font-family:'Inter',sans-serif;">${p.name}</h3>
       <div style="display:flex;align-items:center;gap:3px;">
-        <span style="color:#f59e0b;font-size:.75rem;">${stars(p.rating)}</span>
-        <span style="color:#9ca3af;font-size:.68rem;margin-left:2px;">${p.rating} (${p.reviews})</span>
+        ${p.reviews>0?`<span style="color:#f59e0b;font-size:.75rem;">${stars(p.rating)}</span>
+        <span style="color:#9ca3af;font-size:.68rem;margin-left:2px;">${p.rating} (${p.reviews})</span>`:`<span style="color:#9ca3af;font-size:.68rem;">New</span>`}
       </div>
       <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:2px;">
         <span style="color:#166534;font-weight:900;font-size:1.05rem;font-family:'Inter',sans-serif;">₹${p.price}</span>
@@ -857,7 +836,7 @@ function renderRec(){
     const d = disc(p);
     return `<div class="wish-card" style="animation:cardIn .4s cubic-bezier(.22,1,.36,1) ${i*80}ms both;">
       <div class="wish-card-img" style="height:170px;">
-        <img src="${p.image}" alt="${p.name}" loading="lazy"/>
+        <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy"/>
         <button onclick="addToWishlistFromRec(${p.id},this)" id="recwish-${p.id}" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:.8rem;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">[[icon:heart]]</button>
       </div>
       <div style="padding:.75rem;display:flex;flex-direction:column;gap:3px;">
@@ -905,7 +884,7 @@ function renderCartDrawer(){
   body.innerHTML = cart.map((item,idx)=>{
     const prod = products.find(p=>p.id===item.id);
     return `<div style="display:flex;gap:.85rem;align-items:center;padding:.85rem 0;border-bottom:1px solid rgba(26,58,42,.07);">
-      <div style="width:52px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0fdf4;"><img src="${prod?.image||''}" style="width:100%;height:100%;object-fit:cover;"/></div>
+      <div style="width:52px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0fdf4;"><img src="${ikThumb(prod?.image||'',200)}" style="width:100%;height:100%;object-fit:cover;"/></div>
       <div style="flex:1;min-width:0;">
         <p style="font-size:.78rem;font-weight:700;color:#1a2416;line-height:1.3;">${item.name}</p>
         <p style="font-size:.68rem;color:#6b7280;">${item.qtyLabel||''}</p>

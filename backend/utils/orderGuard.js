@@ -33,6 +33,7 @@ function cleanItems(raw) {
       image: str(i.image, 600),
       quantity: qty,
       selectedQuantity: str(i.selectedQuantity, 40) || '1',
+      sku: str(i.sku, 40).toUpperCase(),
       selectedUnit: str(i.selectedUnit, 20),
       selectedPrice: Number.isFinite(Number(i.selectedPrice)) ? Math.max(0, Number(i.selectedPrice)) : price,
       price,
@@ -54,6 +55,15 @@ function cleanAddress(a) {
   return out;
 }
 
+/** the size an order line refers to: by code, else by label ("500 g" = "500g"), else the only size there is */
+function findSize(sizes, item) {
+  const norm = v => String(v || '').toLowerCase().replace(/\s+/g, '').replace(/pieces?|pcs?$/, 'pc');
+  if (item.sku) { const bySku = sizes.find(z => String(z.sku).toUpperCase() === item.sku); if (bySku) return bySku; }
+  const byLabel = sizes.find(z => norm(z.label) === norm(item.selectedQuantity));
+  if (byLabel) return byLabel;
+  return sizes.length === 1 ? sizes[0] : null;
+}
+
 /** coupon document -> rupees off a subtotal (0 when it does not apply) */
 function couponAmount(c, sub) {
   if (!c || (c.isValid && !c.isValid())) return 0;
@@ -63,13 +73,24 @@ function couponAmount(c, sub) {
   return Math.round(Math.min(d, sub));
 }
 
-function priceOrder(items, coupon) {
+/** delivery and COD rules when no store settings are passed in (tests, or before the admin saves any) */
+function envRules() {
+  return { gstRate: GST_RATE, freeShippingAbove: FREE_SHIPPING_ABOVE(), shippingFee: SHIPPING_FEE(), codEnabled: true, codFee: 0 };
+}
+
+/**
+ * subtotal - coupon, + 5% GST on that, + delivery (free at or above the threshold), + COD fee for cash on delivery.
+ * The checkout page does the same sum with the same rules (GET /api/orders/pricing).
+ */
+function priceOrder(items, coupon, rules, method) {
+  const r = Object.assign(envRules(), rules || {});
   const itemsPrice = money(items.reduce((s, i) => s + i.price * i.quantity, 0));
   const couponOff = couponAmount(coupon, itemsPrice);
   const taxable = Math.max(0, itemsPrice - couponOff);
-  const taxPrice = Math.round(taxable * GST_RATE);
-  const shippingPrice = itemsPrice >= FREE_SHIPPING_ABOVE() ? 0 : SHIPPING_FEE();
-  return { itemsPrice, couponOff, taxPrice, shippingPrice, totalPrice: taxable + taxPrice + shippingPrice };
+  const taxPrice = Math.round(taxable * r.gstRate);
+  const shippingPrice = itemsPrice >= r.freeShippingAbove ? 0 : r.shippingFee;
+  const codFee = method === 'COD' ? Number(r.codFee) || 0 : 0;
+  return { itemsPrice, couponOff, taxPrice, shippingPrice, codFee, totalPrice: taxable + taxPrice + shippingPrice + codFee };
 }
 
 /**
@@ -82,13 +103,31 @@ async function buildOrder(body, ctx) {
   const items = cleanItems(body.items);
   const shippingAddress = cleanAddress(body.shippingAddress);
 
-  // catalogue price check (only for products that really exist in the database)
+  // catalogue check: products are found by database id or by the storefront's number (legacyId)
   const ids = [...new Set(items.map(i => String(i.product)))];
   const found = ctx.findProducts ? await ctx.findProducts(ids) : [];
-  const byId = new Map(found.map(p => [String(p._id), p]));
+  const byId = new Map();
+  found.forEach(p => { byId.set(String(p._id), p); if (p.legacyId != null) byId.set(String(p.legacyId), p); });
   for (const i of items) {
     const p = byId.get(String(i.product));
-    if (p && Number(p.price) > 0 && i.price < Number(p.price) * MIN_PRICE_SHARE) {
+    if (!p) continue;
+    if (p.isActive === false) throw new OrderError(`${p.name || i.name} is not available any more. Please remove it from your cart.`, 409);
+    const sizes = (p.sizes || []).filter(z => z && z.active !== false);
+    if (sizes.length) {
+      // products with sizes: the line must be one of them, at exactly that size's price
+      const z = findSize(sizes, i);
+      if (!z) throw new OrderError(`The pack size of ${p.name} has changed. Please remove it and add it again.`, 409);
+      if (Math.abs(Number(z.price) - i.price) > 0.5) {
+        throw new OrderError(`The price of ${p.name} (${z.label}) is now ₹${z.price}. Please refresh the page and try again.`, 409);
+      }
+      if (z.stock != null && i.quantity > z.stock) {
+        throw new OrderError(z.stock > 0 ? `Only ${z.stock} of ${p.name} (${z.label}) left.` : `${p.name} (${z.label}) is out of stock.`, 409);
+      }
+      i.sku = String(z.sku || '').toUpperCase();
+      i.selectedQuantity = z.label;
+      i.name = p.name;
+      i.product = String(p._id);
+    } else if (Number(p.price) > 0 && i.price < Number(p.price) * MIN_PRICE_SHARE) {
       throw new OrderError(`The price of ${i.name} has changed. Please refresh the page and try again.`, 409);
     }
   }
@@ -99,7 +138,11 @@ async function buildOrder(body, ctx) {
     coupon = await ctx.findCoupon(code);
     if (!coupon) throw new OrderError(`Promo code ${code} is not valid any more.`);
   }
-  const priced = priceOrder(items, coupon);
+  const rules = ctx.getRules ? await ctx.getRules() : envRules();
+  if (ctx.method === 'COD' && rules.codEnabled === false) {
+    throw new OrderError('Cash on delivery is not available right now. Please choose Pay online.', 400);
+  }
+  const priced = priceOrder(items, coupon, rules, ctx.method);
   const claimed = Number(body.totalPrice);
   if (!Number.isFinite(claimed) || Math.abs(claimed - priced.totalPrice) > 1.5) {
     throw new OrderError('The order total does not match the prices. Please refresh the page and try again.', 409);
@@ -113,6 +156,7 @@ async function buildOrder(body, ctx) {
     itemsPrice: priced.itemsPrice,
     taxPrice: priced.taxPrice,
     shippingPrice: priced.shippingPrice,
+    codFee: priced.codFee,
     discount: Math.max(0, Math.min(priced.itemsPrice, Math.round(Number(body.discount) || 0))) || priced.couponOff,
     totalPrice: priced.totalPrice,
     couponCode: coupon ? coupon.code : undefined,
@@ -127,4 +171,9 @@ function codOnly(method) {
   return m;
 }
 
-module.exports = { buildOrder, codOnly, priceOrder, couponAmount, OrderError, PAY_METHODS };
+/** The pricing rules the checkout page shows, so its totals always match what the server charges. */
+function pricingRules(rules) {
+  return Object.assign(envRules(), rules || {});
+}
+
+module.exports = { buildOrder, codOnly, priceOrder, couponAmount, pricingRules, envRules, findSize, OrderError, PAY_METHODS };

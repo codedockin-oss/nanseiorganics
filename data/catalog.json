@@ -1,0 +1,679 @@
+[
+  {
+    "legacyId": 1,
+    "name": "Karunguruvai Rice",
+    "category": "Rice Varieties",
+    "tagline": "Traditional medicinal rice from Tamil Nadu — low glycemic, high fiber, used in Siddha medicine.",
+    "description": "Karunguruvai Rice is a traditional medicinal rice variety from Tamil Nadu, widely known for its powerful health benefits and natural nutrition. Used in Siddha medicine and traditional cooking, it is known for its low glycemic index and high fiber content.\n\nKarunguruvai rice is also widely used in preparing Karunguruvai rice kanji, which is considered highly beneficial for health. Choosing a quality source ensures better taste and nutritional value.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602"
+    ],
+    "sizes": [
+      {
+        "sku": "P1-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 90,
+        "mrp": 110,
+        "stock": null
+      },
+      {
+        "sku": "P1-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 180,
+        "mrp": 220,
+        "stock": null
+      },
+      {
+        "sku": "P1-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 360,
+        "mrp": 440,
+        "stock": null
+      },
+      {
+        "sku": "P1-5KG",
+        "label": "5 kg",
+        "amount": 5000,
+        "unit": "g",
+        "price": 900,
+        "mrp": 1100,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Soak rice for 6–8 hours before cooking for best results.\nUse 1:2.5 ratio of rice to water for perfect texture.\nIdeal for Karunguruvai rice kanji (porridge) — very popular for health.\nSuitable for daily meals, sambar rice and traditional recipes.\nCan be used in Karunguruvai rice recipe in Tamil for authentic cooking.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 2,
+    "name": "Karuppu Kavuni (Black Kavuni Rice)",
+    "category": "Rice Varieties",
+    "tagline": "Traditional black rice rich in antioxidants, fiber & nutrients — 100% natural and chemical-free.",
+    "description": "Karuppu Kavuni Rice is a traditional black rice variety known for its rich nutritional value and health benefits. Sourced naturally and processed without chemicals, it is widely used in South Indian households for its medicinal properties.\n\nThis rice is rich in iron, fiber, and antioxidants, making it a healthy choice for daily consumption. It is especially beneficial for improving immunity and overall well-being.\n\nNansei Organics brings you high-quality Karuppu Kavuni Rice that is clean, natural, and farm-sourced.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741"
+    ],
+    "sizes": [
+      {
+        "sku": "P2-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 110,
+        "mrp": 135,
+        "stock": null
+      },
+      {
+        "sku": "P2-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 220,
+        "mrp": 270,
+        "stock": null
+      },
+      {
+        "sku": "P2-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 440,
+        "mrp": 540,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Soak Karuppu Kavuni rice overnight (8–10 hours) for best results.\nUse 1:3 ratio of rice to water — it needs more water than regular rice.\nPressure cook for 4–5 whistles or cook on low flame for 35–40 minutes.\nIdeal for Kavuni Arisi Payasam — soak overnight, cook with coconut milk and jaggery.\nCan be used for daily meals, kanji (porridge) and traditional sweet recipes.\nStore in an airtight container in a cool, dry place.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 3,
+    "name": "Arubatham Kuruvai Rice",
+    "category": "Rice Varieties",
+    "tagline": "60-day traditional short-duration rice — light and easy to digest.",
+    "description": "Arubatham Kuruvai is a 60-day short-duration traditional rice variety from Tamil Nadu. Known for its light texture and easy digestibility, it is ideal for everyday cooking and is especially recommended for the elderly and children.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P3-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 80,
+        "mrp": 100,
+        "stock": null
+      },
+      {
+        "sku": "P3-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 160,
+        "mrp": 200,
+        "stock": null
+      },
+      {
+        "sku": "P3-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 320,
+        "mrp": 400,
+        "stock": null
+      },
+      {
+        "sku": "P3-5KG",
+        "label": "5 kg",
+        "amount": 5000,
+        "unit": "g",
+        "price": 800,
+        "mrp": 1000,
+        "stock": null
+      }
+    ],
+    "badge": "new",
+    "section": "new",
+    "howToUse": "Rinse rice 2–3 times before cooking.\nUse 1:2 ratio of rice to water — cooks faster than other heritage varieties.\nCook on medium heat for 15–20 minutes (60-day rice cooks quickly).\nSuitable for daily meals — rice, sambar, rasam and curd rice.\nIdeal for kanji (porridge) — especially good for elderly and children.\nStore in an airtight container in a cool, dry place.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 4,
+    "name": "Poongar Rice",
+    "category": "Rice Varieties",
+    "tagline": "Traditional red rice known for natural nutrients, good digestion & women's health — 100% organic and chemical-free.",
+    "description": "Poongar Rice is a traditional red rice variety known for its natural nutritional value and health benefits. This organic rice is widely used in South India and is especially valued for supporting women's health and overall well-being.\n\nSourced directly from farms, Poongar Rice is rich in fiber and essential nutrients, making it a healthy choice for daily consumption. It is easy to cook and suitable for a variety of traditional recipes. Many people prefer Poongar Rice for its natural taste, good digestion support, and balanced nutrition.\n\nIf you are looking to buy Poongar Rice online, Nansei Organics provides high-quality, chemical-free rice that maintains its authentic taste and quality.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674"
+    ],
+    "sizes": [
+      {
+        "sku": "P4-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 100,
+        "mrp": 125,
+        "stock": null
+      },
+      {
+        "sku": "P4-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 200,
+        "mrp": 250,
+        "stock": null
+      },
+      {
+        "sku": "P4-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 400,
+        "mrp": 500,
+        "stock": null
+      },
+      {
+        "sku": "P4-5KG",
+        "label": "5 kg",
+        "amount": 5000,
+        "unit": "g",
+        "price": 1000,
+        "mrp": 1250,
+        "stock": null
+      }
+    ],
+    "badge": "sale",
+    "section": "bestseller",
+    "howToUse": "Soak Poongar rice for 6–8 hours before cooking for best results.\nUse 1:2.5 ratio of rice to water.\nCook on medium-low heat for 25–30 minutes or pressure cook for 3 whistles.\nIdeal for Poongar rice kanji (porridge) — especially recommended for women's health.\nSuitable for daily meals, sambar rice and traditional South Indian recipes.\nPostpartum: prepare kanji with ghee and rock sugar for nursing mothers.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 5,
+    "name": "Mappillai Samba (Mani Samba) Rice",
+    "category": "Rice Varieties",
+    "tagline": "The bridegroom's rice — legendary strength-giving heritage variety.",
+    "description": "Mappillai Samba, literally meaning 'bridegroom's rice', is a legendary Tamil Nadu heritage variety known for its strength-giving properties. Traditionally fed to bridegrooms before weddings, it is rich in iron, fiber and natural compounds that boost stamina and vitality.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P5-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 105,
+        "mrp": 130,
+        "stock": null
+      },
+      {
+        "sku": "P5-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 210,
+        "mrp": 260,
+        "stock": null
+      },
+      {
+        "sku": "P5-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 420,
+        "mrp": 520,
+        "stock": null
+      },
+      {
+        "sku": "P5-5KG",
+        "label": "5 kg",
+        "amount": 5000,
+        "unit": "g",
+        "price": 1050,
+        "mrp": 1300,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Soak Mappillai Samba rice for 1 hour before cooking.\nUse 1:2.5 ratio of rice to water.\nCook on medium-low heat for 30–35 minutes.\nPairs beautifully with coconut milk curries and traditional gravies.\nExcellent as a simple pulao with ginger and turmeric.\nCan be used for kanji (porridge) for maximum health benefits.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 6,
+    "name": "Iluppai Poo Samba Rice",
+    "category": "Rice Varieties",
+    "tagline": "Traditional Tamil Nadu heritage rice — naturally aromatic, easy to digest and suitable for daily meals.",
+    "description": "Iluppai Poo Samba White Rice is a traditional rice variety from Tamil Nadu, known for its natural aroma and soft texture. This rice is widely used in South Indian cooking and is valued for its easy digestion and health benefits.\n\nMany people search for Iluppai Poo Samba White Rice benefits because it supports gut health and provides steady energy. It is also commonly used in traditional recipes, especially Iluppai Poo Samba White Rice recipe in Tamil, making it popular among households looking for authentic cooking.\n\nIluppai Poo Samba White Rice in Tamil is often referred to as a native variety grown in Tamil Nadu, known for its natural taste and nutritional value.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667"
+    ],
+    "sizes": [
+      {
+        "sku": "P6-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 98,
+        "mrp": 120,
+        "stock": null
+      },
+      {
+        "sku": "P6-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 195,
+        "mrp": 240,
+        "stock": null
+      },
+      {
+        "sku": "P6-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 390,
+        "mrp": 480,
+        "stock": null
+      }
+    ],
+    "badge": "new",
+    "section": "new",
+    "howToUse": "Rinse rice 2–3 times before cooking.\nUse 1:2 ratio of rice to water for perfect texture.\nCook on medium heat for 20–25 minutes.\nSuitable for daily meals — rice, sambar, rasam and curd rice.\nCan be used for kanji (porridge) and idli/dosa batter.\nThe natural floral aroma is best preserved when cooked in an open pot.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 7,
+    "name": "Vellai Kavuni (White Kavuni Rice)",
+    "category": "Rice Varieties",
+    "tagline": "Traditional South Indian white rice — soft texture, easy digestion and a healthier alternative to polished white rice.",
+    "description": "White Kavuni Rice is a traditional South Indian rice variety known for its soft texture, mild taste, and natural nutritional value. White Kavuni rice is widely used in daily cooking and is considered a healthier alternative to polished white rice.\n\nMany people search for White Kavuni rice benefits because it supports easy digestion and provides steady energy. Compared to modern rice varieties, White Kavuni rice retains more nutrients and helps maintain overall health.\n\nIf you are looking for White Kavuni rice price or planning to buy White Kavuni rice online, choosing a good quality traditional source ensures better taste and nutrition. White Kavuni rice in English is commonly referred to as a traditional white rice variety with natural health benefits.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240"
+    ],
+    "sizes": [
+      {
+        "sku": "P7-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 95,
+        "mrp": 118,
+        "stock": null
+      },
+      {
+        "sku": "P7-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 190,
+        "mrp": 235,
+        "stock": null
+      },
+      {
+        "sku": "P7-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 380,
+        "mrp": 470,
+        "stock": null
+      }
+    ],
+    "badge": "new",
+    "section": "new",
+    "howToUse": "Rinse White Kavuni rice 2–3 times before cooking.\nUse 1:2 ratio of rice to water.\nCook on medium heat for 20–25 minutes until soft and sticky.\nPerfect for sweet pongal — cook with moong dal, jaggery and ghee.\nIdeal for payasam (rice pudding) with coconut milk and cardamom.\nCan be used for daily meals and traditional celebration dishes.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 8,
+    "name": "Paneer Rose (Fragrant Rose)",
+    "category": "Dried Flowers",
+    "tagline": "Fragrant rose petals widely used for rose water, skin care, hair care and traditional herbal wellness.",
+    "description": "Panneer Rose, also known as fragrant rose flower, is widely used in traditional Indian households for its natural aroma and health benefits. Panneer rose in English refers to a variety of rose known for its strong fragrance and use in rose water, skincare, and herbal preparations.\n\nPanneer rose petals are commonly used to prepare panneer rose water, which is popular for face care and cooling drinks. Many people search for panneer rose benefits because it supports skin health, hair care, and overall wellness.\n\nIf you are looking to buy panneer rose online, dried panneer rose petals and panneer rose powder are widely used for natural beauty and herbal uses.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P8-PACK",
+        "label": "50 pcs",
+        "amount": 50,
+        "unit": "piece",
+        "price": 150,
+        "mrp": 190,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Boil 10–15 dried petals in 500ml water for 5 minutes to make rose water.\nUse rose water as a face toner — apply with cotton pad morning and night.\nAdd petals to warm bath water for a relaxing aromatic soak.\nPrepare rose milk by soaking petals in warm milk with sugar.\nUse dried petals in face packs mixed with sandalwood powder and rose water.\nStore prepared rose water in the refrigerator for up to 7 days.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 9,
+    "name": "Hibiscus Flower",
+    "category": "Dried Flowers",
+    "tagline": "Dried hibiscus flowers for herbal tea, hair care, skin care and natural home remedies.",
+    "description": "Hibiscus dried flowers are widely used in herbal drinks, skincare, and traditional remedies. Known as Hibiscus sabdariffa, these flowers are popular for making hibiscus tea, which is valued for its refreshing taste and health benefits.\n\nMany people search for hibiscus tea benefits because it supports heart health, skin glow, and overall wellness. Hibiscus flowers are also used in powder form for hair care and face packs. Dried hibiscus flowers are easy to use and can be prepared as tea or natural remedies at home.\n\nIf you are looking for hibiscus dried flowers for tea or hibiscus powder for hair and skin, choosing high-quality dried flowers ensures better results.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P9-PACK",
+        "label": "50 pcs",
+        "amount": 50,
+        "unit": "piece",
+        "price": 120,
+        "mrp": 155,
+        "stock": null
+      }
+    ],
+    "badge": "sale",
+    "section": "bestseller",
+    "howToUse": "Boil 5–10 dried hibiscus flowers in 300ml water for 5 minutes to make hibiscus tea.\nStrain and add honey or jaggery to taste. Serve hot or cold.\nFor hair mask: grind dried flowers into powder, mix with coconut oil, apply to scalp for 30 minutes.\nFor face pack: mix hibiscus powder with yogurt and apply for 15 minutes.\nPrepare hibiscus sherbet by boiling flowers with sugar and cooling spices.\nStore dried flowers in an airtight container away from moisture.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 10,
+    "name": "Aavaram Flower",
+    "category": "Dried Flowers",
+    "tagline": "Traditional Tanner's Cassia flower — cooling herbal tea, skin care and Ayurvedic wellness from Tamil Nadu.",
+    "description": "Avarampoo, also known as Avaram Poo, is a traditional herbal flower widely used in Tamil Nadu for its natural health and skincare benefits. Avaram poo in English is commonly known as Tanner's Cassia flower, valued for its cooling and medicinal properties.\n\nMany people search for Avarampoo benefits in Tamil because it helps manage body heat, supports digestion, and improves skin health. Avarampoo tea is especially popular for its natural cooling effect and is often used as a daily herbal drink.\n\nAvarampoo powder and dried flowers are widely used for face packs, hair care, and traditional remedies. If you are looking to buy Avarampoo online, choosing quality dried flowers ensures better results.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P10-PACK",
+        "label": "50 pcs",
+        "amount": 50,
+        "unit": "piece",
+        "price": 110,
+        "mrp": 145,
+        "stock": null
+      }
+    ],
+    "badge": "new",
+    "section": "new",
+    "howToUse": "Boil 5–10 dried Avarampoo flowers in 300ml water for 5–7 minutes.\nStrain and drink as herbal tea — best consumed in the morning on an empty stomach.\nFor face pack: grind dried flowers into powder, mix with turmeric and rose water, apply for 15 minutes.\nFor hair care: mix Avarampoo powder with coconut oil and apply to scalp.\nCan be combined with other herbs like neem or tulsi for enhanced benefits.\nStore in an airtight container in a cool, dry place.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 11,
+    "name": "Butterfly Pea Flower (Sangu Poo)",
+    "category": "Dried Flowers",
+    "tagline": "Vivid blue Sangu Poo — color-changing herbal tea with memory, skin and hair benefits.",
+    "description": "Butterfly Pea Flower, also known as Sangu Poo in Tamil, is a traditional herbal flower widely used for tea, skincare, and natural remedies. Known for its vibrant blue color, butterfly pea flower tea is popular for its health benefits and refreshing taste.\n\nMany people search for butterfly pea flower tea benefits because it helps improve memory, supports skin health, and provides a natural cooling effect. Butterfly pea flower is also used in powder form for face packs and hair care.\n\nIf you are looking to buy butterfly pea flower online, dried flowers and powder forms are widely used for herbal drinks and beauty routines. Lemon can be added to the tea to change its color from blue to purple.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P11-PACK",
+        "label": "25 pcs",
+        "amount": 25,
+        "unit": "piece",
+        "price": 180,
+        "mrp": 220,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Prepare butterfly pea flower tea by boiling 5–8 dried flowers in 250ml water for 3–5 minutes.\nAdd lemon juice to change the color from blue to purple — a natural pH reaction.\nUse as natural food color in rice, drinks and desserts.\nApply as face pack in powder form mixed with rose water for skin glow.\nUse in hair care routines — mix powder with coconut oil for scalp massage.\nSuitable for herbal drinks, detox water and iced teas.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 12,
+    "name": "Organic Real Rose Milk",
+    "category": "Beverages",
+    "tagline": "Pure rose milk mix — made from real Paneer Rose petals and natural sweeteners.",
+    "description": "Our Organic Real Rose Milk mix is made from genuine Paneer Rose (Rosa damascena) petals, natural sugar and a touch of cardamom. No artificial colors, no synthetic rose essence — just the pure, authentic taste of real rose milk as it should be.",
+    "images": [
+      "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"
+    ],
+    "sizes": [
+      {
+        "sku": "P12-200ML",
+        "label": "200 ml",
+        "amount": 200,
+        "unit": "ml",
+        "price": 28,
+        "mrp": 35,
+        "stock": null
+      },
+      {
+        "sku": "P12-500ML",
+        "label": "500 ml",
+        "amount": 500,
+        "unit": "ml",
+        "price": 70,
+        "mrp": 88,
+        "stock": null
+      },
+      {
+        "sku": "P12-1L",
+        "label": "1 L",
+        "amount": 1000,
+        "unit": "ml",
+        "price": 140,
+        "mrp": 175,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Mix 2 tablespoons of rose milk mix in 200ml cold milk.\nStir well until fully dissolved.\nAdd ice cubes and serve immediately for best taste.\nCan also be served warm — mix in warm milk and stir.\nAdd a pinch of cardamom for extra flavor.\nStore the mix in a cool, dry place away from moisture.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 13,
+    "name": "Hibiscus Sherbet",
+    "category": "Beverages",
+    "tagline": "Traditional hibiscus sherbet mix — refreshing, tangy and naturally red.",
+    "description": "Made from sun-dried Hibiscus sabdariffa flowers, natural sugar and a blend of cooling spices. This traditional sherbet mix makes a refreshing summer drink that is naturally rich in vitamin C and antioxidants. Just mix with cold water or milk.",
+    "images": [
+      "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"
+    ],
+    "sizes": [
+      {
+        "sku": "P13-200ML",
+        "label": "200 ml",
+        "amount": 200,
+        "unit": "ml",
+        "price": 26,
+        "mrp": 33,
+        "stock": null
+      },
+      {
+        "sku": "P13-500ML",
+        "label": "500 ml",
+        "amount": 500,
+        "unit": "ml",
+        "price": 65,
+        "mrp": 83,
+        "stock": null
+      },
+      {
+        "sku": "P13-1L",
+        "label": "1 L",
+        "amount": 1000,
+        "unit": "ml",
+        "price": 130,
+        "mrp": 165,
+        "stock": null
+      }
+    ],
+    "badge": "sale",
+    "section": "bestseller",
+    "howToUse": "Mix 2–3 tablespoons of sherbet mix in 200ml cold water.\nStir well until fully dissolved and serve over ice.\nCan also be mixed with cold milk for a creamy version.\nAdd black salt and roasted cumin for a traditional taste.\nDilute more or less according to your taste preference.\nStore the mix in a cool, dry place. Refrigerate after opening.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 14,
+    "name": "Hand-pounded Rice Idiyappam Flour",
+    "category": "Flour Varieties",
+    "tagline": "Traditional hand-pounded rice flour — for soft, silky idiyappam.",
+    "description": "Made from premium raw rice that is soaked, dried and hand-pounded using traditional methods. This idiyappam flour produces the softest, most silky string hoppers with a natural rice flavor that machine-milled flour cannot replicate.",
+    "images": [
+      "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"
+    ],
+    "sizes": [
+      {
+        "sku": "P14-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 80,
+        "mrp": 100,
+        "stock": null
+      },
+      {
+        "sku": "P14-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 160,
+        "mrp": 200,
+        "stock": null
+      },
+      {
+        "sku": "P14-2KG",
+        "label": "2 kg",
+        "amount": 2000,
+        "unit": "g",
+        "price": 320,
+        "mrp": 400,
+        "stock": null
+      },
+      {
+        "sku": "P14-5KG",
+        "label": "5 kg",
+        "amount": 5000,
+        "unit": "g",
+        "price": 800,
+        "mrp": 1000,
+        "stock": null
+      }
+    ],
+    "badge": "hot",
+    "section": "bestseller",
+    "howToUse": "Mix 1 cup flour with 1 cup boiling water and ½ tsp salt.\nMix immediately with a wooden spoon until a smooth dough forms.\nLet rest for 5 minutes, then press through idiyappam press onto greased plates.\nSteam for 8–10 minutes until firm and glossy.\nServe immediately with coconut milk, vegetable stew or chutney.\nStore unused flour in an airtight container — use within 6 months.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 15,
+    "name": "Black Urad Dal Health Mix Powder",
+    "category": "Flour Varieties",
+    "tagline": "Protein-rich black urad dal health mix — for energy and strength.",
+    "description": "A nutritious health mix made from roasted black urad dal (whole black gram) ground with traditional spices. Rich in protein, iron and B-vitamins, this mix can be consumed as a porridge, added to dosa batter or mixed with warm milk for a nutritious drink.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P15-250G",
+        "label": "250 g",
+        "amount": 250,
+        "unit": "g",
+        "price": 44,
+        "mrp": 54,
+        "stock": null
+      },
+      {
+        "sku": "P15-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 88,
+        "mrp": 108,
+        "stock": null
+      },
+      {
+        "sku": "P15-1KG",
+        "label": "1 kg",
+        "amount": 1000,
+        "unit": "g",
+        "price": 175,
+        "mrp": 215,
+        "stock": null
+      }
+    ],
+    "badge": "new",
+    "section": "new",
+    "howToUse": "Mix 3 tablespoons of health mix powder in 200ml warm milk or water.\nAdd jaggery or honey and a pinch of cardamom to taste.\nStir well and serve immediately as a morning porridge.\nCan be added to dosa or idli batter for extra nutrition.\nBlend into smoothies or milkshakes for a protein boost.\nOptional: add 1 tsp ghee for extra flavor and nutrition.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  },
+  {
+    "legacyId": 16,
+    "name": "Country Fig Powder",
+    "category": "Other Products",
+    "tagline": "Sun-dried country fig powder — a natural digestive and energy tonic.",
+    "description": "Made from sun-dried country figs (Ficus carica) ground into a fine powder. Country figs are known for their exceptional fiber content, natural digestive enzymes and high iron content. Used as a natural remedy for constipation, anemia and as an energy supplement.",
+    "images": [
+      "https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png"
+    ],
+    "sizes": [
+      {
+        "sku": "P16-100G",
+        "label": "100 g",
+        "amount": 100,
+        "unit": "g",
+        "price": 80,
+        "mrp": 100,
+        "stock": null
+      },
+      {
+        "sku": "P16-250G",
+        "label": "250 g",
+        "amount": 250,
+        "unit": "g",
+        "price": 200,
+        "mrp": 250,
+        "stock": null
+      },
+      {
+        "sku": "P16-500G",
+        "label": "500 g",
+        "amount": 500,
+        "unit": "g",
+        "price": 400,
+        "mrp": 500,
+        "stock": null
+      }
+    ],
+    "badge": "new",
+    "section": "new",
+    "howToUse": "Morning tonic: mix 1 tsp in warm water with lemon and honey.\nSmoothie boost: add 2 tsp to any fruit or vegetable smoothie.\nPorridge: stir into oats or ragi porridge for added fiber.\nEnergy balls: mix with dates, nuts and coconut to form energy balls.\nCan be added to milkshakes, yogurt or desserts.\nStart with 1 tsp daily and gradually increase to 2 tsp for best results.",
+    "shelfLife": "",
+    "countryOfOrigin": "India"
+  }
+]

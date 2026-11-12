@@ -10,6 +10,7 @@
     "links": "node links.js",
     "accounts": "node accounts.js",
     "flows": "node flows.js",
+    "pages": "node pagecheck.js",
     "test": "node syntax.js && node qa.js && node links.js && node accounts.js && node flows.js"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Your Account — Nansai Organics</title>
+  <meta name="robots" content="noindex" />
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../js/config.js"></script>
 <script src="../js/auth.js"></script>
@@ -171,7 +172,7 @@
   select { -webkit-appearance: auto; appearance: auto; }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -270,34 +271,8 @@ a .nansai-icon,
 <!-- ══════════════════════════════
   NAVIGATION
 ══════════════════════════════ -->
-<header class="sticky top-0 z-[300] bg-white border-b border-[rgba(26,58,42,.12)] shadow-[0_2px_8px_rgba(10,30,15,.06)]">
-  <div class="max-w-[1200px] mx-auto px-4 h-[62px] flex items-center gap-4">
-
-    <!-- Mobile hamburger -->
-    <button class="ham-btn md:hidden flex flex-col gap-[4.5px] p-[5px] cursor-pointer border-none bg-transparent shrink-0"
-            id="hamBtn" onclick="toggleDrawer()">
-      <span class="block w-[22px] h-[2px] bg-[#0f2218] rounded-sm transition-all duration-300"></span>
-      <span class="block w-[22px] h-[2px] bg-[#0f2218] rounded-sm transition-all duration-300"></span>
-      <span class="block w-[22px] h-[2px] bg-[#0f2218] rounded-sm transition-all duration-300"></span>
-    </button>
-
-    <!-- Logo -->
-    <a href="index.html" class="shrink-0">
-      <img src="nansei organics.png" alt="Nansei Organics" class="h-[38px] w-auto"/>
-    </a>
-
-    <!-- Search bar -->
-    <form onsubmit="event.preventDefault();window.location.href='index.html?search='+encodeURIComponent(document.getElementById('acctSearch').value)" class="hidden md:flex items-center flex-1 max-w-[300px] rounded-xl border-2 overflow-hidden" style="border-color:rgba(26,58,42,.18);background:#fff;">
-      <input id="acctSearch" type="text" placeholder="Search organic products"
-             class="flex-1 px-4 py-2 text-sm outline-none bg-transparent"
-             style="font-family:'Inter',sans-serif;color:#0f2218;"/>
-      <button type="submit" class="px-3 py-2 flex items-center justify-center transition" style="background:#0f2218;color:#f7f3ec;" onmouseover="this.style.background='#2d5a3d'" onmouseout="this.style.background='#0f2218'">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-    </form>
-
-    <!-- Desktop nav links -->
-    <nav class="hidden md:flex items-center gap-[0.15rem] ml-6 flex-1">
+<script src="../js/site-shell.js?v=20261112" data-part="header"></script>
+<div class="bg-white border-b border-[rgba(26,58,42,.1)]"><nav class="flex items-center gap-[0.15rem] max-w-[1200px] mx-auto px-4 py-2 overflow-x-auto whitespace-nowrap" aria-label="Your account">
       <button onclick="goPage('home')"
               class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
                      hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Account</button>
@@ -320,85 +295,10 @@ a .nansai-icon,
       <button onclick="goPage('wishlist')"
               class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-text-mid rounded-md
                      hover:bg-forest-pale hover:text-forest-dark transition-all whitespace-nowrap">Wishlist</button>
-    </nav>
-
-    <!-- Right actions -->
-    <div class="flex items-center gap-[0.5rem] ml-auto shrink-0">
-      <button onclick="logout()"
-              class="hidden md:inline-flex items-center gap-1.5 px-[0.85rem] py-[0.38rem] text-[0.75rem] font-semibold
-                     text-text-mid border border-forest-dark/20 rounded-md
-                     hover:border-red-300 hover:text-red-600 hover:bg-red-50 transition-all whitespace-nowrap">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Sign Out
-      </button>
-      <div class="w-px h-[18px] bg-[rgba(26,58,42,.15)]"></div>
-      <a href="checkoutmyorderpage.html"
-         class="w-9 h-9 rounded-full flex items-center justify-center text-[#0f2218]
-                hover:text-[#4a8c5c] hover:bg-[rgba(74,140,92,.08)] transition-all relative">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/>
-        </svg>
-        <span class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[0.5rem] font-black
-                     min-w-[15px] h-[15px] rounded-full flex items-center justify-center
-                     border-2 border-white px-0.5">0</span>
-      </a>
-      <a href="wishlist.html"
-         class="w-9 h-9 rounded-full flex items-center justify-center text-[#0f2218]
-                hover:text-[#4a8c5c] hover:bg-[rgba(74,140,92,.08)] transition-all">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/>
-        </svg>
-      </a>
-    </div>
-
-  </div>
-</header>
+    <button onclick="logout()" class="sub-link px-[0.75rem] py-[0.38rem] text-[0.78rem] font-semibold text-red-600 rounded-md bg-transparent border-none cursor-pointer ml-auto">Sign Out</button></nav></div>
 
 <!-- Mobile drawer -->
-<div class="mob-drawer md:hidden fixed top-[var(--nav-h)] left-0 right-0 bottom-0
-            bg-forest-dark z-[280] overflow-y-auto" id="mobDrawer">
-  <div class="px-5 py-4 border-b border-white/[0.07]">
-    <div class="font-serif text-[1.05rem] font-bold text-white" id="drawerName">Welcome!</div>
-    <div class="text-[0.7rem] text-white/40 mt-0.5" id="drawerEmail">—</div>
-  </div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('home')">[[icon:chart-no-axes-column-increasing]]&nbsp; Your Account</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('orders')">[[icon:package]]&nbsp; Your Orders</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('wishlist')">[[icon:heart]]&nbsp; Wishlist</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('addresses')">[[icon:map-pin]]&nbsp; Addresses</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('profile')">[[icon:settings]]&nbsp; Edit Profile</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('security')">[[icon:shield-keyhole]]&nbsp; Login &amp; Security</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="navTo('wallet')" style="display:none">[[icon:leaf]]&nbsp; Points &amp; Coupons</div>
-  <div class="mob-drawer-item flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-white/78
-               border-b border-white/[0.05] cursor-pointer transition-all border-l-[3px] border-l-transparent
-               hover:bg-white/[0.06] hover:text-gold-light hover:border-l-gold"
-       onclick="window.location.href='index.html'">[[icon:shopping-bag]]&nbsp; Continue Shopping</div>
-  <div class="flex items-center gap-3 px-5 py-[0.82rem] text-[0.85rem] font-medium text-red-400/70
-               border-b border-white/[0.05] cursor-pointer transition-all
-               hover:text-red-300 hover:bg-red-500/[0.08]"
-       onclick="logout()">[[icon:log-out]]&nbsp; Sign Out</div>
-</div>
+
 
 
 <!-- ══════════════════════════════
@@ -940,72 +840,10 @@ a .nansai-icon,
 
 
 <!-- Mobile Bottom Nav -->
-<nav id="mob-bottom-nav">
-  <a href="index.html" class="mbn-btn">
-    <div style="position:relative;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </div>
-    Home
-  </a>
-  <a href="index.html#products" class="mbn-btn">
-    <div style="position:relative;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="15" width="7" height="7"/><rect x="2" y="15" width="7" height="7"/></svg>
-    </div>
-    Shop
-  </a>
-  <a href="checkoutmyorderpage.html" class="mbn-btn" style="background:#0f2218;color:#fff;border-radius:14px;padding:.45rem .6rem;flex:1.4;box-shadow:0 4px 14px rgba(15,34,24,.28);">
-    <div style="position:relative;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-    </div>
-    Cart
-  </a>
-  <button class="mbn-btn" onclick="navTo('wishlist')">
-    <div style="position:relative;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-    </div>
-    Wishlist
-  </button>
-  <button class="mbn-btn active" onclick="navTo('home')">
-    <div style="position:relative;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
-    Account
-  </button>
-</nav>
+
 
 <!-- FOOTER -->
-<footer class="bg-gray-900 text-gray-300">
-  <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-    <div>
-      <img src="nansei organics.png" alt="Nansei Organics" class="h-16 w-auto mb-4 brightness-0 invert"/>
-      <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural products. Trusted by farmers everywhere.</p>
-      <div class="flex gap-3">
-        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">𝕏</a>
-        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">f</a>
-        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">in</a>
-      </div>
-    </div>
-    <div>
-      <h3 class="font-bold text-white text-base mb-5">Quick Links</h3>
-      <ul class="space-y-3 text-sm">
-        <li><a href="index.html" class="text-gray-400 hover:text-green-400 transition">Home</a></li>
-        <li><a href="index.html#products" class="text-gray-400 hover:text-green-400 transition">Shop</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">About Us</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="font-bold text-white text-base mb-5">Customer Service</h3>
-      <ul class="space-y-3 text-sm">
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">FAQ</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Returns Policy</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Shipping Info</a></li>
-        <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Track Order</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="border-t border-gray-800 py-5 text-center text-gray-500 text-xs px-4">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
-</footer>
+<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 
 <!-- ══════════════════════════════
   JAVASCRIPT (unchanged logic)
@@ -1024,22 +862,7 @@ function showToast(msg){
   t._t=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-function toggleDrawer(){
-  document.getElementById('mobDrawer').classList.toggle('open');
-  document.getElementById('hamBtn').classList.toggle('open');
-}
-function navTo(id){
-  document.getElementById('mobDrawer').classList.remove('open');
-  document.getElementById('hamBtn').classList.remove('open');
-  goPage(id);
-}
-document.addEventListener('click',e=>{
-  const d=document.getElementById('mobDrawer');
-  const h=document.getElementById('hamBtn');
-  if(d.classList.contains('open')&&!d.contains(e.target)&&!h.contains(e.target)){
-    d.classList.remove('open');h.classList.remove('open');
-  }
-});
+function navTo(id){ if(window.NanseiShell)NanseiShell.closeDrawer(); goPage(id); }
 
 function goPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1065,8 +888,8 @@ function loadProfile(){
   USER=getUser()||{};
   const fn=(USER.name||'User').split(' ')[0];
   const ini=initials(USER.name||'U');
-  document.getElementById('drawerName').textContent=USER.name||'User';
-  document.getElementById('drawerEmail').textContent=USER.email||'—';
+  const dn=document.getElementById('drawerName');if(dn)dn.textContent=USER.name||'User';
+  const de=document.getElementById('drawerEmail');if(de)de.textContent=USER.email||'—';
   const tf6=document.getElementById('tileFoot6');if(tf6)tf6.textContent=(USER.name||'User')+' · Edit →';
   const rc='NSI-'+(USER.name||'USER').replace(/\s/g,'').toUpperCase().slice(0,6);
   const tf7=document.getElementById('tileFoot7');if(tf7)tf7.textContent=rc;
@@ -1491,22 +1314,22 @@ async function setDefAddr(id){
 
 function starStr(r){return'★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r));}
 const PRODUCTS_DATA = [
-  {id:1,  name:"Karunguruvai Rice",      price:180, oldPrice:220, rating:4.7, image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop"},
-  {id:2,  name:"Karuppu Kavuni Rice",    price:220, oldPrice:270, rating:4.8, image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
-  {id:3,  name:"Arubatham Kuruvai Rice", price:160, oldPrice:200, rating:4.5, image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
-  {id:4,  name:"Poongar Rice",           price:200, oldPrice:250, rating:4.6, image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:5,  name:"Mappillai Samba Rice",   price:210, oldPrice:260, rating:4.7, image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
-  {id:6,  name:"Iluppai Poo Samba Rice", price:195, oldPrice:240, rating:4.5, image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
-  {id:7,  name:"Vellai Kavuni Rice",     price:190, oldPrice:235, rating:4.6, image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
-  {id:8,  name:"Paneer Rose",            price:150, oldPrice:190, rating:4.8, image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
-  {id:9,  name:"Hibiscus Flower",        price:120, oldPrice:155, rating:4.6, image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
-  {id:10, name:"Aavaram Flower",         price:110, oldPrice:145, rating:4.5, image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
-  {id:11, name:"Butterfly Pea Flower",   price:180, oldPrice:220, rating:4.7, image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
-  {id:12, name:"Organic Rose Milk",      price:140, oldPrice:175, rating:4.7, image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
-  {id:13, name:"Hibiscus Sherbet",       price:130, oldPrice:165, rating:4.6, image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
-  {id:14, name:"Idiyappam Flour",        price:160, oldPrice:200, rating:4.8, image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:15, name:"Health Mix Powder",      price:175, oldPrice:215, rating:4.6, image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
-  {id:16, name:"Country Fig Powder",     price:200, oldPrice:250, rating:4.7, image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
+  {id:1,  name:"Karunguruvai Rice",      price:180, oldPrice:220, rating:0, image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop"},
+  {id:2,  name:"Karuppu Kavuni Rice",    price:220, oldPrice:270, rating:0, image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
+  {id:3,  name:"Arubatham Kuruvai Rice", price:160, oldPrice:200, rating:0, image:"https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=500&auto=format&fit=crop"},
+  {id:4,  name:"Poongar Rice",           price:200, oldPrice:250, rating:0, image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:5,  name:"Mappillai Samba Rice",   price:210, oldPrice:260, rating:0, image:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop"},
+  {id:6,  name:"Iluppai Poo Samba Rice", price:195, oldPrice:240, rating:0, image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:7,  name:"Vellai Kavuni Rice",     price:190, oldPrice:235, rating:0, image:"https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=500&auto=format&fit=crop"},
+  {id:8,  name:"Paneer Rose",            price:150, oldPrice:190, rating:0, image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:9,  name:"Hibiscus Flower",        price:120, oldPrice:155, rating:0, image:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop"},
+  {id:10, name:"Aavaram Flower",         price:110, oldPrice:145, rating:0, image:"https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=500&auto=format&fit=crop"},
+  {id:11, name:"Butterfly Pea Flower",   price:180, oldPrice:220, rating:0, image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:12, name:"Organic Rose Milk",      price:140, oldPrice:175, rating:0, image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
+  {id:13, name:"Hibiscus Sherbet",       price:130, oldPrice:165, rating:0, image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
+  {id:14, name:"Idiyappam Flour",        price:160, oldPrice:200, rating:0, image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
+  {id:15, name:"Health Mix Powder",      price:175, oldPrice:215, rating:0, image:"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop"},
+  {id:16, name:"Country Fig Powder",     price:200, oldPrice:250, rating:0, image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop"},
 ];
 
 function removeFromWishlistAccount(id) {
@@ -1550,7 +1373,7 @@ function renderWish(){
       </div>
       <div class="px-[0.8rem] py-[0.7rem] flex flex-col gap-[0.3rem] flex-1">
         <div class="text-[0.78rem] font-semibold text-text-dark leading-snug line-clamp-2">${p.name}</div>
-        <div class="text-[0.7rem] tracking-[0.5px]" style="color:#f0a500;">${starStr(p.rating)} <span class="text-text-light text-[0.65rem]">(${p.rating})</span></div>
+        ${p.rating>0?`<div class="text-[0.7rem] tracking-[0.5px]" style="color:#f0a500;">${starStr(p.rating)} <span class="text-text-light text-[0.65rem]">(${p.rating})</span></div>`:''}
         <div class="flex items-center gap-[0.4rem] flex-wrap">
           <span class="text-[0.92rem] font-black text-forest-dark">₹${p.price}</span>
           <span class="text-[0.7rem] text-text-light line-through">₹${p.oldPrice}</span>

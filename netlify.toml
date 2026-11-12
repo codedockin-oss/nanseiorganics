@@ -14,6 +14,133 @@
   status = 404
   force = true
 
+# source files, notes and leftovers that are not part of the site
+[[redirects]]
+  from = "/product/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/Flower/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/assets-source/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/research_notes/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/reports/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/asscets/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/debug2.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/debug3.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/debug4.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/debug5.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/debug_lines.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/farm_content.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/test_write.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/fix2.py"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/fix_cart.py"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/fix_rupee.py"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/fix_product.js"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/DEPLOY.md"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/SECURITY.md"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/render.yaml"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tailwind.config.js"
+  to = "/404"
+  status = 404
+  force = true
+
 # ── Static asset rules (must come BEFORE catch-all) ──────────────────────────
 # Serve JS files directly — never redirect them to index.html
 [[redirects]]
@@ -120,7 +247,7 @@
 # ── API proxy ─────────────────────────────────────────────────────────────────
 [[redirects]]
   from = "/api/*"
-  to = "https://nansei-backend.onrender.com/api/:splat"
+  to = "https://nanseiorganics.onrender.com/api/:splat"
   status = 200
   force = true
 

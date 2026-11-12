@@ -110,8 +110,27 @@ const productSchema = new mongoose.Schema({
   },
   slug: {
     type: String,
-    unique: true
-  }
+    unique: true,
+    sparse: true
+  },
+  // the number used by the storefront's links and saved carts (product.html?id=1 ... 16)
+  legacyId: { type: Number, unique: true, sparse: true },
+  // what customers actually buy: each pack size has its own code, price, printed MRP and stock
+  sizes: [{
+    sku:    { type: String, required: true, trim: true, uppercase: true, maxlength: 40 },
+    label:  { type: String, required: true, trim: true, maxlength: 30 },   // e.g. "500 g", "1 kg", "200 ml", "50 pcs"
+    amount: { type: Number, min: 0 },                                      // grams, ml or pieces in the pack
+    unit:   { type: String, enum: ['g', 'ml', 'piece'], default: 'g' },
+    price:  { type: Number, required: true, min: 1 },                      // selling price incl. GST
+    mrp:    { type: Number, min: 0 },                                      // printed MRP (Legal Metrology)
+    stock:  { type: Number, default: null, min: 0 },                       // null = not tracked
+    active: { type: Boolean, default: true },
+  }],
+  hsn:     { type: String, trim: true, maxlength: 8 },                      // HSN code for the GST invoice
+  gstRate: { type: Number, min: 0, max: 28, default: 5 },
+  countryOfOrigin: { type: String, trim: true, default: 'India', maxlength: 60 },
+  packedBy: { type: String, trim: true, maxlength: 200 },
+  lowStockAt: { type: Number, min: 0, default: 5 },
 }, {
   timestamps: true
 });

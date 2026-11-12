@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Newsroom — Nansai Organics</title>
+  <meta name="description" content="News and updates from Nansai Organics." />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -713,7 +714,7 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 .mob-ham.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -805,61 +806,13 @@ a .nansai-icon,
 <div id="toast"></div>
 
 <!-- ═══════════════ NAVBAR ═══════════════ -->
-<header class="site-nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html">
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<span style=\'font-family:Cormorant Garamond,serif;font-size:1.55rem;font-weight:700;color:#0f2218;\'>Nan<span style=\'color:#b8922a;\'>sai</span></span>'"/>
-    </a>
-    <ul class="nav-links">
-      <li><a class="nav-link" href="index.html#products">Shop</a></li>
-      <li><a class="nav-link" href="index.html#why-section">Our Promise</a></li>
-      <li><a class="nav-link" href="blog.html">Blogs</a></li>
-      <li><a class="nav-link active" href="news.html">News</a></li>
-      <li><a class="nav-link" href="index.html#site-footer">About</a></li>
-    </ul>
-    <div class="nav-actions">
-      <a href="checkoutmyorderpage.html" style="display:flex;align-items:center;gap:.35rem;font-size:.65rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--forest-deep);text-decoration:none;padding:.38rem .7rem;border:1px solid rgba(26,58,42,.2);border-radius:6px;transition:all .2s;white-space:nowrap;" onmouseover="this.style.color='var(--forest-leaf)';this.style.borderColor='var(--forest-leaf)'" onmouseout="this.style.color='var(--forest-deep)';this.style.borderColor='rgba(26,58,42,.2)'">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        My Orders
-      </a>
-      <div style="width:1px;height:18px;background:rgba(26,58,42,.15);"></div>
-      <a href="login.html" class="nav-icon-btn" id="navAccountBtn" style="gap:5px;width:auto;padding:0 8px;border-radius:20px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span id="navAccountText" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);">Sign In</span>
-      </a>
-      <a href="wishlist.html" class="nav-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-        <span class="nav-badge" id="wishlistBadge">0</span>
-      </a>
-      <a href="checkoutmyorderpage.html" class="nav-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-        <span class="nav-badge" id="cartBadge">0</span>
-      </a>
-      <button class="mob-ham" id="mobHam" onclick="toggleMobDrawer()">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
+<script src="../js/site-shell.js?v=20261112" data-part="header"></script>
 
 <!-- Mobile Drawer -->
-<div id="mob-drawer">
-  <nav>
-    <a class="mob-drawer-link" href="index.html">[[icon:shopping-cart]] Shop</a>
-    <a class="mob-drawer-link" href="index.html#why-section">[[icon:leaf]] Our Promise</a>
-    <a class="mob-drawer-link" href="index.html#blog-section">[[icon:book-open]] Blogs</a>
-    <a class="mob-drawer-link" href="news.html" style="color:var(--forest-leaf);">[[icon:newspaper]] News</a>
-    <a class="mob-drawer-link" href="index.html#site-footer">[[icon:house]] About</a>
-    <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a class="mob-drawer-link" href="login.html" id="mobAccountLink">[[icon:user]] Sign In</a>
-    <a class="mob-drawer-link" href="checkoutmyorderpage.html">[[icon:package]] My Orders</a>
-    <a class="mob-drawer-link" href="wishlist.html">[[icon:heart]] Wishlist</a>
-    <a class="mob-drawer-link" href="checkoutmyorderpage.html">[[icon:shopping-bag]] Cart</a>
-  </nav>
-</div>
+
 
 <!-- ═══════════════ BREAKING TICKER ═══════════════ -->
-<div class="news-ticker" id="tickerBar">
+<div class="news-ticker" id="tickerBar" style="display:none">
   <div class="ticker-inner" id="tickerInner"></div>
 </div>
 
@@ -901,8 +854,8 @@ a .nansai-icon,
     <!-- Empty State -->
     <div class="empty-state" id="emptyState">
       <div style="font-size:3.5rem;margin-bottom:.75rem;">[[icon:newspaper]]</div>
-      <p style="font-weight:700;color:#9ca3af;font-size:1rem;">No articles found</p>
-      <p style="font-size:.82rem;color:#d1d5db;margin-top:.4rem;">Try a different search or category</p>
+      <p id="emptyTitle" style="font-weight:700;color:#1a3a2a;font-size:1rem;">No articles found</p>
+      <p id="emptyText" style="font-size:.88rem;color:#5b6f60;margin-top:.4rem;">Try a different search or category</p>
     </div>
 
     <!-- Load More -->
@@ -919,12 +872,9 @@ a .nansai-icon,
 
     <!-- Newsletter -->
     <div class="nl-widget sr sd1">
-      <div class="nl-title">Stay in the Loop [[icon:leaf]]</div>
-      <p class="nl-sub">Get the latest Nansai news, harvest updates and offers straight to your inbox.</p>
-      <form class="nl-form" onsubmit="handleNLSubmit(event)">
-        <input class="nl-input" type="email" placeholder="Your email address" required/>
-        <button class="nl-btn" type="submit">Subscribe for Free →</button>
-      </form>
+      <div class="nl-title">Harvest updates</div>
+      <p class="nl-sub">Message us on WhatsApp and we will tell you when a new harvest is packed.</p>
+      <a class="nl-btn" style="display:block;text-align:center;text-decoration:none" href="https://wa.me/916382142578?text=Please%20send%20me%20harvest%20updates" target="_blank" rel="noopener">Message us on WhatsApp</a>
     </div>
 
     <!-- Categories -->
@@ -963,26 +913,7 @@ a .nansai-icon,
 </div>
 
 <!-- MOBILE STICKY BOTTOM BAR -->
-<nav id="mob-sticky-bar">
-  <a href="index.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Home
-  </a>
-  <a href="blog.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    Blogs
-  </a>
-  <a href="news.html" class="mob-bar-btn active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-    News
-  </a>
-<a href="farm.html" class="mob-bar-btn">
-    <div class="mob-bar-icon-wrap">
-      <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
-    </div>
-    <span>Farm</span>
-  </a>
-</nav>
+
 
 <!-- ═══════════════ ARTICLE MODAL ═══════════════ -->
 <div id="article-modal" onclick="closeModal(event)">
@@ -999,25 +930,16 @@ a .nansai-icon,
 </div>
 
 <!-- ═══════════════ FOOTER ═══════════════ -->
-<footer style="background:#111827;color:#9ca3af;">
-  <div style="max-width:1400px;margin:0 auto;padding:3rem 1.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem;border-bottom:1px solid #1f2937;">
-    <div>
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:60px;width:auto;object-fit:contain;filter:brightness(0) invert(1);display:block;margin-bottom:4px;"/>
-    </div>
-    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
-      <a href="index.html" style="font-size:.78rem;color:#9ca3af;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='#9ca3af'">Home</a>
-      <a href="index.html#products" style="font-size:.78rem;color:#9ca3af;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='#9ca3af'">Shop</a>
-      <a href="news.html" style="font-size:.78rem;color:#86efac;text-decoration:none;">News</a>
-      <a href="#" style="font-size:.78rem;color:#9ca3af;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='#9ca3af'">Contact</a>
-    </div>
-  </div>
-  <div style="text-align:center;padding:1.25rem;font-size:.72rem;color:#4b5563;">&copy; 2026 Nansai Organics. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
-</footer>
+<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 
 <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
 <script>
 /* ════ NEWS DATA ════ */
-const NEWS = [
+/* Sample news written for the old site. They make claims (certifications, awards, partners, figures)
+   that need proof before they can be published, so they are switched off. Set this to true only for
+   items you can back up, or better, publish real news from the admin panel. */
+const SHOW_SAMPLE_NEWS = false;
+const SAMPLE_NEWS = [
   {
     id: 1,
     title: "Nansai Achieves USDA Organic Certification — A 22-Year Journey Recognised",
@@ -1192,6 +1114,7 @@ const NEWS = [
     `
   },
 ];
+const NEWS = SHOW_SAMPLE_NEWS ? SAMPLE_NEWS : [];
 
 /* ════ STATE ════ */
 let activeFilter = 'all';
@@ -1202,7 +1125,8 @@ let filteredNews = [...allNews];
 /* ════ FETCH API NEWS ════ */
 (async function fetchApiNews(){
   try {
-    const API = window.API_BASE || 'http://localhost:5000/api';
+    const local = ['localhost', '127.0.0.1'].includes(location.hostname) || location.protocol === 'file:';
+    const API = window.API_BASE || (local ? 'http://localhost:5000/api' : '/api');
     const res = await fetch(API + '/news');
     if (!res.ok) return;
     const data = await res.json();
@@ -1227,17 +1151,19 @@ let filteredNews = [...allNews];
     renderFeatured();
     renderGrid(filteredNews, visibleCount);
     renderSidebar();
-  } catch(e) { /* silently fall back to hardcoded data */ }
+  } catch(e) { /* no news yet */ }
+  document.getElementById('tickerBar').style.display = 'none';
+  newsEmptyNote();
 })();
 
 /* ════ CATEGORY META ════ */
 const CAT_META = {
-  all:           { label: 'All News',        icon: '[[icon:newspaper]]' },
-  milestone:     { label: 'Milestones',       icon: '[[icon:trophy]]' },
-  certification: { label: 'Certifications',   icon: '[[icon:leaf]]' },
-  product:       { label: 'Product Launches', icon: '[[icon:package]]' },
-  community:     { label: 'Community',        icon: '[[icon:handshake]]' },
-  award:         { label: 'Awards',           icon: '[[icon:medal]]' },
+  all:           { label: 'All News',        icon: '' },
+  milestone:     { label: 'Milestones',       icon: '' },
+  certification: { label: 'Certifications',   icon: '' },
+  product:       { label: 'Product Launches', icon: '' },
+  community:     { label: 'Community',        icon: '' },
+  award:         { label: 'Awards',           icon: '' },
 };
 
 /* ════ TICKER ════ */
@@ -1253,7 +1179,7 @@ function renderFeatured(){
   if(!pin) return;
   const sec = document.getElementById('featuredSection');
   sec.innerHTML = `
-    <div class="featured-card sr" id="featuredCard" onclick="openArticle(${pin.id})">
+    <div class="featured-card sr" id="featuredCard" onclick="openArticle('${pin.id}')">
       <img class="featured-img" src="${pin.image}" alt="${pin.title}" loading="eager"/>
       <div class="featured-overlay"></div>
       <div class="featured-body">
@@ -1268,7 +1194,7 @@ function renderFeatured(){
           <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${pin.readTime}</span>
           <span style="background:rgba(201,168,76,.25);color:var(--gold-lt);font-size:.6rem;font-weight:800;padding:2px 10px;border-radius:20px;letter-spacing:.1em;">[[icon:pin]] PINNED</span>
         </div>
-        <a href="#" class="read-btn" onclick="event.preventDefault();openArticle(${pin.id})">Read Full Story →</a>
+        <a href="#" class="read-btn" onclick="event.preventDefault();openArticle('${pin.id}')">Read Full Story →</a>
       </div>
     </div>
   `;
@@ -1298,7 +1224,7 @@ function renderGrid(list, showCount){
   lmWrap.style.display = nonFeatured.length > showCount ? 'block' : 'none';
 
   grid.innerHTML = toShow.map((n, i) => `
-    <div class="news-card" style="animation-delay:${i * 0.07}s;" onclick="openArticle(${n.id})">
+    <div class="news-card" style="animation-delay:${i * 0.07}s;" onclick="openArticle('${n.id}')">
       <div class="news-card-img">
         <span style="position:absolute;top:10px;left:10px;z-index:2;display:inline-flex;align-items:center;gap:4px;font-size:.58rem;font-weight:800;padding:3px 10px;border-radius:20px;color:${n.catColor};background:${n.catBg};">${n.catLabel}</span>
         <img src="${n.image}" alt="${n.title}" loading="lazy"/>
@@ -1313,7 +1239,7 @@ function renderGrid(list, showCount){
             <span style="width:3px;height:3px;border-radius:50%;background:rgba(26,58,42,.2);display:inline-block;"></span>
             ${n.readTime}
           </div>
-          <a href="#" class="card-read-link" onclick="event.preventDefault();openArticle(${n.id})">
+          <a href="#" class="card-read-link" onclick="event.preventDefault();openArticle('${n.id}')">
             Read <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
@@ -1337,7 +1263,7 @@ function renderSidebar(){
   // Recent
   const recentList = document.getElementById('recentList');
   recentList.innerHTML = allNews.slice(0,4).map(n => `
-    <div class="side-news-item" onclick="openArticle(${n.id})">
+    <div class="side-news-item" onclick="openArticle('${n.id}')">
       <div class="side-news-thumb"><img src="${n.image}" alt="${n.title}" loading="lazy"/></div>
       <div>
         <div class="side-news-title">${n.title}</div>
@@ -1491,5 +1417,17 @@ renderSidebar();
 
 </script>
 
+<script>
+function newsEmptyNote() {
+  if (allNews.length) return;
+  const t = document.getElementById('emptyTitle'), x = document.getElementById('emptyText');
+  if (t) t.textContent = 'No news yet';
+  if (x) x.innerHTML = 'When there is news from the farm, it will be posted here. Meanwhile, our <a href="blog.html" style="color:#2d5a3d;text-decoration:underline">blog</a> has recipes and cooking notes.';
+  const label = document.getElementById('latestLabel'); if (label) label.style.display = 'none';
+  const strip = document.querySelector('.filter-strip'); if (strip) strip.style.display = 'none';
+  document.querySelectorAll('.sidebar-box').forEach(b => { if (/categor/i.test(b.textContent)) b.style.display = 'none'; });
+}
+newsEmptyNote();
+</script>
 </body>
 </html>

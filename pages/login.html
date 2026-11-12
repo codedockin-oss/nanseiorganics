@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nansei Organics - Authentication</title>
+  <meta name="robots" content="noindex" />
 <script>
 (function () {
   const PRODUCTION_API = '/api';
@@ -73,11 +74,9 @@ body{
     radial-gradient(circle at 12% 8%,rgba(143,188,154,.24),transparent 28%),
     radial-gradient(circle at 88% 16%,rgba(201,168,76,.16),transparent 26%),
     linear-gradient(135deg,#ffffff 0%,#f5fbf6 48%,#f7f3ec 100%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:28px 16px;
+  margin:0;
 }
+.login-wrap{display:flex;align-items:center;justify-content:center;padding:28px 16px;min-height:calc(100vh - 68px)}
 button,input{font:inherit}
 .shell{
   width:min(1040px,100%);
@@ -367,7 +366,7 @@ input.invalid{
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.error{background:var(--error)}
 @media (max-width:840px){
-  body{align-items:flex-start;padding:18px 12px}
+  .login-wrap{align-items:flex-start;padding:18px 12px}
   .shell{grid-template-columns:1fr;min-height:auto;border-radius:22px}
   .brand-panel{display:none}
   .auth-panel{padding:26px 18px}
@@ -382,9 +381,10 @@ input.invalid{
 </style>
 </head>
 <body>
+<script src="../js/site-shell.js?v=20261112" data-part="header"></script>
 <div id="toast" role="status" aria-live="polite"></div>
 
-<main class="shell">
+<div class="login-wrap"><main class="shell">
   <section class="brand-panel" aria-label="Nansei Organics">
     <img class="brand-logo" src="nansei_org_logo.svg" alt="Nansei Organics"/>
     <div class="brand-copy">
@@ -489,13 +489,16 @@ input.invalid{
       </form>
     </div>
   </section>
-</main>
+</main></div>
+<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 
 <script>
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 let toastTimer;
 
-Auth.redirectIfAuthenticated('index.html');
+// After signing in, go back to the page that sent the shopper here (only pages on this site)
+const NEXT_PAGE = (function () { const n = new URLSearchParams(location.search).get('next') || ''; return /^[a-z0-9-]+\.html(#[a-z0-9-]*)?$/i.test(n) ? n : 'index.html'; })();
+Auth.redirectIfAuthenticated(NEXT_PAGE);
 
 function showToast(message, isError) {
   const toast = document.getElementById('toast');
@@ -597,7 +600,7 @@ document.getElementById('loginPanel').addEventListener('submit', async (event) =
     const password = document.getElementById('loginPassword').value;
     const data = await Auth.login(email, password);
     showToast('Login successful');
-    const target = data.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
+    const target = data.user?.role === 'admin' ? 'admin-panel.html' : NEXT_PAGE;
     setTimeout(() => window.location.replace(target), 650);
   } catch (error) {
     showToast(error.message || 'Login failed', true);
@@ -618,7 +621,7 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
     const password  = document.getElementById('registerPassword').value;
     const regData = await Auth.register(firstName, lastName, email, password);
     showToast('Account created successfully');
-    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
+    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : NEXT_PAGE;
     setTimeout(() => window.location.replace(regTarget), 650);
   } catch (error) {
     showToast(error.message || 'Registration failed', true);
@@ -627,7 +630,7 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
   }
 });
 
-function forgotPassword(event) {
+async function forgotPassword(event) {
   event.preventDefault();
   const email = document.getElementById('loginEmail').value.trim();
   setFieldError('loginEmail', 'loginEmailError', '');
@@ -635,7 +638,12 @@ function forgotPassword(event) {
     setFieldError('loginEmail', 'loginEmailError', 'Enter your email first');
     return;
   }
-  showToast('Forgot Password placeholder - reset email flow is ready for backend email delivery');
+  try {
+    const res = await Auth.forgotPassword(email);
+    showToast((res && res.message) || 'If an account exists for this email, a reset link has been sent.');
+  } catch (err) {
+    showToast((err && err.message) || 'Could not send the reset email. Please try again.');
+  }
 }
 
 document.getElementById('registerPassword').addEventListener('input', updateStrength);

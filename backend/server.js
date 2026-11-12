@@ -148,6 +148,7 @@ app.use('/api/discounts', publicLimiter,  discountRoutes);
 app.use('/api/payment',   paymentLimiter, paymentRoutes);
 app.use('/api/blogs',     publicLimiter,  blogRoutes);
 app.use('/api/news',      publicLimiter,  newsRoutes);
+app.use('/api/settings',  publicLimiter,  require('./routes/settingsRoutes'));   // store settings (public read, admin save)
 
 // ── 404 for unknown API routes ──
 app.use('/api/*', (_req, res) => {

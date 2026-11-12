@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Blog & Stories | Nansai Organics</title>
+  <meta name="description" content="Notes from the farm: heritage rice, dried flowers, cooking and traditional food from Tamil Nadu." />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
 /* ═══════════════════════════════════════
@@ -890,7 +891,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 .dot-other     { background:#16a34a; }
 </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -984,71 +985,10 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      NAVBAR
 ═══════════════════════════════════════ -->
-<header class="site-nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html">
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" onerror="this.style.display='none'"/>
-    </a>
-    <ul class="nav-links">
-      <li><a class="nav-link" href="index.html">Home</a></li>
-      <li><a class="nav-link" href="index.html#products">Shop</a></li>
-      <li><a class="nav-link" href="index.html#why-section">Our Promise</a></li>
-      <li><a class="nav-link active" href="blog.html">Blogs</a></li>
-      <li><a class="nav-link" href="news.html">News</a></li>
-      <li><a class="nav-link" href="index.html#site-footer">About</a></li>
-    </ul>
-    <!-- Search bar -->
-    <div style="position:relative;flex:1;max-width:320px;display:flex;align-items:center;border:1.5px solid rgba(26,58,42,.18);border-radius:8px;overflow:hidden;background:#fff;" class="hidden-mob">
-      <input id="blogSearchInput" type="text" placeholder="Search articles…"
-             oninput="onSearch(this.value)"
-             onkeydown="if(event.key==='Escape'){this.value='';onSearch('')}"
-             style="flex:1;padding:.5rem 1rem;font-size:.79rem;color:var(--forest-deep);font-family:'Inter',sans-serif;border:none;outline:none;background:transparent;"/>
-      <button onclick="onSearch(document.getElementById('blogSearchInput').value)"
-              style="padding:.5rem .85rem;background:var(--forest-deep);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;"
-              onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest-deep)'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-    </div>
-    <div class="nav-actions">
-      <a href="checkoutmyorderpage.html" class="nav-orders-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        My Orders
-      </a>
-      <div class="nav-divider"></div>
-      <a id="navSignInBtn" href="login.html" class="nav-icon-btn" style="gap:5px;width:auto;padding:0 8px;border-radius:20px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span id="navSignInText" style="font-size:.72rem;font-weight:700;color:var(--forest-deep);">Sign In</span>
-      </a>
-      <a href="wishlist.html" class="nav-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-        <span class="nav-badge" id="wishlistCount">0</span>
-      </a>
-      <a href="checkoutmyorderpage.html" class="nav-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-        <span class="nav-badge" id="cartCount">0</span>
-      </a>
-      <button class="mob-ham" id="mobHam" onclick="toggleMobDrawer()">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
+<script src="../js/site-shell.js?v=20261112" data-part="header"></script>
 
 <!-- Mobile Drawer -->
-<div id="mobDrawer" style="display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:#fff;z-index:999;overflow-y:auto;padding:1.5rem;border-top:1px solid rgba(26,58,42,.1);">
-  <nav style="display:flex;flex-direction:column;gap:.15rem;">
-    <a href="index.html"             style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] Home</a>
-    <a href="index.html#products"    style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:shopping-cart]] Shop</a>
-    <a href="index.html#why-section" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:leaf]] Our Promise</a>
-    <a href="blog.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-leaf);text-decoration:none;border-radius:10px;display:block;">[[icon:book-open]] Blogs</a>
-    <a href="news.html"              style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:newspaper]] News</a>
-    <a href="index.html#site-footer" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:house]] About</a>
-    <hr style="border:none;border-top:1px solid rgba(26,58,42,.08);margin:.5rem 0;"/>
-    <a id="mobSignInLink" href="login.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:user]] Sign In</a>
-    <a href="checkoutmyorderpage.html" style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:package]] My Orders</a>
-    <a href="wishlist.html"          style="padding:.85rem 1rem;font-size:.9rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-radius:10px;display:block;">[[icon:heart]] Wishlist</a>
-  </nav>
-</div>
+
 <!-- ═══════════════════════════════════════
      3D ARTICLE CAROUSEL
 ═══════════════════════════════════════ -->
@@ -1075,15 +1015,15 @@ a .nansai-icon,
 <div class="filter-section">
   <div class="filter-inner">
     <button class="fpill active" data-cat="all"       onclick="filterBlog('all',this)">All Articles</button>
-    <button class="fpill" data-cat="rice"             onclick="filterBlog('rice',this)">[[icon:wheat]] Rice Varieties</button>
-    <button class="fpill" data-cat="flowers"          onclick="filterBlog('flowers',this)">[[icon:flower-2]] Dried Flowers</button>
-    <button class="fpill" data-cat="beverages"        onclick="filterBlog('beverages',this)">[[icon:glass-water]] Beverages</button>
-    <button class="fpill" data-cat="flour"            onclick="filterBlog('flour',this)">[[icon:package]] Flour & Mixes</button>
-    <button class="fpill" data-cat="other"            onclick="filterBlog('other',this)">[[icon:leaf]] Other</button>
-    <button class="fpill" data-cat="wellness"         onclick="filterBlog('wellness',this)">[[icon:heart]] Wellness</button>
-    <button class="fpill" data-cat="recipes"          onclick="filterBlog('recipes',this)">[[icon:chef-hat]] Recipes</button>
-    <button class="fpill" data-cat="sustainability"   onclick="filterBlog('sustainability',this)">[[icon:recycle]] Sustainability</button>
-    <span class="result-count" id="resultCount">48 articles</span>
+    <button class="fpill" data-cat="rice"             onclick="filterBlog('rice',this)">Rice Varieties</button>
+    <button class="fpill" data-cat="flowers"          onclick="filterBlog('flowers',this)">Dried Flowers</button>
+    <button class="fpill" data-cat="beverages"        onclick="filterBlog('beverages',this)">Drinks</button>
+    <button class="fpill" data-cat="flour"            onclick="filterBlog('flour',this)">Flour &amp; Mixes</button>
+    <button class="fpill" data-cat="other"            onclick="filterBlog('other',this)">Other</button>
+    <button class="fpill" data-cat="wellness"         onclick="filterBlog('wellness',this)">Traditions</button>
+    <button class="fpill" data-cat="recipes"          onclick="filterBlog('recipes',this)">Recipes</button>
+    <button class="fpill" data-cat="sustainability"   onclick="filterBlog('sustainability',this)">On the farm</button>
+    <span class="result-count" id="resultCount"></span>
   </div>
 </div>
 
@@ -1101,80 +1041,17 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════ -->
-<footer class="site-footer">
-  <div class="footer-grid">
-    <div>
-      <img src="nansei_org_logo.svg" alt="Nansai Organics" style="height:64px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);"/>
-      <div class="footer-tagline">Experience the Root of Nature</div>
-      <p class="footer-desc">100% organic & high-quality agricultural products. Trusted by farmers and families across India for over 22 years.</p>
-      <div class="footer-socials">
-        <a href="#" class="footer-social">𝕏</a>
-        <a href="#" class="footer-social">f</a>
-        <a href="#" class="footer-social">in</a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#products">Shop</a></li>
-        <li><a href="blog.html">Blogs</a></li>
-        <li><a href="news.html">News</a></li>
-        <li><a href="index.html#site-footer">About Us</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h3>Support</h3>
-      <ul>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Returns Policy</a></li>
-        <li><a href="#">Shipping Info</a></li>
-        <li><a href="#">Track Order</a></li>
-        <li><a href="#">Certifications</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h3>Categories</h3>
-      <ul>
-        <li><a href="index.html#products">Rice Varieties</a></li>
-        <li><a href="index.html#products">Dried Flowers</a></li>
-        <li><a href="index.html#products">Beverages</a></li>
-        <li><a href="index.html#products">Flour & Mixes</a></li>
-        <li><a href="index.html#products">Other Products</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">&copy; 2026 NANSEI. All Rights Reserved. Made with [[icon:heart]] for farmers.</div>
-</footer>
+<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 
 <!-- MOBILE STICKY BOTTOM BAR -->
-<nav id="mob-sticky-bar">
-  <a href="index.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Home
-  </a>
-  <a href="blog.html" class="mob-bar-btn active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    Blogs
-  </a>
-  <a href="news.html" class="mob-bar-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-    News
-  </a>
-<a href="farm.html" class="mob-bar-btn">
-    <div class="mob-bar-icon-wrap">
-      <i data-lucide="tractor" style="width:20px;height:20px;" aria-hidden="true"></i>
-    </div>
-    <span>Farm</span>
-  </a>
-</nav>
+
 
 <!-- ═══════════════════════════════════════
      ARTICLE MODAL
 ═══════════════════════════════════════ -->
 <div id="articleModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box" id="modalBox">
-    <button class="modal-close" onclick="closeModal()">[[icon:x]]</button>
+    <button class="modal-close" aria-label="Close article" onclick="closeModal()">[[icon:x]]</button>
     <img id="modalImg" src="" alt="" class="modal-hero-img"/>
     <div class="modal-body">
       <span id="modalCat" class="modal-category"></span>
@@ -1197,45 +1074,28 @@ const BLOGS = [
     id:1, productId:1,
     category:'rice', tags:['wellness','heritage'],
     product:'Karunguruvai Rice',
-    title:'Karunguruvai Rice: The Ancient Tamil Remedy You Should Be Eating Daily',
-    excerpt:'This short-grain medicinal rice has a glycemic index of just 51 — and has been prescribed in Siddha medicine for over 2,000 years.',
+    title:'Karunguruvai Rice: How Tamil Kitchens Have Cooked It for Generations',
+    excerpt:'How to soak and cook Karunguruvai, and what to serve it with.',
     date:'Mar 12, 2026', read:'5 min',
-    author:'Dr. Nithya Kumar',
+    author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602',
     catColor:'#65a30d',
-    content:`<p>Walk into any traditional Tamil household and you will find that the oldest member of the family knows exactly what Karunguruvai rice is. It is not just a grain — it is a prescription from nature, passed down through generations of Siddha practitioners.</p>
-    <h4>What Makes It Medicinal?</h4>
-    <p>Karunguruvai is a short-grain, dark-husked heritage rice variety native to the Cauvery delta region of Tamil Nadu. Its deep pigmentation comes from natural anthocyanins — the same powerful antioxidants found in blueberries and black grapes. These compounds actively fight oxidative stress at the cellular level.</p>
-    <blockquote>"In Siddha medicine, Karunguruvai is classified as a cooling grain that balances pitta dosha and strengthens the digestive fire." — Traditional Siddha text, Agasthiyar Gunavagadam</blockquote>
-    <h4>Glycemic Index & Diabetes</h4>
-    <p>Modern nutritional science has confirmed what Siddha practitioners knew for centuries. With a glycemic index of just 51 (compared to 72 for white rice), Karunguruvai causes a much slower, steadier rise in blood sugar. This makes it an excellent daily staple for people managing Type 2 diabetes or insulin resistance.</p>
-    <h4>Nutritional Profile per 100g</h4>
-    <ul>
-      <li>Calories: 350 kcal (slow-release energy)</li>
-      <li>Dietary Fiber: 4–6g (excellent for gut health)</li>
-      <li>Iron: 2–3mg (prevents anemia)</li>
-      <li>Magnesium: 60–80mg (supports muscle & nerve function)</li>
-      <li>Protein: 7–9g (builds and repairs tissue)</li>
-    </ul>
+    content:`<p>Walk into any traditional Tamil household and you will find that the oldest member of the family knows exactly what Karunguruvai rice is.</p>
     <h4>How to Cook Karunguruvai Rice</h4>
-    <p>Use a 1:2.5 rice-to-water ratio. Soak for 30 minutes before cooking for best results. Cook on medium-low heat for 25–30 minutes. The grain will have a slightly chewy texture and a subtle earthy aroma. Serve with curd rice, sambar, or rasam for a complete meal.</p>
-    <p>At Nansai Organics, our Karunguruvai is grown on our 25-acre certified farm in Tamil Nadu using traditional seed-saving methods — ensuring you receive grain that is both authentic and genuinely nutritious.</p>`
+    <p>Use a 1:2.5 rice-to-water ratio. Cook on medium-low heat for 25–30 minutes. The grain will have a slightly chewy texture and a subtle earthy aroma. Serve with curd rice, sambar, or rasam for a complete meal.</p>
+    `
   },
   {
     id:2, productId:2,
     category:'rice', tags:['wellness','antioxidants'],
     product:'Karuppu Kavuni Rice',
-    title:'Black Kavuni Rice: Why This Purple Payasam Ingredient Is a Superfood',
-    excerpt:'Karuppu Kavuni is among the richest plant sources of anthocyanins on earth. Here is everything you need to know.',
+    title:'Black Kavuni Rice: The Purple Grain Behind Kavuni Arisi Payasam',
+    excerpt:'How to make kavuni arisi payasam with coconut milk and jaggery.',
     date:'Feb 28, 2026', read:'4 min',
     author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741',
     catColor:'#65a30d',
-    content:`<p>Karuppu Kavuni — literally "black glutinous rice" — has been a ceremonial grain in Tamil Nadu for centuries. Served at weddings, temple festivals and new year celebrations, it is now recognised by modern nutrition science as one of the most antioxidant-rich foods you can eat.</p>
-    <h4>The Science of its Deep Black Color</h4>
-    <p>The striking black-purple color of Kavuni rice comes from anthocyanins — a class of flavonoid antioxidants. Research published in the Journal of Agricultural and Food Chemistry found that black rice bran contains more anthocyanins than blueberries, weight for weight. These compounds actively neutralise free radicals that cause inflammation, aging, and chronic disease.</p>
-    <h4>Heart Health & Cholesterol</h4>
-    <p>Studies have shown that the phytochemicals in black rice can reduce LDL (bad) cholesterol oxidation — a key driver of arterial plaque formation. Regular consumption is associated with improved cardiovascular outcomes in observational studies from both India and China, where black rice has been consumed for millennia.</p>
+    content:`<p>Karuppu Kavuni — literally "black glutinous rice" — has been a ceremonial grain in Tamil Nadu for centuries.</p>
     <h4>Traditional Kavuni Payasam Recipe</h4>
     <ul>
       <li>Soak 1 cup Kavuni rice overnight</li>
@@ -1245,7 +1105,7 @@ const BLOGS = [
       <li>Garnish with cashews and raisins fried in ghee</li>
     </ul>
     <p>The result is a stunning deep purple dessert with a rich, nutty flavor that guests will remember long after the meal is finished.</p>
-    <blockquote>"Let food be thy medicine and medicine be thy food." — Hippocrates, echoed in centuries of Tamil food wisdom.</blockquote>`
+    `
   },
   {
     id:3, productId:3,
@@ -1261,7 +1121,7 @@ const BLOGS = [
     <h4>Why Short-Duration Rice Matters</h4>
     <p>Short-duration varieties like Arubatham Kuruvai require significantly less water than high-yield modern varieties. They fit naturally into crop rotation schedules, allowing land to rest and regenerate. Their shallow roots loosen the soil without depleting deep mineral reserves, making them genuinely regenerative crops.</p>
     <h4>Light on the Stomach, Rich in Minerals</h4>
-    <p>Arubatham Kuruvai produces a soft, light grain that is remarkably easy to digest. It is particularly recommended for the elderly, children, and anyone recovering from illness. The rice is rich in zinc, magnesium, and phosphorus — minerals that support immune function and bone health.</p>
+    <p>Arubatham Kuruvai produces a soft, light grain that is remarkably easy to digest. It is particularly recommended for the elderly, children, and anyone recovering from illness.</p>
     <h4>Perfect Everyday Rice</h4>
     <p>Unlike some heritage varieties that require special preparation, Arubatham Kuruvai cooks beautifully with a simple 1:2 water ratio. The result is a light, non-sticky cooked grain with a delicate flavor that pairs with everything from dal to fish curry. This is the rice your grandmother would have served every day — because it was the right rice to serve every day.</p>`
   },
@@ -1269,38 +1129,30 @@ const BLOGS = [
     id:4, productId:4,
     category:'rice', tags:['wellness','women'],
     product:'Poongar Rice',
-    title:'Poongar Rice: The Heritage Grain That Supports Women\'s Health Naturally',
-    excerpt:'With an iron content of 6.6mg per 100g and a glycemic index under 46, Poongar is the grain every woman should know about.',
+    title:'Poongar Rice: A Heritage Grain Tamil Families Cook at Home',
+    excerpt:'Cooking notes for Poongar, a red heritage rice from Tamil Nadu.',
     date:'Feb 5, 2026', read:'5 min',
     author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674',
     catColor:'#65a30d',
-    content:`<p>In many Tamil Nadu villages, a new bride's household would receive a gift of Poongar rice from her mother. The tradition was rooted not in ceremony but in practical wisdom: Poongar was known to regulate menstrual cycles, support lactation, and maintain iron levels during pregnancy. Modern nutritional analysis has confirmed every one of these traditional claims.</p>
-    <h4>Iron That Prevents Anemia</h4>
-    <p>Poongar rice contains 6.6mg of iron per 100g — significantly higher than most other rice varieties and comparable to many iron-fortified cereals. Iron-deficiency anemia affects roughly 51% of Indian women of reproductive age. A daily serving of Poongar rice, combined with a source of Vitamin C (such as tomatoes or lemon), dramatically improves iron absorption.</p>
-    <h4>Menstrual Health & Hormonal Balance</h4>
-    <p>Traditional Siddha texts prescribe Poongar kanji (rice porridge) specifically for women experiencing irregular periods or hormonal imbalance. The grain's unique phytochemical profile — including natural phytoestrogens — is thought to support hormonal regulation. While clinical trials are still limited, the empirical evidence from centuries of use is substantial.</p>
+    content:`<p>In many Tamil Nadu villages, a new bride's household would receive a gift of Poongar rice from her mother. Modern nutritional analysis has confirmed every one of these traditional claims.</p>
     <h4>Pregnancy & Lactation</h4>
-    <p>Poongar rice kanji, prepared with small amounts of ghee and rock sugar, has been a postpartum food in Tamil Nadu for centuries. It is said to support milk production in nursing mothers and provide the energy needed for recovery after childbirth. Its low glycemic index (41–46) also makes it safe for women who develop gestational diabetes.</p>
+    <p>Poongar rice kanji, prepared with small amounts of ghee and rock sugar, has been a postpartum food in Tamil Nadu for centuries. It is said to support milk production in nursing mothers and provide the energy needed for recovery after childbirth.</p>
     <blockquote>"Poongar sadham — the women's rice — is our grandmother's gift to every daughter." — Traditional Tamil saying</blockquote>`
   },
   {
     id:5, productId:5,
     category:'rice', tags:['heritage','wellness'],
     product:'Mappillai Samba Rice',
-    title:'Mappillai Samba: The Bridegroom\'s Rice That Builds Real Strength',
-    excerpt:'Traditionally fed to grooms before their wedding day, this iron-rich heritage variety has been a strength builder for generations.',
+    title:'Mappillai Samba: The Bridegroom\'s Rice and How to Cook It',
+    excerpt:'Cooking notes for Mappillai Samba, the bridegroom’s rice.',
     date:'Jan 28, 2026', read:'4 min',
     author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png',
     catColor:'#65a30d',
-    content:`<p>The name tells the story: "Mappillai" means bridegroom in Tamil, and "Samba" is the rice type. This grain was traditionally given to the groom for weeks before his wedding to build physical stamina, improve digestion, and strengthen the body for the demands of married life and farming. It is, in essence, Tamil Nadu's original energy food.</p>
-    <h4>What Gives It Its Strength?</h4>
-    <p>Mappillai Samba is a long-grain, reddish-brown rice with a naturally high fiber content and a rich supply of iron, zinc, and natural plant sterols. Its bran layer — which is preserved in our hand-pounded preparation — contains phytosterols that support testosterone metabolism and hormonal health in men.</p>
-    <h4>Stamina and Endurance</h4>
-    <p>Athletes and fitness enthusiasts who have incorporated Mappillai Samba into their diet consistently report sustained energy throughout long training sessions. Unlike refined white rice that causes a rapid spike and crash in blood sugar, this heritage variety provides slow, steady fuel — perfect for endurance sports or long days of physical work.</p>
+    content:`<p>The name tells the story: "Mappillai" means bridegroom in Tamil, and "Samba" is the rice type. It is, in essence, Tamil Nadu's original energy food.</p>
     <h4>How to Cook It</h4>
-    <p>Soak for one hour before cooking. Use a 1:2.5 water ratio and cook for 30–35 minutes. Mappillai Samba pairs beautifully with coconut milk curries and is exceptional when cooked as a simple pulao with ginger and turmeric — a recipe that maximises its natural anti-inflammatory properties.</p>`
+    <p>Soak for one hour before cooking. Use a 1:2.5 water ratio and cook for 30–35 minutes.</p>`
   },
   {
     id:6, productId:6,
@@ -1313,10 +1165,8 @@ const BLOGS = [
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667',
     catColor:'#65a30d',
     content:`<p>There is a moment when you open the lid of a pot of Iluppai Poo Samba rice that is simply unforgettable. A gentle, floral fragrance — reminiscent of the Mahua (Iluppai) tree flower after which this rice is named — fills the entire kitchen. It is one of those sensory experiences that connects you immediately to Tamil Nadu's rich agricultural heritage.</p>
-    <h4>The Science of the Aroma</h4>
-    <p>The distinctive fragrance of Iluppai Poo Samba comes from natural volatile compounds — primarily 2-acetyl-1-pyrroline — that develop during the grain's growth in specific soil and climate conditions in the Cauvery delta. This same compound is responsible for the aroma of Basmati, but in Iluppai Poo Samba it carries an additional floral note that is uniquely Tamil.</p>
     <h4>Everyday Versatility</h4>
-    <p>Despite its premium aroma, Iluppai Poo Samba is an everyday rice — light, easy to digest, and suitable for the whole family. It cooks in 20–25 minutes with a 1:2 water ratio and can be used for everything from plain rice to biriyani, pongal, and curd rice. Its moderate fiber content supports healthy digestion without heaviness.</p>
+    <p>Despite its premium aroma, Iluppai Poo Samba is an everyday rice — light, easy to digest, and suitable for the whole family. It cooks in 20–25 minutes with a 1:2 water ratio and can be used for everything from plain rice to biriyani, pongal, and curd rice.</p>
     <h4>Preservation Through Purchase</h4>
     <p>Iluppai Poo Samba is classified as a rare heritage variety. Fewer than 200 farming families in Tamil Nadu still cultivate it. When you buy this rice from Nansai Organics, you are directly funding the continued cultivation of a 1,500-year-old grain variety. Your purchase is an act of cultural preservation.</p>`
   },
@@ -1325,7 +1175,7 @@ const BLOGS = [
     category:'rice', tags:['recipes','heritage'],
     product:'Vellai Kavuni Rice',
     title:'Vellai Kavuni: The Sticky White Rice Behind Tamil Nadu\'s Best Sweet Pongal',
-    excerpt:'White Kavuni\'s gentle stickiness and mild sweetness make it the traditional choice for pongal, payasam, and celebration rice dishes.',
+    excerpt:'White Kavuni’s gentle stickiness and mild sweetness make it the traditional choice for pongal, payasam, and celebration rice dishes.',
     date:'Jan 8, 2026', read:'3 min',
     author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240',
@@ -1333,8 +1183,6 @@ const BLOGS = [
     content:`<p>While its sibling Karuppu Kavuni gets the nutritional headlines, Vellai Kavuni — white Kavuni rice — has a devoted following among Tamil cooks who know it as the secret to the most texturally perfect sweet pongal imaginable. Its natural stickiness creates a creamy, unified dish that simply cannot be replicated with modern short-grain rice.</p>
     <h4>Why Sticky Rice for Pongal?</h4>
     <p>The slightly glutinous nature of Vellai Kavuni comes from a naturally higher amylopectin content. When cooked, the grains bind together without becoming glue-like — creating the silky, cohesive texture that defines perfect pongal. Modern rice varieties lack this quality because they have been bred for yield and separation, not texture.</p>
-    <h4>Nutritional Benefits</h4>
-    <p>Vellai Kavuni retains more of its natural nutrients than polished white rice because it is minimally processed. It provides steady, complex carbohydrate energy and contains good amounts of calcium, phosphorus, and magnesium — minerals essential for bone health and muscle function. It is a healthier alternative to the heavily polished white rice most urban families consume daily.</p>
     <h4>Classic Sweet Pongal Recipe</h4>
     <ul>
       <li>1 cup Vellai Kavuni rice + ¼ cup moong dal (soaked 30 min)</li>
@@ -1352,14 +1200,12 @@ const BLOGS = [
     category:'flowers', tags:['wellness','skincare'],
     product:'Paneer Rose',
     title:'Panneer Rose: Tamil Nadu\'s Fragrant Rose and Its 12 Remarkable Uses',
-    excerpt:'From face tonics to cooling drinks to hair masks — the Panneer rose petal has been central to Tamil women\'s beauty routines for centuries.',
+    excerpt:'From face tonics to cooling drinks to hair masks — the Panneer rose petal has been central to Tamil women’s beauty routines for centuries.',
     date:'Mar 8, 2026', read:'5 min',
-    author:'Dr. Priya Selvam',
+    author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png',
     catColor:'#db2777',
-    content:`<p>The Panneer rose — Rosa damascena grown in Tamil Nadu's specific climate — is not just a flower. It is a pharmacy, a perfumery, a kitchen ingredient, and a skincare product all at once. Tamil women have known this for generations. Modern cosmetic science is only now catching up.</p>
-    <h4>Panneer Rose Water for Skin</h4>
-    <p>Pure Panneer rose water is one of the most effective natural toners available. Rich in phenylethanol and natural flavonoids, it lowers skin pH to the optimal range of 5.0–5.5, tightens pores, and provides a natural, long-lasting fragrance. Apply with a cotton pad morning and night after cleansing for visibly improved skin texture within 4 weeks.</p>
+    content:`<p>The Panneer rose — Rosa damascena grown in Tamil Nadu's specific climate — is not just a flower. It is a pharmacy, a perfumery, a kitchen ingredient, and a skincare product all at once. Tamil women have known this for generations.</p>
     <h4>Panneer Rose Milk Recipe</h4>
     <ul>
       <li>Steep 15–20 dried petals in 200ml warm milk for 10 minutes</li>
@@ -1368,78 +1214,56 @@ const BLOGS = [
     </ul>
     <p>This is Tamil Nadu's beloved rose milk — the authentic version that uses real petals, not artificial rose essence. The difference in taste is extraordinary.</p>
     <h4>Hair Growth Mask</h4>
-    <p>Grind dried petals with 2 tbsp coconut oil into a smooth paste. Apply to scalp and hair roots, leave for 45 minutes, rinse with a mild shampoo. Rose petals contain geraniol and citronellol — compounds that stimulate circulation in the scalp and support healthy hair follicle activity. Use twice weekly for best results.</p>
-    <h4>Anti-Inflammatory Face Pack</h4>
-    <p>Mix powdered Panneer rose petals with raw honey and a few drops of rose water into a smooth paste. Apply for 15 minutes. The natural gallic acid in rose petals has confirmed anti-inflammatory properties that reduce redness and calm sensitized skin — without the irritation risk of synthetic actives.</p>`
+    <p>Grind dried petals with 2 tbsp coconut oil into a smooth paste. Apply to scalp and hair roots, leave for 45 minutes, rinse with a mild shampoo. Rose petals contain geraniol and citronellol — compounds that stimulate circulation in the scalp and support healthy hair follicle activity.</p>
+    `
   },
   {
     id:9, productId:9,
     category:'flowers', tags:['wellness','recipes'],
     product:'Hibiscus Flower',
-    title:'Hibiscus: The Blood Pressure Flower with 8 Proven Health Benefits',
-    excerpt:'Clinical trials have confirmed what traditional medicine has known for centuries — hibiscus tea is one of the most effective natural remedies for hypertension.',
+    title:'Hibiscus: Brewing the Dried Flower as Tea and Sherbet',
+    excerpt:'A simple hibiscus tea, sweetened with jaggery.',
     date:'Feb 22, 2026', read:'5 min',
-    author:'Nansai Wellness Team',
+    author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png',
     catColor:'#db2777',
-    content:`<p>Hibiscus sabdariffa — known as Sembaruthi or Chembarathi in Tamil — is one of the most researched medicinal plants in traditional and modern medicine. Its vivid red calyces contain a concentration of natural acids and anthocyanins that have been clinically demonstrated to lower blood pressure, improve liver function, and fight inflammation.</p>
-    <h4>Blood Pressure: The Clinical Evidence</h4>
-    <p>A randomized controlled trial published in the Journal of Nutrition found that consuming hibiscus tea daily for six weeks reduced systolic blood pressure by an average of 7.2 mmHg in pre-hypertensive adults. This effect is comparable to some pharmaceutical interventions, without the side effects.</p>
-    <h4>8 Proven Benefits</h4>
-    <ul>
-      <li>Lowers systolic blood pressure (clinically confirmed)</li>
-      <li>Reduces LDL cholesterol oxidation</li>
-      <li>Supports liver health and reduces liver damage markers</li>
-      <li>Rich in Vitamin C — supports immune function</li>
-      <li>Natural diuretic that reduces water retention</li>
-      <li>Anti-inflammatory via anthocyanins</li>
-      <li>Supports hair growth and scalp health</li>
-      <li>Improves skin elasticity through collagen support</li>
-    </ul>
+    content:`
     <h4>Perfect Hibiscus Tea Recipe</h4>
-    <p>Steep 1 tablespoon dried hibiscus flowers in 250ml boiling water for 8 minutes. Strain and sweeten with jaggery to taste. Add lemon juice for an extra Vitamin C boost and a deeper red color. Drink one cup daily before breakfast for best cardiovascular benefits.</p>
-    <blockquote>"In Ayurveda, hibiscus is a rasayana — a rejuvenating herb that promotes longevity and vitality." — Classical Ayurvedic text</blockquote>`
+    <p>Steep 1 tablespoon dried hibiscus flowers in 250ml boiling water for 8 minutes. Strain and sweeten with jaggery to taste.</p>
+    `
   },
   {
     id:10, productId:10,
     category:'flowers', tags:['wellness','diabetes'],
     product:'Aavaram Flower',
-    title:'Aavaram Flower (Avarampoo): The Siddha Medicine Superstar for Blood Sugar Control',
-    excerpt:'Avarampoo has been prescribed in Tamil Siddha medicine for diabetes for over 2,000 years. Modern science is finally proving why.',
+    title:'Aavaram Flower (Avarampoo): A Tamil Kitchen Staple and How to Brew It',
+    excerpt:'How to brew dried avarampoo as a warm tea.',
     date:'Feb 12, 2026', read:'4 min',
-    author:'Dr. Nithya Kumar',
-    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png',
+    author:'Nansai Farm Team',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png',
     catColor:'#db2777',
-    content:`<p>If you were to ask a Siddha physician in Tamil Nadu what single herb they would recommend most broadly, many would say Avarampoo — Cassia auriculata, the Tanner's Cassia flower. It is one of the foundational herbs of Siddha medicine, prescribed for everything from skin conditions to diabetes management to urinary tract health.</p>
-    <h4>Blood Sugar Management</h4>
-    <p>Avarampoo contains natural compounds called flavonoids and terpenoids that have been shown in animal studies and preliminary human trials to enhance insulin sensitivity and lower fasting blood glucose levels. Traditional Siddha practice recommends Avarampoo tea as a morning drink for people with Type 2 diabetes — a practice supported by contemporary herbal medicine research.</p>
+    content:`
     <h4>How to Prepare Avarampoo Tea</h4>
     <ul>
       <li>Boil 1 tsp dried Avarampoo in 300ml water for 10 minutes</li>
       <li>Strain well and drink warm, unsweetened</li>
       <li>Best consumed on an empty stomach in the morning</li>
-      <li>Consistent daily use for at least 4 weeks for best results</li>
     </ul>
-    <h4>Skin Health Applications</h4>
-    <p>Avarampoo is naturally antibacterial and anti-inflammatory. Ground into a powder and mixed with raw honey, it makes an effective face pack for acne-prone skin. The natural tannins in the flower tighten pores and reduce sebum production. Used regularly, it visibly improves skin tone and texture within 3–4 weeks.</p>
-    <h4>Cooling Effect</h4>
-    <p>In Siddha medicine, Avarampoo is classified as a cooling herb — one that reduces excess body heat (pitta). This makes it particularly valuable in Tamil Nadu's hot climate as a summer drink that prevents heat-related exhaustion and keeps the body's internal temperature regulated naturally.</p>`
+    `
   },
   {
     id:11, productId:11,
     category:'flowers', tags:['recipes','wellness'],
     product:'Butterfly Pea Flower',
-    title:'Butterfly Pea Flower: The Color-Changing Herb That Boosts Your Brain',
-    excerpt:'Butterfly pea flower tea turns purple with lemon juice, blue in water, and according to growing research, it may turn back the clock on cognitive aging.',
+    title:'Butterfly Pea Flower: The Blue Tea That Changes Colour',
+    excerpt:'How to brew butterfly pea tea, and why lemon turns it purple.',
     date:'Jan 25, 2026', read:'4 min',
-    author:'Nansai Wellness Team',
+    author:'Nansai Farm Team',
     image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png',
     catColor:'#db2777',
     content:`<p>The first time you add lemon to a cup of Butterfly Pea Flower tea and watch it transform from deep ocean blue to vivid violet purple, you understand immediately why this flower has captured the imagination of bartenders, wellness enthusiasts, and traditional healers for centuries. But the magic goes far beyond the color change.</p>
-    <h4>Brain Health: The Research</h4>
-    <p>Clitoria ternatea — the scientific name for Butterfly Pea Flower — contains ternatins, a class of anthocyanin compounds that have shown significant promise in preliminary cognitive research. Studies have found that ternatin supplementation in rodent models improved memory formation and reduced neuroinflammation — two key factors in age-related cognitive decline.</p>
     <h4>The Color-Changing Chemistry</h4>
-    <p>The blue color comes from anthocyanins — natural pH-sensitive pigments. In neutral or alkaline water, they appear deep blue. When you add lemon juice (acidic), the pH drops and the molecular structure changes, shifting the color to purple-pink. This natural chemistry makes Butterfly Pea Flower tea one of the most visually spectacular natural drinks you can make.</p>
+    <p>In neutral or alkaline water, they appear deep blue. When you add lemon juice (acidic), the pH drops and the molecular structure changes, shifting the color to purple-pink. This natural chemistry makes Butterfly Pea Flower tea one of the most visually spectacular natural drinks you can make.</p>
     <h4>Blue Lemonade Recipe</h4>
     <ul>
       <li>Steep 1 tsp dried flowers in 200ml hot water for 10 minutes</li>
@@ -1447,8 +1271,7 @@ const BLOGS = [
       <li>Squeeze ½ fresh lemon and watch the color transform</li>
       <li>Sweeten with honey to taste</li>
     </ul>
-    <h4>Hair and Skin Benefits</h4>
-    <p>The ternatins in Butterfly Pea Flower have been incorporated into premium hair care products by several global cosmetic brands due to their ability to promote hair follicle cell growth. A simple hair rinse — diluted tea poured over clean hair after washing — can support scalp health and improve hair luster over time.</p>`
+    `
   },
 
   /* ──────────── BEVERAGES ──────────── */
@@ -1459,7 +1282,7 @@ const BLOGS = [
     title:'The Real Rose Milk: A Tamil Nadu Classic That Deserves a Global Audience',
     excerpt:'Authentic rose milk uses Panneer Rose petals — not artificial rose essence. Here is the history, the recipe, and why the real thing is incomparably better.',
     date:'Mar 5, 2026', read:'4 min',
-    author:'Chef Arun Balaji',
+    author:'Nansai Farm Team',
     image:'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=700&auto=format&fit=crop',
     catColor:'#0891b2',
     content:`<p>In the 1970s and 1980s, every street-corner tea shop in Tamil Nadu served rose milk made from actual Panneer Rose petals steeped in syrup. Somewhere along the way, artificial rose essence replaced the real thing — cheaper, more uniform, and utterly inferior in taste. Nansai Organics was founded, in part, to bring the real rose milk back.</p>
@@ -1473,9 +1296,7 @@ const BLOGS = [
       <li>Add a pinch of cardamom and two strands of saffron (optional)</li>
       <li>Serve immediately over crushed ice</li>
     </ul>
-    <h4>Cooling and Digestive Benefits</h4>
-    <p>In Tamil traditional medicine, rose milk is prescribed as a specific remedy for excess body heat (pitta aggravation) — particularly during summer months. The natural cooling properties of rose petals, combined with milk's calcium and fat content, make this drink genuinely medicinal as well as delicious. It also aids digestion when consumed after a heavy meal.</p>
-    <blockquote>"The rose milk at my grandfather's shop was pink from real petals. We used to collect them from the garden every morning. That fragrance — you cannot buy it in a bottle." — A Chennai resident remembering the 1970s</blockquote>`
+    `
   },
   {
     id:13, productId:13,
@@ -1484,12 +1305,12 @@ const BLOGS = [
     title:'Hibiscus Sherbet: Summer\'s Best Natural Cooler with a 500-Year History',
     excerpt:'Long before soft drinks, Indian summers were survived with sherbets. Hibiscus sherbet is the most beautiful and most beneficial of them all.',
     date:'Feb 18, 2026', read:'3 min',
-    author:'Nansai Kitchen Team',
-    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png',
+    author:'Nansai Farm Team',
+    image:'https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png',
     catColor:'#0891b2',
     content:`<p>The word "sherbet" comes from the Arabic "sharbat" — a sweetened cold drink. Long before refrigerators and packaged beverages, sherbets made from natural botanical ingredients were the primary way to survive brutal South Asian summers with hydration, electrolytes, and cooling botanical compounds. Hibiscus sherbet, with its deep ruby color and refreshing tartness, is the most spectacular of them all.</p>
     <h4>What Makes Hibiscus So Cooling?</h4>
-    <p>Hibiscus calyces contain natural organic acids — primarily hibiscus acid and citric acid — that produce a pleasant tartness while actively promoting hydration. The natural diuretic properties of hibiscus help flush excess heat and water retention. Combined with its anthocyanin content, hibiscus sherbet genuinely reduces body temperature and improves thermal comfort in hot weather.</p>
+    <p>Hibiscus calyces contain natural organic acids — primarily hibiscus acid and citric acid — that produce a pleasant tartness while actively promoting hydration. The natural diuretic properties of hibiscus help flush excess heat and water retention.</p>
     <h4>Classic Sherbet Recipe</h4>
     <ul>
       <li>Simmer 2 tbsp dried hibiscus flowers in 250ml water for 15 minutes</li>
@@ -1498,8 +1319,7 @@ const BLOGS = [
       <li>Add black salt, roasted cumin powder, and mint leaves</li>
       <li>Serve over ice for maximum refreshment</li>
     </ul>
-    <h4>Vitamin C and Immunity</h4>
-    <p>A single serving of hibiscus sherbet prepared from fresh dried flowers provides approximately 25–30mg of natural Vitamin C — a meaningful contribution to the daily recommended intake of 65–90mg. Unlike synthetic Vitamin C supplements, the natural form in hibiscus comes packaged with synergistic flavonoids that improve its absorption and efficacy in the body.</p>`
+    `
   },
 
   /* ──────────── FLOUR ──────────── */
@@ -1508,16 +1328,16 @@ const BLOGS = [
     category:'flour', tags:['recipes','wellness'],
     product:'Idiyappam Flour',
     title:'Hand-Pounded vs Machine-Milled: Why Your Idiyappam Is Only as Good as Its Flour',
-    excerpt:'The secret to silk-soft idiyappam lies entirely in how the rice was milled. Here is what food science says about the difference.',
+    excerpt:'The secret to silk-soft idiyappam lies entirely in how the rice was milled.',
     date:'Mar 2, 2026', read:'4 min',
-    author:'Chef Meena Sundaram',
+    author:'Nansai Farm Team',
     image:'https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop',
     catColor:'#ca8a04',
     content:`<p>Ask any experienced Tamil cook what makes the best idiyappam and they will tell you immediately: the flour. Not the press, not the steaming time, not the accompaniment. The flour. Specifically, the way the rice was milled before becoming flour.</p>
     <h4>The Problem with Industrial Milling</h4>
     <p>Industrial roller mills operate at high speeds and generate significant heat through friction. This heat — often reaching 60–80°C — denatures heat-sensitive proteins and damages the starch granule structure of rice. The resulting flour has compromised texture properties: it either becomes too dense or too sticky, and it lacks the natural flavor compounds that make good idiyappam distinctively delicious.</p>
     <h4>Why Hand-Pounding Changes Everything</h4>
-    <p>Traditional hand-pounding and stone-grinding operate at low speed and minimal heat. The starch granules remain intact, the natural oils in the rice bran are preserved, and the protein structure stays undamaged. The result is a flour with superior water absorption properties — creating idiyappam strings that are simultaneously delicate and structurally stable enough to hold their shape.</p>
+    <p>Traditional hand-pounding and stone-grinding operate at low speed and minimal heat. The starch granules remain intact, the natural oils in the rice bran are preserved, and the protein structure stays undamaged.</p>
     <h4>Perfect Idiyappam Method</h4>
     <ul>
       <li>Mix 1 cup flour with 1 cup boiling water and ½ tsp salt</li>
@@ -1527,23 +1347,21 @@ const BLOGS = [
       <li>Serve immediately with coconut milk or vegetable stew</li>
     </ul>
     <h4>Nutrition Preserved</h4>
-    <p>Because our Nansai idiyappam flour is hand-pounded rather than machine-milled, it retains its natural fiber content, iron, zinc, and B-vitamins — nutrients that are largely stripped away in high-heat industrial processing. The result is a flour that not only makes better idiyappam, but provides genuinely better nutrition.</p>`
+    <p>The result is a flour that not only makes better idiyappam, but provides genuinely better nutrition.</p>`
   },
   {
     id:15, productId:15,
     category:'flour', tags:['wellness','recipes'],
     product:'Health Mix Powder',
-    title:'Black Urad Dal Health Mix: The Protein-Rich Breakfast Your Family Has Been Missing',
-    excerpt:'Black urad dal contains more protein per 100g than chicken egg white. Here is how to incorporate it into your daily routine.',
+    title:'Black Urad Dal Health Mix: A Warm Breakfast Porridge',
+    excerpt:'Ways to cook the black urad dal mix as a breakfast porridge.',
     date:'Jan 22, 2026', read:'4 min',
-    author:'Nutritionist Kavitha Rajan',
+    author:'Nansai Farm Team',
     image:'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop',
     catColor:'#ca8a04',
-    content:`<p>Black urad dal — whole black gram — is one of the most nutritionally dense legumes grown in South Asia. Yet it is dramatically underused as a breakfast ingredient, consumed mostly as a dal or idli batter base rather than in its most nutritious form: roasted and stone-ground into a health mix powder that can be prepared in minutes.</p>
+    content:`<p>Yet it is dramatically underused as a breakfast ingredient, consumed mostly as a dal or idli batter base rather than in its most nutritious form: roasted and stone-ground into a health mix powder that can be prepared in minutes.</p>
     <h4>Nutritional Powerhouse</h4>
-    <p>Black urad dal provides approximately 25g of protein per 100g — significantly more than many animal proteins per calorie. It is exceptionally rich in iron (7mg/100g), B-vitamins especially B1 and B3, and potassium. For vegetarian and vegan families, it is one of the most important plant proteins available in the Indian subcontinent.</p>
-    <h4>Bone and Dental Health</h4>
-    <p>The combination of calcium, phosphorus, and magnesium in black urad dal creates a mineral profile that is ideal for bone density maintenance. Regular consumption from childhood through adulthood can meaningfully contribute to peak bone mass and reduce osteoporosis risk in later years — a particularly important consideration for women over 35.</p>
+    <p>Black urad dal provides approximately 25g of protein per 100g — significantly more than many animal proteins per calorie. For vegetarian and vegan families, it is one of the most important plant proteins available in the Indian subcontinent.</p>
     <h4>Morning Porridge Recipe</h4>
     <ul>
       <li>Mix 3 tbsp health mix powder with 200ml warm milk or water</li>
@@ -1551,7 +1369,6 @@ const BLOGS = [
       <li>Stir well and serve immediately</li>
       <li>Optional: add a teaspoon of ghee for extra flavor and nutrition</li>
     </ul>
-    <p>This takes 3 minutes to prepare and provides a nutritionally complete breakfast that sustains energy for 4–5 hours. Children especially thrive on it — improved concentration and stamina are commonly reported within the first two weeks of regular consumption.</p>
     <h4>Alternative Uses</h4>
     <p>Stir into dosa batter for improved nutrition, blend into smoothies, or use as a protein-rich thickener for soups and curries. The roasted flavor complements both sweet and savory applications beautifully.</p>`
   },
@@ -1561,17 +1378,13 @@ const BLOGS = [
     id:16, productId:16,
     category:'other', tags:['wellness','sustainability'],
     product:'Country Fig Powder',
-    title:'Country Fig Powder: Nature\'s Answer to Constipation, Anemia and Low Energy',
-    excerpt:'Sun-dried country figs contain more fiber than psyllium husk and more iron than spinach. Here is how to use this overlooked superfood every day.',
+    title:'Country Fig Powder: Easy Ways to Use It in Your Morning',
+    excerpt:'Simple ways to add country fig powder to drinks and breakfast.',
     date:'Mar 10, 2026', read:'4 min',
-    author:'Dr. Nithya Kumar',
+    author:'Nansai Farm Team',
     image:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop',
     catColor:'#16a34a',
-    content:`<p>Country fig — Ficus carica, cultivated in South India for over 4,000 years — is one of the most nutritionally complete fruits available. In dried and powdered form, it becomes a concentrated source of dietary fiber, iron, calcium, and natural digestive enzymes that can address three of India's most prevalent health problems simultaneously: constipation, iron deficiency, and chronic fatigue.</p>
-    <h4>Fiber That Actually Works</h4>
-    <p>Country fig powder contains both soluble and insoluble dietary fiber in a ratio that is ideal for digestive health. The soluble fiber (pectin) feeds beneficial gut bacteria and forms a gel that slows digestion and smooths bowel movement. The insoluble fiber adds bulk and moves waste efficiently through the colon. Combined, they provide genuine constipation relief without the urgency or cramping associated with synthetic laxatives.</p>
-    <h4>Iron for Energy</h4>
-    <p>Many people are unaware that country figs are an excellent plant source of iron — providing approximately 2–3mg per 100g of fresh fruit, and significantly more in concentrated powder form. Unlike the iron in spinach, which is inhibited by oxalates, the iron in figs is accompanied by natural Vitamin C that actively enhances its absorption. This makes country fig powder a genuinely effective natural remedy for iron-deficiency anemia.</p>
+    content:`
     <h4>How to Use Daily</h4>
     <ul>
       <li><strong>Morning tonic:</strong> 1 tsp in warm water with lemon and honey</li>
@@ -1579,63 +1392,20 @@ const BLOGS = [
       <li><strong>Porridge:</strong> Stir into oats or ragi porridge</li>
       <li><strong>Energy balls:</strong> Mix with dates, nuts, and coconut to form energy balls</li>
     </ul>
-    <h4>Traditional Usage</h4>
-    <p>In Tamil Nadu's traditional medicine, fig preparations have been prescribed for lung health, kidney function, and reproductive health for over 2,000 years. Our country fig powder is made from sun-dried figs grown on our organic farm — stone-ground to preserve all natural enzymes and nutrients intact.</p>
-    <blockquote>"The fig tree was considered sacred in ancient India — its fruit a medicine for the whole body." — Traditional Ayurvedic text, Charaka Samhita</blockquote>`
-  },
-
-  /* ──────────── EXTRA SUSTAINABILITY & RECIPE ARTICLES ──────────── */
-  {
-    id:17, productId:null,
-    category:'sustainability', tags:['sustainability','farming'],
-    product:null,
-    title:'Zero Chemicals, Zero Waste: How Nansai Organics Farms Without Compromise',
-    excerpt:'From seed to shelf, every decision on our 25-acre farm is guided by one principle: leave the earth better than we found it.',
-    date:'Feb 5, 2026', read:'5 min',
-    author:'Nansai Farm Team',
-    image:'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=700&auto=format&fit=crop',
-    catColor:'#16a34a',
-    content:`<p>When the founders of Nansai Organics planted their first crop in 2003, they made a commitment: no synthetic chemicals would ever touch this land. 22 years later, that commitment remains unbroken — and the soil science proves it was the right choice.</p>
-    <h4>Our Zero-Input Philosophy</h4>
-    <p>We use no synthetic fertilisers, pesticides, or herbicides. Period. Instead, we rely on a carefully designed system of composting, green manuring, crop rotation, and natural pest management. Our soil organic matter has increased by 18% over five years. Our crop yields have stabilised and become more resilient to climate variation. The farm is healthier today than it was 22 years ago.</p>
-    <h4>Packaging & Waste</h4>
-    <p>All our packaging is either biodegradable or fully recyclable. We eliminated single-use plastic from our supply chain entirely in 2023. Our processing facility operates on 60% solar energy. All organic waste from processing is composted back into the farm — closing the nutrient loop completely.</p>
-    <h4>Our 9 Certifications</h4>
-    <p>We hold active certifications from USDA Organic, India Organic (APEDA), Non-GMO Project, FSSAI, Halal, Kosher, and four additional regional and international organic bodies. These are not marketing decorations — each certification requires annual third-party audits of our farming practices, soil health, and processing facilities.</p>
-    <h4>200 Farming Families</h4>
-    <p>Nansai Organics works directly with over 200 farming families across Tamil Nadu. We provide training, seeds, and guaranteed purchase prices above market rates for certified organic produce. Sustainability, for us, means sustaining people as much as land.</p>`
-  },
-  {
-    id:18, productId:null,
-    category:'wellness', tags:['wellness','heritage'],
-    product:null,
-    title:'Why Heritage Grains Are the Future of Food Security in India',
-    excerpt:'Modern high-yield varieties feed billions, but at a hidden cost. Heritage grains hold the genetic diversity that will feed the next century.',
-    date:'Jan 12, 2026', read:'6 min',
-    author:'Dr. Nithya Kumar',
-    image:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&auto=format&fit=crop',
-    catColor:'#65a30d',
-    content:`<p>Between 1900 and 2000, the world lost approximately 75% of its agricultural biodiversity. Thousands of crop varieties — each the result of thousands of years of natural selection and human cultivation — were replaced by a handful of high-yield modern varieties optimized for industrial production. The consequences of this genetic narrowing are only now becoming apparent.</p>
-    <h4>The Fragility of Monocultures</h4>
-    <p>When a pathogen or climate event affects a monoculture, the damage can be catastrophic. The Irish Potato Famine of the 1840s killed one million people and displaced another million because Irish farmers had concentrated almost entirely on a single potato variety. Heritage varieties, bred over millennia in diverse environments, carry natural resistance to a wide range of pests and climate stresses.</p>
-    <h4>Nutritional Diversity</h4>
-    <p>Heritage grains also provide nutritional diversity that monocultures cannot. Different varieties contain different profiles of minerals, vitamins, and phytochemicals. A diet based on multiple heritage grains is nutritionally richer and more protective against chronic disease than one based on a single modern variety — regardless of how that single variety is fortified.</p>
-    <h4>Seed Saving at Nansai</h4>
-    <p>At Nansai Organics, we maintain active seed banks of all seven rice varieties we cultivate. Each season, a portion of the harvest is reserved specifically as seed stock — cleaned, dried, stored, and prepared for the following year's planting. This practice ensures that these varieties remain genetically viable and adapted to our specific microclimate in perpetuity.</p>
-    <p>When you buy Nansai heritage rice, you are funding seed saving. You are preserving genetic diversity. You are participating in food security for future generations. That is not marketing language — it is agricultural reality.</p>`
+    `
   }
 ];
 
 /* Category metadata */
 const CAT_META = {
-  rice:           { label:'Rice Varieties',  icon:'[[icon:wheat]]', color:'#65a30d', bg:'#f0fdf4' },
-  flowers:        { label:'Dried Flowers',   icon:'[[icon:flower-2]]', color:'#db2777', bg:'#fdf2f8' },
-  beverages:      { label:'Beverages',       icon:'[[icon:glass-water]]', color:'#0891b2', bg:'#f0f9ff' },
-  flour:          { label:'Flour & Mixes',   icon:'[[icon:package]]', color:'#ca8a04', bg:'#fefce8' },
-  other:          { label:'Other Products',  icon:'[[icon:leaf]]', color:'#16a34a', bg:'#f0fdf4' },
-  wellness:       { label:'Wellness',        icon:'[[icon:heart]]', color:'#15803d', bg:'#f0fdf4' },
-  recipes:        { label:'Recipes',         icon:'[[icon:chef-hat]]', color:'#c2410c', bg:'#fff7ed' },
-  sustainability: { label:'Sustainability',  icon:'[[icon:recycle]]', color:'#1d4ed8', bg:'#eff6ff' },
+  rice:           { label:'Rice Varieties', icon:'', color:'#1a3a2a', bg:'#eef3ee' },
+  flowers:        { label:'Dried Flowers',  icon:'', color:'#7a5f17', bg:'#f7f1e1' },
+  beverages:      { label:'Drinks',         icon:'', color:'#2d5a3d', bg:'#eef3ee' },
+  flour:          { label:'Flour & Mixes',  icon:'', color:'#6f5410', bg:'#f7f1e1' },
+  other:          { label:'Other Products', icon:'', color:'#4a8c5c', bg:'#eef3ee' },
+  wellness:       { label:'Traditions',     icon:'', color:'#1a3a2a', bg:'#eef3ee' },
+  recipes:        { label:'Recipes',        icon:'', color:'#7a5f17', bg:'#f7f1e1' },
+  sustainability: { label:'On the farm',    icon:'', color:'#2d5a3d', bg:'#eef3ee' },
 };
 
 function catColor(cat){ return (CAT_META[cat]||{color:'#4a8c5c'}).color; }
@@ -1719,7 +1489,6 @@ function renderGrid(posts) {
 
   if (!gridPosts.length) {
     grid.innerHTML = `<div class="no-results">
-      <div class="icon">[[icon:leaf]]</div>
       <p>No articles found${searchQuery ? ' for "'+searchQuery+'"' : ''}.</p>
     </div>`;
     return;
@@ -1731,23 +1500,23 @@ function renderGrid(posts) {
       const tm = CAT_META[t]||{};
       return `<span class="blog-tag-pill" style="color:${tm.color||'#4a8c5c'};border-color:${tm.color||'#4a8c5c'}22;background:${tm.bg||'#f0fdf4'}">${t}</span>`;
     }).join('');
-    return `<article class="blog-card" onclick="openModal(${post.id})">
+    return `<article class="blog-card" onclick="openModal('${post.id}')">
       <div class="blog-card-img">
         <img src="${post.image}" alt="${post.title}" loading="lazy"/>
-        <span class="blog-cat-tag" style="background:${post.catColor||cat.color||'#4a8c5c'}">${cat.icon||''} ${cat.label||post.category}</span>
+        <span class="blog-cat-tag" style="background:${cat.color||'#4a8c5c'}">${cat.icon||''} ${cat.label||post.category}</span>
       </div>
       <div class="blog-card-body">
         <div class="blog-card-tags">${tagPills}</div>
         <h3>${post.title}</h3>
         <p>${post.excerpt}</p>
-        ${post.product ? `<p style="font-size:.65rem;font-weight:700;color:var(--forest-leaf);margin-bottom:.5rem;margin-top:-.3rem;">[[icon:shopping-bag]] ${post.product}</p>` : ''}
+        ${post.product ? `<p style="font-size:.72rem;font-weight:700;color:var(--forest-leaf);margin-bottom:.5rem;margin-top:-.3rem;">${post.product}</p>` : ''}
         <div class="blog-card-meta">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span>${post.author}</span>
           <span class="meta-dot"></span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <span>${post.read} read</span>
-          <a class="card-read-link" onclick="event.stopPropagation();openModal(${post.id})">
+          <a class="card-read-link" onclick="event.stopPropagation();openModal('${post.id}')">
             Read
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -1776,10 +1545,10 @@ function buildCarousel() {
 
   stage.innerHTML = posts.map((post, i) => {
     const cat = CAT_META[post.category] || {};
-    return `<div class="ac-card" data-i="${i}" onclick="openModal(${post.id})">
+    return `<div class="ac-card" data-i="${i}" onclick="openModal('${post.id}')">
       <img class="ac-img" src="${post.image}" alt="${post.title}" loading="lazy"/>
       <div class="ac-body">
-        <span class="ac-cat" style="background:${post.catColor||cat.color||'#4a8c5c'}">${cat.icon||''} ${cat.label||post.category}</span>
+        <span class="ac-cat" style="background:${cat.color||'#4a8c5c'}">${cat.icon||''} ${cat.label||post.category}</span>
         <div class="ac-title">${post.title}</div>
         <div class="ac-meta"><span>${post.author}</span><span class="ac-meta-dot"></span><span>${post.read} read</span></div>
         <span class="ac-read-btn">Read Article <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
@@ -1802,7 +1571,7 @@ function buildCarousel() {
   });
 
   acGoTo(0, true);
-  acTimer = setInterval(() => acGoTo((acIndex + 1) % total), 1800);
+  /* no automatic sliding: shoppers move it with the arrows */
 }
 
 function acGoTo(idx, instant) {
@@ -1815,7 +1584,7 @@ function acGoTo(idx, instant) {
     cards[(idx + off + total) % total].className = 'ac-card ' + pos[pi];
   });
   document.querySelectorAll('.ac-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-  if (!instant) { clearInterval(acTimer); acTimer = setInterval(() => acGoTo((acIndex+1)%total), 1800); }
+
 }
 
 /* ── Main render ── */
@@ -1824,15 +1593,17 @@ function renderAll() {
 }
 
 /* ── Modal ── */
-function openModal(id) {
-  const post = BLOGS.find(b => b.id === id);
+function openModal(id, fromHistory) {
+  const post = BLOGS.find(b => String(b.id) === String(id));
   if (!post) return;
+  if (!fromHistory) history.pushState({ post: String(post.id) }, '', '?post=' + encodeURIComponent(post.id));
+  document.title = post.title + ' | Nansai Organics';
   const cat = CAT_META[post.category] || {};
 
   document.getElementById('modalImg').src = post.image;
   document.getElementById('modalImg').alt = post.title;
   document.getElementById('modalCat').textContent = (cat.icon||'') + ' ' + (cat.label||post.category);
-  document.getElementById('modalCat').style.background = post.catColor || cat.color || '#4a8c5c';
+  document.getElementById('modalCat').style.background = cat.color || '#4a8c5c';
   document.getElementById('modalTitle').textContent = post.title;
   document.getElementById('modalMeta').innerHTML = `
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1849,7 +1620,7 @@ function openModal(id) {
   const ctaEl = document.getElementById('modalCTA');
   if (post.productId) {
     ctaEl.innerHTML = `
-      <p>[[icon:shopping-bag]] This article is about <strong>${post.product}</strong> — available now from our organic farm.</p>
+      <p>Made with <strong>${post.product}</strong> from our farm.</p>
       <a class="cta-btn" href="product.html?id=${post.productId}">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
         Shop ${post.product}
@@ -1866,7 +1637,9 @@ function openModal(id) {
   document.getElementById('modalBox').scrollTop = 0;
 }
 
-function closeModal() {
+function closeModal(fromHistory) {
+  if (!fromHistory && new URLSearchParams(location.search).get('post')) { history.back(); return; }
+  document.title = 'Blog & Stories | Nansai Organics';
   const modal = document.getElementById('articleModal');
   modal.classList.remove('open');
   setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 320);
@@ -1936,5 +1709,41 @@ document.querySelectorAll('.sr').forEach(el => srObserver.observe(el));
 buildCarousel();
 renderAll();
 </script>
+<script>
+/* article links: open the article named in ?post=, and let Back close it */
+window.addEventListener('popstate', () => {
+  const id = new URLSearchParams(location.search).get('post');
+  if (id) openModal(id, true); else closeModal(true);
+});
+/* posts written in the admin panel (GET /api/blogs) appear above the ones written into this page */
+(async function () {
+  const local = ['localhost', '127.0.0.1'].includes(location.hostname) || location.protocol === 'file:';
+  const base = local ? 'http://localhost:5000/api' : '/api';
+  try {
+    const res = await fetch(base + '/blogs');
+    const d = await res.json();
+    (d.data || []).forEach(b => {
+      if (BLOGS.some(x => String(x.id) === String(b._id))) return;
+      BLOGS.unshift({
+        id: String(b._id), productId: null, category: b.category || 'recipes', tags: [], product: null,
+        title: b.title, excerpt: b.excerpt || '', author: b.author || 'Nansai Farm Team',
+        date: new Date(b.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        read: b.readTime || '4 min', image: b.image || '', content: b.content || ''
+      });
+    });
+    if ((d.data || []).length) renderAll();
+  } catch (e) { /* keep the articles on this page */ }
+  const open = new URLSearchParams(location.search).get('post');
+  if (open) openModal(open, true);
+})();
+</script>
+<style>
+  /* comfortable reading in the article view */
+  #modalContent.modal-content{font-size:17px;line-height:1.7;color:#2b3a30;max-width:66ch}
+  #modalContent.modal-content p{margin-bottom:1.05rem}
+  #modalContent.modal-content h4{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;color:#0f2218;margin:1.6rem 0 .5rem}
+  #modalContent.modal-content ul li,#modalContent.modal-content ol li{font-size:1rem;color:#2b3a30;margin-bottom:.35rem}
+  .blog-card-meta span,.blog-card p{font-size:.86rem}
+</style>
 </body>
 </html>

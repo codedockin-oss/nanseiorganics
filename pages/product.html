@@ -3,16 +3,18 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script>/* ImageKit photos: ask for a copy about twice the size it is shown at, instead of the full upload */window.ikThumb=function(u,w){if(!u||u.indexOf('ik.imagekit.io')<0||/[?&]tr=/.test(u))return u||'';return u+(u.indexOf('?')<0?'?':'&')+'tr=w-'+w;};</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Product NANSAI</title>
+  <meta name="description" content="Sizes, prices, cooking notes and reviews for Nansai Organics farm produce." />
   <script>
     /* -- Inline Cart / Wish / Counters (no backend required) -- */
-    window.API_BASE = '';
+    window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:') ? 'http://localhost:5000/api' : '/api';
     /* renderStars — SVG-based, cross-browser safe */
     window.renderStars = function(r) {
-      const val = Number(r) || 0;
+      const val = Math.max(0, Math.min(5, Math.round((Number(r) || 0) * 2) / 2));
       const full = Math.floor(val);
-      const half = val - full >= 0.5 ? 1 : 0;
+      const half = val - full === 0.5 ? 1 : 0;
       const empty = 5 - full - half;
       const S = '<svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;">';
       const poly = '<polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>';
@@ -3654,7 +3656,7 @@
     }
   </style>
 
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
   <script>
       (function () {
         const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -3741,6 +3743,25 @@
     }
   </style>
 
+<style>
+  /* Shoppers who turned on "reduce motion" on their phone get no looping animations */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+<style>
+  /* reviews: filter bars, toolbar, store reply */
+  #barRows .rev-bar-row{width:100%;background:none;border:0;padding:.15rem .3rem;margin:0;cursor:pointer;border-radius:6px;font:inherit;text-align:left}
+  #barRows .rev-bar-row:hover{background:rgba(74,140,92,.07)}
+  #barRows .rev-bar-row[aria-pressed="true"]{background:rgba(74,140,92,.12)}
+  #barRows .rev-bar-row[aria-pressed="true"] .rev-bar-label{color:var(--forest-deep);font-weight:800}
+  #revToolbar{align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin:0 0 1rem;font-size:.78rem;color:var(--forest-sage)}
+  #revToolbar select{font:inherit;font-size:.78rem;color:var(--forest-deep);background:#fff;border:1px solid rgba(26,58,42,.18);border-radius:8px;padding:.35rem .6rem}
+  #revToolbar button{font:inherit;font-size:.78rem;color:var(--forest-leaf);background:none;border:0;cursor:pointer;text-decoration:underline;padding:0}
+  .rev-reply{margin-top:.75rem;padding:.65rem .85rem;background:var(--cream);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.78rem;line-height:1.55;color:var(--forest-deep)}
+  .rev-reply b{display:block;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-dk,#b8922a);margin-bottom:.15rem}
+  .rev-edited{font-size:.68rem;color:var(--forest-sage)}
+</style>
 </head>
 
 <body class="text-gray-900">
@@ -3755,7 +3776,7 @@
   <!-- ---- LIGHTBOX ---- -->
   <div id="lightbox" class="fixed inset-0 z-[999] flex items-center justify-center
             opacity-0 pointer-events-none" style="background:rgba(10,16,11,.94)" onclick="closeLightbox()">
-    <button onclick="closeLightbox()" class="absolute top-5 right-6 text-3xl leading-none transition"
+    <button aria-label="Close photo" onclick="closeLightbox()" class="absolute top-5 right-6 text-3xl leading-none transition"
       style="color:rgba(247,243,236,.7)" onmouseover="this.style.color='#e8c97a'"
       onmouseout="this.style.color='rgba(247,243,236,.7)'">&times;</button>
     <img id="lightboxImg" src="" alt="" class="max-w-[90vw] max-h-[90vh] rounded-2xl object-contain shadow-2xl"
@@ -3763,83 +3784,7 @@
   </div>
 
   <!-- ---- NAVBAR ---- -->
-  <nav class="sticky top-0 z-50 bg-white border-b" style="border-color:rgba(26,58,42,.12)">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-      <!-- Logo -->
-      <a href="index.html" class="flex-shrink-0">
-        <img src="nansei organics.png" alt="Nansei Organics" style="height:45px;width:auto;" />
-      </a>
-
-      <!-- Search bar -->
-      <div class="flex-1 max-w-xl hidden sm:flex items-center rounded-xl border-2 overflow-hidden"
-        style="border-color:rgba(26,58,42,.18);background:#fff;">
-        <input id="prodSearchInput" type="text" placeholder="Search organic products"
-          class="flex-1 px-4 py-2 text-sm outline-none bg-transparent"
-          style="font-family:'Inter',sans-serif;color:var(--forest-deep);"
-          onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='index.html?search='+encodeURIComponent(this.value.trim())" />
-        <button
-          onclick="var v=document.getElementById('prodSearchInput').value.trim();if(v)window.location.href='index.html?search='+encodeURIComponent(v)"
-          class="px-4 py-2 flex items-center justify-center transition"
-          style="background:var(--forest);color:var(--cream);" onmouseover="this.style.background='var(--forest-mid)'"
-          onmouseout="this.style.background='var(--forest)'">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Right icons -->
-      <div class="flex items-center gap-3">
-        <div style="position:relative;" id="accountMenuWrap">
-          <a id="accountNavLink" href="login.html" class="transition"
-            style="display:flex;align-items:center;gap:5px;color:var(--forest-deep);padding:0 8px;border-radius:20px;"
-            onmouseover="this.style.color='var(--forest-leaf)'" onmouseout="this.style.color='var(--forest-deep)'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            <span id="accountLabel"
-              style="font-size:.72rem;font-weight:700;color:var(--forest-deep);white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;"></span>
-          </a>
-          <div id="accountDropdown"
-            style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid rgba(26,58,42,.12);border-radius:12px;box-shadow:0 8px 28px rgba(10,30,15,.14);min-width:160px;overflow:hidden;z-index:500;">
-            <a href="account.html"
-              style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:var(--forest-deep);text-decoration:none;border-bottom:1px solid rgba(26,58,42,.07);transition:background .15s;"
-              onmouseover="this.style.background='#f0faf2'" onmouseout="this.style.background=''"><span aria-hidden="true">[[icon:user]]</span> My Account</a>
-            <button
-              onclick="localStorage.removeItem('nansai_token');localStorage.removeItem('nansai_user');window.location.href='login.html'"
-              style="display:flex;align-items:center;gap:8px;padding:.65rem 1rem;font-size:.8rem;font-weight:600;color:#dc2626;background:none;border:none;width:100%;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;"
-              onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background=''"><span aria-hidden="true">[[icon:log-out]]</span> Sign Out</button>
-          </div>
-        </div>
-        <a href="wishlist.html" class="relative flex items-center justify-content transition"
-          style="color:var(--forest-deep)" onmouseover="this.style.color='var(--forest-leaf)'"
-          onmouseout="this.style.color='var(--forest-deep)'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z" />
-          </svg>
-          <span id="wishlistCount" class="absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] font-black
-                     min-w-[15px] h-[15px] px-0.5 rounded-full flex items-center justify-center">0</span>
-        </a>
-        <a href="checkoutmyorderpage.html" class="relative transition" style="color:var(--forest-deep)"
-          onmouseover="this.style.color='var(--forest-leaf)'" onmouseout="this.style.color='var(--forest-deep)'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="8" cy="21" r="1" />
-            <circle cx="19" cy="21" r="1" />
-            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-          </svg>
-          <span id="cartCount" class="absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] font-black
-                     min-w-[15px] h-[15px] px-0.5 rounded-full flex items-center justify-center">0</span>
-        </a>
-      </div>
-    </div>
-  </nav>
+  <script src="../js/site-shell.js?v=20261112" data-part="header" data-bottom-bar="off"></script>
 
   <!-- ---- BREADCRUMB ---- -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-1.5 text-xs flex-wrap"
@@ -3868,7 +3813,7 @@
         <div style="position:relative;">
           <!-- Wish + Share buttons inside image top-right -->
           <div style="position:absolute;top:12px;right:12px;z-index:20;display:flex;flex-direction:column;gap:8px;">
-            <button id="wishMainBtn" onclick="toggleWishlistFn();event.stopPropagation()" title="Wishlist"
+            <button aria-label="Add to wishlist" id="wishMainBtn" onclick="toggleWishlistFn();event.stopPropagation()" title="Wishlist"
               class="wish-main"
               style="width:36px;height:36px;border-radius:50%;background:#fff;border:1.5px solid #e5e7eb;box-shadow:0 4px 14px rgba(0,0,0,.13);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;"
               onmouseover="this.style.background='#fff5f5';this.style.borderColor='#fca5a5';this.style.transform='scale(1.12)'"
@@ -3879,7 +3824,7 @@
                   d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z" />
               </svg>
             </button>
-            <button onclick="shareProduct();event.stopPropagation()" title="Share"
+            <button aria-label="Share" onclick="shareProduct();event.stopPropagation()" title="Share"
               style="width:36px;height:36px;border-radius:50%;background:#fff;border:1.5px solid #e5e7eb;box-shadow:0 4px 14px rgba(0,0,0,.13);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;"
               onmouseover="this.style.background='#f0faf2';this.style.borderColor='var(--forest-sage)';this.style.transform='scale(1.12)'"
               onmouseout="this.style.background='#fff';this.style.borderColor='#e5e7eb';this.style.transform='scale(1)'">
@@ -3975,14 +3920,14 @@
               style="color:var(--forest-sage)">Quantity</span>
             <div class="flex items-center border-2 rounded-lg overflow-hidden"
               style="border-color:#c8e6c9;height:34px;">
-              <button onclick="changeFlowerQty(-1)"
+              <button aria-label="Decrease quantity" onclick="changeFlowerQty(-1)"
                 class="w-8 h-full flex items-center justify-center font-black text-base transition"
                 style="color:var(--forest)" onmouseover="this.style.background='#e8f5e9'"
                 onmouseout="this.style.background=''">&#8722;</button>
               <span id="flowerQtyVal"
                 class="w-10 text-center font-black text-xs border-x-2 h-full flex items-center justify-center"
                 style="border-color:#c8e6c9;">1</span>
-              <button onclick="changeFlowerQty(1)"
+              <button aria-label="Increase quantity" onclick="changeFlowerQty(1)"
                 class="w-8 h-full flex items-center justify-center font-black text-base transition"
                 style="color:var(--forest)" onmouseover="this.style.background='#e8f5e9'"
                 onmouseout="this.style.background=''">+</button>
@@ -4110,415 +4055,6 @@
 
 
   <!-- ----------------------------------------------------------
-     WATCH & LEARN — PREMIUM REDESIGN
------------------------------------------------------------ -->
-  <style>
-    #nsVideos {
-      background: #fff;
-      padding: 5rem 0 4.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    #nsVideos::before { display: none; }
-    #nsVideos::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(26,58,42,.1), transparent);
-    }
-    .vw-inner { max-width: 1280px; margin: 0 auto; padding: 0 1.75rem; position: relative; }
-
-    /* ---- HEADER ---- */
-    .vw-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .vw-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .58rem;
-      font-weight: 800;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--forest-leaf);
-      margin-bottom: .5rem;
-    }
-    .vw-eyebrow::before {
-      content: '';
-      width: 1.4rem;
-      height: 1.5px;
-      background: var(--gold);
-      flex-shrink: 0;
-    }
-    .vw-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      font-weight: 700;
-      color: var(--forest-deep);
-      line-height: 1.05;
-      letter-spacing: -.02em;
-    }
-    .vw-title em { font-style: italic; color: var(--forest-leaf); }
-    .vw-sub { font-size: .78rem; color: var(--forest-sage); margin-top: .4rem; }
-    .vw-count-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: rgba(26,58,42,.06);
-      border: 1px solid rgba(26,58,42,.14);
-      border-radius: 30px;
-      padding: .4rem 1rem;
-      font-size: .68rem;
-      font-weight: 700;
-      color: var(--forest-mid);
-      white-space: nowrap;
-      flex-shrink: 0;
-      align-self: flex-end;
-    }
-
-    /* ---- LAYOUT: HERO + SIDE STACK ---- */
-    .vw-layout {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 1.25rem;
-      align-items: start;
-    }
-
-    /* ---- HERO CARD ---- */
-    .vw-hero {
-      position: relative;
-      border-radius: 22px;
-      overflow: hidden;
-      cursor: pointer;
-      aspect-ratio: 16/10;
-      background: #000;
-      border: 1px solid rgba(26,58,42,.1);
-      transition: transform .4s cubic-bezier(.22,1,.36,1);
-    }
-    .vw-hero:hover {
-      transform: translateY(-4px);
-    }
-    .vw-hero-img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .7s cubic-bezier(.22,1,.36,1), filter .7s;
-      filter: brightness(.7);
-    }
-    .vw-hero:hover .vw-hero-img { transform: scale(1.05); filter: brightness(.85); }
-    .vw-hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.3) 45%, transparent 70%);
-    }
-    /* Gold top shimmer */
-    .vw-hero-shimmer {
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0;
-      transition: opacity .3s;
-    }
-    .vw-hero:hover .vw-hero-shimmer { opacity: 1; }
-    /* FEATURED badge */
-    .vw-featured-badge {
-      position: absolute; top: 16px; left: 16px;
-      background: var(--gold);
-      color: var(--forest-deep);
-      font-size: .55rem;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .3rem .8rem;
-      border-radius: 20px;
-      z-index: 4;
-    }
-    /* Big play button */
-    .vw-play-center {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.15);
-      backdrop-filter: blur(12px);
-      border: 2px solid rgba(255,255,255,.35);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .25s, transform .35s cubic-bezier(.34,1.56,.64,1), border-color .25s;
-      z-index: 4;
-    }
-    .vw-hero:hover .vw-play-center {
-      background: var(--gold);
-      border-color: var(--gold);
-      transform: translate(-50%, -50%) scale(1.12);
-    }
-    .vw-play-center svg { margin-left: 3px; }
-    .vw-hero:hover .vw-play-center svg path { fill: var(--forest-deep); }
-    /* Hero bottom info */
-    .vw-hero-info {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 1.75rem;
-      z-index: 4;
-    }
-    .vw-hero-tag {
-      display: inline-block;
-      font-size: .56rem; font-weight: 800;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: var(--gold-lt); opacity: .85;
-      margin-bottom: .45rem;
-    }
-    .vw-hero-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.4rem, 2.2vw, 1.9rem);
-      font-weight: 700; color: #fff;
-      line-height: 1.2; margin-bottom: .5rem;
-      text-shadow: 0 2px 16px rgba(0,0,0,.5);
-    }
-    .vw-hero-meta {
-      display: flex; align-items: center; gap: .75rem;
-      font-size: .68rem; color: rgba(255,255,255,.55);
-    }
-    .vw-hero-dur {
-      display: inline-flex; align-items: center; gap: .35rem;
-      background: rgba(0,0,0,.5);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 20px; padding: .2rem .65rem;
-      font-size: .62rem; font-weight: 700; color: #fff;
-    }
-
-    /* ---- SIDE STACK ---- */
-    .vw-stack {
-      display: flex; flex-direction: column; gap: 1rem;
-    }
-    .vw-card {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      background: #fff;
-      border: 1px solid rgba(26,58,42,.1);
-      transition: border-color .3s, transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s;
-      display: flex;
-      height: 110px;
-    }
-    .vw-card:hover {
-      border-color: rgba(74,140,92,.35);
-      transform: translateX(6px);
-      box-shadow: 0 12px 36px rgba(15,34,24,.1);
-    }
-    .vw-card-img-wrap {
-      flex-shrink: 0;
-      width: 140px;
-      position: relative;
-      overflow: hidden;
-    }
-    .vw-card-img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .5s cubic-bezier(.22,1,.36,1), filter .5s;
-      filter: brightness(.65);
-    }
-    .vw-card:hover .vw-card-img { transform: scale(1.07); filter: brightness(.8); }
-    .vw-card-play {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.18);
-      backdrop-filter: blur(6px);
-      border: 1.5px solid rgba(255,255,255,.3);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .25s, transform .3s cubic-bezier(.34,1.56,.64,1);
-    }
-    .vw-card:hover .vw-card-play {
-      background: var(--gold);
-      border-color: var(--gold);
-      transform: translate(-50%, -50%) scale(1.15);
-    }
-    .vw-card:hover .vw-card-play svg path { fill: var(--forest-deep); }
-    .vw-card-body {
-      flex: 1; padding: .85rem 1rem;
-      display: flex; flex-direction: column; justify-content: center;
-      background: #fff;
-    }
-    .vw-card-tag {
-      font-size: .52rem; font-weight: 800;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: var(--forest-leaf); margin-bottom: .3rem;
-    }
-    .vw-card-title {
-      font-size: .85rem; font-weight: 700;
-      color: var(--forest-deep); line-height: 1.3;
-      margin-bottom: .35rem;
-    }
-    .vw-card-dur {
-      font-size: .6rem; color: var(--forest-sage);
-      font-weight: 600;
-    }
-    /* active indicator */
-    .vw-card::before {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--forest-leaf);
-      border-radius: 0 3px 3px 0;
-      opacity: 0;
-      transition: opacity .25s;
-    }
-    .vw-card:hover::before { opacity: 1; }
-
-    /* ---- MOBILE: stack hero then horizontal scroll ---- */
-    @media (max-width: 900px) {
-      .vw-layout { grid-template-columns: 1fr; }
-      .vw-hero { aspect-ratio: 16/9; }
-      .vw-stack {
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        scrollbar-width: none;
-        gap: 1rem;
-        padding-bottom: 4px;
-      }
-      .vw-stack::-webkit-scrollbar { display: none; }
-      .vw-card {
-        flex-shrink: 0;
-        flex-direction: column;
-        width: clamp(180px, 42vw, 220px);
-        height: auto;
-        transform: none !important;
-      }
-      .vw-card:hover { transform: translateY(-4px) !important; box-shadow: 0 10px 28px rgba(15,34,24,.1); }
-      .vw-card-img-wrap { width: 100%; height: 140px; flex-shrink: 0; }
-      .vw-card-body { background: #fff; }
-    }
-    @media (max-width: 480px) {
-      .vw-card { width: clamp(160px, 48vw, 200px); }
-      .vw-card-img-wrap { height: 120px; }
-      .vw-card-title { font-size: .78rem; }
-      #nsVideos { padding: 3.5rem 0 3rem; }
-      .vw-inner { padding: 0 1rem; }
-      .vw-play-center { width: 56px; height: 56px; }
-    }
-  </style>
-
-  <section id="nsVideos" aria-label="Video showcase">
-    <div class="vw-inner">
-
-      <!-- Header -->
-      <div class="vw-header ns-reveal">
-        <div>
-          <div class="vw-eyebrow">See It Live</div>
-          <h2 class="vw-title">Watch &amp; <em>Learn</em></h2>
-          <p class="vw-sub">Real farm footage · Honest recipes · Genuine customer stories</p>
-        </div>
-        <div class="vw-count-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-          5 Videos
-        </div>
-      </div>
-
-      <!-- Grid: hero + side stack -->
-      <div class="vw-layout">
-
-        <!-- Hero video card -->
-        <div class="vw-hero ns-reveal" id="vwHero" onclick="nsOpenVideo('dQw4w9WgXcQ')" role="button" aria-label="Play Farm Harvesting">
-          <div class="vw-hero-shimmer"></div>
-          <img class="vw-hero-img" id="vwHeroImg"
-            src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&auto=format&fit=crop"
-            alt="Farm Harvesting" />
-          <div class="vw-hero-overlay"></div>
-          <div class="vw-featured-badge">Featured</div>
-          <div class="vw-play-center" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z" fill="#fff"/></svg>
-          </div>
-          <div class="vw-hero-info">
-            <span class="vw-hero-tag" id="vwHeroTag">Our Farm</span>
-            <h3 class="vw-hero-title" id="vwHeroTitle">Farm Harvesting</h3>
-            <div class="vw-hero-meta">
-              <span class="vw-hero-dur" id="vwHeroDur">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                2:34
-              </span>
-              <span>Click to play</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Side stack -->
-        <div class="vw-stack" id="nsVideoRow"></div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Video modal -->
-  <div id="nsVideoModal" role="dialog" aria-modal="true" aria-label="Video player"
-    style="display:none;position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem;"
-    onclick="if(event.target===this)nsCloseVideo()">
-    <div style="position:relative;width:100%;max-width:900px;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 40px 100px rgba(0,0,0,.8);">
-      <iframe id="nsVideoFrame" src="" allow="autoplay;fullscreen" style="width:100%;height:100%;border:none;"
-        loading="lazy" title="Product video"></iframe>
-      <button onclick="nsCloseVideo()" aria-label="Close video"
-        style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1.2rem;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;"
-        onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">&#x2715;</button>
-    </div>
-  </div>
-
-
-  <!-- ----------------------------------------------------------
-     CUSTOMER PHOTO GALLERY / UGC (UPGRADE 5)
------------------------------------------------------------ -->
-  <section id="nsGallery" aria-label="Customer photos"
-    style="background:var(--cream);padding:3rem 0 2.5rem;border-top:1px solid rgba(26,58,42,.07);">
-    <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
-      <div class="ns-reveal"
-        style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;">
-        <div>
-          <div class="ns-eyebrow" style="margin-bottom:.4rem;">Real Customers</div>
-          <h2
-            style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:700;color:var(--forest-deep);">
-            From Their Kitchens</h2>
-          <p style="font-size:.75rem;color:var(--forest-sage);margin-top:.25rem;">Unfiltered photos from our community.
-            Tag #NanseiOrganics to be featured.</p>
-        </div>
-        <a href="#"
-          style="font-size:.72rem;font-weight:700;color:var(--forest-leaf);text-decoration:none;border:1.5px solid var(--forest-leaf);padding:.35rem .9rem;border-radius:20px;transition:background .2s,color .2s;"
-          onmouseenter="this.style.background='var(--forest-leaf)';this.style.color='#fff'"
-          onmouseleave="this.style.background='';this.style.color='var(--forest-leaf)'">View All Photos</a>
-      </div>
-      <div class="ns-masonry" id="nsGalleryGrid"></div>
-    </div>
-  </section>
-
-  <!-- Lightbox modal -->
-  <div id="nsLightbox" role="dialog" aria-modal="true" aria-label="Photo lightbox"
-    style="display:none;position:fixed;inset:0;z-index:9970;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:1rem;"
-    onclick="if(event.target===this)nsCloseLightbox()">
-    <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:.75rem;">
-      <img id="nsLightboxImg" src="" alt=""
-        style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:12px;" />
-      <div id="nsLightboxCaption"
-        style="font-size:.78rem;color:rgba(255,255,255,.75);text-align:center;max-width:400px;"></div>
-      <button onclick="nsCloseLightbox()" aria-label="Close photo"
-        style="position:absolute;top:-44px;right:0;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.4rem;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
-      <div style="display:flex;gap:.5rem;">
-        <button onclick="nsLightboxNav(-1)" aria-label="Previous photo"
-          style="background:rgba(255,255,255,.12);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;">‹</button>
-        <button onclick="nsLightboxNav(1)" aria-label="Next photo"
-          style="background:rgba(255,255,255,.12);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;">›</button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ----------------------------------------------------------
      REVIEWS SECTION — corrected IDs
 ----------------------------------------------------------- -->
   <section id="reviewsSection" aria-label="Customer reviews"
@@ -4538,40 +4074,21 @@
           <div id="revScoreEl" style="font-family:'Inter',sans-serif;font-size:3.8rem;font-weight:900;color:var(--forest-deep);line-height:1;letter-spacing:-.03em;">—</div>
           <div id="revStarsEl" style="color:#f59e0b;font-size:1rem;letter-spacing:.05em;margin:.3rem 0 .2rem;"></div>
           <div id="revCntEl" style="font-size:.68rem;color:var(--forest-sage);font-weight:600;">New</div>
-          <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-leaf);margin-top:.4rem;">Verified</div>
+          <div id="revVerifiedNote" style="display:none;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest-leaf);margin-top:.4rem;">From delivered orders</div>
         </div>
         <!-- Divider -->
-        <div style="width:1px;background:rgba(26,58,42,.1);align-self:stretch;flex-shrink:0;"></div>
+        <div id="revDivider" style="width:1px;background:rgba(26,58,42,.1);align-self:stretch;flex-shrink:0;"></div>
         <!-- Bars block -->
         <div id="barRows" style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:.6rem;min-width:180px;"></div>
       </div>
 
       <!-- No reviews placeholder (shown when list is empty) -->
-      <div id="noReviewsMsg" style="display:block;text-align:center;padding:2rem 1rem;background:#fff;border:1px solid rgba(26,58,42,.09);border-radius:16px;box-shadow:0 2px 12px rgba(15,34,24,.05);margin-bottom:2rem;box-sizing:border-box;">
-        <div style="font-size:2rem;margin-bottom:.6rem;">&#9733;</div>
-        <p style="font-size:.88rem;font-weight:700;color:var(--forest-deep);margin-bottom:.3rem;">No reviews yet</p>
-        <p style="font-size:.75rem;color:var(--forest-sage);">Be the first to share your experience!</p>
-      </div>
+      <div id="noReviewsMsg" style="display:block;padding:1.25rem 1.4rem;background:#fff;border:1px solid rgba(26,58,42,.09);border-radius:14px;margin-bottom:1.5rem;"><p style="font-size:.9rem;font-weight:700;color:var(--forest-deep);margin-bottom:.25rem;">No reviews yet</p><p style="font-size:.8rem;color:var(--forest-sage);line-height:1.5;">Customers can review this product once their order has been delivered.</p></div>
 
       <!-- Review cards -->
+      <div id="revToolbar" style="display:none"></div>
       <div id="reviewsList" class="rev-list" style="margin-bottom:2rem;"></div>
-      <script>
-        /* Show/hide "No reviews yet" based on whether reviewsList has content */
-        (function(){
-          const list = document.getElementById('reviewsList');
-          const msg  = document.getElementById('noReviewsMsg');
-          if (!list || !msg) return;
-          const orig = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
-          Object.defineProperty(list, 'innerHTML', {
-            set(v) {
-              orig.set.call(this, v);
-              msg.style.display = (v && v.trim()) ? 'none' : 'block';
-            },
-            get() { return orig.get.call(this); },
-            configurable: true
-          });
-        })();
-      </script>
+
 
       <!-- Write a review form (shown only to verified purchasers) -->
       <div id="revForm" style="display:none;background:#fff;border:1.5px solid rgba(26,58,42,.1);border-radius:18px;padding:1.5rem;margin-top:.5rem;">
@@ -4616,12 +4133,12 @@
     style="position:fixed;bottom:0;left:0;right:0;z-index:500;background:#fff;border-top:1px solid rgba(26,58,42,.12);padding:.6rem .85rem;padding-bottom:calc(.6rem + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:.5rem;box-shadow:0 -4px 20px rgba(10,30,15,.1);">
     <!-- Qty stepper -->
     <div style="display:flex;align-items:center;border:2px solid #c8e6c9;border-radius:10px;height:44px;overflow:hidden;flex-shrink:0;">
-      <button onclick="changeFlowerQty(-1)"
+      <button onclick="changeAnyQty(-1)" aria-label="Decrease quantity"
         style="width:36px;height:100%;background:none;border:none;font-size:1.1rem;font-weight:900;color:var(--forest);cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif;"
         onmouseover="this.style.background='#e8f5e9'" onmouseout="this.style.background=''">&#8722;</button>
       <span id="mobQtyVal"
         style="width:36px;text-align:center;font-size:.82rem;font-weight:900;color:var(--forest-deep);border-left:2px solid #c8e6c9;border-right:2px solid #c8e6c9;height:100%;display:flex;align-items:center;justify-content:center;">1</span>
-      <button onclick="changeFlowerQty(1)"
+      <button onclick="changeAnyQty(1)" aria-label="Increase quantity"
         style="width:36px;height:100%;background:none;border:none;font-size:1.1rem;font-weight:900;color:var(--forest);cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif;"
         onmouseover="this.style.background='#e8f5e9'" onmouseout="this.style.background=''">+</button>
     </div>
@@ -5367,14 +4884,7 @@
       };
 
       /* --- REVIEWS ------------------------------------------ */
-      const NS_REVIEWS = [
-        { name: 'Rajan K.', loc: 'Chennai', stars: 5, date: '2 weeks ago', verified: true, text: 'Blood sugar improved from 210 to 148 after 3 months. My doctor was genuinely amazed. The quality is unlike anything from a supermarket shelf.' },
-        { name: 'Priya S.', loc: 'Madurai', stars: 5, date: '1 month ago', verified: true, text: 'Switched our entire family breakfast routine to millet kanji. Children love it. The aroma when cooking is just divine — earthy and clean.' },
-        { name: 'Sundar M.', loc: 'Coimbatore', stars: 4, date: '3 weeks ago', verified: true, text: 'Genuinely organic taste difference. Slightly coarser than refined flour but that is the point — you want the bran. Fast shipping too.' },
-        { name: 'Kavitha R.', loc: 'Bangalore', stars: 5, date: '5 days ago', verified: true, text: 'Third time ordering. The lab certificate QR code on the pack is a brilliant touch — I actually scanned it. Everything verified. Trust is earned here.' },
-        { name: 'Murugan P.', loc: 'Thanjavur', stars: 5, date: '1 week ago', verified: true, text: 'As someone from the region, I can say this is authentic. The milling is done right — you can feel the texture and the grain is whole, not broken.' },
-        { name: 'Deepa A.', loc: 'Hyderabad', stars: 5, date: '2 months ago', verified: true, text: 'My 8-year-old actually prefers the millet dosa to rice dosa now. That is the biggest endorsement I can give. Packaging is also very premium.' },
-      ];
+      const NS_REVIEWS = []; // sample reviews removed
 
       function nsRenderReviews() {
         const g = document.getElementById('nsReviewsGrid');
@@ -5412,7 +4922,7 @@
          onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 48px rgba(15,34,24,.12)'"
          onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div style="position:relative;aspect-ratio:1/1;overflow:hidden;">
-        <img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .4s;" onmouseenter="this.style.transform='scale(1.07)'" onmouseleave="this.style.transform=''"/>
+        <img src="${ikThumb(p.img,400)}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .4s;" onmouseenter="this.style.transform='scale(1.07)'" onmouseleave="this.style.transform=''"/>
         <span style="position:absolute;top:8px;left:8px;font-size:.58rem;font-weight:800;background:var(--forest-deep);color:var(--cream);padding:2px 8px;border-radius:20px;">${p.badge}</span>
       </div>
       <div style="padding:.85rem;">
@@ -5439,8 +4949,8 @@
           else if (e.key === 'ArrowLeft') nsNavStory(-1);
           else if (e.key === 'Escape') nsCloseStory();
         }
-        if (document.getElementById('nsVideoModal').style.display === 'flex' && e.key === 'Escape') nsCloseVideo();
-        if (document.getElementById('nsLightbox').style.display === 'flex') {
+        if (document.getElementById('nsVideoModal')?.style.display === 'flex' && e.key === 'Escape') nsCloseVideo();
+        if (document.getElementById('nsLightbox')?.style.display === 'flex') {
           if (e.key === 'ArrowRight') nsLightboxNav(1);
           else if (e.key === 'ArrowLeft') nsLightboxNav(-1);
           else if (e.key === 'Escape') nsCloseLightbox();
@@ -5559,13 +5069,13 @@
         <a href="index.html#products" class="rel-view-all">View All </a>
       </div>
       <div class="rel-hscroll-wrap">
-        <button class="rel-scroll-btn left" onclick="scrollRelRow('relScroll1',-1)"><svg width="16" height="16"
+        <button aria-label="Scroll left" class="rel-scroll-btn left" onclick="scrollRelRow('relScroll1',-1)"><svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg></button>
         <div class="rel-scroll" id="relScroll1" style="flex:1;"></div>
-        <button class="rel-scroll-btn right" onclick="scrollRelRow('relScroll1',1)"><svg width="16" height="16"
+        <button aria-label="Scroll right" class="rel-scroll-btn right" onclick="scrollRelRow('relScroll1',1)"><svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M9 18l6-6-6-6" />
@@ -5584,13 +5094,13 @@
         <a href="index.html#products" class="rel-view-all">See All </a>
       </div>
       <div class="rel-hscroll-wrap">
-        <button class="rel-scroll-btn left" onclick="scrollRelRow('relScroll2',-1)"><svg width="16" height="16"
+        <button aria-label="Scroll left" class="rel-scroll-btn left" onclick="scrollRelRow('relScroll2',-1)"><svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg></button>
         <div class="rel-scroll" id="relScroll2" style="flex:1;"></div>
-        <button class="rel-scroll-btn right" onclick="scrollRelRow('relScroll2',1)"><svg width="16" height="16"
+        <button aria-label="Scroll right" class="rel-scroll-btn right" onclick="scrollRelRow('relScroll2',1)"><svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M9 18l6-6-6-6" />
@@ -5609,13 +5119,13 @@
         <a href="index.html#products" class="rel-view-all">See All &rsaquo;</a>
       </div>
       <div class="rel-hscroll-wrap">
-        <button class="rel-scroll-btn left" onclick="scrollRelRow('relScroll3',-1)"><svg width="16" height="16"
+        <button aria-label="Scroll left" class="rel-scroll-btn left" onclick="scrollRelRow('relScroll3',-1)"><svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg></button>
         <div class="rel-scroll" id="relScroll3" style="flex:1;"></div>
-        <button class="rel-scroll-btn right" onclick="scrollRelRow('relScroll3',1)"><svg width="16" height="16"
+        <button aria-label="Scroll right" class="rel-scroll-btn right" onclick="scrollRelRow('relScroll3',1)"><svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M9 18l6-6-6-6" />
@@ -5648,7 +5158,7 @@
   <!-- ---- BLOG ARTICLE MODAL ---- -->
   <div id="blogModal" onclick="if(event.target===this)closeBlogModal()">
     <div class="blog-modal-box">
-      <button class="blog-modal-close" onclick="closeBlogModal()">&times;</button>
+      <button aria-label="Close article" class="blog-modal-close" onclick="closeBlogModal()">&times;</button>
       <img id="blogModalImg" src="" alt="" class="blog-modal-img" />
       <div class="blog-modal-body">
         <span id="blogModalTag" class="blog-modal-tag"></span>
@@ -5679,79 +5189,14 @@
   <!-- ---------------------------------------
      FOOTER
 --------------------------------------- -->
-  <footer id="site-footer" class="bg-gray-900 text-gray-300">
-    <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-      <div>
-        <img src="nansei_org_logo.svg" alt="Nansai Organics"
-          style="height:56px;width:auto;object-fit:contain;margin-bottom:.5rem;filter:brightness(0) invert(1);" />
-        <p style="font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:#6b7280;margin-bottom:.85rem;">
-          Experience the Root of Nature</p>
-        <p class="text-gray-400 text-sm leading-relaxed mb-5">Providing 100% organic and high-quality agricultural
-          products. Trusted by farmers everywhere.</p>
-        <div class="flex gap-3">
-          <a href="#"
-            class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">[[icon:instagram]]</a>
-          <a href="#"
-            class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">f</a>
-          <a href="#"
-            class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-700 flex items-center justify-center transition text-sm">in</a>
-        </div>
-      </div>
-      <div>
-        <h3 class="font-bold text-white text-base mb-5">Quick Links</h3>
-        <ul class="space-y-3 text-sm">
-          <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Home</a></li>
-          <li><a href="#products" class="text-gray-400 hover:text-green-400 transition">Shop</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-green-400 transition">About Us</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Our Farmers</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="font-bold text-white text-base mb-5">Customer Service</h3>
-        <ul class="space-y-3 text-sm">
-          <li><a href="#" class="text-gray-400 hover:text-green-400 transition">FAQ</a></li>
-          <li><a href="refund-policy.html" class="text-gray-400 hover:text-green-400 transition">Returns &amp;
-              Refunds</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-green-400 transition">Shipping Info</a></li>
-          <li><a href="checkoutmyorderpage.html?page=orders" class="text-gray-400 hover:text-green-400 transition">Track
-              Order</a></li>
-          <li><a href="privacy-policy.html" class="text-gray-400 hover:text-green-400 transition">Privacy Policy</a>
-          </li>
-          <li><a href="terms-and-conditions.html" class="text-gray-400 hover:text-green-400 transition">Terms &amp;
-              Conditions</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="font-bold text-white text-base mb-5">Contact Us</h3>
-        <ul class="space-y-3 text-sm">
-          <li><a href="mailto:info@nansaiorganics.com"
-              class="text-gray-400 hover:text-green-400 transition">info@nansaiorganics.com</a></li>
-          <li><a href="tel:+919999999999" class="text-gray-400 hover:text-green-400 transition">+91 99999 99999</a></li>
-          <li><span class="text-gray-400">Tamil Nadu, India</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="border-t border-gray-800 py-5 px-4">
-      <div
-        style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-        <span class="text-gray-500 text-xs">&copy; 2026 NANSEI Organics. All Rights Reserved.</span>
-        <div style="display:flex;flex-wrap:wrap;gap:16px;">
-          <a href="privacy-policy.html" class="text-gray-500 hover:text-green-400 text-xs transition">Privacy Policy</a>
-          <a href="terms-and-conditions.html" class="text-gray-500 hover:text-green-400 text-xs transition">Terms &amp;
-            Conditions</a>
-          <a href="refund-policy.html" class="text-gray-500 hover:text-green-400 text-xs transition">Refund Policy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
 
 
   <!-- ---------------- JS ---------------- -->
   <script>
     const products = [
       {
-        id: 1, name: "Karunguruvai Rice", category: "Rice Varieties", price: 180, oldPrice: 220, rating: 4.7, reviews: 142, sold: 312, badge: "hot",
+        id: 1, name: "Karunguruvai Rice", category: "Rice Varieties", price: 180, oldPrice: 220, rating: 0, reviews: 0, sold: 312, badge: "hot",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice%20benefits.png?updatedAt=1776255900548", "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice%20nutrition%20benefits.png?updatedAt=1776255899159"],
         variants: ["500g", "1kg", "2kg", "5kg"],
@@ -5763,7 +5208,7 @@
         nutrients: [{ label: "Energy", value: "~350 kcal", per: "per 100g" }, { label: "Carbohydrates", value: "70–75 g", per: "per 100g" }, { label: "Dietary Fiber", value: "4–6 g", per: "per 100g" }, { label: "Protein", value: "7–9 g", per: "per 100g" }, { label: "Fat", value: "1–2 g", per: "per 100g" }, { label: "Iron", value: "2–3 mg", per: "per 100g" }, { label: "Calcium", value: "20–30 mg", per: "per 100g" }, { label: "Magnesium", value: "60–80 mg", per: "per 100g" }],
         howToUse: ["Soak rice for 6–8 hours before cooking for best results.", "Use 1:2.5 ratio of rice to water for perfect texture.", "Ideal for Karunguruvai rice kanji (porridge) — very popular for health.", "Suitable for daily meals, sambar rice and traditional recipes.", "Can be used in Karunguruvai rice recipe in Tamil for authentic cooking."],
         specs: { "Net Weight": "1 kg", "Origin": "Tamil Nadu, India", "Shelf Life": "12 months", "Type": "Heritage Short Grain", "Processing": "Hand-pounded", "Certification": "FSSAI" },
-        reviewData: [{ name: "Priya S.", rating: 5, text: "Authentic taste! Reminds me of my grandmother's cooking. The aroma while cooking is wonderful.", date: "Feb 2026", verified: true }, { name: "Ramesh K.", rating: 5, text: "Best heritage rice I've found online. Cooks perfectly and very nutritious.", date: "Jan 2026", verified: true }],
+        reviewData: [],
         experience: {
           stories: [
             { emoji: "[[icon:leaf]]", title: "Why Karunguruvai Rice", body: "Karunguruvai is one of Tamil Nadu's oldest medicinal rice varieties, grown pesticide-free in the Cauvery delta and stone-milled to preserve its natural dark hue and nutrients.", cta: "Our Story", img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&auto=format&fit=crop" },
@@ -5790,7 +5235,7 @@
       },
 
       {
-        id: 2, name: "Karuppu Kavuni (Black Kavuni Rice)", category: "Rice Varieties", price: 220, oldPrice: 270, rating: 4.8, reviews: 198, sold: 421, badge: "hot",
+        id: 2, name: "Karuppu Kavuni (Black Kavuni Rice)", category: "Rice Varieties", price: 220, oldPrice: 270, rating: 0, reviews: 0, sold: 421, badge: "hot",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice%20benefits.png?updatedAt=1776255900532", "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice%20nutrition%20benefits.png?updatedAt=1776255899137"],
         variants: ["500g", "1kg", "2kg"],
@@ -5876,11 +5321,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Kavitha R.", rating: 5, text: "Made kavuni arisi payasam — absolutely divine! The color and taste are incredible.", date: "Feb 2026", verified: true }, { name: "Senthil M.", rating: 5, text: "Authentic black kavuni. Hard to find this quality elsewhere.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 3, name: "Arubatham Kuruvai Rice", category: "Rice Varieties", price: 160, oldPrice: 200, rating: 4.5, reviews: 87, sold: 189, badge: "new",
+        id: 3, name: "Arubatham Kuruvai Rice", category: "Rice Varieties", price: 160, oldPrice: 200, rating: 0, reviews: 0, sold: 189, badge: "new",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice%20benefits.png?updatedAt=1780666011440", "https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice%20Nutrition.png?updatedAt=1780666004480"],
         variants: ["500g", "1kg", "2kg", "5kg"],
@@ -5966,11 +5411,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Meena T.", rating: 5, text: "Very light rice, perfect for daily cooking. My family loves it.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 4, name: "Poongar Rice", category: "Rice Varieties", price: 200, oldPrice: 250, rating: 4.6, reviews: 113, sold: 247, badge: "sale",
+        id: 4, name: "Poongar Rice", category: "Rice Varieties", price: 200, oldPrice: 250, rating: 0, reviews: 0, sold: 247, badge: "sale",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice%20benefits.png?updatedAt=1776255898885", "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice%20nutrition%20benefits.png?updatedAt=1776255898622"],
         variants: ["500g", "1kg", "2kg", "5kg"],
@@ -6056,11 +5501,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Lakshmi P.", rating: 5, text: "Excellent quality Poongar rice. The pinkish color is beautiful and it tastes wonderful.", date: "Feb 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 5, name: "Mappillai Samba (Mani Samba) Rice", category: "Rice Varieties", price: 210, oldPrice: 260, rating: 4.7, reviews: 156, sold: 334, badge: "hot",
+        id: 5, name: "Mappillai Samba (Mani Samba) Rice", category: "Rice Varieties", price: 210, oldPrice: 260, rating: 0, reviews: 0, sold: 334, badge: "hot",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE%20BENEFITS.png?updatedAt=1780666010964", "https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE%20NUTRITION.png?updatedAt=1780666004448"],
         variants: ["500g", "1kg", "2kg", "5kg"],
@@ -6146,11 +5591,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Arjun V.", rating: 5, text: "Amazing rice! Noticed improved energy levels. Authentic Mappillai Samba.", date: "Feb 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 6, name: "Iluppai Poo Samba Rice", category: "Rice Varieties", price: 195, oldPrice: 240, rating: 4.5, reviews: 74, sold: 158, badge: "new",
+        id: 6, name: "Iluppai Poo Samba Rice", category: "Rice Varieties", price: 195, oldPrice: 240, rating: 0, reviews: 0, sold: 158, badge: "new",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice%20benefits.png?updatedAt=1776255900613", "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice%20nutrition%20benefits.png?updatedAt=1776255899278"],
         variants: ["500g", "1kg", "2kg"],
@@ -6236,11 +5681,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Vijaya R.", rating: 5, text: "The aroma while cooking is incredible! Very unique and nutritious rice.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 7, name: "Vellai Kavuni (White Kavuni Rice)", category: "Rice Varieties", price: 190, oldPrice: 235, rating: 4.6, reviews: 91, sold: 196, badge: "new",
+        id: 7, name: "Vellai Kavuni (White Kavuni Rice)", category: "Rice Varieties", price: 190, oldPrice: 235, rating: 0, reviews: 0, sold: 196, badge: "new",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice%20benefits.png?updatedAt=1776255898282", "https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice%20nutrition%20benefits.png?updatedAt=1776255897943"],
         variants: ["500g", "1kg", "2kg"],
@@ -6326,11 +5771,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Deepa S.", rating: 5, text: "Perfect for making sweet pongal. Sticky texture is just right.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 8, name: "Paneer Rose (Fragrant Rose)", category: "Dried Flowers", price: 150, oldPrice: 190, rating: 4.8, reviews: 204, sold: 432, badge: "hot",
+        id: 8, name: "Paneer Rose (Fragrant Rose)", category: "Dried Flowers", price: 150, oldPrice: 190, rating: 0, reviews: 0, sold: 432, badge: "hot",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose%20Properties.png?updatedAt=1780666108696"],
         variants: ["50", "100", "200", "500"],
@@ -6416,11 +5861,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Ananya M.", rating: 5, text: "Beautiful fragrance! I use it for rose milk and the taste is heavenly.", date: "Feb 2026", verified: true }, { name: "Preethi K.", rating: 5, text: "Pure and fragrant. Makes the best rose water for my skin.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 9, name: "Hibiscus Flower", category: "Dried Flowers", price: 120, oldPrice: 155, rating: 4.6, reviews: 167, sold: 356, badge: "sale",
+        id: 9, name: "Hibiscus Flower", category: "Dried Flowers", price: 120, oldPrice: 155, rating: 0, reviews: 0, sold: 356, badge: "sale",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png?updatedAt=1780666109178",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS%20PROPERTIES.png?updatedAt=1780666107939", "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS%20BENEFITS.png?updatedAt=1780666107835"],
         variants: ["50", "100", "200", "500"],
@@ -6506,11 +5951,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Sridevi M.", rating: 5, text: "Perfect for making hibiscus sherbet. Deep red color and wonderful tart taste.", date: "Feb 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 10, name: "Aavaram Flower", category: "Dried Flowers", price: 110, oldPrice: 145, rating: 4.5, reviews: 88, sold: 187, badge: "new",
+        id: 10, name: "Aavaram Flower", category: "Dried Flowers", price: 110, oldPrice: 145, rating: 0, reviews: 0, sold: 187, badge: "new",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png",
         thumbs: [],
         variants: ["50", "100", "200"],
@@ -6596,11 +6041,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Dr. Kamala N.", rating: 5, text: "Excellent quality Aavaram flowers. I recommend to my patients for blood sugar management.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 11, name: "Butterfly Pea Flower", category: "Dried Flowers", price: 180, oldPrice: 220, rating: 4.7, reviews: 132, sold: 281, badge: "hot",
+        id: 11, name: "Butterfly Pea Flower", category: "Dried Flowers", price: 180, oldPrice: 220, rating: 0, reviews: 0, sold: 281, badge: "hot",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png",
         thumbs: ["https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO%20BENEFITS.png?updatedAt=1780666108858", "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO%20Properties.png?updatedAt=1780666106213"],
         variants: ["25", "50", "100", "200"],
@@ -6686,11 +6131,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Nisha R.", rating: 5, text: "The color change is magical! Makes the most beautiful blue lemonade.", date: "Feb 2026", verified: true }, { name: "Chef Arun B.", rating: 5, text: "Using this in my restaurant for color-changing cocktails. Customers love it!", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 12, name: "Organic Real Rose Milk", category: "Beverages", price: 140, oldPrice: 175, rating: 4.7, reviews: 219, sold: 467, badge: "hot",
+        id: 12, name: "Organic Real Rose Milk", category: "Beverages", price: 140, oldPrice: 175, rating: 0, reviews: 0, sold: 467, badge: "hot",
         image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=700&auto=format&fit=crop",
         thumbs: [],
         variants: ["200ml", "500ml", "1000ml"],
@@ -6776,11 +6221,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Kavitha S.", rating: 5, text: "Finally a rose milk that tastes like the real thing! No artificial taste at all.", date: "Feb 2026", verified: true }, { name: "Priya M.", rating: 5, text: "My kids love this. So happy it's made from real roses.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 13, name: "Hibiscus Sherbet", category: "Beverages", price: 130, oldPrice: 165, rating: 4.6, reviews: 143, sold: 304, badge: "sale",
+        id: 13, name: "Hibiscus Sherbet", category: "Beverages", price: 130, oldPrice: 165, rating: 0, reviews: 0, sold: 304, badge: "sale",
         image: "https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png",
         thumbs: [],
         variants: ["200ml", "500ml", "1000ml"],
@@ -6866,11 +6311,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Radha V.", rating: 5, text: "Perfect summer drink! The natural red color is beautiful and the taste is amazing.", date: "Feb 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 14, name: "Hand-pounded Rice Idiyappam Flour", category: "Flour Varieties", price: 160, oldPrice: 200, rating: 4.8, reviews: 178, sold: 378, badge: "hot",
+        id: 14, name: "Hand-pounded Rice Idiyappam Flour", category: "Flour Varieties", price: 160, oldPrice: 200, rating: 0, reviews: 0, sold: 378, badge: "hot",
         image: "https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=700&auto=format&fit=crop",
         thumbs: [],
         variants: ["500g", "1kg", "2kg", "5kg"],
@@ -6956,11 +6401,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Meena S.", rating: 5, text: "The idiyappam comes out so soft and silky! Much better than store-bought flour.", date: "Feb 2026", verified: true }, { name: "Lakshmi R.", rating: 5, text: "Authentic hand-pounded quality. My family can taste the difference.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 15, name: "Black Urad Dal Health Mix Powder", category: "Flour Varieties", price: 175, oldPrice: 215, rating: 4.6, reviews: 94, sold: 198, badge: "new",
+        id: 15, name: "Black Urad Dal Health Mix Powder", category: "Flour Varieties", price: 175, oldPrice: 215, rating: 0, reviews: 0, sold: 198, badge: "new",
         image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=700&auto=format&fit=crop",
         thumbs: [],
         variants: ["250g", "500g", "1kg"],
@@ -7046,11 +6491,11 @@
             }
           ]
         },
-        reviewData: [{ name: "Sunita K.", rating: 5, text: "My children love this as a morning porridge. Very nutritious and filling.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
 
       {
-        id: 16, name: "Country Fig Powder", category: "Other Products", price: 200, oldPrice: 250, rating: 4.7, reviews: 61, sold: 129, badge: "new",
+        id: 16, name: "Country Fig Powder", category: "Other Products", price: 200, oldPrice: 250, rating: 0, reviews: 0, sold: 129, badge: "new",
         image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop",
         thumbs: [],
         variants: ["100g", "250g", "500g"],
@@ -7086,33 +6531,15 @@
             { src: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&auto=format&fit=crop", caption: "Curd bowl topped with Country Fig Powder.", author: "@simple_kitchen" }
           ]
         },
-        reviewData: [{ name: "Dr. Anand R.", rating: 5, text: "Excellent quality fig powder. I recommend to patients with digestive issues.", date: "Feb 2026", verified: true }, { name: "Priya N.", rating: 4, text: "Good quality and very effective for digestion. Will buy again.", date: "Jan 2026", verified: true }]
+        reviewData: []
       },
     ];
 
     function hydrateProductExperienceReviews(p) {
       if (!p) return;
-      const existing = Array.isArray(p.reviewData) ? p.reviewData : [];
-      const names = ['Anitha R.', 'Suresh K.', 'Meena P.', 'Harini S.', 'Dinesh V.', 'Revathi M.'];
-      const cities = ['Chennai', 'Madurai', 'Coimbatore', 'Trichy', 'Salem', 'Bengaluru'];
-      const categoryTone = {
-        'Rice Varieties': ['cooks beautifully after soaking', 'has a clean heritage-rice aroma', 'works well for kanji and daily meals'],
-        'Dried Flowers': ['gives a bright natural infusion', 'smells fresh even after drying', 'is lovely for tea and summer drinks'],
-        'Beverages': ['mixes smoothly without artificial taste', 'feels refreshing in summer', 'has a natural flavour my family liked'],
-        'Flour Varieties': ['makes soft breakfast dishes', 'has a proper hand-pounded texture', 'feels lighter than regular flour'],
-        'Other Products': ['is easy to add to a morning routine', 'tastes natural without fillers', 'works well in smoothies and warm water']
-      };
-      const tone = categoryTone[p.category] || categoryTone['Other Products'];
-      const generated = names.map((name, i) => ({
-        name,
-        rating: i === 2 ? 4 : 5,
-        text: `${p.name} ${tone[i % tone.length]}. The pack felt fresh, the quality was consistent, and it matched the product details shown here.`,
-        date: ['Jun 2026', 'May 2026', 'Apr 2026', 'Mar 2026', 'Feb 2026', 'Jan 2026'][i],
-        verified: true,
-        loc: cities[i]
-      }));
-      const seen = new Set(existing.map(r => (r.name || '') + '|' + (r.text || '')));
-      p.reviewData = existing.concat(generated.filter(r => !seen.has(r.name + '|' + r.text))).slice(0, 8);
+      const existing = Array.isArray(p.reviewData) ? p.reviewData: [];
+      // Show only real reviews. (This used to pad the list with made-up reviewers marked as verified.)
+      p.reviewData = existing.slice(0, 8);
     }
 
     /* --- QUANTITY CONFIG --- */
@@ -7400,60 +6827,8 @@
         <td style="padding:.55rem .85rem;font-size:.72rem;font-weight:600;color:#374151">${v}</td>
       </tr>`).join('') + `</tbody>`;
 
-      // Reviews
-      document.getElementById('revScoreEl').textContent = p.reviews > 0 ? Number(p.rating || 0).toFixed(1) : '—';
-      document.getElementById('revStarsEl').innerHTML = renderStars(p.rating);
-      document.getElementById('revCntEl').textContent = p.reviews > 0 ? p.reviews + ' ratings' : 'New';
-
-      const bars = [
-        { label: '5★', pct: p.reviews > 0 ? Math.round(p.rating * 15) : 0 },
-        { label: '4★', pct: p.reviews > 0 ? Math.round((5 - p.rating) * 18) + 10 : 0 },
-        { label: '3★', pct: 8 }, { label: '2★', pct: 4 }, { label: '1★', pct: 3 },
-      ];
-      document.getElementById('barRows').innerHTML = bars.map(b => `
-    <div class="rev-bar-row">
-      <span class="rev-bar-label">${b.label}</span>
-      <div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:0%" data-pct="${b.pct}"></div></div>
-      <span class="rev-bar-pct">${b.pct}</span>
-    </div>`).join('');
-      // animate bars after paint
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        document.querySelectorAll('.rev-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
-      }));
-
-      const allReviews = p.reviewData || [];
-      const REVIEWS_LIMIT = 5;
-      function reviewCardHTML(r) {
-        return `<div class="rev-card">
-      <div class="rev-card-head">
-        <div class="rev-avatar">${r.name[0]}</div>
-        <div class="rev-meta">
-          <div class="rev-name">${r.name}</div>
-          <div class="rev-stars-row">${renderStars(r.rating)}</div>
-        </div>
-        <span class="rev-date">${r.date}</span>
-      </div>
-      <p class="rev-text">${r.text}</p>
-      ${r.verified ? `<span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>` : ''}
-    </div>`;
-      }
-      const listEl = document.getElementById('reviewsList');
-      if (!allReviews.length) {
-        listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--forest-sage);font-size:.85rem;">Be the first to review!</div>`;
-      } else {
-        listEl.innerHTML = allReviews.slice(0, REVIEWS_LIMIT).map(reviewCardHTML).join('');
-        if (allReviews.length > REVIEWS_LIMIT) {
-          const remaining = allReviews.length - REVIEWS_LIMIT;
-          const viewMoreWrap = document.createElement('div');
-          viewMoreWrap.id = 'revViewMoreWrap';
-          viewMoreWrap.style.cssText = 'grid-column:1/-1;display:flex;justify-content:center;margin-top:.5rem;';
-          viewMoreWrap.innerHTML = `<button onclick="expandReviews()" style="display:flex;align-items:center;gap:.5rem;padding:.65rem 1.75rem;border-radius:30px;border:1.5px solid rgba(26,58,42,.18);background:#fff;color:var(--forest-mid);font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;box-shadow:0 2px 10px rgba(15,34,24,.07);" onmouseover="this.style.background='var(--forest)';this.style.color='#fff';this.style.borderColor='var(--forest)'" onmouseout="this.style.background='#fff';this.style.color='var(--forest-mid)';this.style.borderColor='rgba(26,58,42,.18)'">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-        View ${remaining} More Review${remaining > 1 ? 's' : ''}
-      </button>`;
-          listEl.appendChild(viewMoreWrap);
-        }
-      }
+      // Reviews: only real ones (from the API); the page starts with the empty state until they load
+      renderReviewSection(p.reviewData || [], { rating: p.rating, count: p.reviews });
 
       // Wishlist state - use Wish.has() so it works for both guest and logged-in
       Wish.has(p.id).then(isWished => {
@@ -7470,32 +6845,6 @@
       initReviewForm();
       if (currentProduct && !/^\d+$/.test(String(currentProduct.id))) loadProductReviews(currentProduct.id);
       window.nansaiApplyIcons?.(document.body);
-      // Check for a review pre-saved from the orders page
-      const user = (function () { try { return JSON.parse(localStorage.getItem('nansai_user') || 'null'); } catch { return null; } })();
-      if (user) {
-        const revKey = 'rev_' + p.id + '_' + (user._id || user.email || 'u');
-        const saved = localStorage.getItem(revKey);
-        if (saved && saved !== '1') {
-          try {
-            const r = JSON.parse(saved);
-            currentProduct.reviewData = [r, ...(currentProduct.reviewData || [])];
-            currentProduct.reviews = (currentProduct.reviews || 0) + 1;
-            document.getElementById('revCntEl').textContent = currentProduct.reviews + ' ratings';
-            document.getElementById('pReviewsEl').textContent = currentProduct.reviews + ' reviews';
-            const listEl = document.getElementById('reviewsList');
-            const card = document.createElement('div');
-            card.className = 'rev-card';
-            card.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity .35s ease,transform .35s ease;';
-            card.innerHTML = `<div class="rev-card-head"><div class="rev-avatar">${r.name[0]}</div><div class="rev-meta"><div class="rev-name">${r.name}</div><div class="rev-stars-row">${renderStars(r.rating)}</div></div><span class="rev-date">${r.date}</span></div><p class="rev-text">${r.text}</p><span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>`;
-            listEl.insertBefore(card, listEl.firstChild);
-            window.nansaiApplyIcons?.(card);
-            requestAnimationFrame(() => requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }));
-            // Mark as submitted (store '1' so form shows already-reviewed message)
-            localStorage.setItem(revKey, '1');
-            showToast('\u2b50 Your review has been posted!');
-          } catch (e) { }
-        }
-      }
     }
 
     /* --- TABS --- */
@@ -7520,11 +6869,17 @@
       flowerQty = 1;
       const fv = document.getElementById('flowerQtyVal');
       if (fv) fv.textContent = 1;
+      const mb = document.getElementById('mobQtyVal');
+      if (mb) mb.textContent = 1;
       if (p.category === 'Dried Flowers') {
         updateFlowerPrice();
       } else {
         updatePriceDisplay();
       }
+    }
+    // mobile sticky bar stepper: works for every product type
+    function changeAnyQty(d) {
+      if (currentProduct && currentProduct.category === 'Dried Flowers') changeFlowerQty(d); else changeItemQty(d);
     }
     function changeItemQty(d) {
       itemQty = Math.max(1, itemQty + d);
@@ -7533,6 +6888,8 @@
     function changeFlowerQty(d) {
       flowerQty = Math.max(1, flowerQty + d);
       document.getElementById('flowerQtyVal').textContent = flowerQty;
+      const mb = document.getElementById('mobQtyVal');
+      if (mb) mb.textContent = flowerQty;
       updateFlowerPrice();
     }
     function updateFlowerPrice() {
@@ -7551,13 +6908,43 @@
       const m = document.getElementById('itemQtyValMob');
       if (d) d.textContent = itemQty;
       if (m) m.textContent = itemQty;
+      const mb = document.getElementById('mobQtyVal');
+      if (mb) mb.textContent = itemQty;
+    }
+    // One place that decides the size, label and price of what is selected,
+    // so the price on screen and the price in the cart always agree.
+    // Sizes are stored in the units checkout uses (kg / ml / piece).
+    function currentSelection() {
+      const p = currentProduct;
+      const cat = p.category;
+      const cfg = getQtyCfg(cat);
+      if (cat === 'Dried Flowers') {
+        return { price: p.price, oldPrice: p.oldPrice, qtyVal: 1, unit: 'piece', label: fmtQtyLbl(1, 'piece'), basePrice: p.price, qty: flowerQty };
+      }
+      const sel = document.querySelector('#variantBtns .selected');
+      const v = sel ? sel.dataset.variant : '';
+      if (!v || isNaN(parseFloat(v))) {
+        const q = cfg.options[0];
+        return { price: calcTotalPrice(p.price, q, cfg.unit), oldPrice: calcTotalPrice(p.oldPrice, q, cfg.unit), qtyVal: q, unit: cfg.unit, label: fmtQtyLbl(q, cfg.unit), basePrice: p.price, qty: itemQty };
+      }
+      const m = getVariantMultiplier(v, cat);
+      const amount = m * (BASE_UNIT_G[cat] || 1000);          // grams or ml
+      const qtyVal = cfg.unit === 'ml' ? amount : amount / 1000; // ml or kg
+      const price = Math.round(p.price * m);
+      return {
+        price, oldPrice: Math.round(p.oldPrice * m), qtyVal, unit: cfg.unit,
+        label: formatVariantLabel(v, cat),
+        basePrice: price / (cfg.unit === 'ml' ? qtyVal / 1000 : qtyVal),
+        qty: itemQty
+      };
     }
     function updatePriceDisplay() {
-      if (!currentProduct || currentQtyVal === null) return;
+      if (!currentProduct) return;
       const p = currentProduct;
-      const cfg = getQtyCfg(p.category);
-      const total = calcTotalPrice(p.price, currentQtyVal, cfg.unit);
-      const oldTotal = calcTotalPrice(p.oldPrice, currentQtyVal, cfg.unit);
+      if (p.category === 'Dried Flowers') { updateFlowerPrice(); return; }
+      const s = currentSelection();
+      const total = s.price;
+      const oldTotal = s.oldPrice;
       const disc = Math.round((1 - p.price / p.oldPrice) * 100);
       document.getElementById('pPriceEl').textContent = '\u20b9' + total;
       document.getElementById('pOldPriceEl').textContent = '\u20b9' + oldTotal;
@@ -7588,7 +6975,7 @@
       'Rice Varieties': 1000,
       'Flour Varieties': 1000,
       'Dried Flowers': 1,
-      'Beverages': 1,
+      'Beverages': 1000,
       'Other Products': 250,
     };
     function getVariantMultiplier(v, category) {
@@ -7604,36 +6991,25 @@
       return grams / base;
     }
 
-    function updatePriceFromVariant(v, category) {
-      if (!currentProduct) return;
+    function updatePriceFromVariant() { updatePriceDisplay(); }
+
+    function cartItemFromSelection() {
       const p = currentProduct;
-      const cat = category || p.category;
-      const disc = Math.round((1 - p.price / p.oldPrice) * 100);
-      const m = getVariantMultiplier(v, cat);
-      const total = Math.round(p.price * m);
-      const oldTotal = Math.round(p.oldPrice * m);
-      document.getElementById('pPriceEl').textContent = '\u20b9' + total;
-      document.getElementById('pOldPriceEl').textContent = '\u20b9' + oldTotal;
-      document.getElementById('pDiscEl').textContent = disc + '% OFF';
-      document.getElementById('pSavingEl').textContent = '\ud83c\udf89 You save \u20b9' + (oldTotal - total) + ' on this order!';
+      const s = currentSelection();
+      const selectedVariant = (document.querySelector('#variantBtns .selected') || {}).textContent || (p.variants || [''])[0];
+      return { id: p.id, name: p.name, price: s.price, basePrice: s.basePrice, oldPrice: s.oldPrice, image: p.image, qty: s.qty, qtyLabel: s.label, qtyVal: s.qtyVal, unit: s.unit, selectedVariant };
     }
 
     /* --- ADD TO CART --- */
     function addToCartFn() {
       const p = currentProduct;
-      const cfg = getQtyCfg(p.category);
-      const qtyVal = currentQtyVal !== null ? currentQtyVal : cfg.options[0];
-      const unit = cfg.unit;
-      const totalPrice = calcTotalPrice(p.price, qtyVal, unit);
-      const label = fmtQtyLbl(qtyVal, unit);
-      const selectedVariant = (document.querySelector('#variantBtns .selected') || {}).textContent || (p.variants || [''])[0];
-      const qty = p.category === 'Dried Flowers' ? flowerQty : itemQty;
-      const cartItem = { id: p.id, name: p.name, price: totalPrice, basePrice: p.price, oldPrice: p.oldPrice, image: p.image, qty, qtyLabel: label, qtyVal, unit, selectedVariant };
+      const cartItem = cartItemFromSelection();
+      const label = cartItem.qtyLabel;
       const existing = JSON.parse(localStorage.getItem('cart') || '[]');
-      const idx = existing.findIndex(i => String(i.id) === String(p.id));
-      if (idx > -1) { existing[idx].qty += qty; } else { existing.push(cartItem); }
+      // same product in the same size -> one line; a different size gets its own line
+      const idx = existing.findIndex(i => String(i.id) === String(p.id) && (i.qtyLabel || '') === label);
+      if (idx > -1) { existing[idx].qty += cartItem.qty; } else { existing.push(cartItem); }
       localStorage.setItem('cart', JSON.stringify(existing));
-      Cart.add(cartItem, 0).catch(() => { });
       updateCounters();
       showToast('[[icon:shopping-cart]] ' + p.name + ' (' + label + ') added!');
       // Bounce animation on ATC button
@@ -7652,19 +7028,12 @@
 
     /* --- BUY NOW --- */
     function buyNow() {
-      const p = currentProduct;
-      const cfg = getQtyCfg(p.category);
-      const qtyVal = currentQtyVal !== null ? currentQtyVal : cfg.options[0];
-      const unit = cfg.unit;
-      const totalPrice = calcTotalPrice(p.price, qtyVal, unit);
-      const label = fmtQtyLbl(qtyVal, unit);
-      const selectedVariant = (document.querySelector('#variantBtns .selected') || {}).textContent || (p.variants || [''])[0];
-      const qty = p.category === 'Dried Flowers' ? flowerQty : itemQty;
-      const cartItem = {
-        id: p.id, name: p.name, price: totalPrice, oldPrice: p.oldPrice,
-        image: p.image, qty, qtyLabel: label, qtyVal, unit, basePrice: p.price, selectedVariant
-      };
-      localStorage.setItem('cart', JSON.stringify([cartItem]));
+      // Buy Now adds this item to the cart (keeping anything already in it) and goes to checkout
+      const cartItem = cartItemFromSelection();
+      const existing = JSON.parse(localStorage.getItem('cart') || '[]');
+      const idx = existing.findIndex(i => String(i.id) === String(cartItem.id) && (i.qtyLabel || '') === cartItem.qtyLabel);
+      if (idx > -1) { existing[idx].qty = cartItem.qty; } else { existing.push(cartItem); }
+      localStorage.setItem('cart', JSON.stringify(existing));
       window.location.href = 'checkoutmyorderpage.html';
     }
 
@@ -7793,7 +7162,7 @@
             <path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/>
           </svg>
         </button>
-        <img class="rel-img" src="${p.image}" alt="${p.name}" loading="lazy"/>
+        <img class="rel-img" src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy"/>
       </div>
       <div class="rel-body">
         <div class="rel-cat">${p.category}</div>
@@ -8092,9 +7461,7 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBlogModal(); });
 
     /* --- STARS --- */
-    function renderStars(r) {
-      return [1, 2, 3, 4, 5].map(i => i <= Math.floor(r) ? '★' : i - r < 1 ? '★' : '☆').join('');
-    }
+    /* stars: window.renderStars (top of the page) draws whole and half stars */
 
     /* --- WRITE REVIEW --- */
     let selectedStar = 0;
@@ -8106,51 +7473,95 @@
         const res = await fetch(base + '/reviews/product/' + productId);
         const data = await res.json();
         if (!data.success) return;
-        const rating = data.rating || 0;
-        const count = data.numReviews || 0;
-        document.getElementById('revScoreEl').textContent = count > 0 ? Number(rating).toFixed(1) : '\u2014';
-        document.getElementById('revStarsEl').innerHTML = count > 0 ? renderStars(rating) : '';
-        document.getElementById('revCntEl').textContent = count > 0 ? count + ' rating' + (count !== 1 ? 's' : '') : 'New';
-        document.getElementById('pStarsEl').innerHTML = renderStars(rating);
-        document.getElementById('pRatingEl').textContent = count > 0 ? Number(rating).toFixed(1) : '';
-        document.getElementById('pReviewsEl').textContent = count > 0 ? count + ' review' + (count !== 1 ? 's' : '') : 'New';
-        const reviews = data.data || [];
-        const counts = [0,0,0,0,0];
-        reviews.forEach(r => { if (r.rating >= 1 && r.rating <= 5) counts[r.rating-1]++; });
-        const total = reviews.length || 1;
-        const bars = [5,4,3,2,1].map(star => ({ label: star + '\u2605', pct: Math.round((counts[star-1]/total)*100) }));
-        document.getElementById('barRows').innerHTML = bars.map(b =>
-          '<div class="rev-bar-row"><span class="rev-bar-label">' + b.label + '</span><div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:0%" data-pct="' + b.pct + '"></div></div><span class="rev-bar-pct">' + b.pct + '</span></div>'
-        ).join('');
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          document.querySelectorAll('.rev-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+        const reviews = (data.data || []).map(r => ({
+          name: r.name || 'Customer', rating: r.rating, title: r.title || '', text: r.comment || '',
+          createdAt: r.createdAt, edited: !!r.editedAt, verified: !!r.isVerifiedPurchase, reply: r.reply || null
         }));
-        const listEl = document.getElementById('reviewsList');
-        if (!reviews.length) {
-          listEl.innerHTML = '';
-        } else {
-          const LIMIT = 5;
-          listEl.innerHTML = reviews.slice(0, LIMIT).map(r => {
-            const name = (r.user && (r.user.name || r.user.firstName)) || 'Customer';
-            const date = new Date(r.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-            return '<div class="rev-card"><div class="rev-card-head"><div class="rev-avatar">' + name[0].toUpperCase() + '</div><div class="rev-meta"><div class="rev-name">' + name + '</div><div class="rev-stars-row">' + renderStars(r.rating) + '</div></div><span class="rev-date">' + date + '</span></div>' +
-              (r.title ? '<p style="font-size:.82rem;font-weight:700;color:var(--forest-deep);margin-bottom:.35rem;">' + r.title + '</p>' : '') +
-              '<p class="rev-text">' + r.comment + '</p>' +
-              (r.isVerifiedPurchase ? '<span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>' : '') +
-              '</div>';
-          }).join('');
-          if (reviews.length > LIMIT) {
-            const remaining = reviews.length - LIMIT;
-            const wrap = document.createElement('div');
-            wrap.id = 'revViewMoreWrap';
-            wrap.style.cssText = 'grid-column:1/-1;display:flex;justify-content:center;margin-top:.5rem;';
-            wrap.innerHTML = '<button onclick="expandReviews()" style="display:flex;align-items:center;gap:.5rem;padding:.65rem 1.75rem;border-radius:30px;border:1.5px solid rgba(26,58,42,.18);background:#fff;color:var(--forest-mid);font-size:.78rem;font-weight:700;cursor:pointer;font-family:\'Inter\',sans-serif;transition:all .2s;" onmouseover="this.style.background=\'var(--forest)\';this.style.color=\'#fff\'" onmouseout="this.style.background=\'#fff\';this.style.color=\'var(--forest-mid)\'">View ' + remaining + ' More Review' + (remaining > 1 ? 's' : '') + '</button>';
-            listEl.appendChild(wrap);
-          }
-        }
-        if (currentProduct) currentProduct.reviewData = reviews.map(r => ({ name: (r.user && (r.user.name || r.user.firstName)) || 'Customer', rating: r.rating, text: r.comment, date: new Date(r.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }), verified: r.isVerifiedPurchase }));
-      } catch(e) { /* silently keep static data */ }
+        if (currentProduct) { currentProduct.reviewData = reviews; currentProduct.rating = data.rating || 0; currentProduct.reviews = data.numReviews || 0; }
+        renderReviewSection(reviews, { rating: data.rating || 0, count: data.numReviews || 0, histogram: data.histogram });
+        const count = data.numReviews || 0;
+        document.getElementById('pStarsEl').innerHTML = count > 0 ? renderStars(data.rating) : '';
+        document.getElementById('pRatingEl').textContent = count > 0 ? Number(data.rating).toFixed(1) : '';
+        document.getElementById('pReviewsEl').textContent = count > 0 ? count + ' review' + (count !== 1 ? 's' : '') : 'New';
+      } catch (e) { /* keep the empty state */ }
     }
+
+    /* --- REVIEW DISPLAY ---
+       Shows only reviews from the API. Bars filter the list (shown once there are more than 5 reviews),
+       newest first by default, store replies under the review. All customer text is escaped. */
+    const REV_PAGE = 6;
+    let _rev = { all: [], star: 0, sort: 'recent', shown: REV_PAGE };
+    function escHTML(v) {
+      return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function revDate(r) {
+      if (r.createdAt) { const d = new Date(r.createdAt); if (!isNaN(d)) return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); }
+      return r.date || '';
+    }
+    function revCardHTML(r) {
+      const name = escHTML(r.name || 'Customer');
+      return '<div class="rev-card">' +
+        '<div class="rev-card-head"><div class="rev-avatar">' + escHTML((r.name || 'C').trim()[0] || 'C').toUpperCase() + '</div>' +
+        '<div class="rev-meta"><div class="rev-name">' + name + '</div><div class="rev-stars-row">' + renderStars(r.rating) + '</div></div>' +
+        '<span class="rev-date">' + escHTML(revDate(r)) + (r.edited ? ' <span class="rev-edited">(edited)</span>' : '') + '</span></div>' +
+        (r.title ? '<p style="font-size:.84rem;font-weight:700;color:var(--forest-deep);margin-bottom:.3rem;">' + escHTML(r.title) + '</p>' : '') +
+        '<p class="rev-text">' + escHTML(r.text) + '</p>' +
+        (r.verified ? '<span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified purchase</span>' : '') +
+        (r.reply && r.reply.text ? '<div class="rev-reply"><b>Reply from Nansei Organics</b>' + escHTML(r.reply.text) + '</div>' : '') +
+        '</div>';
+    }
+    function renderReviewSection(reviews, summary) {
+      _rev = { all: Array.isArray(reviews) ? reviews : [], star: 0, sort: _rev.sort || 'recent', shown: REV_PAGE };
+      const count = _rev.all.length;
+      const avg = count ? _rev.all.reduce((t, r) => t + (Number(r.rating) || 0), 0) / count : 0;
+      document.getElementById('revScoreEl').textContent = count ? avg.toFixed(1) : '\u2014';
+      document.getElementById('revStarsEl').innerHTML = count ? renderStars(avg) : '';
+      document.getElementById('revCntEl').textContent = count ? count + ' review' + (count !== 1 ? 's' : '') : 'No reviews yet';
+      const note = document.getElementById('revVerifiedNote');
+      if (note) note.style.display = count && _rev.all.every(r => r.verified) ? 'block' : 'none';
+      // star distribution: only meaningful once there are a few reviews
+      const hist = [0, 0, 0, 0, 0];
+      _rev.all.forEach(r => { const k = Math.round(Number(r.rating) || 0); if (k >= 1 && k <= 5) hist[k - 1]++; });
+      const bars = document.getElementById('barRows'), div = document.getElementById('revDivider');
+      const showBars = count > 5;
+      bars.style.display = showBars ? '' : 'none';
+      if (div) div.style.display = showBars ? '' : 'none';
+      bars.innerHTML = showBars ? [5, 4, 3, 2, 1].map(st => {
+        const n = hist[st - 1], pct = Math.round(n / count * 100);
+        return '<button type="button" class="rev-bar-row" aria-pressed="false" data-star="' + st + '" onclick="filterReviews(' + st + ')" title="Show ' + st + '-star reviews">' +
+          '<span class="rev-bar-label">' + st + '\u2605</span>' +
+          '<div class="rev-bar-track"><div class="rev-bar-fill bar-fill" style="width:' + pct + '%"></div></div>' +
+          '<span class="rev-bar-pct">' + n + '</span></button>';
+      }).join('') : '';
+      document.getElementById('noReviewsMsg').style.display = count ? 'none' : 'block';
+      drawReviewList();
+    }
+    function drawReviewList() {
+      let list = _rev.all.slice();
+      if (_rev.star) list = list.filter(r => Math.round(Number(r.rating) || 0) === _rev.star);
+      const t = r => new Date(r.createdAt || 0).getTime() || 0;
+      if (_rev.sort === 'recent') list.sort((a, b) => t(b) - t(a));
+      else if (_rev.sort === 'high') list.sort((a, b) => b.rating - a.rating || t(b) - t(a));
+      else if (_rev.sort === 'low') list.sort((a, b) => a.rating - b.rating || t(b) - t(a));
+      const tb = document.getElementById('revToolbar');
+      if (_rev.all.length > 1) {
+        tb.style.display = 'flex';
+        tb.innerHTML = '<span>' + (_rev.star ? 'Showing ' + list.length + ' of ' + _rev.all.length + ' reviews with ' + _rev.star + ' stars \u00b7 <button type="button" onclick="filterReviews(0)">Show all</button>' : 'Showing ' + Math.min(list.length, _rev.shown) + ' of ' + _rev.all.length + ' reviews') + '</span>' +
+          '<label>Sort by <select onchange="sortReviews(this.value)">' +
+          [['recent', 'Most recent'], ['high', 'Highest rated'], ['low', 'Lowest rated']].map(o => '<option value="' + o[0] + '"' + (o[0] === _rev.sort ? ' selected' : '') + '>' + o[1] + '</option>').join('') +
+          '</select></label>';
+      } else { tb.style.display = 'none'; tb.innerHTML = ''; }
+      document.querySelectorAll('#barRows .rev-bar-row').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.star === _rev.star)));
+      const listEl = document.getElementById('reviewsList');
+      listEl.innerHTML = list.slice(0, _rev.shown).map(revCardHTML).join('');
+      if (list.length > _rev.shown) {
+        const more = list.length - _rev.shown;
+        listEl.insertAdjacentHTML('beforeend', '<div id="revViewMoreWrap" style="grid-column:1/-1;display:flex;justify-content:center;margin-top:.5rem;">' +
+          '<button type="button" onclick="expandReviews()" style="padding:.6rem 1.5rem;border-radius:30px;border:1.5px solid rgba(26,58,42,.18);background:#fff;color:var(--forest-deep);font-weight:700;font-size:.8rem;cursor:pointer;">Show ' + Math.min(more, REV_PAGE) + ' more</button></div>');
+      }
+    }
+    function filterReviews(star) { _rev.star = _rev.star === star ? 0 : star; _rev.shown = REV_PAGE; drawReviewList(); }
+    function sortReviews(v) { _rev.sort = v; _rev.shown = REV_PAGE; drawReviewList(); }
 
     function initReviewForm() {
       const user = (function () { try { return JSON.parse(localStorage.getItem('nansai_user') || 'null'); } catch { return null; } })();
@@ -8178,7 +7589,7 @@
               }
               _revOrderId = deliveredOrder._id;
               form.style.display = 'block';
-              document.getElementById('revFormUserName').textContent = 'Posting as ' + (user.name || 'You');
+              document.getElementById('revFormUserName').textContent = 'Shown as ' + (function (n) { const w = String(n || '').trim().split(/\s+/).filter(Boolean); return w.length > 1 ? w[0] + ' ' + w[w.length - 1][0].toUpperCase() + '.' : (w[0] || 'Customer'); })(user.name);
               document.querySelectorAll('#starPicker span').forEach(s => {
                 s.addEventListener('mouseover', () => highlightStars(+s.dataset.star));
                 s.addEventListener('mouseout', () => highlightStars(selectedStar));
@@ -8222,26 +7633,7 @@
     }
 
     /* --- EXPAND REVIEWS --- */
-    function expandReviews() {
-      const p = currentProduct;
-      if (!p) return;
-      const listEl = document.getElementById('reviewsList');
-      const wrap = document.getElementById('revViewMoreWrap');
-      if (wrap) wrap.remove();
-      const shown = listEl.querySelectorAll('.rev-card').length;
-      const remaining = (p.reviewData || []).slice(shown);
-      remaining.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'rev-card';
-        div.style.opacity = '0';
-        div.style.transform = 'translateY(16px)';
-        div.style.transition = 'opacity .35s ease, transform .35s ease';
-        div.innerHTML = `<div class="rev-card-head"><div class="rev-avatar">${r.name[0]}</div><div class="rev-meta"><div class="rev-name">${r.name}</div><div class="rev-stars-row">${renderStars(r.rating)}</div></div><span class="rev-date">${r.date}</span></div><p class="rev-text">${r.text}</p>${r.verified ? '<span class="rev-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Purchase</span>' : ''}`;
-        listEl.appendChild(div);
-        window.nansaiApplyIcons?.(div);
-        requestAnimationFrame(() => requestAnimationFrame(() => { div.style.opacity = '1'; div.style.transform = 'translateY(0)'; }));
-      });
-    }
+    function expandReviews() { _rev.shown += REV_PAGE; drawReviewList(); }
 
     /* --- INIT --- */
     document.addEventListener('DOMContentLoaded', () => {
@@ -8251,7 +7643,7 @@
       const label = document.getElementById('accountLabel');
       const dropdown = document.getElementById('accountDropdown');
 
-      if (user && token) {
+      if (user && token && link && label) { // the old product-page nav; the shared header shows the name now
         const firstName = (user.name || 'User').split(' ')[0];
         label.textContent = 'Hi, ' + firstName;
         link.removeAttribute('href');

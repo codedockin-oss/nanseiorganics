@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Video Reels Component</title>
+  <meta name="robots" content="noindex" />
   <style>
     /* ─── Reset & Base ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -194,7 +195,7 @@
     @media (max-width: 480px) { .reel-arrows { display: none; } }
   </style>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.72.0/dist/umd/lucide.min.js"></script>
 <script>
 (function(){
   const markerRe = /\[\[icon:([a-z0-9-]+)\]\]/g;
@@ -361,7 +362,7 @@ function buildSlides(trackEl, dotsEl, onDotClick) {
     vid.src = v.src;
     vid.muted = true; vid.loop = true; vid.playsInline = true;
     vid.preload = 'none'; // lazy
-    if (i === 0) { vid.preload = 'auto'; vid.play(); }
+    if (i === 0) { vid.preload = 'auto'; vid.play().catch(()=>{}); }
 
     slide.appendChild(vid);
 
@@ -405,7 +406,7 @@ function goTo(index, trackEl, dotsEl) {
   nextSlide.classList.add('active');
   const vid = nextSlide.querySelector('video');
   vid.preload = 'auto';
-  vid.play();
+  vid.play().catch(()=>{});
 
   dots.forEach((d, i) => d.classList.toggle('active', i === current));
 }

@@ -150,6 +150,16 @@ test('login: wrong password and unknown e-mail get the same answer; empty and ma
   assert.equal((await call('POST', '/api/auth/login', { body: { email: { $gt: '' }, password: { $gt: '' } } })).status >= 400, true);   // NoSQL-injection style input
 });
 
+test('login: after 5 wrong passwords the account is locked, even with the right password, until it expires', async () => {
+  await call('POST', '/api/auth/register', { body: { firstName: 'Lock', lastName: 'Test', email: 'lock@example.com', password: 'Str0ng!pass' } });
+  for (let i = 0; i < 5; i++) assert.equal((await login('lock@example.com', 'wrong-pass-' + i)).status, 401);
+  const locked = await login('lock@example.com', 'Str0ng!pass');
+  assert.equal(locked.status, 429); assert.match(locked.body.message, /wait 15 minutes/);
+  users.find(u => u.email === 'lock@example.com').lockUntil = new Date(Date.now() - 1000);   // time passes
+  assert.equal((await login('lock@example.com', 'Str0ng!pass')).status, 200);
+  assert.equal(users.find(u => u.email === 'lock@example.com').loginAttempts, 0);
+});
+
 test('protected routes: no token, garbage, tampered and expired tokens are all refused', async () => {
   assert.equal((await call('GET', '/api/auth/me')).status, 401);
   assert.equal((await call('GET', '/api/auth/me', { token: 'abc.def.ghi' })).status, 401);

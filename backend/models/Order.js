@@ -22,6 +22,7 @@ const orderItemSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  sku: { type: String, trim: true },   // the pack size bought (product.sizes[].sku)
   selectedPrice: {
     type: Number,
     min: 0
@@ -74,6 +75,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
+  codFee: { type: Number, default: 0 },
   shippingPrice: {
     type: Number,
     required: true,
