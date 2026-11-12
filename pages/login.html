@@ -1,15 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="js/farm-loader.js?v=20261002" data-text="Opening the farm gate"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-
-
-
-<meta name="robots" content="noindex,nofollow"/>
-<meta name="theme-color" content="#0f2218"/>
 <title>Nansei Organics - Authentication</title>
 <script>
 (function () {
@@ -50,9 +43,9 @@ const Auth={
 };
 window.Auth=Auth;
 </script>
-
-
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -74,7 +67,7 @@ window.Auth=Auth;
 html{min-height:100%}
 body{
   min-height:100vh;
-  font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:"DM Sans",sans-serif;
   color:var(--ink);
   background:
     radial-gradient(circle at 12% 8%,rgba(143,188,154,.24),transparent 28%),
@@ -123,13 +116,9 @@ button,input{font:inherit}
 .brand-logo{
   position:relative;
   z-index:1;
-  width:104px;
+  width:132px;
   height:auto;
-  box-sizing:content-box;
-  padding:12px 18px;
-  background:rgba(253,250,245,.96);
-  border-radius:16px;
-  box-shadow:0 12px 32px rgba(0,0,0,.25);
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.18));
 }
 .brand-copy{position:relative;z-index:1;max-width:470px}
 .eyebrow{
@@ -145,7 +134,7 @@ button,input{font:inherit}
 }
 .eyebrow::before{content:"";width:34px;height:1px;background:var(--gold)}
 h1{
-  font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:"Cormorant Garamond",serif;
   font-size:clamp(2.45rem,5vw,4.9rem);
   line-height:.94;
   font-weight:700;
@@ -213,7 +202,7 @@ h1{
 .panel.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .panel h2{
-  font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:"Cormorant Garamond",serif;
   font-size:2.1rem;
   line-height:1;
   color:var(--forest);
@@ -391,7 +380,6 @@ input.invalid{
   input,.submit{min-height:47px}
 }
 </style>
-<link rel="icon" type="image/svg+xml" href="nansei_org_logo.svg"/>
 </head>
 <body>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -441,7 +429,7 @@ input.invalid{
           <div class="error" id="loginPasswordError"></div>
         </div>
 
-        <a class="forgot" href="login.html" onclick="forgotPassword(event)">Forgot Password</a>
+        <a class="forgot" href="#" onclick="forgotPassword(event)">Forgot Password</a>
         <button class="submit" id="loginButton" type="submit">Login</button>
 
         <p class="switch">Don't have an account? <button type="button" onclick="switchTab('register')">Create one</button></p>
@@ -507,13 +495,7 @@ input.invalid{
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 let toastTimer;
 
-/* where to go after signing in: ?next=checkout.html (only plain page names on this site are accepted) */
-const NEXT = (function () {
-  const n = new URLSearchParams(location.search).get('next') || '';
-  return /^(?!login|reset-password|admin)[a-z0-9-]+\.html(\?[a-z0-9=&_-]*)?$/i.test(n) ? n : 'index.html';
-})();
-
-Auth.redirectIfAuthenticated(NEXT);
+Auth.redirectIfAuthenticated('index.html');
 
 function showToast(message, isError) {
   const toast = document.getElementById('toast');
@@ -605,7 +587,6 @@ function updateStrength() {
   text.textContent = labels[score] || 'Weak';
 }
 
-
 document.getElementById('loginPanel').addEventListener('submit', async (event) => {
   event.preventDefault();
   clearAllErrors();
@@ -616,7 +597,7 @@ document.getElementById('loginPanel').addEventListener('submit', async (event) =
     const password = document.getElementById('loginPassword').value;
     const data = await Auth.login(email, password);
     showToast('Login successful');
-    const target = data.user?.role === 'admin' ? 'admin-panel.html' : NEXT;
+    const target = data.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
     setTimeout(() => window.location.replace(target), 650);
   } catch (error) {
     showToast(error.message || 'Login failed', true);
@@ -637,7 +618,7 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
     const password  = document.getElementById('registerPassword').value;
     const regData = await Auth.register(firstName, lastName, email, password);
     showToast('Account created successfully');
-    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : NEXT;
+    const regTarget = regData.user?.role === 'admin' ? 'admin-panel.html' : 'index.html';
     setTimeout(() => window.location.replace(regTarget), 650);
   } catch (error) {
     showToast(error.message || 'Registration failed', true);
@@ -646,7 +627,7 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
   }
 });
 
-async function forgotPassword(event) {
+function forgotPassword(event) {
   event.preventDefault();
   const email = document.getElementById('loginEmail').value.trim();
   setFieldError('loginEmail', 'loginEmailError', '');
@@ -654,12 +635,7 @@ async function forgotPassword(event) {
     setFieldError('loginEmail', 'loginEmailError', 'Enter your email first');
     return;
   }
-  try {
-    await Auth.forgotPassword(email);
-    showToast('If an account exists for ' + email + ', a password reset link is on its way.');
-  } catch (error) {
-    showToast(error.message || 'Could not send the reset link. Please try again.', true);
-  }
+  showToast('Forgot Password placeholder - reset email flow is ready for backend email delivery');
 }
 
 document.getElementById('registerPassword').addEventListener('input', updateStrength);

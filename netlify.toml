@@ -1,5 +1,163 @@
-# The storefront is the pages/ folder: it holds the html, css/, js/ and images/ and is the only thing Netlify publishes.
-# (backend/, tests/ and the source art are therefore never reachable from the internet.)
-# Redirects (incl. the /api proxy to the Render backend) live in pages/_redirects, headers in pages/_headers.
 [build]
-  publish = "pages"
+  publish = "."
+
+# ── Never serve server code or test files (the whole repo is published) ──────
+[[redirects]]
+  from = "/backend/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tests/*"
+  to = "/404"
+  status = 404
+  force = true
+
+# ── Static asset rules (must come BEFORE catch-all) ──────────────────────────
+# Serve JS files directly — never redirect them to index.html
+[[redirects]]
+  from = "/js/*"
+  to = "/js/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/frontend/js/*"
+  to = "/frontend/js/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/frontend/*"
+  to = "/frontend/:splat"
+  status = 200
+
+# ── Page routes ───────────────────────────────────────────────────────────────
+[[redirects]]
+  from = "/"
+  to = "/pages/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/pages/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/account"
+  to = "/pages/account.html"
+  status = 200
+
+[[redirects]]
+  from = "/product"
+  to = "/pages/product.html"
+  status = 200
+
+[[redirects]]
+  from = "/product.html"
+  to = "/pages/product.html"
+  status = 200
+
+[[redirects]]
+  from = "/wishlist"
+  to = "/pages/wishlist.html"
+  status = 200
+
+[[redirects]]
+  from = "/orders"
+  to = "/pages/checkoutmyorderpage.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog"
+  to = "/pages/blog.html"
+  status = 200
+
+[[redirects]]
+  from = "/news"
+  to = "/pages/news.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/pages/admin-panel.html"
+  status = 200
+
+[[redirects]]
+  from = "/refund-policy"
+  to = "/pages/refund-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/refund-policy.html"
+  to = "/pages/refund-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/pages/privacy-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy-policy.html"
+  to = "/pages/privacy-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms-and-conditions"
+  to = "/pages/terms-and-conditions.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms-and-conditions.html"
+  to = "/pages/terms-and-conditions.html"
+  status = 200
+
+[[redirects]]
+  from = "/pages/*"
+  to = "/pages/:splat"
+  status = 200
+
+# ── API proxy ─────────────────────────────────────────────────────────────────
+[[redirects]]
+  from = "/api/*"
+  to = "https://nansei-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# ── SPA fallback — MUST be last, MUST be status 200 ──────────────────────────
+# status=200 means: only fires when the file does NOT exist on disk
+[[redirects]]
+  from = "/*"
+  to = "/pages/index.html"
+  status = 200
+
+# ── Security headers ──────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Explicit MIME types for JS — prevents text/html being served for JS files
+[[headers]]
+  for = "/js/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/frontend/js/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/pages/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"

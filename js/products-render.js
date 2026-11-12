@@ -123,10 +123,10 @@ function sectionHTML(key, list) {
           <span style="font-size:.85rem;">${m.icon}</span>
           <span style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${m.accent};">${m.label}</span>
         </div>
-        <h2 style="font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:#1a2416;">${m.label}</h2>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:#1a2416;">${m.label}</h2>
         <p style="color:#7a9980;font-size:.8rem;margin-top:2px;">${m.sub}</p>
       </div>
-      <button onclick="filterProdsScroll('${key}')" style="font-size:.75rem;font-weight:700;color:${m.accent};border:1.5px solid ${m.accent}33;padding:6px 18px;border-radius:30px;background:transparent;cursor:pointer;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;white-space:nowrap;flex-shrink:0;transition:all .2s;" onmouseover="this.style.background='${m.accent}11'" onmouseout="this.style.background='transparent'">
+      <button onclick="filterProdsScroll('${key}')" style="font-size:.75rem;font-weight:700;color:${m.accent};border:1.5px solid ${m.accent}33;padding:6px 18px;border-radius:30px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:all .2s;" onmouseover="this.style.background='${m.accent}11'" onmouseout="this.style.background='transparent'">
         View All (${list.length}) &#8250;
       </button>
     </div>
@@ -138,7 +138,7 @@ function sectionHTML(key, list) {
       ${rest.map((p, i) => prodCardHTML(p, i + 5)).join('')}
     </div>
     <div class="text-center mt-4" id="expand-btn-wrap-${key}">
-      <button onclick="expandSection('${key}')" style="font-size:.8rem;font-weight:700;color:${m.accent};border:1.5px solid ${m.accent}33;padding:8px 28px;border-radius:30px;background:${m.accent}08;cursor:pointer;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;transition:all .2s;">
+      <button onclick="expandSection('${key}')" style="font-size:.8rem;font-weight:700;color:${m.accent};border:1.5px solid ${m.accent}33;padding:8px 28px;border-radius:30px;background:${m.accent}08;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;">
         Show ${rest.length} more &#8595;
       </button>
     </div>` : ''}
@@ -225,10 +225,10 @@ function renderMobProducts(list) {
           <span style="font-size:.5rem;font-weight:700;background:#fef3c7;color:#92400e;padding:1px 4px;border-radius:8px;">${d}% off</span>
         </div>
         <div style="display:flex;align-items:center;gap:4px;margin-top:3px;">
-          <select id="qty-${p.id}" onclick="event.stopPropagation()" onchange="event.stopPropagation()" style="height:24px;border:1px solid #d1d5db;border-radius:6px;font-size:.6rem;font-weight:700;color:#374151;background:#f3f4f6;padding:0 3px;outline:none;cursor:pointer;max-width:80px;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+          <select id="qty-${p.id}" onclick="event.stopPropagation()" onchange="event.stopPropagation()" style="height:24px;border:1px solid #d1d5db;border-radius:6px;font-size:.6rem;font-weight:700;color:#374151;background:#f3f4f6;padding:0 3px;outline:none;cursor:pointer;max-width:80px;font-family:'DM Sans',sans-serif;">
             ${qtyOptionsHTML(p.category, p)}
           </select>
-          <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id})" class="cart-btn" style="flex:1;background:#166534;color:#fff;font-size:.6rem;font-weight:700;padding:5px;border-radius:6px;border:none;cursor:pointer;font-family:'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;display:flex;align-items:center;justify-content:center;gap:2px;">
+          <button id="cartbtn-${p.id}" onclick="addToCartWithQty(${p.id})" class="cart-btn" style="flex:1;background:#166534;color:#fff;font-size:.6rem;font-weight:700;padding:5px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:2px;">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
             <span>Add</span>
           </button>

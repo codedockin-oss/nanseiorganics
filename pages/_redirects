@@ -1,32 +1,9 @@
-# ── API proxy: the browser talks to /api on this domain, Netlify forwards it to the Render backend ──
-/api/*  https://nanseiorganics.onrender.com/api/:splat  200!
-
-# ── Old links that still carry the /pages/ prefix (emails, bookmarks, sitemap) ──
-/pages        /          301
-/pages/       /          301
-/pages/*      /:splat    301
-
-# ── Friendly URLs ──
-/account       /orders.html  200
-/orders        /orders.html                200
-/admin         /admin-panel.html           200
-/product       /product.html               200
-/login         /login.html                 200
-/wishlist      /wishlist.html              200
-/checkout      /checkout.html              200
-/blog          /blog.html                  200
-/shop          /shop.html                  200
-/about         /about.html                 200
-/faq           /faq.html                   200
-/contact       /contact.html               200
-/shipping      /shipping.html              200
-/bulk-orders   /bulk-orders.html           200
-/track-order   /track-order.html           200
-/our-grains    /our-grains.html            200
-/refund-policy /refund-policy.html         200
-/privacy-policy /privacy-policy.html       200
-/terms-and-conditions /terms-and-conditions.html 200
-/reset-password /reset-password.html       200
-
-# ── Anything else is a real 404 ──
-/*  /404.html  404
+/pages/product.html /pages/product.html 200
+/pages/index.html /pages/index.html 200
+/pages/login.html /pages/login.html 200
+/pages/account.html /pages/account.html 200
+/pages/wishlist.html /pages/wishlist.html 200
+/pages/checkoutmyorderpage.html /pages/checkoutmyorderpage.html 200
+/pages/blog.html /pages/blog.html 200
+/pages/news.html /pages/news.html 200
+/pages/admin-panel.html /pages/admin-panel.html 200
