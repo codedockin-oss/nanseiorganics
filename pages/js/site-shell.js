@@ -1,7 +1,7 @@
 /*
  * Shared header, mobile menu, mobile bottom bar and footer for every storefront page.
- * Use:  <script src="../js/site-shell.js" data-part="header"></script>   (top of <body>)
- *       <script src="../js/site-shell.js" data-part="footer"></script>   (end of <body>)
+ * Use:  <script src="js/site-shell.js" data-part="header"></script>   (top of <body>, path relative to the page)
+ *       <script src="js/site-shell.js" data-part="footer"></script>   (end of <body>)
  * Optional on the header tag: data-bottom-bar="off" for pages that already have their own sticky bar.
  *
  * It keeps the element ids the pages already use (searchInput, cartCount, wishlistCount, mobDrawer, ...)

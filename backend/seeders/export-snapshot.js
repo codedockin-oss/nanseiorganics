@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
     sizes: (p.sizes || []).filter(z => z.active !== false).map(z => ({ sku: z.sku, label: z.label, amount: z.amount, unit: z.unit, price: z.price, mrp: z.mrp, stock: z.stock == null ? null : z.stock })),
     countryOfOrigin: p.countryOfOrigin || 'India',
   }));
-  const dest = path.join(__dirname, '../../data/catalog.json');
+  const dest = path.join(__dirname, '../../pages/data/catalog.json');
   fs.writeFileSync(dest, JSON.stringify(out, null, 2) + '\n');
   console.log(`Wrote ${out.length} products to ${dest}. Publish the site to update the copy shoppers see first.`);
   await mongoose.disconnect();

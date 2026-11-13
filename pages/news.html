@@ -806,7 +806,7 @@ a .nansai-icon,
 <div id="toast"></div>
 
 <!-- ═══════════════ NAVBAR ═══════════════ -->
-<script src="../js/site-shell.js?v=20261112" data-part="header"></script>
+<script src="js/site-shell.js?v=20261113" data-part="header"></script>
 
 <!-- Mobile Drawer -->
 
@@ -930,7 +930,7 @@ a .nansai-icon,
 </div>
 
 <!-- ═══════════════ FOOTER ═══════════════ -->
-<script src="../js/site-shell.js?v=20261112" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261113" data-part="footer"></script>
 
 <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
 <script>
@@ -1153,7 +1153,7 @@ let filteredNews = [...allNews];
     renderSidebar();
   } catch(e) { /* no news yet */ }
   document.getElementById('tickerBar').style.display = 'none';
-  newsEmptyNote();
+  if (typeof newsEmptyNote === 'function') newsEmptyNote();   // also called once the page has finished loading
 })();
 
 /* ════ CATEGORY META ════ */

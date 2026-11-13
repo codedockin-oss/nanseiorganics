@@ -75,7 +75,7 @@
 
   try { var cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (cached && cached.length) state.products = cached, state.source = 'saved'; } catch (e) { /* ignore */ }
 
-  var snapshot = fetch('../data/catalog.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : []; })
+  var snapshot = fetch('data/catalog.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : []; })
     .then(function (list) { return (list || []).map(fromSnapshot); }).catch(function () { return []; });
 
   api.ready = snapshot.then(function (snap) {

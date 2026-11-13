@@ -15,7 +15,8 @@ const PAGES = ['index', 'product.html?id=2', 'blog', 'news', 'wishlist', 'accoun
       await page.setViewport({ width, height: 900 });
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
-      const url = 'http://127.0.0.1:8093/pages/' + (p.includes('.html') ? p : p + '.html');
+      // PAGES_BASE: http://127.0.0.1:8093/pages/ (repo served from its root) or http://127.0.0.1:8094/ (pages/ as the root, like the live site)
+      const url = (process.env.PAGES_BASE || 'http://127.0.0.1:8093/pages/') + (p.includes('.html') ? p : p + '.html');
       await page.goto(url, { waitUntil: 'load' });
       await new Promise(r => setTimeout(r, 1200));
       const info = await page.evaluate(() => ({
