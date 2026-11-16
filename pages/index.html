@@ -1,14 +1,15 @@
-﻿﻿
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
   <script>/* ImageKit photos: ask for a copy about twice the size it is shown at, instead of the full upload */window.ikThumb=function(u,w){if(!u||u.indexOf('ik.imagekit.io')<0||/[?&]tr=/.test(u))return u||'';return u+(u.indexOf('?')<0?'?':'&')+'tr=w-'+w;};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nansai -Experience the Root of Nature</title>
+<title>Nansei Organics — Heritage Rice, Dried Flowers &amp; Flours from Our Farm</title>
   <meta name="description" content="Heritage rice such as Karunguruvai, Mappillai Samba, Karuppu Kavuni and Poongar, plus sun-dried flowers, flours and drinks, grown on our farm in Achankulam near Srivilliputhur, Tamil Nadu." />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
 <script src="js/config.js?v=20261113"></script>
+<script src="js/farm-reels.js?v=20261118" defer></script>
 <script src="js/auth.js?v=20261113"></script>
 <script src="js/api.js?v=20261113"></script>
 <script src="js/cart.js?v=20261113"></script>
@@ -662,10 +663,6 @@ video.slide-bg { transform:none!important; transition:none!important; }
   #site-footer .grid > div:first-child { grid-column: 1 / -1; }
   #site-footer .grid > div:last-child { grid-column: 1 / -1; }
 
-  /* -- REEL WIDGET � move up above sticky bar -- */
-  #reel-widget { bottom: 72px !important; right: 10px !important; width: 130px !important; }
-  #reel-tab { bottom: 72px !important; }
-  .mini-caption { font-size: 8.5px !important; padding: 5px 6px !important; }
 
   /* -- TOAST � above sticky bar -- */
   #toast { bottom: calc(64px + 14px) !important; font-size: .74rem !important; }
@@ -795,140 +792,6 @@ video.slide-bg { transform:none!important; transition:none!important; }
 </style>
 
 <style>
-/* ---------------------------------------
-   FLOATING REELS WIDGET
---------------------------------------- */
-#reel-widget {
-  position:fixed; bottom:24px; right:16px;
-  width:195px; border-radius:14px;
-  overflow:visible;
-  box-shadow:0 6px 24px rgba(10,30,15,.45);
-  background:#000; z-index:1050;
-  transition:transform .4s cubic-bezier(.4,0,.2,1);
-  cursor:grab;
-  user-select:none;
-}
-#reel-widget:active { cursor:grabbing; }
-.reel-track { border-radius:14px; overflow:hidden; }
-@media(max-width:768px){ #reel-widget{ width:175px; bottom:20px; right:14px; } }
-@media(max-width:480px){ #reel-widget{ width:155px; bottom:16px; right:12px; } }
-#reel-widget.minimized{ transform:translateX(calc(100% + 20px)); }
-.reel-track{ position:relative; width:100%; aspect-ratio:9/16; overflow:hidden; }
-.reel-slide{
-  position:absolute; inset:0;
-  transform:translateY(100%);
-  transition:transform .45s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-}
-.reel-slide.active{ transform:translateY(0); }
-.reel-slide.prev  { transform:translateY(-100%); }
-.reel-slide video { width:100%; height:100%; object-fit:cover; display:block; }
-.reel-dots{
-  position:absolute; right:6px; top:50%; transform:translateY(-50%);
-  display:flex; flex-direction:column; gap:5px; z-index:5;
-}
-.reel-dots span{
-  width:5px; height:5px; border-radius:50%;
-  background:rgba(255,255,255,.4); cursor:pointer;
-  transition:background .25s, transform .25s;
-}
-.reel-dots span.active{ background:#e8c97a; transform:scale(1.4); }
-.mini-caption{
-  padding:6px 8px;
-  background:linear-gradient(0deg,rgba(10,30,15,.85),transparent);
-  position:absolute; bottom:0; left:0; right:0;
-  color:#f7f3ec; font-size:9.5px; line-height:1.4;
-  pointer-events:none;
-}
-#reel-tab{
-  position:fixed; bottom:24px; right:-4px;
-  background:#fff; color:var(--forest-deep);
-  border-radius:50%;
-  width:26px; height:26px;
-  cursor:pointer;
-  z-index:1049;
-  display:none;
-  align-items:center; justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.5);
-  border:2px solid #fff;
-  transition:background .2s;
-}
-#reel-tab:hover{ background:#f0f0f0; }
-@media(max-width:480px){ #reel-tab{ bottom:16px; } }
-#btn-reel-minimize{
-  position:absolute; top:-10px; right:-10px;
-  background:#fff; border:2px solid #fff; color:var(--forest-deep);
-  border-radius:50%; width:26px; height:26px;
-  font-size:13px; cursor:pointer; z-index:20;
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.5);
-  transition:background .2s;
-  line-height:1;
-}
-#btn-reel-minimize:hover{ background:#f0f0f0; }
-/* Modal */
-#reel-modal{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0);
-  display:flex; align-items:center; justify-content:center;
-  z-index:2100; pointer-events:none;
-  transition:background .3s;
-}
-#reel-modal.open{ background:rgba(0,0,0,.78); pointer-events:all; }
-.reel-modal-box{
-  position:relative;
-  /* Size box to a 9/16 reel ratio, capped so it fits the screen */
-  height:min(92vh, calc(100vw * 16 / 9));
-  width:calc(min(92vh, calc(100vw * 16 / 9)) * 9 / 16);
-  max-width:95vw;
-  background:#000;
-  border-radius:20px; overflow:visible;
-  transform:scale(.9); opacity:0;
-  transition:transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
-  display:flex; flex-direction:column;
-}
-#reel-modal.open .reel-modal-box{ transform:scale(1); opacity:1; }
-.reel-modal-header{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:10px 14px;
-  background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);
-  position:absolute; top:0; left:0; right:0;
-  z-index:20; pointer-events:all;
-}
-.reel-modal-caption{ color:rgba(255,255,255,.9); font-size:12px; flex:1; line-height:1.4; }
-/* Close btn � floats top-right outside the frame */
-#btn-reel-close{
-  position:absolute; top:-13px; right:-13px;
-  background:#fff; border:none; color:#111;
-  font-size:13px; cursor:pointer;
-  width:28px; height:28px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.35);
-  transition:background .2s, transform .2s;
-  z-index:30;
-}
-#btn-reel-close:hover{ background:#f0f0f0; transform:scale(1.1); }
-/* Prev/Next arrows � outside frame, right side */
-.reel-modal-ext-btn{
-  position:absolute; right:-42px;
-  background:#fff; border:none; color:#111;
-  width:30px; height:30px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:13px; cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-  transition:background .2s, transform .2s;
-  z-index:30;
-}
-.reel-modal-ext-btn:hover{ background:#f0f0f0; transform:scale(1.1); }
-#modal-prev{ top:calc(50% - 36px); }
-#modal-next{ top:calc(50% + 6px); }
-@media(max-width:480px){ .reel-modal-ext-btn{ display:none; } }
-.reel-modal-track{
-  position:relative; width:100%; aspect-ratio:9/16;
-  overflow:hidden; border-radius:20px;
-}
-.reel-modal-arrows{ display:none; }
-
 /* ---------------------------------------
    SECTION PATTERNS
 --------------------------------------- */
@@ -1090,110 +953,183 @@ a .nansai-icon,
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
 </style>
+<style id="nx-home">
+/* filter pills: outline, forest when chosen */
+#filterTabs .filter-bar{gap:8px!important}
+#filterTabs .fpill{background:#fff!important;border:1.5px solid rgba(15,34,24,.16)!important;color:#1a2416!important;border-radius:999px!important;padding:9px 18px!important;font-weight:600!important;font-size:.82rem!important;box-shadow:none!important;transition:background .2s,color .2s,border-color .2s!important}
+#filterTabs .fpill:hover{border-color:#0f2218!important}
+#filterTabs .fpill.active{background:#0f2218!important;border-color:#0f2218!important;color:#f7f3ec!important}
+#filterTabs .fpill .nansai-icon,#filterTabs .fpill svg{display:none!important}
+/* eyebrows across sections: gold dash, one style */
+.gallery-eyebrow,.founder-premium-eyebrow{display:inline-flex!important;align-items:center!important;gap:12px!important;font-family:'Inter',sans-serif!important;font-size:.7rem!important;font-weight:700!important;letter-spacing:.2em!important;text-transform:uppercase!important;color:#b8922a!important}
+.gallery-eyebrow span:last-child,.founder-premium-eyebrow span:last-child{display:none!important}
+.gallery-eyebrow span:first-child,.founder-premium-eyebrow span:first-child{width:26px!important;height:2px!important;background:#c9a84c!important;border-radius:2px}
+/* the marked word, like muams */
+.gallery-title em,.founder-premium-title em,#why-section h2 em,#blog-section h2 em{font-style:normal!important;color:inherit!important;background:linear-gradient(transparent 62%,rgba(201,168,76,.42) 62%);padding:0 .08em}
+.gallery-title,.founder-premium-title{letter-spacing:-.01em}
+/* calmer section rhythm */
+#products{padding:4.5rem 0 4.5rem!important}
+#sr-prod-hdr .nx-title{font-size:clamp(2.3rem,5vw,3.5rem)}
+@media(max-width:700px){#products{padding:3rem 0!important}#filterTabs .filter-bar{flex-wrap:nowrap!important;overflow-x:auto!important;justify-content:flex-start!important;scrollbar-width:none;padding-bottom:4px}#filterTabs .fpill{flex:none}}
+</style>
+<style id="om-home">
+.om-wrap{max-width:1320px;margin:0 auto;padding:0 24px}
+.om-browse{background:#fff;padding:64px 0 40px}
+.om-cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:28px}
+.om-cat-tile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;text-decoration:none;color:#1a2416}
+.om-cat-img{width:100%;aspect-ratio:1;border-radius:22px;background:#eef3ee;display:grid;place-items:center;overflow:hidden;margin-bottom:10px;transition:transform .3s,box-shadow .3s}
+.om-cat-img img{width:82%;height:82%;object-fit:contain;transition:transform .4s}
+.om-cat-tile b{font-size:1rem;font-weight:700;color:#0f2218}
+.om-cat-tile small{font-size:.8rem;color:#6b7a6f}
+.om-cat-tile:hover .om-cat-img{box-shadow:0 14px 34px rgba(15,34,24,.12);transform:translateY(-4px)}
+.om-cat-tile:hover .om-cat-img img{transform:scale(1.06)}
+/* product rows */
+#products{background:#fff!important;background-image:none!important}
+.om-row{margin-bottom:3.2rem}
+.om-row-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+.om-kicker{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6b7a6f;margin:0 0 4px}
+.om-row-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:#0f2218;margin:0;line-height:1.1}
+.om-row-sub{font-size:.88rem;color:#6b7a6f;margin:6px 0 0}
+.om-viewall{background:none;border:0;color:#2d5a3d;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;padding:6px 0;border-bottom:2px solid #c9a84c}
+.om-rail{display:flex;gap:18px;overflow-x:auto;overflow-y:visible;padding:4px 2px 14px;scrollbar-width:none;flex:1;scroll-snap-type:x proximity}
+.om-rail::-webkit-scrollbar{display:none}
+.om-card{flex:0 0 232px;width:232px;background:#fff;border:1px solid rgba(15,34,24,.08);border-radius:18px;display:flex;flex-direction:column;cursor:pointer;position:relative;scroll-snap-align:start;transition:box-shadow .3s,transform .3s;overflow:hidden;animation:none!important}
+#productGrid .om-card{width:auto;flex:none}
+.om-card:hover{box-shadow:0 16px 40px rgba(15,34,24,.12);transform:translateY(-3px)}
+.om-img{position:relative;background:#eef3ee;aspect-ratio:1;display:grid;place-items:center;border-radius:0!important;overflow:hidden}
+.om-img .prod-img{width:86%;height:86%;object-fit:contain;transition:transform .45s}
+.om-card:hover .om-img .prod-img{transform:scale(1.05)}
+.om-tag{position:absolute;top:12px;left:12px;z-index:3;background:#2d5a3d;color:#fff;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:20px}
+.om-tag.om-new{background:#c9a84c;color:#0f2218}
+.om-wish{position:absolute;top:10px;right:10px;z-index:3;width:36px;height:36px;border-radius:50%;background:#fff;border:0;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(15,34,24,.12);transition:transform .2s}
+.om-wish:hover{transform:scale(1.1)}
+.om-info{padding:14px 14px 16px!important;display:flex;flex-direction:column;gap:4px;flex:1}
+.om-cat{font-size:.72rem;font-weight:600;color:#6b7a6f;text-transform:capitalize}
+.om-name{font-size:1rem;font-weight:700;color:#1a2416;line-height:1.3;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.om-rating{display:flex;align-items:center;gap:4px;font-size:.74rem;color:#9aa59d;min-height:1em}
+.om-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:4px 0 10px}
+.om-price [data-card-price]{font-size:1.15rem;font-weight:700;color:#0f2218}
+.om-price s{font-size:.82rem;color:#9aa59d}
+.om-save{font-size:.72rem;font-weight:700;color:#2d5a3d}
+.om-btn-area{margin-top:auto}
+.om-add{width:100%;height:42px;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;border:1.5px solid #0f2218;background:#fff;color:#0f2218;font-weight:700;font-size:.9rem;cursor:pointer;transition:background .2s,color .2s}
+.om-add:hover{background:#0f2218;color:#fff}
+.hscroll-wrap .scroll-btn{background:#fff!important;color:#0f2218!important;border:1px solid rgba(15,34,24,.12)!important;box-shadow:0 6px 18px rgba(15,34,24,.12)!important;animation:none!important}
+.hscroll-wrap .scroll-btn:hover{background:#0f2218!important;color:#fff!important}
+@media(max-width:900px){
+  .om-wrap{padding:0 16px}
+  .om-browse{padding:40px 0 24px}
+  .om-cat-grid{display:flex;overflow-x:auto;gap:12px;scrollbar-width:none;margin:20px -16px 0;padding:0 16px 6px}
+  .om-cat-grid::-webkit-scrollbar{display:none}
+  .om-cat-tile{flex:0 0 31%}
+  .om-cat-img{border-radius:18px}
+  .om-cat-tile b{font-size:.86rem}.om-cat-tile small{display:none}
+  .om-card{flex-basis:46vw;width:46vw;max-width:220px}
+  .om-rail{gap:12px}
+  .om-name{font-size:.9rem}
+  .om-row-title{font-size:1.5rem}
+  .om-add{height:38px;font-size:.84rem}
+  #productGrid{grid-template-columns:1fr 1fr!important;gap:12px!important}
+}
+</style>
+<style id="om-home-2">
+/* Organic Mandya card: white, thin border, square image, name, price, size + Add */
+.om-card{position:relative;flex:0 0 250px;width:250px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s;cursor:pointer;animation:none!important;transform:none}
+.om-card:hover{box-shadow:0 14px 36px rgba(15,34,24,.1);transform:translateY(-2px)}
+/* photos are square artwork: square box, photo fills it (old rules fixed the box at 240px/160px tall) */
+.om-card .om-img.prod-img-wrap{display:block;width:100%!important;height:auto!important;aspect-ratio:1/1!important;background:#fff;position:relative;overflow:hidden!important;border-radius:0!important;flex-shrink:0;transition:none}
+.om-card .om-img .prod-img{width:100%!important;height:100%!important;object-fit:cover!important;padding:0!important;border-radius:0!important;transition:transform .45s}
+.om-card:hover .om-img .prod-img{transform:scale(1.04)}
+.om-card .om-tag{position:absolute;top:10px;left:10px;z-index:2;background:#2d5a3d;color:#fff;font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px}
+.om-card .om-tag.om-new{background:#c9a84c;color:#0f2218}
+.om-card .om-wish{position:absolute;top:10px;right:10px;z-index:3;width:32px;height:32px;border-radius:50%;border:0;background:#f0f0f0;display:grid;place-items:center;cursor:pointer;box-shadow:none;transition:background .2s,transform .2s}
+.om-card .om-wish:hover{background:#e6ece7;transform:scale(1.08)}
+.om-card .om-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.om-card .om-name{font-size:15px;font-weight:700;line-height:1.35;color:#0f2218;text-decoration:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+.om-card .om-name:hover{color:#2d5a3d}
+.om-card .om-rating{display:flex;align-items:center;gap:4px;font-size:12px;color:#9aa59d;min-height:0}
+.om-card .om-rating:empty{display:none}
+.om-card .om-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:2px 0 4px}
+.om-card .om-price [data-card-price]{font-size:17px;font-weight:700;color:#0f2218}
+.om-card .om-price s{font-size:13px;color:#6b7268}
+.om-card .om-actions{display:flex;gap:8px;margin-top:auto}
+.om-card .om-size{flex:0 0 42%;min-width:0;height:44px;border:1px solid #e5e7eb;border-radius:12px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230f2218' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;padding:0 26px 0 10px;font-size:13.5px;font-weight:600;color:#1a1a1a;appearance:none;-webkit-appearance:none;cursor:pointer}
+.om-card .om-size:focus{outline:2px solid #2d5a3d;outline-offset:1px}
+.om-card .om-add{flex:1;height:44px;border:0;border-radius:12px;background:#0f2218;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
+.om-card .om-add:hover{background:#2d5a3d}
+.om-card .om-add.done{background:#c9a84c;color:#0f2218}
+#productGrid .om-card{width:auto}
+@media(max-width:900px){
+  .om-card{flex-basis:46vw;width:46vw;max-width:230px}
+  .om-card .om-body{padding:10px;gap:4px}
+  .om-card .om-name{font-size:13.5px}
+  .om-card .om-price [data-card-price]{font-size:15px}
+  .om-card .om-actions{flex-direction:column;gap:6px}
+  .om-card .om-size,.om-card .om-add{flex:none;width:100%;height:40px}
+}
+
+/* hand mill */
+#mill-heritage-section.hm{background:#f7f3ec;padding:90px 0}
+.hm-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center}
+.hm-media{position:relative;margin:0;border-radius:26px;overflow:hidden;aspect-ratio:5/4;box-shadow:0 30px 70px rgba(15,34,24,.18)}
+.hm-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.hm-media:hover img{transform:scale(1.04)}
+.hm-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,22,15,.65));pointer-events:none}
+.hm-media figcaption{position:absolute;top:18px;left:18px;z-index:2;background:rgba(255,255,255,.92);color:#0f2218;font-size:.8rem;padding:7px 13px;border-radius:30px}
+.hm-play{position:absolute;left:18px;bottom:18px;z-index:2;display:flex;align-items:center;gap:12px;border:0;background:rgba(15,34,24,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;padding:10px 18px 10px 10px;border-radius:40px;cursor:pointer;text-align:left;font-weight:700;font-size:.9rem;transition:background .2s}
+.hm-play:hover{background:#0f2218}
+.hm-play small{display:block;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#e8c97a}
+.hm-play-ic{width:44px;height:44px;border-radius:50%;background:#c9a84c;color:#0f2218;display:grid;place-items:center;flex-shrink:0;box-shadow:0 0 0 0 rgba(201,168,76,.5);animation:frfPulse 2.2s infinite}
+.hm-steps{list-style:none;margin:28px 0 30px;padding:0;display:grid;gap:4px}
+.hm-steps li{display:flex;gap:18px;padding:16px 0;border-top:1px solid rgba(15,34,24,.1)}
+.hm-steps li:last-child{border-bottom:1px solid rgba(15,34,24,.1)}
+.hm-steps b{font-size:1.4rem;color:#c9a84c;font-weight:700;min-width:34px}
+.hm-steps h3{font-size:1.05rem;font-weight:700;color:#0f2218;margin:0 0 3px}
+.hm-steps p{font-size:.9rem;color:#3d5a45;line-height:1.6;margin:0}
+.hm-acts{display:flex;gap:12px;flex-wrap:wrap}
+
+/* moments from our farm: editorial mosaic */
+#gallery.gm{background:#fff;padding:90px 0}
+.gm-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:210px;gap:14px;margin-top:34px}
+.gm-tile{position:relative;padding:0;border:0;border-radius:20px;overflow:hidden;cursor:zoom-in;background:#eef3ee;isolation:isolate}
+.gm-1{grid-column:span 2;grid-row:span 2}
+.gm-4{grid-row:span 2}
+.gm-7{grid-column:span 2}
+.gm-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.gm-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,20,13,.75));opacity:.85;transition:opacity .3s;pointer-events:none}
+.gm-tile:hover img{transform:scale(1.06)}
+.gm-tile:hover::after{opacity:1}
+.gm-cap{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;color:#fff;font-weight:700;font-size:.98rem;text-align:left;line-height:1.25;transform:translateY(4px);transition:transform .3s}
+.gm-cap small{display:block;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#e8c97a;margin-bottom:3px}
+.gm-tile:hover .gm-cap{transform:none}
+.gm-1 .gm-cap{font-size:1.35rem}
+.gm-tile:focus-visible{outline:3px solid #c9a84c;outline-offset:2px}
+@media(max-width:900px){
+  #mill-heritage-section.hm,#gallery.gm{padding:56px 0!important}
+  .hm-grid{grid-template-columns:1fr;gap:30px}
+  .hm-media{aspect-ratio:4/3;border-radius:20px}
+  .hm-play{left:12px;bottom:12px;font-size:.82rem}
+  .hm-acts .nx-btn,.hm-acts .nx-btn-outline{flex:1;min-width:0}
+  .gm-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:22px -16px 0;padding:0 16px 8px;scrollbar-width:none;grid-auto-rows:auto}
+  .gm-grid::-webkit-scrollbar{display:none}
+  .gm-tile{flex:0 0 74vw;height:58vw;scroll-snap-align:center;border-radius:18px}
+  .gm-1{flex-basis:84vw;height:66vw}
+  .gm-cap{font-size:.92rem}
+}
+</style>
 </head>
 <body>
 
 <!-- TOAST -->
 <div id="toast"></div>
 
-<!-- ---------------------------------------
-     FLOATING REELS WIDGET
---------------------------------------- -->
-<!-- Restore tab -->
-<div id="reel-tab" title="Open Reels"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1a3a2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
-
-<!-- Mini player -->
-<div id="reel-widget">
-  <button aria-label="Minimise reels" id="btn-reel-minimize" title="Minimize"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1a3a2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-  <div class="reel-track" id="mini-track">
-    <div class="reel-dots" id="mini-dots"></div>
-  </div>
-</div>
-
-<!-- Expanded modal -->
-<div id="reel-modal">
-  <div class="reel-modal-box">
-    <!-- Close btn: top-right outside frame -->
-    <button aria-label="Close reels" id="btn-reel-close">&#10005;</button>
-    <!-- Up/down arrows: outside frame on sides -->
-    <button aria-label="Previous reel" class="reel-modal-ext-btn" id="modal-prev">&#8593;</button>
-    <button aria-label="Next reel" class="reel-modal-ext-btn" id="modal-next">&#8595;</button>
-    <div class="reel-modal-track" id="modal-track">
-      <div class="reel-modal-header">
-        <span class="reel-modal-caption" id="modal-caption"></span>
-      </div>
-      <div class="reel-dots" id="modal-dots"></div>
-    </div>
-  </div>
-</div>
 <!-- OVERLAY -->
 <div id="dd-overlay"></div>
 
 <!-- ---------------------------------------
-     OFFER BAR  DESKTOP
---------------------------------------- -->
-<div id="desk-offer-bar" class="w-full bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-y border-amber-200">
-  <div class="max-w-[1400px] mx-auto flex items-center justify-between h-11 px-4 gap-6 overflow-hidden">
-    <div class="flex items-center gap-2 shrink-0">
-      <div class="relative flex h-2 w-2">
-        <span class="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-70" style="animation:ping .9s cubic-bezier(0,0,.2,1) infinite;"></span>
-        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
-      </div>
-      <span class="text-[11px] font-bold tracking-[0.2em] text-amber-900">LIVE OFFERS</span>
-    </div>
-    <div class="flex-1 overflow-hidden">
-      <div id="offerTrack" class="flex items-center gap-8 whitespace-nowrap text-[13px] text-[#4a3510] font-medium animate-marquee hover:[animation-play-state:paused]" style="width:max-content;">
-        <span class="flex items-center gap-2 cursor-pointer" data-code="NANSAI10">[[icon:gift]] First Order <b class="text-green-800">10% OFF</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">NANSAI10</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
-        <span class="text-amber-400">•</span>
-        <span>[[icon:truck]] Free Delivery on Orders Above <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹999</mark></span>
-        <span class="text-amber-400">•</span>
-        <span>[[icon:wheat]] Grain Essentials Pack Save <mark class="bg-yellow-200 px-1.5 py-[1px] rounded font-semibold">₹221</mark></span>
-        <span class="text-amber-400">•</span>
-        <span>[[icon:flower]] Paneer Rose <b class="text-rose-600">Only 32 Left</b></span>
-        <span class="text-amber-400">•</span>
-        <span class="flex items-center gap-2 cursor-pointer" data-code="HEALTH3">[[icon:pill]] Buy 2 Flowers Get <b class="text-green-700">1 FREE</b> <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold">HEALTH3</mark> <span class="text-[10px] px-2 py-[1px] rounded-full bg-amber-500 text-white">Copy</span></span>
-        <span class="text-amber-400">•</span>
-        <span>[[icon:tractor]] Farm Direct · Lab Tested · Organic Certified</span>
-      </div>
-    </div>
-    <div class="flex items-center gap-2 shrink-0">
-      <span class="text-[11px] text-amber-800 font-semibold">Ends</span>
-      <div class="flex items-center gap-1 text-sm font-bold">
-        <span id="hh" class="bg-amber-100 px-2 py-[2px] rounded text-amber-900 shadow-sm">00</span>
-        <span class="text-amber-500">:</span>
-        <span id="mm" class="bg-amber-100 px-2 py-[2px] rounded text-amber-900 shadow-sm">00</span>
-        <span class="text-amber-500">:</span>
-        <span id="ss" class="bg-amber-100 px-2 py-[2px] rounded text-amber-900 shadow-sm">00</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- OFFER BAR � MOBILE -->
-<div id="mob-offer-bar" style="display:none;">
-  <div style="background:#FEFBE9;border-bottom:1px solid rgba(20,48,31,.1);padding:.3rem .75rem;display:flex;align-items:center;gap:.6rem;overflow:hidden;">
-    <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
-      <div style="position:relative;width:6px;height:6px;flex-shrink:0;">
-        <span style="position:absolute;inset:0;border-radius:50%;background:#4ade80;opacity:.7;animation:ping .9s cubic-bezier(0,0,.2,1) infinite;"></span>
-        <span style="position:relative;display:block;width:6px;height:6px;border-radius:50%;background:#22c55e;"></span>
-      </div>
-      <span style="font-size:.52rem;font-weight:800;letter-spacing:.14em;color:#14301f;text-transform:uppercase;white-space:nowrap;">Offers</span>
-    </div>
-    <div style="flex:1;overflow:hidden;"><div id="mobMarqueeTrack" style="display:inline-flex;align-items:center;gap:1.2rem;white-space:nowrap;animation:marquee 45s linear infinite;font-size:.68rem;color:#14301f;font-weight:500;width:max-content;"></div></div>
-    <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
-      <span id="mob-hh" style="background:rgba(20,48,31,.1);color:#9a7520;font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">00</span>
-      <span style="color:#9a7520;font-size:.6rem;font-weight:800;">:</span>
-      <span id="mob-mm" style="background:rgba(20,48,31,.1);color:#9a7520;font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">00</span>
-      <span style="color:#9a7520;font-size:.6rem;font-weight:800;">:</span>
-      <span id="mob-ss" style="background:rgba(20,48,31,.1);color:#9a7520;font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">00</span>
-    </div>
-  </div>
-</div>
-
-<!-- ---------------------------------------
      NAVBAR
 --------------------------------------- -->
-<script src="js/site-shell.js?v=20261113" data-part="header"></script>
+<script src="js/site-shell.js?v=20261123" data-part="header"></script>
 
 <!-- Mobile Drawer -->
 
@@ -1309,6 +1245,32 @@ a .nansai-icon,
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
 
+  </div>
+</section>
+<div class="trust-strip" role="list" aria-label="Shopping with Nansei Organics">
+  <div class="trust-inner">
+    <div role="listitem"><b data-free-above>Free delivery above ₹999</b><span>Across India, from our farm</span></div>
+    <div role="listitem"><b>7-day replacement</b><span>For damaged or wrong items</span></div>
+    <div role="listitem"><b>Packed at the farm</b><span>Achankulam, near Srivilliputhur</span></div>
+    <div role="listitem"><b>UPI, cards &amp; COD</b><span>Secure payments by Razorpay</span></div>
+  </div>
+</div>
+<style>
+.trust-strip{background:#0f2218;border-top:1px solid rgba(201,168,76,.28);color:#f7f3ec}
+.trust-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.trust-inner>div{padding:18px 22px;display:flex;flex-direction:column;gap:3px;border-left:1px solid rgba(247,243,236,.09)}
+.trust-inner>div:first-child{border-left:0}
+.trust-inner b{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:700;color:#e8c97a;letter-spacing:.01em}
+.trust-inner span{font-size:.74rem;color:rgba(247,243,236,.66)}
+/* phones: hidden under the hero (the same promises are in the footer) */
+@media(max-width:860px){.trust-strip{display:none}}
+@media(max-width:860px){.trust-inner{grid-template-columns:repeat(2,1fr)}.trust-inner>div:nth-child(3){border-left:0}.trust-inner>div{padding:14px 16px;border-top:1px solid rgba(247,243,236,.07)}}
+</style>
+<section class="om-browse" aria-labelledby="omBrowseTitle">
+  <div class="om-wrap">
+    <div class="nx-head"><div><p class="nx-eyebrow">Browse</p><h2 class="nx-title" id="omBrowseTitle">Shop by <span>category</span></h2></div>
+      <div class="nx-head-side"><a class="nx-link" href="#products">All products &rarr;</a></div></div>
+    <div class="om-cat-grid"><a class="om-cat-tile" href="#shop-rice" onclick="return NanseiShell.goCat('rice')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602&tr=w-300" alt="" loading="lazy"/></span><b>Heritage Rice</b><small>7 varieties</small></a><a class="om-cat-tile" href="#shop-flowers" onclick="return NanseiShell.goCat('flowers')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png?tr=w-300" alt="" loading="lazy"/></span><b>Dried Flowers</b><small>Sun-dried at the farm</small></a><a class="om-cat-tile" href="#shop-flour" onclick="return NanseiShell.goCat('flour')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png?tr=w-300" alt="" loading="lazy"/></span><b>Flours & Mixes</b><small>Stone-ground</small></a><a class="om-cat-tile" href="#shop-beverages" onclick="return NanseiShell.goCat('beverages')"><span class="om-cat-img"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop" alt="" loading="lazy"/></span><b>Drinks</b><small>Rose milk, sherbet</small></a><a class="om-cat-tile" href="#shop-other" onclick="return NanseiShell.goCat('other')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png?tr=w-300" alt="" loading="lazy"/></span><b>Fig Powder & More</b><small>From our trees</small></a></div>
   </div>
 </section>
 <style>
@@ -2147,10 +2109,13 @@ function millResetIdx(card) {
   <div style="max-width:1400px;margin:0 auto;padding:0 1.5rem;overflow:visible;">
 
     <!-- Header -->
-    <div style="text-align:center;margin-bottom:2.5rem;" class="sr" id="sr-prod-hdr">
-      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#166534 0%,#15803d 100%);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:30px;margin-bottom:.75rem;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(21,128,61,.25);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">[[icon:wheat]] Explore the Fields →</button>
-      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#1a2416;margin-bottom:.35rem;"> Bringing Nature's Best To  <em style="color:#166534;">Your Family.</em></h1>
-      <p style="color:#7a9980;font-size:.85rem;">16 farm-fresh, certified products Direct from Organic Farmers</p>
+    <div class="nx-head sr" id="sr-prod-hdr" style="margin-bottom:2rem;">
+      <div>
+        <p class="nx-eyebrow">From our farm</p>
+        <h1 class="nx-title">Shop the <span>harvest</span></h1>
+        <p class="nx-lead">Heritage rice, sun-dried flowers, stone-ground flours and drinks, grown and packed in Achankulam, Tamil Nadu.</p>
+      </div>
+      <div class="nx-head-side"><a class="nx-link" href="track-order.html">Track an order &rarr;</a></div>
     </div>
 
     <!-- Category Filter Pills -->
@@ -2321,215 +2286,29 @@ function millResetIdx(card) {
   #gallery { padding: 64px 0 60px !important; }
 }
 </style>
-<section id="mill-heritage-section">
-  <div style="max-width: 1300px; margin: 0 auto;">
-    
-    <!-- Unified Header -->
-    <div class="reveal" style="text-align: center; margin-bottom: 64px;">
-      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-        <span style="width: 20px; height: 1px; background: var(--gold-dk);"></span>
-        <span style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-dk);">Traditional Knowledge</span>
-        <span style="width: 20px; height: 1px; background: var(--gold-dk);"></span>
+<section id="mill-heritage-section" class="hm" aria-labelledby="hmTitle">
+  <div class="om-wrap hm-grid">
+    <figure class="hm-media">
+      <img src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg?tr=w-1100" alt="Wooden thirugai hand mills at the farm" loading="lazy" width="1100" height="900"/>
+      <figcaption><b>Thirugai</b> &middot; the wooden hand mill</figcaption>
+      <button type="button" class="hm-play" onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')" aria-label="Watch Nammalvar on the wooden hand mill">
+        <span class="hm-play-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <span><small>Watch</small>Nammalvar on the wooden mill</span>
+      </button>
+    </figure>
+    <div class="hm-copy">
+      <p class="nx-eyebrow">How we mill</p>
+      <h2 class="nx-title" id="hmTitle">Milled by hand on a <span>wooden thirugai</span></h2>
+      <p class="nx-lead">Before rice mills, every village husked its paddy on a thirugai: two heavy wooden discs turned by hand. We still mill this way, a little at a time, the way Nammalvar encouraged farmers to.</p>
+      <ol class="hm-steps">
+        <li><b>01</b><div><h3>Turned by hand</h3><p>No motor. Someone sits at the mill and turns it, so each batch is small.</p></div></li>
+        <li><b>02</b><div><h3>Husk off, bran kept</h3><p>The wooden discs crack the husk without polishing the grain, so the rice stays unpolished.</p></div></li>
+        <li><b>03</b><div><h3>Packed at the farm</h3><p>Milled rice is cleaned, packed and sent from Achankulam.</p></div></li>
+      </ol>
+      <div class="hm-acts">
+        <a class="nx-btn" href="#shop-rice" onclick="return NanseiShell.goCat('rice')">Shop heritage rice</a>
+        <button type="button" class="nx-btn-outline" onclick="openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')">Watch a clip from the farm</button>
       </div>
-      
-      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 600; color: var(--forest-deep); line-height: 1.15; margin-bottom: 18px;">
-        The Traditional Hand Mill <br style="display: none;"/>
-        <span style="font-style: italic; color: var(--forest-leaf);">Discover the Story Behind</span>
-      </h2>
-      
-      <div style="width: 3rem; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto 18px;"></div>
-      
-      <p style="font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.65; color: var(--text-md); max-width: 680px; margin: 0 auto; font-weight: 400;">
-        Explore the traditions, wisdom, and natural farming practices that make our slow stone-milled grains unique. Operating at low RPM with zero friction heat, our hand-operated mill preserves every active nutrient.
-      </p>
-    </div>
-    
-    <!-- 2-Column Split Content -->
-    <div style="display: grid; grid-template-columns: 1fr; gap: 48px; align-items: start;" class="mill-grid-cols">
-      
-      <!-- LEFT: HAND MILL DETAILS -->
-      <div>
-        <div id="mill-card-idx" style="display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 20px 50px rgba(15,34,24,0.08), 0 4px 16px rgba(15,34,24,0.04); transform: perspective(1200px) rotateY(0deg) rotateX(0deg) translateZ(0); transition: transform .6s cubic-bezier(.22,1,.36,1), box-shadow .6s cubic-bezier(.22,1,.36,1); will-change: transform;" onmousemove="millTiltIdx(event, this)" onmouseleave="millResetIdx(this)">
-          
-          <!-- Image -->
-          <div class="mill-img-container">
-            <img loading="lazy" decoding="async" src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg" alt="Traditional Hand Mill"
-              id="mill-img-idx"
-              style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform .6s cubic-bezier(.22,1,.36,1);"/>
-            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15, 34, 24, 0.4) 0%, transparent 60%); pointer-events: none;"></div>
-            <div id="mill-shine-idx" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 65%); opacity: 0; transition: opacity .3s; pointer-events: none;"></div>
-          </div>
-          
-          <!-- Info Details -->
-          <div class="mill-content-container">
-            <div style="position: absolute; right: 24px; bottom: 20px; opacity: 0.04; pointer-events: none; color: var(--forest-deep);">
-              <svg width="90" height="90" viewBox="0 0 64 64" fill="none"><path d="M10 54 C10 54 24 12 54 10 C54 10 50 40 10 54Z" fill="currentColor"/></svg>
-            </div>
-            
-            <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-              <div style="width: 12px; height: 1.5px; background: var(--gold-dk);"></div>
-              <span style="font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dk);">Thirugai Milling</span>
-            </div>
-            
-            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--forest-deep); margin-bottom: 16px;">
-              Authentic, Zero-Heat Stone Milling
-            </h3>
-            
-            <p style="font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.65; color: var(--text-md); margin-bottom: 28px;">
-              Traditional stone hand-milling is slow and manual. It generates no heat damage, protecting valuable enzymes, iron, calcium, and vitamin contents that are completely lost in modern high-RPM industrial mills.
-            </p>
-            
-            <!-- Features Stack -->
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              <!-- F1 -->
-              <div class="premium-feature-box">
-                <div class="premium-feature-icon">[[icon:wheat]]</div>
-                <div>
-                  <h4 class="premium-feature-title">Stone Ground Integrity</h4>
-                  <p class="premium-feature-desc">Slow grinding ensures no heat damage and preserves original dietary fibers and minerals.</p>
-                </div>
-              </div>
-              
-              <!-- F2 -->
-              <div class="premium-feature-box">
-                <div class="premium-feature-icon">[[icon:hand]]</div>
-                <div>
-                  <h4 class="premium-feature-title">Artisanal Hand Operation</h4>
-                  <p class="premium-feature-desc">Zero electrical power is used. Every single bag represents our dedication to organic heritage.</p>
-                </div>
-              </div>
-              
-              <!-- F3 -->
-              <div class="premium-feature-box">
-                <div class="premium-feature-icon">[[icon:leaf]]</div>
-                <div>
-                  <h4 class="premium-feature-title">Direct Farm Sourcing</h4>
-                  <p class="premium-feature-desc">Directly trace your rice back to the fertile soils of our certified 25-acre organic farm.</p>
-                </div>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      
-      <!-- RIGHT: VIDEO GALLERY -->
-      <div>
-        <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
-          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--forest-deep); margin: 0;">Milling in Motion</h3>
-          <span style="font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-lt); letter-spacing: 0.1em;">5 Videos</span>
-        </div>
-        
-        <!-- Featured Video -->
-        <div class="featured-video-wrap premium-featured-video reveal" role="button" tabindex="0" aria-label="Play: The Art of Traditional Hand Milling"
-          onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')"
-          onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')">
-          <img
-            src="https://ik.imagekit.io/ueorokkbc/images/Screenshot%202026-06-11%20153122.png"
-            alt="Traditional wooden hand mill  rice milling process"
-            loading="lazy"
-            style="width: 100%; height: 100%; object-fit: cover;"
-          />
-          <div class="video-glass-overlay premium-video-overlay">
-            <div class="premium-video-overlay-inner">
-              <div class="play-btn" aria-hidden="true" style="background: var(--gold-dk); border-color: rgba(255, 255, 255, 0.4); width: 60px; height: 60px; box-shadow: 0 8px 20px rgba(184, 146, 42, 0.45); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div>
-                <p style="color: var(--gold-lt); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Featured Story</p>
-                <h4 class="font-display" style="font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 600; color: white; line-height: 1.25; margin: 0;">
-                  The Art of Traditional Hand Milling
-                </h4>
-                <p style="color: rgba(255,255,255,0.72); font-family: 'Inter', sans-serif; font-size: 12.5px; margin-top: 6px; max-width: 440px; line-height: 1.5; font-weight: 400;">
-                  Witness how our traditional wooden stone mill gently husks grains to protect their natural nutrient profile.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Video scroll track: 2x2 grid on desktop, scrollable row on mobile -->
-        <div class="video-gallery-wrapper">
-          <div class="video-scroll-track video-grid-layout">
-            
-            <!-- Card 2 -->
-            <div class="video-card reveal reveal-delay-1" role="button" tabindex="0" aria-label="Play: Nammalvar on Our Wooden Hand Mill"
-              onclick="openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')"
-              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/m0htTSaPPIY?si=N_6NJpi3SZTA4H8E')">
-              <img loading="lazy" decoding="async" class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/namm.jfif" alt="Nammalvar on our wooden mill" />
-              <div class="video-card-overlay">
-                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
-                  Nammalvar on Wooden Mill
-                </p>
-                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
-                  Insights on traditional grain hand-milling.
-                </p>
-              </div>
-            </div>
-            
-            <!-- Card 3 -->
-            <!-- hidden until its real video is uploaded (it pointed at a placeholder link) -->
-            <div class="video-card reveal reveal-delay-2" style="display:none" role="button" tabindex="0" aria-label="Play: Preserving Nutrition Through Hand Milling"
-              onclick="openVideoModal('https://www.youtube.com/embXcQ')"
-              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-              <img loading="lazy" decoding="async" class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Stone ground nutrition" />
-              <div class="video-card-overlay">
-                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
-                  Preserving Vital Nutrition
-                </p>
-                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
-                  Science of slow stone grinding.
-                </p>
-              </div>
-            </div>
-            
-            <!-- Card 4 -->
-            <!-- hidden until its real video is uploaded (it pointed at a placeholder link) -->
-            <div class="video-card reveal reveal-delay-3" style="display:none" role="button" tabindex="0" aria-label="Play: From Harvest to Hand-Milled Rice"
-              onclick="openVideoModal('https://www.youtube.com/eXcQ')"
-              onkeydown="if(event.key==='Enter')openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-              <img loading="lazy" decoding="async" class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Field harvest to milled rice" />
-              <div class="video-card-overlay">
-                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
-                  Harvest to Hand-Milled Rice
-                </p>
-                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
-                  The journey from field to kitchen.
-                </p>
-              </div>
-            </div>
-            
-            <!-- Card 5 -->
-            <div class="video-card reveal reveal-delay-4" role="button" tabindex="0" aria-label="Play: Seeds of Our Heritage"
-              onclick="openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')"
-              onkeydown="if(event.key==='Enter')openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')">
-              <img loading="lazy" decoding="async" class="video-card-thumb" src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Heirloom grain seeds catalog" />
-              <div class="video-card-overlay">
-                <div class="play-sm" aria-hidden="true" style="background: var(--gold-dk); width: 34px; height: 34px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <p class="font-display" style="font-size: 14px; font-weight: 600; color: white; line-height: 1.25; margin-bottom: 4px;">
-                  Seeds of Our Heritage
-                </p>
-                <p style="font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; margin: 0;">
-                  Living library of heirloom paddy varieties.
-                </p>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      
     </div>
   </div>
 </section>
@@ -2544,25 +2323,14 @@ function millResetIdx(card) {
     </div>
   </div>
 </div>
-<!--gallery section start--->
-<section id="gallery" aria-label="Life at the Farm Gallery">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-    <div class="reveal" style="text-align:center; margin-bottom:64px;">
-      <div class="gallery-eyebrow"><span></span>Life at the Farm<span></span></div>
-      <h2 class="gallery-title">Moments from <em>Our Fields</em></h2>
-      <div class="gallery-gold-rule"></div>
-      <p class="gallery-subtitle">A glimpse into the people, traditions, and landscapes behind every harvest.</p>
+<section id="gallery" class="gm" aria-labelledby="gmTitle">
+  <div class="om-wrap">
+    <div class="nx-head">
+      <div><p class="nx-eyebrow">Life at the farm</p><h2 class="nx-title" id="gmTitle">Moments from <span>our farm</span></h2>
+      <p class="nx-lead">Photos from Achankulam, near Srivilliputhur: the paddy, the nursery, the flowers we dry and the mills we use.</p></div>
+      <div class="nx-head-side"><a class="nx-link" href="video-reels.html">Watch farm reels &rarr;</a></div>
     </div>
-    <div class="bento-grid reveal">
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Pichai Murugan in the paddy fields"><img src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Pichai Murugan in the paddy fields" loading="lazy" data-caption="Pichai Murugan in the Paddy Fields" /><div class="bento-caption"><span class="bento-caption-text">Pichai Murugan in the Paddy Fields</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Traditional farming activities"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%2010.14.20%20AM.jpeg" alt="Traditional farming activities" loading="lazy" data-caption="Traditional Farming Activities" /><div class="bento-caption"><span class="bento-caption-text">Traditional Farming Activities</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Harvest season"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.49.35%20AM.jpeg" alt="Rice harvest season" loading="lazy" data-caption="Harvest Season" /><div class="bento-caption"><span class="bento-caption-text">Harvest Season</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Wooden hand-milling process"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.46%20AM.jpeg" alt="Wooden hand-milling process" loading="lazy" data-caption="The Wooden Hand-Milling Process" /><div class="bento-caption"><span class="bento-caption-text">The Wooden Hand-Milling Process</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Rice drying in the sun"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.50%20AM.jpeg" alt="Rice drying under the open sky" loading="lazy" data-caption="Drying Under the Open Sky" /><div class="bento-caption"><span class="bento-caption-text">Drying Under the Open Sky</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Farm landscape at dawn"><img src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg" alt="Pichai Murugan in the paddy fields" alt="Serene farm landscape at dawn" loading="lazy" data-caption="The Farm at Dawn" /><div class="bento-caption"><span class="bento-caption-text">The Farm at Dawn</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Heirloom seed selection"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%2010.14.20%20AM.jpeg" alt="Heirloom seed selection" loading="lazy" data-caption="Choosing the Seeds" /><div class="bento-caption"><span class="bento-caption-text">Choosing the Seeds</span></div></div>
-      <div class="bento-item" onclick="openLightbox(this)" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox(this)" role="button" aria-label="Rice storage and preparation"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.51%20AM.jpeg" alt="Rice storage and preparation" loading="lazy" data-caption="Storage &amp; Preparation" /><div class="bento-caption"><span class="bento-caption-text">Storage &amp; Preparation</span></div></div>
-    </div>
+    <div class="gm-grid"><button type="button" class="gm-tile gm-1" onclick="openLightbox(this)" aria-label="Open photo: The paddy fields at Achankulam"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.49.35%20AM.jpeg?tr=w-900" alt="The paddy fields at Achankulam" loading="lazy" data-caption="The paddy fields at Achankulam"/><span class="gm-cap"><small>Fields</small>The paddy fields at Achankulam</span></button><button type="button" class="gm-tile gm-2" onclick="openLightbox(this)" aria-label="Open photo: Ducklings working the paddy water"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%2010.14.20%20AM.jpeg?tr=w-900" alt="Ducklings working the paddy water" loading="lazy" data-caption="Ducklings working the paddy water"/><span class="gm-cap"><small>Farm life</small>Ducklings working the paddy water</span></button><button type="button" class="gm-tile gm-3" onclick="openLightbox(this)" aria-label="Open photo: Butterfly pea flowers drying"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.51%20AM.jpeg?tr=w-900" alt="Butterfly pea flowers drying" loading="lazy" data-caption="Butterfly pea flowers drying"/><span class="gm-cap"><small>Dried flowers</small>Butterfly pea flowers drying</span></button><button type="button" class="gm-tile gm-4" onclick="openLightbox(this)" aria-label="Open photo: Seedlings ready to transplant"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.46%20AM.jpeg?tr=w-900" alt="Seedlings ready to transplant" loading="lazy" data-caption="Seedlings ready to transplant"/><span class="gm-cap"><small>Nursery</small>Seedlings ready to transplant</span></button><button type="button" class="gm-tile gm-5" onclick="openLightbox(this)" aria-label="Open photo: Our rice, unpolished"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.50%20AM.jpeg?tr=w-900" alt="Our rice, unpolished" loading="lazy" data-caption="Our rice, unpolished"/><span class="gm-cap"><small>Harvest</small>Our rice, unpolished</span></button><button type="button" class="gm-tile gm-6" onclick="openLightbox(this)" aria-label="Open photo: Paddy nursery beds"><img src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg?tr=w-900" alt="Paddy nursery beds" loading="lazy" data-caption="Paddy nursery beds"/><span class="gm-cap"><small>Nursery</small>Paddy nursery beds</span></button><button type="button" class="gm-tile gm-7" onclick="openLightbox(this)" aria-label="Open photo: The wooden thirugai mills"><img src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg?tr=w-900" alt="The wooden thirugai mills" loading="lazy" data-caption="The wooden thirugai mills"/><span class="gm-cap"><small>Milling</small>The wooden thirugai mills</span></button></div>
   </div>
 </section>
 
@@ -2732,6 +2500,39 @@ function millResetIdx(card) {
 </div>
 
 
+<section id="faq" class="faq-sec" aria-labelledby="faqTitle">
+  <div class="faq-wrap">
+    <div class="faq-head">
+      <p class="faq-eyebrow">Questions</p>
+      <h2 id="faqTitle">Good to know</h2>
+      <p>Delivery, returns and payment, in short. For anything else, message us on <a href="https://wa.me/916382142578" target="_blank" rel="noopener" data-wa>WhatsApp</a>.</p>
+    </div>
+    <div class="faq-list">
+      <details><summary>Where do you ship from, and where do you deliver?</summary><p>Every order is packed at our farm in Achankulam, near Srivilliputhur in Tamil Nadu, and sent by courier to addresses across India. Delivery is free on orders above <span data-free-above-amt>₹999</span>.</p></details>
+      <details><summary>How do I track my order?</summary><p>Sign in and open <a href="account.html">My Orders</a>. Once your parcel is dispatched you will see the courier, the AWB number and a tracking link there.</p></details>
+      <details><summary>What if something arrives damaged or wrong?</summary><p>Tell us within 7 days of delivery with your order number and a few photos or a short video of the product and packaging. We reply within 1–2 working days and send a replacement or refund. The full terms are on the <a href="refund-policy.html">refund policy</a> page.</p></details>
+      <details><summary>How can I pay?</summary><p>UPI, debit and credit cards and net banking through Razorpay, or cash on delivery. Online refunds go back to the original payment method within 5–7 working days.</p></details>
+      <details><summary>Can I cancel an order?</summary><p>Yes, until it is dispatched. Open <a href="account.html">My Orders</a> and choose “Cancel order”, or message us with the order number.</p></details>
+    </div>
+  </div>
+</section>
+<style>
+.faq-sec{background:#f7f3ec;padding:72px 20px;border-top:1px solid rgba(15,34,24,.08)}
+.faq-wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:48px;align-items:start}
+.faq-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#b8922a;margin-bottom:8px}
+.faq-head h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:#0f2218;line-height:1;margin-bottom:14px}
+.faq-head p:last-child{font-size:.9rem;color:#3d5a45;line-height:1.7}
+.faq-head a,.faq-list a{color:#2d5a3d;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.faq-list details{border-bottom:1px solid rgba(15,34,24,.12)}
+.faq-list details:first-child{border-top:1px solid rgba(15,34,24,.12)}
+.faq-list summary{list-style:none;cursor:pointer;padding:18px 36px 18px 0;position:relative;font-weight:600;font-size:.95rem;color:#0f2218}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:1.3rem;font-weight:400;color:#b8922a;transition:transform .2s}
+.faq-list details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.faq-list details p{padding:0 36px 18px 0;font-size:.88rem;line-height:1.75;color:#3d5a45}
+@media(max-width:820px){.faq-wrap{grid-template-columns:1fr;gap:20px}.faq-sec{padding:52px 16px}}
+</style>
+
 <!-- ---------------------------------------
      MOBILE STICKY BOTTOM NAV BAR
 --------------------------------------- -->
@@ -2740,7 +2541,9 @@ function millResetIdx(card) {
 <!-- ---------------------------------------
      FOOTER
 --------------------------------------- -->
-<script src="js/site-shell.js?v=20261113" data-part="footer"></script>
+<!-- farm reels slide in from the side once the visitor scrolls (js/farm-reels.js) -->
+<div data-farm-reels="float" data-after="700" data-mobile-bottom="84"></div>
+<script src="js/site-shell.js?v=20261123" data-part="footer"></script>
 
 <!-- ---------------------------------------
      JAVASCRIPT
@@ -2756,8 +2559,8 @@ if(cs) cs.innerHTML+=cs.innerHTML;
 (function(){
   const mobTrack=document.getElementById('mobMarqueeTrack');
   if(!mobTrack)return;
-  const items=['[[icon:gift]] First Order 10% OFF · NANSAI10','•','[[icon:truck]] Free Delivery above ₹999','•','[[icon:wheat]] Heritage Rice Varieties · Farm Direct','•','[[icon:flower]] Paneer Rose · Only 32 Left','•','[[icon:heart]] Buy 2 Flowers Get 1 FREE · HEALTH3','•','[[icon:leaf]] Organic Lab Tested · 9 Certifications'];
-  const html=items.map(t=>t==='?'?`<span style="color:#9a7520;">?</span>`:`<span>${t}</span>`).join('');
+  const items=['First order 10% off · NANSAI10','•','Free delivery above ₹999','•','Buy 2 flowers, get 1 free · HEALTH3','•','Packed at our farm in Achankulam','•','Cash on delivery available','•'];
+  const html=items.map(t=>t==='•'?'<span style="color:rgba(201,168,76,.6);">&bull;</span>':'<span>'+t+'</span>').join('');
   mobTrack.innerHTML=html+html;
 })();
 
@@ -2768,31 +2571,31 @@ function applyAnnouncements(st){
   if(!items.length)return;
   const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const one=i=>(i.link?'<a href="'+esc(i.link)+'" style="color:inherit;text-decoration:none">':'<span>')+esc(i.text)+
-    (i.code?' <mark class="bg-yellow-200 px-1.5 py-[1px] rounded text-[12px] font-bold" data-code="'+esc(i.code)+'" style="cursor:pointer">'+esc(i.code)+'</mark>':'')+(i.link?'</a>':'</span>');
-  const sep='<span class="text-amber-400">\u2022</span>';
+    (i.code?' <mark class="offer-code" data-code="'+esc(i.code)+'" style="cursor:pointer">'+esc(i.code)+'</mark>':'')+(i.link?'</a>':'</span>');
+  const sep='<span class="offer-sep">\u2022</span>';
   const html=items.map(one).join(sep)+sep;
   const desk=document.getElementById('offerTrack'); if(desk) desk.innerHTML=html+html;
   const mob=document.getElementById('mobMarqueeTrack'); if(mob) mob.innerHTML=html+html;
   document.querySelectorAll('[data-code]').forEach(el=>{ el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('Code '+el.dataset.code+' copied'); }; });
 }
-if(window.NANSEI_SETTINGS) applyAnnouncements(window.NANSEI_SETTINGS);
+function applyStoreFacts(st){
+  if(!st)return;
+  const sh=st.shipping||{},c=st.contact||{};
+  if(sh.freeShippingAbove>0){
+    const amt='₹'+Number(sh.freeShippingAbove).toLocaleString('en-IN');
+    document.querySelectorAll('[data-free-above]').forEach(el=>el.textContent='Free delivery above '+amt);
+    document.querySelectorAll('[data-free-above-amt]').forEach(el=>el.textContent=amt);
+  }
+  if(c.whatsapp)document.querySelectorAll('[data-wa]').forEach(el=>el.href='https://wa.me/'+String(c.whatsapp).replace(/\D/g,''));
+}
+if(window.NANSEI_SETTINGS){ applyAnnouncements(window.NANSEI_SETTINGS); applyStoreFacts(window.NANSEI_SETTINGS); }
+document.addEventListener('nansei:settings',e=>applyStoreFacts(e.detail));
 document.addEventListener('nansei:settings',e=>applyAnnouncements(e.detail));
 
 /* ---- COPY COUPON ---- */
 document.querySelectorAll('[data-code]').forEach(el=>{
   el.onclick=()=>{ navigator.clipboard.writeText(el.dataset.code).catch(()=>{}); showToast('[[icon:circle-check]] Code '+el.dataset.code+' copied!'); };
 });
-
-/* ---- COUNTDOWN ---- */
-function updateTimer(){
-  const now=new Date(),end=new Date();
-  end.setHours(23,59,59);
-  const diff=end-now;
-  const h=Math.floor(diff/1000/60/60),m=Math.floor(diff/1000/60)%60,s=Math.floor(diff/1000)%60;
-  ['hh','mm','ss'].forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=String([h,m,s][i]).padStart(2,'0'); });
-  ['mob-hh','mob-mm','mob-ss'].forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=String([h,m,s][i]).padStart(2,'0'); });
-}
-setInterval(updateTimer,1000); updateTimer();
 
 /* ---- TOAST ---- */
 function showToast(msg){
@@ -2807,17 +2610,6 @@ function subNewsletter(e){
   showToast('[[icon:leaf]] Subscribed! Welcome to the farm family.');
   e.target.reset();
 }
-
-/* ---- REELS MOBILE VIEW MORE BUTTON INJECT ---- */
-document.addEventListener('DOMContentLoaded', function(){
-  const sec = document.getElementById('nansei-reels-section');
-  if(!sec) return;
-  const btn = document.createElement('button');
-  btn.id = 'reels-mob-viewmore';
-  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M5 12h14M12 5l7 7-7 7"/></svg> View More Reels';
-  btn.onclick = function(){ if(typeof openReelsViewer === 'function') openReelsViewer(0); };
-  sec.appendChild(btn);
-});
 
 /* ---- PRODUCTS DATA ---- */
 const products=[
@@ -2876,40 +2668,61 @@ function syncCounters(){
 
 /* ---- PRODUCT CARD HTML ---- */
 const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4','prod-float-5','prod-float-6'];
+/* default pack on a card = the one the listed price is for (1 kg / 1 L / 1 piece) */
+function cardDefaultQty(cfg){ const one=cfg.unit==='ml'?1000:1; return cfg.options.includes(one)?one:cfg.options[0]; }
+function cardPriceFor(p,v,unit){ return unit==='ml'?Math.round(p.price*(v/1000)):Math.round(p.price*v); }
+function cardOldFor(p,v,unit){ return unit==='ml'?Math.round(p.oldPrice*(v/1000)):Math.round(p.oldPrice*v); }
 function prodCardHTML(p,i){
   const d=disc(p);
   const isW=wishlist.includes(p.id);
-  const badgeEl=p.badge==='hot'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#f97316;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">HOT</span>`
-    :p.badge==='new'
-    ?`<span style="position:absolute;top:10px;left:10px;background:#166534;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">NEW</span>`
-    :`<span style="position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;z-index:10;">${d}% OFF</span>`;
-  const fc=floatClasses[i%floatClasses.length];
-  return `<div class="prod-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col cursor-pointer ${fc}" style="flex-shrink:0;width:260px;overflow:visible;position:relative;z-index:1;" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
-    <div class="prod-img-wrap" style="border-radius:12px 12px 0 0;">
-      ${badgeEl}
-      <button aria-label="Add ${p.name} to wishlist" onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()" style="position:absolute;top:8px;right:8px;width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.18);border:none;cursor:pointer;z-index:10;transition:transform .2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="${isW?'#ef4444':'none'}" stroke="${isW?'#ef4444':'#ef4444'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:fill .2s,stroke .2s;"><path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/></svg>
-      </button>
-      <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy" class="prod-img"/>
-    </div>
-    <div class="prod-info" style="overflow:visible;">
-      <span style="font-size:.68rem;font-weight:400;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;">${p.category}</span>
-      <h3 style="font-size:.95rem;font-weight:700;color:#1a2416;line-height:1.3;font-family:'Inter',sans-serif;">${p.name}</h3>
-      <div style="display:flex;align-items:center;gap:3px;overflow:hidden;"><span style="display:flex;align-items:center;gap:1px;flex-shrink:0;">${Number(p.reviews||p.numReviews||0)>0?stars(p.rating):''}</span><span style="color:#9ca3af;font-size:.72rem;margin-left:2px;font-family:'Inter',sans-serif;" class="rating-text">${ratingText(p)}</span></div>
-      <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:2px;">
-        <span data-card-price style="color:#166534;font-weight:900;font-size:1.1rem;font-family:'Inter',sans-serif;">₹${p.price}</span>
-        <span data-card-old style="color:#9ca3af;font-size:.78rem;text-decoration:line-through;font-family:'Inter',sans-serif;">₹${p.oldPrice}</span>
-        <span data-card-disc style="background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px;font-family:'Inter',sans-serif;">${d}% off</span>
-      </div>
-      <div id="cardbtn-area-${p.id}" class="prod-btn-area" style="margin-top:auto;">
-        <button id="cartbtn-${p.id}" onclick="startQtySelect(${p.id},this);event.preventDefault();event.stopPropagation()" style="width:100%;background:var(--forest-deep);color:#fff;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:10px;border:none;cursor:pointer;font-family:'Roboto',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,transform .15s;box-shadow:0 3px 10px rgba(15,34,24,.25);" onmouseover="this.style.background='var(--forest-mid)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--forest-deep)';this.style.transform='translateY(0)'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57l1.65-7.43H5.12"/></svg>
-          Add to Cart
-        </button>
+  const cfg=getQtyCfg(p.category);
+  const q=cardDefaultQty(cfg);
+  const opts=cfg.options.map(v=>`<option value="${v}"${v===q?' selected':''}>${fmtQty(v,cfg.unit)}</option>`).join('');
+  const price=cardPriceFor(p,q,cfg.unit), old=cardOldFor(p,q,cfg.unit);
+  return `<div class="prod-card om-card" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
+    <a class="om-img prod-img-wrap" href="product.html?id=${p.id}" onclick="event.stopPropagation()">
+      ${p.badge==='new'?'<span class="om-tag om-new">New</span>':(d>0?`<span class="om-tag">${d}% off</span>`:'')}
+      <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy" class="prod-img" width="400" height="400"/>
+    </a>
+    <button type="button" class="om-wish${isW?' on':''}" aria-pressed="${isW}" aria-label="Add ${p.name} to wishlist" onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="${isW?'#b83232':'none'}" stroke="${isW?'#b83232':'#0f2218'}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.5 15 3.5 9.2A4.7 4.7 0 0 1 12 6.6a4.7 4.7 0 0 1 8.5 2.6c0 5.8-8.5 11.3-8.5 11.3z"/></svg>
+    </button>
+    <div class="om-body prod-info">
+      <a class="om-name" href="product.html?id=${p.id}" onclick="event.stopPropagation()">${p.name}</a>
+      <div class="om-rating">${Number(p.reviews||p.numReviews||0)>0?stars(p.rating)+'<span class="rating-text">'+ratingText(p)+'</span>':''}</div>
+      <div class="om-price"><span data-card-price>₹ ${price}.00</span>${old>price?`<s data-card-old>₹ ${old}.00</s>`:'<s data-card-old></s>'}</div>
+      <div class="om-actions prod-btn-area" id="cardbtn-area-${p.id}" onclick="event.preventDefault();event.stopPropagation()">
+        <select class="om-size" aria-label="Choose size for ${p.name}" onchange="omSize(${p.id},this)">${opts}</select>
+        <button type="button" class="om-add" id="cartbtn-${p.id}" onclick="omAdd(${p.id},this)">Add</button>
       </div>
     </div>
   </div>`;
+}
+function omSize(id,sel){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const cfg=getQtyCfg(p.category), v=parseFloat(sel.value);
+  cardState[id]={qty:v,unit:cfg.unit};
+  const card=sel.closest('.prod-card'); if(!card)return;
+  const price=cardPriceFor(p,v,cfg.unit), old=cardOldFor(p,v,cfg.unit);
+  const pe=card.querySelector('[data-card-price]'), oe=card.querySelector('[data-card-old]');
+  if(pe) pe.textContent='₹ '+price+'.00';
+  if(oe) oe.textContent=old>price?'₹ '+old+'.00':'';
+}
+function omAdd(id,btn){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const sel=btn.parentElement.querySelector('.om-size');
+  if(sel) omSize(id,sel);
+  const cfg=getQtyCfg(p.category);
+  const {qty,unit}=cardState[id]||{qty:cardDefaultQty(cfg),unit:cfg.unit};
+  const totalPrice=cardPriceFor(p,qty,unit);
+  const label=fmtQty(qty,unit);
+  const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
+  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit,selectedQuantity:label,selectedUnit:unit,selectedPrice:totalPrice});
+  saveCart();
+  showToast(p.name+' '+label+' added to cart');
+  if(typeof animateCartIcon==='function') animateCartIcon();
+  btn.classList.add('done'); btn.textContent='Added';
+  clearTimeout(btn._t); btn._t=setTimeout(()=>{btn.classList.remove('done');btn.textContent='Add';},1500);
 }
 
 const sectionMeta={
@@ -2925,29 +2738,26 @@ const SECTION_ORDER=['new','bestseller','rice','flowers','beverages','flour','ot
 
 function sectionHTML(key,list){
   const m=sectionMeta[key];
-  return `<div class="prod-section sr" id="sec-${key}" style="margin-bottom:3.5rem;">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,58,42,.07);">
+  return `<div class="prod-section sr om-row" id="sec-${key}">
+    <div class="om-row-head">
       <div>
-        <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(26,58,42,.06);border-radius:30px;padding:3px 12px 3px 8px;margin-bottom:6px;">
-          <span style="font-size:.85rem;">${m.icon}</span>
-          <span style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${m.accent};">${m.label}</span>
-        </div>
-        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:#1a2416;">${m.label}</h2>
-        <p style="color:#7a9980;font-size:.8rem;margin-top:2px;">${m.sub}</p>
+        <p class="om-kicker">Shop</p>
+        <h2 class="om-row-title">${m.label}</h2>
+        <p class="om-row-sub">${m.sub}</p>
       </div>
-      <button onclick="filterProds('${key}')" style="font-size:.72rem;font-weight:700;color:${m.accent};border:1.5px solid ${m.accent}33;padding:6px 18px;border-radius:30px;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;transition:all .2s;" onmouseover="this.style.background='${m.accent}11'" onmouseout="this.style.background='transparent'">
-        View All (${list.length}) 
-      </button>
+      <div class="om-row-acts">
+        <button type="button" class="om-viewall" onclick="filterProds('${key}')">View all (${list.length}) &rarr;</button>
+      </div>
     </div>
     <div class="hscroll-wrap">
       <button class="scroll-btn left" aria-label="Scroll left" onclick="scrollRow('sec-${key}',-1)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <div style="display:flex;gap:16px;overflow-x:auto;overflow-y:visible;padding-bottom:12px;scrollbar-width:none;flex:1;" class="prod-hscroll" id="hscroll-sec-${key}">
+      <div class="prod-hscroll om-rail" id="hscroll-sec-${key}">
         ${list.map((p,i)=>prodCardHTML(p,i)).join('')}
       </div>
       <button class="scroll-btn right" aria-label="Scroll right" onclick="scrollRow('sec-${key}',1)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
     </div>
   </div>`;
@@ -2979,15 +2789,14 @@ function renderFlat(list,cat){
   if(!list.length){ grid.style.display='none'; empty.style.display='block'; return; }
   empty.style.display='none';
   const m=cat&&sectionMeta[cat]?sectionMeta[cat]:null;
-  const heading=m?`<div style="width:100%;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,58,42,.07);text-align:left;">
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:#1a2416;margin-bottom:4px;">${m.label}</h2>
-    <p style="color:#7a9980;font-size:.8rem;">${m.sub} <strong style="color:#1a2416;">${list.length} product${list.length!==1?'s':''}</strong></p>
-  </div>`:'';
-  grid.style.display='flex';
-  grid.style.flexWrap='wrap';
-  grid.style.gap='20px';
+  const heading=m?`<div class="om-row-head" style="width:100%"><div><p class="om-kicker">Shop</p><h2 class="om-row-title">${m.label}</h2>
+    <p class="om-row-sub">${m.sub} &middot; <strong>${list.length} product${list.length!==1?'s':''}</strong></p></div>
+    <div class="om-row-acts"><button type="button" class="om-viewall" onclick="document.querySelector('#filterTabs .fpill[data-cat=all]').click()">Show everything &rarr;</button></div></div>`:'';
+  grid.style.display='grid';
+  grid.style.gridTemplateColumns='repeat(auto-fill,minmax(220px,1fr))';
+  grid.style.gap='18px';
   grid.style.overflow='visible';
-  grid.style.padding='12px 4px';
+  grid.style.padding='4px 0 12px';
   grid.innerHTML=heading+list.map((p,i)=>prodCardHTML(p,i)).join('');
   grid.querySelectorAll('.sr').forEach(el=>el.classList.add('is-visible'));
   attachCarousel3D();
@@ -3166,7 +2975,7 @@ function renderSearchSuggestions(input,matches){
   if(!box) return;
   if(!matches.length){ box.classList.remove('show'); box.innerHTML=''; return; }
   box.innerHTML=matches.slice(0,6).map(p=>`
-    <button type="button" class="suggestion-item" onclick="selectSearchSuggestion(${p.id})">
+    <button type="button" class="suggestion-item" data-product-id="${p.id}">
       <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy">
       <span style="min-width:0;">
         <span class="suggestion-name">${p.name}</span>
@@ -3566,179 +3375,6 @@ function attachCarousel3D(){
   // intentionally empty � removed to prevent inline style conflicts with card-lifted
 }
 
-/* ---- REEL WIDGET SCROLL TRIGGER ---- */
-(function(){
-  const widget = document.getElementById('reel-widget');
-  const tab    = document.getElementById('reel-tab');
-  const target = document.getElementById('filterTabs');
-  if(!widget || !target) return;
-
-  // start hidden
-  widget.style.opacity = '0';
-  widget.style.pointerEvents = 'none';
-  widget.style.transform = 'translateX(calc(100% + 20px))';
-
-  let visible = false;
-  let minimized = false;
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !visible && !minimized) {
-        visible = true;
-        widget.style.transition = 'opacity .5s ease, transform .5s cubic-bezier(.4,0,.2,1)';
-        widget.style.opacity = '1';
-        widget.style.pointerEvents = 'all';
-        widget.style.transform = '';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  observer.observe(target);
-
-  // patch minimize to also track state
-  const origMin = document.getElementById('btn-reel-minimize');
-  if(origMin) {
-    origMin.addEventListener('click', () => { minimized = true; }, { capture: true });
-  }
-  const origTab = document.getElementById('reel-tab');
-  if(origTab) {
-    origTab.addEventListener('click', () => { minimized = false; }, { capture: true });
-  }
-})();
-
-/* ----------------------------------------
-   FLOATING REELS WIDGET
----------------------------------------- */
-(function(){
-  /* Video data � swap src with your real product videos */
-  const REELS = [
-    { src:'',       caption:'[[icon:wheat]] 25 acres of certified organic land — grown with love by Nansai farmers',  product:'Karunguruvai Rice', price:'₹180', id:1  },
-    { src:'',          caption:'[[icon:flower-2]] Sun-dried Paneer Rose petals — Tamil Nadu\'s finest, straight from our farm', product:'Paneer Rose',       price:'₹150', id:8  },
-    { src:'',       caption:'[[icon:leaf]] Zero chemicals. Zero compromise. Pure nature in every grain — Nansai Organics', product:'Karuppu Kavuni Rice', price:'₹220', id:2  },
-    { src:'',          caption:'[[icon:flower-2]] From living soil to your table — 22 years of organic farming heritage', product:'Hibiscus Flower',    price:'₹120', id:9  },
-  ];
-
-  let cur = 0, autoTimer = null;
-  const INTERVAL = 6000;
-  const $ = id => document.getElementById(id);
-
-  /* Build slides into a track */
-  function buildSlides(trackEl, dotsEl, isMini) {
-    REELS.forEach((r, i) => {
-      const slide = document.createElement('div');
-      slide.className = 'reel-slide' + (i === 0 ? ' active' : '');
-
-      const vid = document.createElement('video');
-      vid.src = r.src;
-      vid.muted = true; vid.loop = true; vid.playsInline = true;
-      vid.preload = i === 0 ? 'auto' : 'none';
-      if (i === 0) vid.play().catch(() => {});
-      slide.appendChild(vid);
-
-      if (isMini) {
-        const cap = document.createElement('div');
-        cap.className = 'mini-caption';
-        cap.textContent = r.caption;
-        slide.appendChild(cap);
-      }
-
-      trackEl.insertBefore(slide, dotsEl);
-
-      const dot = document.createElement('span');
-      dot.className = i === 0 ? 'active' : '';
-      dot.addEventListener('click', e => { e.stopPropagation(); syncTo(i); startAuto(); });
-      dotsEl.appendChild(dot);
-    });
-  }
-
-  function goTo(trackEl, dotsEl, index) {
-    const slides = trackEl.querySelectorAll('.reel-slide');
-    const dots   = dotsEl.querySelectorAll('span');
-    const prev   = cur;
-
-    slides[prev].classList.remove('active');
-    slides[prev].classList.add('prev');
-    slides[prev].querySelector('video').pause();
-    setTimeout(() => slides[prev].classList.remove('prev'), 460);
-
-    const next = slides[index];
-    next.classList.add('active');
-    const vid = next.querySelector('video');
-    vid.preload = 'auto';
-    vid.play().catch(() => {});
-
-    dots.forEach((d, i) => d.classList.toggle('active', i === index));
-  }
-
-  function syncTo(index) {
-    const miniTrack  = $('mini-track'),  miniDots  = $('mini-dots');
-    const modalTrack = $('modal-track'), modalDots = $('modal-dots');
-    goTo(miniTrack,  miniDots,  index);
-    goTo(modalTrack, modalDots, index);
-    cur = index;
-    $('modal-caption').textContent = REELS[cur].caption;
-  }
-
-  function startAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(() => syncTo((cur + 1) % REELS.length), INTERVAL);
-  }
-
-  /* Only reels that have a video. With none, keep the widget off the page instead of showing an empty box. */
-  for (let k = REELS.length - 1; k >= 0; k--) if (!REELS[k].src) REELS.splice(k, 1);
-  if (!REELS.length) {
-    ['reel-widget', 'reel-tab', 'reel-modal'].forEach(id => { const el = $(id); if (el) el.style.display = 'none'; });
-    return;
-  }
-
-  /* Init */
-  buildSlides($('mini-track'),  $('mini-dots'),  true);
-  buildSlides($('modal-track'), $('modal-dots'), false);
-  $('modal-caption').textContent = REELS[0].caption;
-  startAuto();
-
-  /* Mini player ? open modal */
-  $('reel-widget').addEventListener('click', e => {
-    if (e.target.closest('#btn-reel-minimize')) return;
-    $('reel-modal').classList.add('open');
-  });
-
-  /* Close modal */
-  $('btn-reel-close').addEventListener('click', () => $('reel-modal').classList.remove('open'));
-  $('reel-modal').addEventListener('click', e => {
-    if (e.target === $('reel-modal')) $('reel-modal').classList.remove('open');
-  });
-
-  /* Arrow buttons */
-  $('modal-prev').addEventListener('click', e => { e.stopPropagation(); syncTo((cur - 1 + REELS.length) % REELS.length); startAuto(); });
-  $('modal-next').addEventListener('click', e => { e.stopPropagation(); syncTo((cur + 1) % REELS.length); startAuto(); });
-
-  /* Minimize / restore */
-  $('btn-reel-minimize').addEventListener('click', e => {
-    e.stopPropagation();
-    $('reel-widget').classList.add('minimized');
-    $('reel-tab').style.display = 'flex';
-  });
-  $('reel-tab').addEventListener('click', () => {
-    $('reel-widget').classList.remove('minimized');
-    $('reel-tab').style.display = 'none';
-  });
-
-  /* Swipe support */
-  function addSwipe(el) {
-    let sy = 0;
-    el.addEventListener('touchstart', e => { sy = e.touches[0].clientY; }, { passive: true });
-    el.addEventListener('touchend',   e => {
-      const dy = sy - e.changedTouches[0].clientY;
-      if (Math.abs(dy) < 40) return;
-      syncTo(dy > 0 ? (cur + 1) % REELS.length : (cur - 1 + REELS.length) % REELS.length);
-      startAuto();
-    }, { passive: true });
-  }
-  addSwipe($('mini-track'));
-  addSwipe($('modal-track'));
-})();
-
 /* ---- BLOG MOBILE SCROLL DOTS ---- */
 (function(){
   const dotsWrap = document.getElementById('blog-scroll-dots');
@@ -3826,50 +3462,6 @@ function closeBlogModal() {
 }
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModal(); });
 
-/* ---- REEL WIDGET DRAG ---- */
-(function(){
-  // Drag disabled on mobile
-  if(window.innerWidth <= 768) return;
-  const el = document.getElementById('reel-widget');
-  if (!el) return;
-  let dragging = false, ox = 0, oy = 0;
-
-  let moved = false;
-
-  function startDrag(cx, cy) {
-    dragging = true;
-    moved = false;
-    const rect = el.getBoundingClientRect();
-    ox = cx - rect.left;
-    oy = cy - rect.top;
-    el.style.transition = 'none';
-    el.style.right = 'auto';
-    el.style.bottom = 'auto';
-    el.style.left = rect.left + 'px';
-    el.style.top  = rect.top  + 'px';
-  }
-
-  function moveDrag(cx, cy) {
-    if (!dragging) return;
-    moved = true;
-    const maxX = window.innerWidth  - el.offsetWidth;
-    const maxY = window.innerHeight - el.offsetHeight;
-    el.style.left = Math.min(Math.max(0, cx - ox), maxX) + 'px';
-    el.style.top  = Math.min(Math.max(0, cy - oy), maxY) + 'px';
-  }
-
-  function endDrag() { dragging = false; el.style.transition = ''; }
-
-  el.addEventListener('mousedown',  e => { if (e.target.closest('#btn-reel-minimize')) return; startDrag(e.clientX, e.clientY); e.preventDefault(); });
-  document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-  document.addEventListener('mouseup',   endDrag);
-
-  el.addEventListener('touchstart', e => { if (e.target.closest('#btn-reel-minimize')) return; const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, { passive: true });
-  document.addEventListener('touchmove',  e => { if (!dragging) return; const t = e.touches[0]; moveDrag(t.clientX, t.clientY); e.preventDefault(); }, { passive: false });
-  document.addEventListener('touchend',   endDrag);
-
-  el.addEventListener('click', e => { if (moved) { moved = false; e.stopImmediatePropagation(); e.preventDefault(); } });
-})();
 
 /* signed-in name and admin button: handled by js/site-shell.js */
 </script>

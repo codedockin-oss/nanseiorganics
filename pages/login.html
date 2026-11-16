@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nansei Organics - Authentication</title>
+<title>Sign in — Nansei Organics</title>
   <meta name="robots" content="noindex" />
 <script>
 (function () {
@@ -95,7 +95,7 @@ button,input{font:inherit}
   padding:42px;
   background:
     linear-gradient(140deg,rgba(18,50,32,.88),rgba(45,90,61,.82)),
-    url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80") center/cover;
+    url("https://ik.imagekit.io/ueorokkbc/images/field.jpeg?tr=w-1100") center/cover;
   color:#fff;
   display:flex;
   flex-direction:column;
@@ -117,7 +117,7 @@ button,input{font:inherit}
   z-index:1;
   width:132px;
   height:auto;
-  filter:drop-shadow(0 8px 22px rgba(0,0,0,.18));
+  filter:brightness(0) invert(1);
 }
 .brand-copy{position:relative;z-index:1;max-width:470px}
 .eyebrow{
@@ -146,23 +146,10 @@ h1{
   line-height:1.75;
   font-size:.96rem;
 }
-.trust-row{
-  position:relative;
-  z-index:1;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:34px;
-}
-.trust-pill{
-  border:1px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.1);
-  border-radius:999px;
-  padding:8px 12px;
-  font-size:.76rem;
-  font-weight:700;
-  color:#eef8f1;
-}
+.perks{position:relative;z-index:1;list-style:none;margin-top:30px;display:grid;gap:12px;max-width:400px}
+.perks li{display:flex;gap:14px;align-items:baseline;font-size:.9rem;line-height:1.5;color:rgba(255,255,255,.86);padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.14)}
+.perks li:last-child{border-bottom:0}
+.perks span{font-family:"Cormorant Garamond",serif;font-size:1.05rem;font-weight:700;color:var(--gold);min-width:22px}
 .auth-panel{
   background:rgba(255,255,255,.9);
   padding:34px;
@@ -379,23 +366,24 @@ input.invalid{
   input,.submit{min-height:47px}
 }
 </style>
+<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
 </head>
 <body>
-<script src="js/site-shell.js?v=20261113" data-part="header"></script>
+<script src="js/site-shell.js?v=20261123" data-part="header"></script>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <div class="login-wrap"><main class="shell">
   <section class="brand-panel" aria-label="Nansei Organics">
     <img class="brand-logo" src="nansei_org_logo.svg" alt="Nansei Organics"/>
     <div class="brand-copy">
-      <div class="eyebrow">Organic pantry access</div>
+      <div class="eyebrow">Your Nansei account</div>
       <h1>Welcome to Nansei Organics</h1>
-      <p>Sign in to manage orders, save favourites, and keep your farm-fresh organic essentials close at hand.</p>
-      <div class="trust-row">
-        <span class="trust-pill">Secure account</span>
-        <span class="trust-pill">Fresh harvests</span>
-        <span class="trust-pill">Premium organics</span>
-      </div>
+      <p>Rice, flowers and flours from our farm in Tamil Nadu. Sign in to see your orders and check out faster.</p>
+      <ul class="perks">
+        <li><span>01</span>Track every order and its courier status in one place</li>
+        <li><span>02</span>Save your delivery address once, reuse it at checkout</li>
+        <li><span>03</span>Keep a wishlist of the products you buy again</li>
+      </ul>
     </div>
   </section>
 
@@ -404,13 +392,13 @@ input.invalid{
       <img class="mobile-logo" src="nansei_org_logo.svg" alt="Nansei Organics"/>
 
       <div class="tabs" role="tablist" aria-label="Authentication">
-        <button class="tab active" type="button" id="loginTab" role="tab" aria-selected="true" onclick="switchTab('login')">Login</button>
-        <button class="tab" type="button" id="registerTab" role="tab" aria-selected="false" onclick="switchTab('register')">Register</button>
+        <button class="tab active" type="button" id="loginTab" data-auth-tab="login" role="tab" aria-selected="true">Login</button>
+        <button class="tab" type="button" id="registerTab" data-auth-tab="register" role="tab" aria-selected="false">Register</button>
       </div>
 
       <form id="loginPanel" class="panel active" novalidate>
         <h2>Welcome back</h2>
-        <p class="sub">Login with your email and password to continue.</p>
+        <p class="sub">Sign in with the email you used for your orders.</p>
 
         <div class="field">
           <label for="loginEmail">Email</label>
@@ -422,22 +410,22 @@ input.invalid{
           <label for="loginPassword">Password</label>
           <div class="input-wrap password">
             <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"/>
-            <button class="toggle" type="button" onclick="togglePassword('loginPassword', this)" aria-label="Show password">
+            <button class="toggle" type="button" data-toggle-password="loginPassword" aria-label="Show password">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
           <div class="error" id="loginPasswordError"></div>
         </div>
 
-        <a class="forgot" href="#" onclick="forgotPassword(event)">Forgot Password</a>
+        <a class="forgot" href="#" id="forgotPasswordLink">Forgot password?</a>
         <button class="submit" id="loginButton" type="submit">Login</button>
 
-        <p class="switch">Don't have an account? <button type="button" onclick="switchTab('register')">Create one</button></p>
+        <p class="switch">Don't have an account? <button type="button" data-auth-tab="register">Create one</button></p>
       </form>
 
       <form id="registerPanel" class="panel" novalidate>
-        <h2>Create Account</h2>
-        <p class="sub">Start your Nansei Organics account in a few details.</p>
+        <h2>Create account</h2>
+        <p class="sub">It takes a minute. Your orders and addresses stay in one place.</p>
 
         <div class="grid-2">
           <div class="field">
@@ -462,7 +450,7 @@ input.invalid{
           <label for="registerPassword">Password</label>
           <div class="input-wrap password">
             <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Minimum 8 characters"/>
-            <button class="toggle" type="button" onclick="togglePassword('registerPassword', this)" aria-label="Show password">
+            <button class="toggle" type="button" data-toggle-password="registerPassword" aria-label="Show password">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
@@ -477,7 +465,7 @@ input.invalid{
           <label for="confirmPassword">Confirm Password</label>
           <div class="input-wrap password">
             <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Repeat password"/>
-            <button class="toggle" type="button" onclick="togglePassword('confirmPassword', this)" aria-label="Show password">
+            <button class="toggle" type="button" data-toggle-password="confirmPassword" aria-label="Show password">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
@@ -485,12 +473,12 @@ input.invalid{
         </div>
 
         <button class="submit" id="registerButton" type="submit">Create Account</button>
-        <p class="switch">Already have an account? <button type="button" onclick="switchTab('login')">Login</button></p>
+        <p class="switch">Already have an account? <button type="button" data-auth-tab="login">Login</button></p>
       </form>
     </div>
   </section>
 </main></div>
-<script src="js/site-shell.js?v=20261113" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261123" data-part="footer"></script>
 
 <script>
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -629,6 +617,14 @@ document.getElementById('registerPanel').addEventListener('submit', async (event
     setLoading('registerButton', false, 'Create Account');
   }
 });
+
+document.querySelectorAll('[data-auth-tab]').forEach((button) => {
+  button.addEventListener('click', () => switchTab(button.dataset.authTab));
+});
+document.querySelectorAll('[data-toggle-password]').forEach((button) => {
+  button.addEventListener('click', () => togglePassword(button.dataset.togglePassword, button));
+});
+document.getElementById('forgotPasswordLink').addEventListener('click', forgotPassword);
 
 async function forgotPassword(event) {
   event.preventDefault();

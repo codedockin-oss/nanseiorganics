@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <script>/* ImageKit photos: ask for a copy about twice the size it is shown at, instead of the full upload */window.ikThumb=function(u,w){if(!u||u.indexOf('ik.imagekit.io')<0||/[?&]tr=/.test(u))return u||'';return u+(u.indexOf('?')<0?'?':'&')+'tr=w-'+w;};</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product NANSAI</title>
+  <title>Nansei Organics</title>
   <meta name="description" content="Sizes, prices, cooking notes and reviews for Nansai Organics farm produce." />
   <script>
     /* -- Inline Cart / Wish / Counters (no backend required) -- */
@@ -3772,6 +3772,22 @@
   .pd-ship p{margin:.15rem 0}
   .pd-ship b{display:inline-block;min-width:4.6rem;color:#0f2218}
   .pd-ship a{color:#2d5a3d;text-decoration:underline;text-underline-offset:3px}
+  .pd-trust{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(26,58,42,.12);border-radius:10px;overflow:hidden;background:#fdfaf5}
+  .pd-trust li{padding:.7rem .75rem;display:flex;flex-direction:column;gap:2px;border-left:1px solid rgba(26,58,42,.1)}
+  .pd-trust li:first-child{border-left:0}
+  .pd-trust b{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#0f2218;line-height:1.15}
+  .pd-trust span{font-size:.72rem;color:#5d7563}
+  .pd-pin label{display:block;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--forest-sage);margin-bottom:.4rem}
+  .pd-pin-row{display:flex;border:1.5px solid rgba(26,58,42,.18);border-radius:8px;overflow:hidden;max-width:340px;background:#fff}
+  .pd-pin-row:focus-within{border-color:#4a8c5c}
+  .pd-pin-row input{flex:1;min-width:0;border:0;outline:0;padding:.6rem .8rem;font-size:.9rem;letter-spacing:.08em;background:transparent}
+  .pd-pin-row button{border:0;background:#0f2218;color:#f7f3ec;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:0 1rem;cursor:pointer}
+  .pd-pin-row button:hover{background:#2d5a3d}
+  .pd-pin-msg{font-size:.8rem;margin-top:.4rem;color:#33453a;min-height:1em}
+  .pd-pin-msg.bad{color:#b83232}
+  .pd-ask{display:inline-flex;align-items:center;gap:.5rem;font-size:.84rem;font-weight:600;color:#2d5a3d;text-decoration:none;border-bottom:1px solid rgba(45,90,61,.3);align-self:flex-start;padding-bottom:2px}
+  .pd-ask:hover{color:#0f2218;border-color:#c9a84c}
+  @media(max-width:420px){.pd-trust{grid-template-columns:1fr}.pd-trust li{border-left:0;border-top:1px solid rgba(26,58,42,.1)}.pd-trust li:first-child{border-top:0}}
   .pd-wrap{max-width:1180px;margin:0 auto;padding:1.5rem 1.5rem 2.5rem}
   .pd-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:2.5rem;align-items:start}
   .pd-highlights{list-style:none;margin:0 0 1.5rem;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem 1.5rem}
@@ -3805,6 +3821,47 @@
     .pd-facts{position:static}
   }
 </style>
+<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
+<script src="js/farm-reels.js?v=20261118" defer></script>
+<style id="om-pdp">
+/* Organic Mandya-style product page, Nansei colours */
+body{background:#fff!important}
+#galleryCol .main-img-zone{background:#fff!important;border-radius:22px!important;border:1px solid #e5e7eb}
+/* product photos are finished square artwork: fill the square edge to edge */
+#galleryCol .main-product-img{object-fit:cover!important;padding:0!important;width:100%!important;height:100%!important}
+#thumbsRow button,#thumbsRow img{border-radius:12px!important}
+#infoCol{gap:18px!important;padding-top:28px!important}
+#pCategory{font-size:.74rem!important;letter-spacing:.14em!important;color:#6b7a6f!important;font-weight:700!important}
+#pTitle{font-size:clamp(1.7rem,3vw,2.3rem)!important;font-weight:700!important;line-height:1.15!important;color:#0f2218!important}
+#pTagline{font-size:.98rem!important;color:#3d5a45!important}
+#infoCol .info-2{background:transparent!important;border:0!important;padding:0!important}
+#pPriceEl{font-size:1.9rem!important;font-weight:700!important;color:#0f2218!important}
+#pDiscEl{background:#2d5a3d!important;border-color:#2d5a3d!important;color:#fff!important;font-weight:700!important}
+#pSavingEl{color:#2d5a3d!important;font-weight:700!important}
+#variantLabel{font-size:.78rem!important;letter-spacing:.12em!important;color:#3d5a45!important;margin-bottom:10px!important}
+#variantBtns{gap:10px!important}
+#variantBtns .var-btn{display:flex!important;flex-direction:column;align-items:flex-start;gap:2px;min-width:92px;padding:10px 14px!important;border:1.5px solid rgba(15,34,24,.14)!important;border-radius:12px!important;background:#fff!important;color:#1a2416!important;font-weight:700!important;font-size:.95rem!important;text-align:left;cursor:pointer}
+#variantBtns .var-btn .vb-p{font-size:.78rem;font-weight:600;color:#6b7a6f}
+#variantBtns .var-btn:hover{border-color:#2d5a3d!important}
+#variantBtns .var-btn.selected{border-color:#0f2218!important;background:#eef3ee!important;box-shadow:inset 0 0 0 1px #0f2218}
+#variantBtns .var-btn.selected .vb-p{color:#0f2218}
+#infoCol .info-4{gap:12px!important}
+#atcBtn,.btn-atc{height:52px!important;border-radius:12px!important;background:#0f2218!important;color:#fff!important;font-weight:700!important;font-size:1rem!important;box-shadow:none!important;background-image:none!important}
+#atcBtn:hover{background:#2d5a3d!important}
+.btn-buynow{height:52px!important;border-radius:12px!important;background:#fff!important;color:#0f2218!important;border:1.5px solid #0f2218!important;font-weight:700!important;font-size:1rem!important;box-shadow:none!important;background-image:none!important}
+.btn-buynow:hover{background:#eef3ee!important}
+.btn-buynow svg{display:none}
+.pd-trust{background:#fff!important;border-radius:16px!important}
+.pd-trust b{font-weight:700!important}
+#pdDetails{background:#fff}
+#pdDetails summary,#pdDetails h2,#pdDetails h3{color:#0f2218!important}
+@media(max-width:767px){
+  #infoCol{padding:20px 16px!important}
+  #galleryCol .main-img-zone{border-radius:0!important}
+  #pTitle{font-size:1.6rem!important}
+  #variantBtns .var-btn{min-width:84px;padding:9px 12px!important}
+}
+</style>
 </head>
 
 <body class="text-gray-900">
@@ -3828,7 +3885,7 @@
 
   <!-- ---- NAVBAR ---- -->
   <script src="js/product-copy.js?v=20261113"></script>
-<script src="js/site-shell.js?v=20261113" data-part="header" data-bottom-bar="off"></script>
+<script src="js/site-shell.js?v=20261123" data-part="header" data-bottom-bar="off"></script>
 
   <!-- ---- BREADCRUMB ---- -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-1.5 text-xs flex-wrap"
@@ -3919,8 +3976,8 @@
         <div class="info-1">
           <span id="pCategory" class="text-[10px] font-black uppercase tracking-widest"
             style="color:var(--forest-leaf)"></span>
-          <h1 id="pTitle" class="text-2xl sm:text-3xl font-bold leading-tight mt-1"
-            style="color:var(--forest-deep);font-family:'Inter',sans-serif;font-weight:700;"></h1>
+          <h1 id="pTitle" class="text-[2rem] sm:text-[2.4rem] leading-[1.05] mt-1"
+            style="color:var(--forest-deep);font-family:'Cormorant Garamond',serif;font-weight:700;"></h1>
           <p id="pTagline" class="text-sm leading-relaxed mt-1.5" style="color:var(--forest-sage)"></p>
         </div>
 
@@ -3998,8 +4055,28 @@
         <div class="pd-ship" id="pdShip">
           <p><b>Delivery</b> <span id="pdShipText">Free delivery on orders of ₹999 and above.</span></p>
           <p id="pdDispatch" style="display:none"></p>
-          <p><b>Returns</b> <a href="refund-policy.html">See our refund and returns policy</a></p>
+          <p><b>Returns</b> <a href="refund-policy.html">7-day replacement for damaged or wrong items</a></p>
         </div>
+
+        <ul class="pd-trust" aria-label="Buying from Nansei Organics">
+          <li><b id="pdTrustShip">Free delivery</b><span id="pdTrustShipSub">above ₹999</span></li>
+          <li><b>Packed at the farm</b><span>Achankulam, Tamil Nadu</span></li>
+          <li><b>Secure payment</b><span id="pdTrustPay">UPI, cards &amp; COD</span></li>
+        </ul>
+
+        <form class="pd-pin" onsubmit="pdCheckPin(event)" novalidate>
+          <label for="pdPin">Check delivery to your pincode</label>
+          <div class="pd-pin-row">
+            <input id="pdPin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6-digit pincode"/>
+            <button type="submit">Check</button>
+          </div>
+          <p id="pdPinMsg" class="pd-pin-msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <a class="pd-ask" id="pdAsk" href="https://wa.me/916382142578" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.96 1.35-.5.05-.98.23-3.3-.69-2.8-1.1-4.56-3.95-4.7-4.13-.13-.18-1.12-1.49-1.12-2.85 0-1.35.71-2.02.96-2.29.25-.27.55-.34.73-.34h.52c.17 0 .4-.06.62.47.24.56.8 1.93.87 2.07.07.14.11.3.02.49-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.61-.14.25.09 1.6.75 1.87.89.27.14.46.2.52.32.07.11.07.66-.17 1.33z"/></svg>
+          Questions about this product? Ask us on WhatsApp
+        </a>
 
       </div><!-- /infoCol -->
     </div><!-- /grid -->
@@ -4970,7 +5047,9 @@
   <!-- ---------------------------------------
      FOOTER
 --------------------------------------- -->
-  <script src="js/site-shell.js?v=20261113" data-part="footer"></script>
+  <!-- farm reels slide in from the side while scrolling (js/farm-reels.js) -->
+  <div data-farm-reels="float" data-after="500" data-mobile-bottom="84"></div>
+  <script src="js/site-shell.js?v=20261123" data-part="footer"></script>
 
 
   <!-- ---------------- JS ---------------- -->
@@ -6081,7 +6160,8 @@
         currentProduct = { ...currentProduct, rating: 0, reviews: 0, reviewData: [] };
       }
       window.currentProduct = currentProduct;
-      document.title = currentProduct.name + ' | NANSAI';
+      if (typeof pdUpdateAsk === 'function') pdUpdateAsk();
+      document.title = currentProduct.name + ' | Nansei Organics';
       try { render(); } catch (e) { console.error('render error', e); }
       try { window.nsRefreshProductExperience?.(); } catch (e) { console.warn('product experience refresh failed', e); }
       try { renderRelated(); } catch (e) { }
@@ -6095,7 +6175,7 @@
       const p = currentProduct;
       const disc = Math.round((1 - p.price / p.oldPrice) * 100);
 
-      document.title = p.name + ' | NANSAI';
+      document.title = p.name + ' | Nansei Organics';
       document.getElementById('breadcrumbName').textContent = p.name;
 
       // badge colors by category
@@ -6188,7 +6268,11 @@
         } else {
           b.style.cssText = 'border-color:#e5e7eb;color:#6b7280';
         }
-        b.textContent = formatVariantLabel(v, p.category);
+        const vLabel = formatVariantLabel(v, p.category);
+        const vPrice = isNaN(parseFloat(v)) ? null : Math.round(p.price * getVariantMultiplier(v, p.category));
+        b.dataset.label = vLabel;
+        b.innerHTML = '<span class="vb-l">' + vLabel + '</span>' + (vPrice ? '<span class="vb-p">\u20b9' + vPrice + '</span>' : '');
+        b.setAttribute('aria-label', vLabel + (vPrice ? ', \u20b9' + vPrice : ''));
         b.dataset.variant = v;
         b.onclick = () => {
           document.querySelectorAll('#variantBtns button').forEach(x => {
@@ -6284,7 +6368,6 @@
       const st = window.NANSEI_SETTINGS || {};
       const lg = st.legal || {}, ct = st.contact || {};
       const packer = [lg.businessName || 'Nansei Organics', ct.address || 'Tamil Nadu, India'].filter(Boolean).join(', ');
-      const care = [ct.phone, ct.email].filter(Boolean).join(' · ');
       const rows = [
         ['Product', c.generic || p.name],
         ['Pack size', '<span id="pdFactSize"></span>'],
@@ -6294,7 +6377,7 @@
         ['Packed by', packer],
         ['FSSAI licence no.', lg.fssai || 'Printed on the pack'],
         ['Best before', c.shelfLife ? c.shelfLife + ' (date on pack)' : 'Printed on the pack'],
-        ['Customer care', care || 'See the Contact Us section below'],
+        ['Customer care', 'Use the WhatsApp button above to contact us'],
       ];
       document.getElementById('specTable').innerHTML = '<tbody>' + rows.map(([k, v]) =>
         '<tr><th scope="row">' + pdEsc(k) + '</th><td>' + (String(v).startsWith('<span id="pdFact') ? v : pdEsc(v)) + '</td></tr>').join('') + '</tbody>';
@@ -6317,9 +6400,46 @@
         else t.textContent = 'Free delivery on every order.';
         if (sh.shippingFee > 0 && !sh.freeShippingAbove) t.textContent = '₹' + sh.shippingFee + ' per order.';
       }
+      const ts = document.getElementById('pdTrustShip'), tss = document.getElementById('pdTrustShipSub');
+      if (ts && tss) {
+        if (sh.shippingFee > 0 && sh.freeShippingAbove) { ts.textContent = 'Free delivery'; tss.textContent = 'on orders above ₹' + sh.freeShippingAbove; }
+        else if (sh.shippingFee > 0) { ts.textContent = 'Delivery ₹' + sh.shippingFee; tss.textContent = 'anywhere in India'; }
+        else { ts.textContent = 'Free delivery'; tss.textContent = 'on every order'; }
+      }
+      const tp = document.getElementById('pdTrustPay');
+      if (tp && sh.codEnabled === false) tp.textContent = 'UPI, cards & net banking';
+      const wa = String((st.contact || {}).whatsapp || '').replace(/\D/g, '');
+      if (wa) pdAskNumber = wa;
+      pdUpdateAsk();
       const d = document.getElementById('pdDispatch');
       if (d && sh.dispatchNote) { d.textContent = sh.dispatchNote; d.style.display = ''; }
       if (currentProduct) renderDetails(currentProduct);
+    }
+    let pdAskNumber = '916382142578';
+    function pdUpdateAsk() {
+      const a = document.getElementById('pdAsk');
+      if (!a) return;
+      const name = (window.currentProduct && window.currentProduct.name) || document.getElementById('pTitle').textContent || 'this product';
+      a.href = 'https://wa.me/' + pdAskNumber + '?text=' + encodeURIComponent('Hi Nansei Organics, I have a question about ' + name + ' (' + location.href.split('#')[0] + ')');
+    }
+    async function pdCheckPin(e) {
+      e.preventDefault();
+      const inp = document.getElementById('pdPin'), msg = document.getElementById('pdPinMsg');
+      const pin = inp.value.replace(/\D/g, '');
+      inp.value = pin;
+      msg.className = 'pd-pin-msg';
+      if (!/^[1-9]\d{5}$/.test(pin)) { msg.textContent = 'Enter a valid 6-digit pincode.'; msg.classList.add('bad'); return; }
+      msg.textContent = 'Checking…';
+      try {
+        const r = await fetch('https://api.postalpincode.in/pincode/' + pin);
+        const d = await r.json();
+        const po = d && d[0] && d[0].Status === 'Success' && d[0].PostOffice && d[0].PostOffice[0];
+        if (!po) { msg.textContent = 'We could not find this pincode. Please check it.'; msg.classList.add('bad'); return; }
+        const st = window.NANSEI_SETTINGS || {}, sh = st.shipping || {};
+        msg.textContent = 'We deliver to ' + po.District + ', ' + po.State + ' by courier' + (sh.codEnabled === false ? '.' : '. Cash on delivery is available.');
+      } catch (err) {
+        msg.textContent = 'We ship across India. Could not look up this pincode right now.';
+      }
     }
     document.addEventListener('nansei:settings', e => pdApplySettings(e.detail));
     if (window.NANSEI_SETTINGS) pdApplySettings(window.NANSEI_SETTINGS);
@@ -6463,7 +6583,8 @@
     function cartItemFromSelection() {
       const p = currentProduct;
       const s = currentSelection();
-      const selectedVariant = (document.querySelector('#variantBtns .selected') || {}).textContent || (p.variants || [''])[0];
+      const selEl = document.querySelector('#variantBtns .selected');
+      const selectedVariant = (selEl && (selEl.dataset.label || selEl.textContent)) || (p.variants || [''])[0];
       return { id: p.id, name: p.name, price: s.price, basePrice: s.basePrice, oldPrice: s.oldPrice, image: p.image, qty: s.qty, qtyLabel: s.label, qtyVal: s.qtyVal, unit: s.unit, selectedVariant };
     }
 
@@ -6531,7 +6652,7 @@
       const p = currentProduct;
       const url = window.location.origin + window.location.pathname + '?id=' + p.id;
       if (navigator.share) {
-        navigator.share({ title: p.name + ' | NANSAI', text: p.tagline, url });
+        navigator.share({ title: p.name + ' | Nansei Organics', text: p.tagline, url });
       } else {
         navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard!'));
       }
@@ -6584,42 +6705,57 @@
 
     /* --- RELATED - 3 horizontal scroll rows like wishlist page --- */
     const relFloatClasses = ['rel-float-1', 'rel-float-2', 'rel-float-3', 'rel-float-4', 'rel-float-5', 'rel-float-6'];
-    function relCardHTML(p, i) {
-      const fc = relFloatClasses[(i || 0) % relFloatClasses.length];
+    /* same card as the home page (css/nansei.css .om-card): photo, name, price, size + Add */
+    function relCfg(p) { return REL_QTY_CFG[p.category] || { unit: 'pcs', options: [1, 2, 3, 5] }; }
+    function relDefault(cfg) { const one = cfg.unit === 'ml' ? 1000 : 1; return cfg.options.includes(one) ? one : cfg.options[0]; }
+    function relPrice(p, v, unit, old) { const b = old ? p.oldPrice : p.price; return unit === 'ml' ? Math.round(b * (v / 1000)) : Math.round(b * v); }
+    function relCardHTML(p) {
       const d = Math.round((1 - p.price / p.oldPrice) * 100);
       const wishIds = JSON.parse(localStorage.getItem('wishlist') || '[]');
       const isW = wishIds.includes(p.id) || wishIds.includes(String(p.id));
-      const badge = p.badge === 'hot'
-        ? `<span class="rel-badge" style="background:#ea580c;color:#fff"> Hot</span>`
-        : p.badge === 'new'
-          ? `<span class="rel-badge" style="background:var(--forest);color:var(--cream)"> New</span>`
-          : `<span class="rel-badge" style="background:#ef4444;color:#fff">${d}% OFF</span>`;
+      const cfg = relCfg(p), q = relDefault(cfg);
+      const price = relPrice(p, q, cfg.unit), old = relPrice(p, q, cfg.unit, true);
+      const opts = cfg.options.map(v => `<option value="${v}"${v === q ? ' selected' : ''}>${relFmtQty(v, cfg.unit)}</option>`).join('');
       return `
-    <div class="rel-card ${fc}" onclick="goToProduct(${p.id})">
-      <div class="rel-img-wrap">
-        ${badge}
-        <button id="relwish-${p.id}" class="rel-wish-btn ${isW ? 'liked' : ''}" onclick="event.stopPropagation();relToggleWish(${p.id},this)">
-          <svg viewBox="0 0 24 24" fill="${isW ? '#ef4444' : 'none'}" stroke="${isW ? '#ef4444' : '#9ca3af'}" stroke-width="2" stroke-linecap="round">
-            <path d="M20.8 4.6c-1.5-1.6-4-1.6-5.6 0L12 7.8 8.8 4.6c-1.5-1.6-4-1.6-5.6 0-1.6 1.7-1.6 4.3 0 6l8.8 9 8.8-9c1.6-1.7 1.6-4.3 0-6z"/>
-          </svg>
-        </button>
-        <img class="rel-img" src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy"/>
-      </div>
-      <div class="rel-body">
-        <div class="rel-cat">${p.category}</div>
-        <div class="rel-name">${p.name}</div>
-        <div class="rel-stars"><span>${renderStars(p.rating)}</span><small>${p.rating} (${p.reviews})</small></div>
-        <div class="rel-price-row">
-          <span class="rel-price" data-card-price>₹${p.price}</span>
-          <span class="rel-old" data-card-old>₹${p.oldPrice}</span>
-          <span class="rel-disc" data-card-disc>${d}% off</span>
+    <div class="rel-card om-card" onclick="if(!event.defaultPrevented)goToProduct(${p.id})">
+      <a class="om-img prod-img-wrap" href="product.html?id=${p.id}" onclick="event.stopPropagation()">
+        ${p.badge === 'new' ? '<span class="om-tag om-new">New</span>' : (d > 0 ? `<span class="om-tag">${d}% off</span>` : '')}
+        <img class="prod-img" src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy" width="400" height="400"/>
+      </a>
+      <button type="button" id="relwish-${p.id}" class="om-wish rel-wish-btn ${isW ? 'liked' : ''}" aria-label="Save ${p.name} to wishlist" onclick="event.stopPropagation();relToggleWish(${p.id},this)">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="${isW ? '#ef4444' : 'none'}" stroke="${isW ? '#ef4444' : '#0f2218'}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.5 15 3.5 9.2A4.7 4.7 0 0 1 12 6.6a4.7 4.7 0 0 1 8.5 2.6c0 5.8-8.5 11.3-8.5 11.3z"/></svg>
+      </button>
+      <div class="om-body">
+        <a class="om-name" href="product.html?id=${p.id}" onclick="event.stopPropagation()">${p.name}</a>
+        <div class="om-price"><span data-card-price>₹ ${price}.00</span>${old > price ? `<s data-card-old>₹ ${old}.00</s>` : '<s data-card-old></s>'}</div>
+        <div class="om-actions" onclick="event.preventDefault();event.stopPropagation()">
+          <select class="om-size" aria-label="Choose size for ${p.name}" onchange="relSize(${p.id},this)">${opts}</select>
+          <button type="button" class="om-add" onclick="relAdd(${p.id},this)">Add</button>
         </div>
-        <button class="rel-add-btn" id="relbtn-${p.id}" onclick="event.stopPropagation();startRelQty(${p.id})">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-          Add to Cart
-        </button>
       </div>
     </div>`;
+    }
+    function relSize(id, sel) {
+      const p = products.find(x => x.id === id); if (!p) return;
+      const cfg = relCfg(p), v = parseFloat(sel.value);
+      relQtyState[id] = { qty: v, unit: cfg.unit };
+      const card = sel.closest('.om-card'), price = relPrice(p, v, cfg.unit), old = relPrice(p, v, cfg.unit, true);
+      card.querySelector('[data-card-price]').textContent = '₹ ' + price + '.00';
+      card.querySelector('[data-card-old]').textContent = old > price ? '₹ ' + old + '.00' : '';
+    }
+    function relAdd(id, btn) {
+      relSize(id, btn.parentElement.querySelector('.om-size'));
+      const p = products.find(x => x.id === id); if (!p) return;
+      const { qty, unit } = relQtyState[id];
+      const totalPrice = relPrice(p, qty, unit), label = relFmtQty(qty, unit);
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const ex = cart.find(i => String(i.id) === String(id) && i.qtyLabel === label);
+      if (ex) ex.qty += 1; else cart.push({ id, name: p.name, price: totalPrice, basePrice: p.price, image: p.image, qty: 1, qtyVal: qty, qtyLabel: label, unit, selectedQuantity: label, selectedUnit: unit, selectedPrice: totalPrice });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCounters();
+      showToast(p.name + ' ' + label + ' added to cart');
+      btn.classList.add('done'); btn.textContent = 'Added';
+      clearTimeout(btn._t); btn._t = setTimeout(() => { btn.classList.remove('done'); btn.textContent = 'Add'; }, 1500);
     }
 
     function renderRelated() {
@@ -6662,7 +6798,7 @@
       if (!p) return;
       const url = window.location.origin + window.location.pathname + '?id=' + id;
       if (navigator.share) {
-        navigator.share({ title: p.name + '  NANSAI', text: p.tagline, url });
+        navigator.share({ title: p.name + ' | Nansei Organics', text: p.tagline, url });
       } else {
         navigator.clipboard.writeText(url).then(() => showToast(' Link copied!'));
       }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
   <script>/* ImageKit photos: ask for a copy about twice the size it is shown at, instead of the full upload */window.ikThumb=function(u,w){if(!u||u.indexOf('ik.imagekit.io')<0||/[?&]tr=/.test(u))return u||'';return u+(u.indexOf('?')<0?'?':'&')+'tr=w-'+w;};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NANSEI Organics Checkout</title>
+<title>Nansei Organics Checkout</title>
   <meta name="robots" content="noindex" />
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -557,6 +557,7 @@ body{background:#f7f3ec}
 .ck-done-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
 .ck-done-actions .ck-btn{width:100%}
 </style>
+<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
 </head>
 <body>
 
@@ -579,7 +580,7 @@ body{background:#f7f3ec}
 </div></div>
 
 <!-- ------------------ NAVBAR ------------------ -->
-<script src="js/site-shell.js?v=20261113" data-part="header" data-bottom-bar="off"></script>
+<script src="js/site-shell.js?v=20261123" data-part="header" data-bottom-bar="off"></script>
 
 
 
@@ -720,7 +721,7 @@ body{background:#f7f3ec}
           <button type="button" class="ck-btn ck-pay-btn" id="btnPayNow" onclick="initiateRazorpay()">Pay ₹0 securely</button>
           <ul class="ck-facts">
             <li>Online payments are handled by Razorpay. We never see your card or UPI details.</li>
-            <li>Questions about your order? <a href="https://wa.me/916382142578" target="_blank" rel="noopener">WhatsApp +91 63821 42578</a></li>
+            <li>Questions about your order? <a href="https://wa.me/916382142578" target="_blank" rel="noopener">Message us on WhatsApp</a></li>
             <li><a href="refund-policy.html">Returns and refunds</a></li>
           </ul>
         </div>
@@ -938,7 +939,7 @@ body{background:#f7f3ec}
 </div>
 
 <!-- FOOTER -->
-<script src="js/site-shell.js?v=20261113" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261123" data-part="footer"></script>
 
 <div id="toast"></div>
 
@@ -1554,28 +1555,30 @@ async function initiateRazorpay() {
 
   // Step 1: Create Razorpay order on backend to get order_id
   // NOTE: send amount in rupees — backend converts to paise
-  let rzpOrderId = null;
+  let rzpOrderId = null, rzpAmount = Math.round(total * 100);
   try {
     const rzpRes = await fetch(window.API_BASE + '/orders/razorpay/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(_getTok() ? { Authorization: 'Bearer ' + _getTok() } : {}) },
-      body: JSON.stringify({ amount: total, currency: 'INR', receipt: 'rcpt_' + Date.now() })
+      // the server prices this cart itself and keeps it, so the order is saved even if this page closes after paying
+      body: JSON.stringify({ orderPayload: _razorpayOrderPayload(), currency: 'INR' })
     });
     const rzpData = await rzpRes.json();
-    if (!rzpData.success) throw new Error(rzpData.message || 'Order creation failed');
+    if (!rzpData.success) { const e = new Error(rzpData.message || 'Order creation failed'); e.userMessage = rzpRes.status === 409 || rzpRes.status === 400 ? rzpData.message : ''; throw e; }
     rzpOrderId = rzpData.data.orderId;
+    rzpAmount = rzpData.data.amount;
     _rzpKeyId = rzpData.data.keyId || _rzpKeyId;
   } catch(e) {
     console.error('Razorpay order creation failed:', e.message);
     if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    showToast('&#10060; Could not start the payment. Please check your connection and try again, or choose Cash on Delivery.');
+    showToast(e.userMessage ? '&#9888; ' + e.userMessage : '&#10060; Could not start the payment. Please check your connection and try again, or choose Cash on Delivery.');
     return;
   }
 
   // Step 2: Open Razorpay checkout
   const options = {
     key: _rzpKeyId,
-    amount: total * 100, // paise — must match what backend created
+    amount: rzpAmount, // paise, exactly what the server asked Razorpay for
     currency: 'INR',
     name: RZP_MERCHANT_NAME,
     description: 'Order from NANSEI Organics - ' + cart.length + ' item' + (cart.length > 1 ? 's' : ''),
@@ -1650,21 +1653,24 @@ function _resetPayBtn() {
   btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
-async function _onRazorpaySuccess(response) {
-  _showProcessingOverlay('Verifying Payment', 'Confirming with Razorpay', true);
-
-  const { sub, disc, gst, total } = calcTotal();
+function _razorpayOrderPayload() {
+  const { sub, gst, total } = calcTotal();
   const d = new Date(); d.setDate(d.getDate() + 5);
-  const orderPayload = {
+  return {
     items: _orderItems(),
     shippingAddress: _orderAddress(addresses[selectedAddrIdx]),
     paymentMethod: 'Razorpay',
     itemsPrice: sub, taxPrice: gst, shippingPrice: deliveryCost, discount: couponDisc, couponCode: window._ckCouponCode ? window._ckCouponCode() : undefined, totalPrice: total,
     estimatedDelivery: d.toISOString()
   };
+}
+
+async function _onRazorpaySuccess(response) {
+  _showProcessingOverlay('Verifying Payment', 'Confirming with Razorpay', true);
+  const orderPayload = _razorpayOrderPayload();
 
   // The backend checks the payment signature and saves the order in one step.
-  let saved = null, problem = '';
+  let saved = null, problem = '', pendingSave = false;
   try {
     const verifyRes = await fetch(window.API_BASE + '/orders/razorpay/verify', {
       method: 'POST',
@@ -1678,10 +1684,11 @@ async function _onRazorpaySuccess(response) {
     });
     const verifyData = await verifyRes.json();
     if (verifyData.success && verifyData.verified) saved = verifyData.data || {};
-    else problem = verifyData.message || '';
+    else { problem = verifyData.message || ''; pendingSave = verifyRes.status === 202; }
   } catch (e) { /* network error: handled below */ }
   _hideProcessingOverlay();
   if (saved) { _finishOrder(saved.orderNumber || (saved._id || '').slice(-8) || response.razorpay_payment_id); return; }
+  if (pendingSave) { _finishOrder(response.razorpay_payment_id); showToast(problem); return; }
   _resetPayBtn();
   showToast('&#9888; ' + (problem || ('We received your payment but could not confirm the order. Please contact us with payment ID ' + response.razorpay_payment_id + '.')));
 }
@@ -1774,7 +1781,7 @@ function _saveLocalOrder(oid, dstr, sub, disc, gst, total, addr, now, d) {
 
 function spawnConfetti() {
   const box = document.getElementById('confettiBox');
-  const colors = ['#2d5a3d', '#66bb6a', '#2563eb', '#60a5fa', '#b8972a', '#fff'];
+  const colors = ['#2d5a3d', '#66bb6a', '#c9a84c', '#e8c97a', '#b8972a', '#fff'];
   box.innerHTML = '';
   for (let i = 0; i < 50; i++) {
     const p = document.createElement('div'); p.className = 'confetti-bit';
@@ -1837,7 +1844,7 @@ function sendWhatsAppOrder() {
     'Thank you for shopping with NANSEI Organics!',
     'Pure. Organic. Farm-Direct.',
     '',
-    'Need help? Call us: +91 63821 42578',
+    'Need help? Message us on WhatsApp.',
   ].filter(Boolean).join('%0A');
 
   // Open WhatsApp on customer's own number (they save it as their receipt)
