@@ -207,7 +207,7 @@
           '<li class="nsh-sep" aria-hidden="true"></li>' +
           '<li><a href="video-reels.html"' + cur('video-reels.html') + '>Farm reels</a></li>' +
           '<li><a href="' + (ON_HOME ? '#gallery' : 'index.html#gallery') + '">Our farm</a></li>' +
-          '<li><a href="blog.html"' + cur('blog.html') + '>Journal</a></li>' +
+          '<li><a href="blog.html"' + cur('blog.html') + '>Blogs</a></li>' +
           '<li><a href="news.html"' + cur('news.html') + '>News</a></li>' +
           '<li><a href="' + FARM_MAP + '" target="_blank" rel="noopener">Map</a></li>' +
           '</ul></nav>' +
@@ -244,7 +244,7 @@
             '<a href="#" onclick="NanseiShell.toggleDrawer(true);return false;"><span class="nsh-iw">' + ICON.grid + '</span>Categories</a>' +
             '<a href="video-reels.html"' + cur('video-reels.html') + '><span class="nsh-iw">' + ICON.play + '</span>Reels</a>' +
             '<a href="' + FARM_MAP + '" target="_blank" rel="noopener"><span class="nsh-iw">' + ICON.map + '</span>Map</a>' +
-            '<a href="account.html"' + cur('account.html') + '><span class="nsh-iw">' + ICON.user + '</span>Account</a>' +
+            '<a href="blog.html"' + cur('blog.html') + '><span class="nsh-iw">' + ICON.book + '</span>Blogs</a>' +
             '<a href="#" onclick="NanseiShell.openCart();return false;"><span class="nsh-iw">' + ICON.cart + '<span class="nsh-bbadge" id="mobBarCartCount">0</span></span>Cart</a>' +
             '</nav>';
         }
