@@ -11,11 +11,14 @@
  */
 (function () {
   if (window.NanseiCatalog) return;
-  var CACHE_KEY = 'ns_catalog_v1';
+  var CACHE_KEY = 'ns_catalog_v2';
   var local = ['localhost', '127.0.0.1'].indexOf(location.hostname) >= 0 || location.protocol === 'file:';
   var API = window.API_BASE || (local ? 'http://localhost:5000/api' : '/api');
   var CATEGORY = { rice: 'Rice Varieties', flowers: 'Dried Flowers', beverages: 'Beverages', flour: 'Flour Varieties', other: 'Other Products' };
   var listeners = [];
+  /* photos uploaded in the admin are served by the backend: /api/media/<id> */
+  var ORIGIN = /^https?:\/\//i.test(API) ? API.replace(/\/api\/?$/, '') : '';
+  function media(u) { u = String(u || ''); return /^\/api\/media\/[a-f0-9]{24}$/i.test(u) ? ORIGIN + u : u.replace(/^\/?pages\/images\//i, 'images/'); }
   var state = { products: [], source: 'none' };
 
   function fromSnapshot(p) {
@@ -27,7 +30,7 @@
     };
   }
   function fromApi(p) {
-    var imgs = (p.images || []).map(function (i) { return i && (i.url || i); }).filter(Boolean);
+    var imgs = (p.images || []).map(function (i) { return media(i && (i.url || i)); }).filter(Boolean);
     return {
       id: p.legacyId != null ? p.legacyId : p._id, legacyId: p.legacyId != null ? p.legacyId : null, dbId: p._id, name: p.name,
       category: CATEGORY[p.category] || p.category, image: imgs[0] || '', images: imgs, description: p.description || '',
@@ -69,6 +72,7 @@
       var k = String(skuOrLabel || '').toUpperCase().replace(/\s+/g, '');
       return p.sizes.find(function (z) { return String(z.sku).toUpperCase() === k || String(z.label).toUpperCase().replace(/\s+/g, '') === k; }) || null;
     },
+    media: media,
     onUpdate: function (fn) { listeners.push(fn); if (state.products.length) fn(api); },
     ready: null,
   };

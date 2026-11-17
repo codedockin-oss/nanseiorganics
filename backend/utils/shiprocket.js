@@ -195,7 +195,7 @@ async function trackAwb(awb) {
     awb,
     courier_name: first.courier_name || '',
     current_status: first.current_status || '',
-    current_status_id: td.shipment_status,
+    shipment_status_id: td.shipment_status,
     etd: td.etd || first.edd || '',
     track_url: td.track_url || '',
     scans: (td.shipment_track_activities || []).map(a => ({
@@ -206,23 +206,53 @@ async function trackAwb(awb) {
 
 /* ------------------------------------------------------- status handling */
 
+
+/**
+ * Shiprocket's shipment status codes (apidocs.shiprocket.in → Tracking → "Shipment Status Codes").
+ * `stage` is what the customer sees on the tracking page; `order` is the order status it may move us to.
+ * Only `shipment_status_id` uses these numbers — the webhook's `current_status_id` is a different list
+ * (their own sample sends current_status_id 20 with "IN TRANSIT"), so it is never used for mapping.
+ */
+const SR_STATUS = {
+  6:  ['Shipped', 'shipped', 'Shipped'],          7:  ['Delivered', 'delivered', 'Delivered'],
+  8:  [null, 'cancelled', 'Shipment cancelled'],  9:  [null, 'rto', 'Returning to us'],
+  10: [null, 'rto', 'Returned to us'],            12: [null, 'problem', 'Shipment lost — we are on it'],
+  13: [null, 'packed', 'Pickup delayed'],         14: [null, 'rto', 'Returning to us'],
+  15: ['Packed', 'packed', 'Pickup rescheduled'], 16: [null, 'packed', 'Cancellation requested'],
+  17: ['Shipped', 'out', 'Out for delivery'],     18: ['Shipped', 'shipped', 'In transit'],
+  19: ['Packed', 'packed', 'Courier on the way for pickup'], 20: [null, 'packed', 'Pickup delayed'],
+  21: [null, 'attempt', 'Delivery attempt failed'], 22: ['Shipped', 'shipped', 'Delayed in transit'],
+  23: [null, 'attempt', 'Partly delivered'],      25: [null, 'problem', 'Damaged in transit — we are on it'],
+  27: ['Packed', 'packed', 'Pickup booked'],      38: ['Shipped', 'shipped', 'Reached the destination hub'],
+  39: ['Shipped', 'shipped', 'Rerouted'],         40: [null, 'rto', 'Returning to us'],
+  41: [null, 'rto', 'Returning to us'],           42: ['Shipped', 'shipped', 'Picked up'],
+  45: [null, 'cancelled', 'Shipment cancelled'],  46: [null, 'rto', 'Returning to us'],
+  48: ['Shipped', 'shipped', 'At the courier warehouse'], 51: ['Shipped', 'shipped', 'Handed to the courier'],
+  52: ['Packed', 'packed', 'Shipment booked'],    75: [null, 'rto', 'Returning to us'],
+  76: [null, 'problem', 'Courier cannot trace it — we are on it'], 77: [null, 'attempt', 'Courier could not reach you'],
+  78: [null, 'rto', 'Returned to our city'],
+};
+
 const RANK = { Pending: 0, Processing: 1, Packed: 2, Shipped: 3, Delivered: 4 };
 
 /**
- * Courier wording → { orderStatus, label, rto }.  `orderStatus` is null when the event should not move the order.
- * Text is matched (not only ids) because courier statuses vary; ids 7 and 17/18/6/42 are the well-known ones.
+ * Courier status → { orderStatus, label, rto, stage }. `orderStatus` is null when the event should not move the order.
+ * The shipment-status id wins when we have one; otherwise the courier's wording is matched.
  */
 function mapStatus(text, id) {
-  const t = String(text || '').toUpperCase();
   const n = Number(id);
-  if (/RTO|RETURN/.test(t) || n === 9 || n === 10) return { orderStatus: null, label: 'Returning to seller', rto: true };
-  if (/CANCEL/.test(t) || n === 8) return { orderStatus: null, label: 'Shipment cancelled', rto: false };
-  if (/UNDELIVERED|NOT DELIVERED|DELIVERY ATTEMPT|FAILED/.test(t) || n === 21) return { orderStatus: null, label: 'Delivery attempt failed', rto: false };
-  if ((/DELIVERED/.test(t) && !/OUT FOR/.test(t)) || n === 7) return { orderStatus: 'Delivered', label: 'Delivered', rto: false };
-  if (/OUT FOR DELIVERY/.test(t) || n === 17) return { orderStatus: 'Shipped', label: 'Out for delivery', rto: false };
-  if (/IN TRANSIT|SHIPPED|PICKED UP|REACHED|ARRIVED|DISPATCH|DEPART|HUB/.test(t) || n === 6 || n === 18 || n === 42) return { orderStatus: 'Shipped', label: n === 42 || /PICKED UP/.test(t) ? 'Picked up' : 'In transit', rto: false };
-  if (/PICKUP|MANIFEST|AWB|READY TO SHIP|PACKED|NEW/.test(t)) return { orderStatus: 'Packed', label: 'Awaiting pickup', rto: false };
-  return { orderStatus: null, label: text ? String(text) : '', rto: false };
+  if (SR_STATUS[n]) { const [orderStatus, stage, label] = SR_STATUS[n]; return { orderStatus, label, rto: stage === 'rto', stage }; }
+  const t = String(text || '').toUpperCase();
+  if (/RTO|RETURN/.test(t)) return { orderStatus: null, label: 'Returning to us', rto: true, stage: 'rto' };
+  if (/CANCEL/.test(t)) return { orderStatus: null, label: 'Shipment cancelled', rto: false, stage: 'cancelled' };
+  if (/UNDELIVERED|NOT DELIVERED|DELIVERY ATTEMPT|FAILED/.test(t)) return { orderStatus: null, label: 'Delivery attempt failed', rto: false, stage: 'attempt' };
+  if (/LOST|DAMAGED|UNTRACEABLE/.test(t)) return { orderStatus: null, label: 'Problem with the shipment — we are on it', rto: false, stage: 'problem' };
+  if (/DELIVERED/.test(t) && !/OUT FOR/.test(t)) return { orderStatus: 'Delivered', label: 'Delivered', rto: false, stage: 'delivered' };
+  if (/OUT FOR DELIVERY/.test(t)) return { orderStatus: 'Shipped', label: 'Out for delivery', rto: false, stage: 'out' };
+  if (/OUT FOR PICKUP/.test(t)) return { orderStatus: 'Packed', label: 'Courier on the way for pickup', rto: false, stage: 'packed' };
+  if (/IN TRANSIT|SHIPPED|PICKED UP|REACHED|ARRIVED|DISPATCH|DEPART|HUB/.test(t)) return { orderStatus: 'Shipped', label: /PICKED UP/.test(t) ? 'Picked up' : 'In transit', rto: false, stage: 'shipped' };
+  if (/PICKUP|MANIFEST|AWB|READY TO SHIP|PACKED|NEW|BOOKED/.test(t)) return { orderStatus: 'Packed', label: 'Awaiting pickup', rto: false, stage: 'packed' };
+  return { orderStatus: null, label: text ? String(text) : '', rto: false, stage: '' };
 }
 
 /** Shiprocket timestamps are India time without a zone: "2026-10-01 14:03:00". */
@@ -258,11 +288,13 @@ function buildTrackingUpdate(order, p) {
 
   const latestScan = merged[merged.length - 1];
   const rawStatus = p.current_status || (latestScan && (latestScan.status || latestScan.activity)) || '';
-  const mapped = mapStatus(rawStatus, p.current_status_id || p.shipment_status_id);
+  const mapped = mapStatus(rawStatus, p.shipment_status_id);
 
   const update = {};
   if (merged.length) update.trackingEvents = merged;
   if (rawStatus) update.shipmentStatus = String(rawStatus);
+  if (mapped.label) update.shipmentLabel = mapped.label;
+  if (mapped.stage) update.shipmentStage = mapped.stage;
   if (p.awb && !order.trackingNumber) update.trackingNumber = String(p.awb);
   if (p.courier_name) update.courierService = p.courier_name;
   const etd = parseStamp(p.etd);
@@ -279,11 +311,12 @@ function buildTrackingUpdate(order, p) {
   }
   update.lastTrackingSync = new Date();
   const changed = !!(update.orderStatus || update.shipmentStatus !== order.shipmentStatus || merged.length !== (order.trackingEvents || []).length);
-  return { update, changed, becameShipped, becameDelivered, label: mapped.label, rto: mapped.rto };
+  const becameOutForDelivery = mapped.stage === 'out' && order.shipmentStage !== 'out';
+  return { update, changed, becameShipped, becameDelivered, becameOutForDelivery, label: mapped.label, rto: mapped.rto, stage: mapped.stage };
 }
 
 module.exports = {
   isConfigured, autoShipEnabled, createShipment, cancelShipment, trackAwb,
-  buildOrderPayload, orderWeightKg, lineWeightKg, cleanPhone, splitName, mapStatus, parseStamp, buildTrackingUpdate, trackingUrlFor,
+  SR_STATUS, buildOrderPayload, orderWeightKg, lineWeightKg, cleanPhone, splitName, mapStatus, parseStamp, buildTrackingUpdate, trackingUrlFor,
   _setFetch,
 };

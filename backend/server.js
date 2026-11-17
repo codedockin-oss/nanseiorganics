@@ -25,7 +25,6 @@ const comboRoutes    = require('./routes/comboRoutes');
 const addressRoutes  = require('./routes/addressRoutes');
 const couponRoutes   = require('./routes/couponRoutes');
 const discountRoutes = require('./routes/discountRoutes');
-const paymentRoutes  = require('./routes/paymentRoutes');
 const blogRoutes     = require('./routes/blogRoutes');
 const newsRoutes     = require('./routes/newsRoutes');
 
@@ -50,9 +49,11 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc:  ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://cdnjs.cloudflare.com", "https://checkout.razorpay.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc:   ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc:    ["'self'", "https://fonts.gstatic.com"],
-      imgSrc:     ["'self'", "data:", "https:"],
+      imgSrc:     ["'self'", "data:", "blob:", "https:"],
+      mediaSrc:   ["'self'", "blob:", "https:"],
       connectSrc: ["'self'", "https://api.razorpay.com"],
       frameSrc:   ["https://api.razorpay.com"],
     }
@@ -63,8 +64,10 @@ app.use(helmet({
 app.use(compression({ threshold: 1024 }));
 
 // ── CORS ──
-const ALLOWED_ORIGINS = [
+const normaliseOrigin = value => String(value || '').trim().replace(/\/+$/, '');
+const ALLOWED_ORIGINS = new Set([
   process.env.FRONTEND_URL,
+  process.env.CORS_ALLOWED_ORIGINS,
   'https://nanseiorg.in',
   'https://www.nanseiorg.in',
   'http://localhost:5500',
@@ -74,22 +77,25 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:5000',
   'http://localhost:5173',
   'null',           // file:// protocol sends origin: null
-].filter(Boolean).map(o => o.replace(/\/$/, '')); // strip trailing slashes
+].flatMap(value => String(value || '').split(',')).map(normaliseOrigin).filter(Boolean));
 
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);          // same-origin / curl
     if (origin === 'null') return cb(null, true); // file://
-    const normalised = origin.replace(/\/$/, '');
-    if (ALLOWED_ORIGINS.includes(normalised)) return cb(null, true);
+    const normalised = normaliseOrigin(origin);
+    if (ALLOWED_ORIGINS.has(normalised)) return cb(null, true);
     if (process.env.NODE_ENV !== 'production') return cb(null, true);
-    cb(new Error('Not allowed by CORS'));
+    console.warn('[CORS] Rejected origin:', normalised);
+    cb(null, false);
   },
   credentials: true,
   exposedHeaders: ['Set-Cookie'],
 }));
 
 // ── Body parsers — tight limits ──
+// Razorpay signs the exact bytes it sends, so its webhook must get the raw body (before the JSON parser)
+app.use('/api/orders/razorpay/webhook', express.raw({ type: '*/*', limit: '1mb' }));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
@@ -124,7 +130,6 @@ const writeLimiter   = makeLimit(100, 15);
 // Admin: 300 req / 15 min
 const adminLimiter   = makeLimit(300, 15);
 // Payment: 50 req / 15 min
-const paymentLimiter = makeLimit(50, 15);
 
 // ── Health check (no rate limit) ──
 app.get('/api/health', (_req, res) => {
@@ -145,10 +150,10 @@ app.use('/api/users',     adminLimiter,   userRoutes);
 app.use('/api/addresses', writeLimiter,   addressRoutes);
 app.use('/api/coupons',   publicLimiter,  couponRoutes);
 app.use('/api/discounts', publicLimiter,  discountRoutes);
-app.use('/api/payment',   paymentLimiter, paymentRoutes);
 app.use('/api/blogs',     publicLimiter,  blogRoutes);
 app.use('/api/news',      publicLimiter,  newsRoutes);
 app.use('/api/settings',  publicLimiter,  require('./routes/settingsRoutes'));   // store settings (public read, admin save)
+app.use('/api/media',     require('./routes/mediaRoutes')());   // photos uploaded from the admin panel, kept in the database
 
 // ── 404 for unknown API routes ──
 app.use('/api/*', (_req, res) => {

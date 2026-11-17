@@ -1,10 +1,10 @@
 const BRAND = {
-  name:    'Nansai Organics',
+  name:    'Nansei Organics',
   tagline: 'Pure. Natural. Trusted.',
   color:   '#0f2218',
   accent:  '#c9a84c',
   light:   '#f0fdf4',
-  url:     process.env.FRONTEND_URL || 'https://nansaiorganics.netlify.app',
+  url:     (process.env.FRONTEND_URL || 'https://www.nanseiorg.in').replace(/\/$/, ''),
 };
 
 function base(content) {
@@ -23,7 +23,7 @@ function base(content) {
       <!-- HEADER -->
       <tr><td style="background:${BRAND.color};border-radius:14px 14px 0 0;padding:32px 40px;text-align:center;">
         <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:.04em;">
-          🌿 ${BRAND.name}
+          ${BRAND.name}
         </p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.12em;text-transform:uppercase;">${BRAND.tagline}</p>
       </td></tr>
@@ -74,7 +74,7 @@ function orderConfirmation(order, user) {
     <!-- Greeting -->
     <p style="margin:0 0 6px;font-size:22px;font-weight:700;color:#0f2218;">Your order is confirmed! 🎉</p>
     <p style="margin:0 0 28px;font-size:15px;color:#4a6a4a;line-height:1.6;">
-      Hi ${user?.name || 'there'}, thank you for choosing Nansai Organics. We've received your order and will begin processing it shortly.
+      Hi ${user?.name || 'there'}, thank you for choosing Nansei Organics. We've received your order and will begin processing it shortly.
     </p>
 
     <!-- Order ID Banner -->
@@ -127,7 +127,7 @@ function orderConfirmation(order, user) {
 
     <!-- CTA -->
     <div style="text-align:center;margin-top:8px;">
-      <a href="${BRAND.url}/orders.html" style="display:inline-block;background:${BRAND.color};color:#fff;font-size:14px;font-weight:700;padding:14px 36px;border-radius:10px;text-decoration:none;letter-spacing:.02em;">
+      <a href="${BRAND.url}/track-order.html?order=${encodeURIComponent(order.orderNumber || order._id)}" style="display:inline-block;background:${BRAND.color};color:#fff;font-size:14px;font-weight:700;padding:14px 36px;border-radius:10px;text-decoration:none;letter-spacing:.02em;">
         Track My Order →
       </a>
     </div>
@@ -208,7 +208,7 @@ function adminOrderNotification(order) {
     </div>
 
     <div style="text-align:center;">
-      <a href="${process.env.FRONTEND_URL || 'https://nansaiorganics.netlify.app'}/pages/admin-panel.html" style="display:inline-block;background:#0f2218;color:#fff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:10px;text-decoration:none;">
+      <a href="${BRAND.url}/admin-panel.html" style="display:inline-block;background:#0f2218;color:#fff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:10px;text-decoration:none;">
         Open Admin Panel →
       </a>
     </div>`;

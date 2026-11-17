@@ -345,13 +345,28 @@ input.invalid{
   border-radius:999px;
   opacity:0;
   pointer-events:none;
-  z-index:20;
+  z-index:2001;
   font-size:.84rem;
   font-weight:800;
   transition:opacity .24s,transform .24s;
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.error{background:var(--error)}
+@media (max-width:840px){
+  #toast{
+    top:max(12px,env(safe-area-inset-top,0px));
+    left:12px;
+    right:12px;
+    width:max-content;
+    max-width:calc(100vw - 24px);
+    white-space:normal;
+    text-align:center;
+    line-height:1.4;
+    border-radius:14px;
+    z-index:2001;
+  }
+  #toast.show{transform:translateY(0)}
+}
 @media (max-width:840px){
   .login-wrap{align-items:flex-start;padding:18px 12px}
   .shell{grid-template-columns:1fr;min-height:auto;border-radius:22px}
@@ -366,10 +381,10 @@ input.invalid{
   input,.submit{min-height:47px}
 }
 </style>
-<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
+<link rel="stylesheet" href="css/nansei.css?v=20261117-mobile-touch"/>
 </head>
 <body>
-<script src="js/site-shell.js?v=20261124" data-part="header"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header"></script>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <div class="login-wrap"><main class="shell">
@@ -478,7 +493,7 @@ input.invalid{
     </div>
   </section>
 </main></div>
-<script src="js/site-shell.js?v=20261124" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
 
 <script>
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

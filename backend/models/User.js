@@ -93,7 +93,6 @@ const userSchema = new mongoose.Schema({
 
 // Indexes
 userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ phone: 1 }, { sparse: true });
 userSchema.index({ role: 1 });
 
 // Keep legacy `name` users compatible with the split-name auth flow.

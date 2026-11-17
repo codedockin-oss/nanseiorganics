@@ -7,12 +7,13 @@
 <title>Nansei Organics — Heritage Rice, Dried Flowers &amp; Flours from Our Farm</title>
   <meta name="description" content="Heritage rice such as Karunguruvai, Mappillai Samba, Karuppu Kavuni and Poongar, plus sun-dried flowers, flours and drinks, grown on our farm in Achankulam near Srivilliputhur, Tamil Nadu." />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
+<link rel="stylesheet" href="css/nansei.css?v=20261117-premium-reel-preview"/>
 <script src="js/config.js?v=20261113"></script>
-<script src="js/farm-reels.js?v=20261118" defer></script>
+<script src="js/farm-reels.js?v=20261117-admin-reels" defer></script>
 <script src="js/auth.js?v=20261113"></script>
 <script src="js/api.js?v=20261113"></script>
 <script src="js/cart.js?v=20261113"></script>
+<script src="js/catalog.js?v=20261117-media"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
@@ -271,7 +272,7 @@ video.slide-bg { transform:none!important; transition:none!important; }
 .slide-title em { font-style:italic; color:#86c98a; }
 .slide-desc { font-size:clamp(.65rem,.85vw,.8rem); font-weight:300; line-height:1.65; color:rgba(255,255,255,.58); max-width:280px; margin-bottom:1.1rem; opacity:0; transform:translateY(12px); transition:opacity .5s .8s,transform .5s .8s; }
 .slide.active .slide-desc { opacity:1; transform:none; }
-.slide-cta { display:inline-flex; align-items:center; gap:.45rem; font-size:.66rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:.48rem 1.25rem; border:1px solid #c9a84c; color:#e8c97a; background:transparent; cursor:pointer; width:fit-content; position:relative; overflow:hidden; opacity:0; transform:translateY(10px); transition:opacity .5s .92s,transform .5s .92s,background .25s,color .25s; }
+.slide-cta { display:inline-flex; align-items:center; justify-content:center;min-height:44px;gap:.45rem; font-size:.66rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:.48rem 1.25rem; border:1px solid #c9a84c; color:#e8c97a; background:transparent; cursor:pointer; width:fit-content; position:relative; overflow:hidden; opacity:0; transform:translateY(10px); transition:opacity .5s .92s,transform .5s .92s,background .25s,color .25s; }
 .slide.active .slide-cta { opacity:1; transform:none; }
 .slide-cta::before { content:''; position:absolute; inset:0; background:#c9a84c; transform:translateX(-101%); transition:transform .3s ease; z-index:-1; }
 .slide-cta:hover::before { transform:translateX(0); }
@@ -280,8 +281,10 @@ video.slide-bg { transform:none!important; transition:none!important; }
 .arrow-btn { position:absolute; top:50%; transform:translateY(-50%); z-index:20; width:2.2rem; height:2.2rem; border:1px solid rgba(255,255,255,.18); background:rgba(5,12,6,.45); backdrop-filter:blur(6px); color:#fff; font-size:.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .25s,border-color .25s; }
 .arrow-btn:hover { background:#c9a84c; border-color:#c9a84c; color:#0a100b; }
 .slider-footer { position:absolute; bottom:0; left:0; right:0; z-index:10; display:flex; align-items:center; gap:.65rem; padding:.7rem clamp(1.2rem,4vw,2.8rem); background:linear-gradient(to top,rgba(5,12,6,.55) 0%,transparent 100%); }
-.dot { width:.42rem; height:.42rem; border-radius:50%; background:rgba(255,255,255,.28); border:none; cursor:pointer; padding:0; transition:background .3s,transform .3s; }
-.dot.active { background:#c9a84c; transform:scale(1.35); }
+.dot { position:relative;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:transparent;border:none;cursor:pointer;padding:0;flex:none; }
+.dot::before{content:"";width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.34);transition:background .3s,transform .3s}
+.dot.active { background:transparent; }
+.dot.active::before { background:#c9a84c; transform:scale(1.35); }
 .timer-track { flex:1; height:1.5px; overflow:hidden; background:rgba(255,255,255,.12); }
 .timer-fill { height:100%; width:0%; background:#c9a84c; }
 #muteBtn { position:absolute; bottom:3rem; right:.9rem; z-index:20; width:1.8rem; height:1.8rem; border-radius:50%; border:1px solid rgba(255,255,255,.25); background:rgba(5,12,6,.5); backdrop-filter:blur(5px); color:#fff; font-size:.65rem; cursor:pointer; display:none; align-items:center; justify-content:center; transition:background .2s; }
@@ -483,9 +486,22 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
   /* -- HERO SLIDER -- */
   #sliderShell { height: clamp(260px, 58vw, 380px) !important; }
+  /* The layered 3D preview slides overlap the active copy at phone widths. */
+  #track .slide { transition: opacity .35s ease !important; }
+  #track .slide:not(.active) {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: none !important;
+  }
+  #track .slide.active {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
   .slide-content { padding: 1rem 1rem 1rem 1.4rem !important; justify-content: flex-end !important; padding-bottom: 3.5rem !important; }
   .slide-title { font-size: clamp(1.25rem, 5.5vw, 1.7rem) !important; margin-bottom: .4rem; }
-  .slide-desc { font-size: .72rem !important; max-width: 100% !important; margin-bottom: .75rem; line-height: 1.55; }
+  .slide-desc { font-size: .72rem !important; max-width: 100% !important; margin-bottom: .75rem; line-height: 1.55; color:rgba(255,255,255,.92) !important; text-shadow:0 1px 3px rgba(0,0,0,.85); }
   .slide-cta { font-size: .62rem !important; padding: .42rem 1rem !important; }
   .eyebrow { font-size: .52rem !important; }
   .arrow-btn { width: 1.8rem !important; height: 1.8rem !important; font-size: .7rem !important; }
@@ -570,17 +586,12 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
   /* flat grid (filtered view) */
   #productGrid {
-    display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 12px !important;
     padding: 8px 2px !important;
     flex-wrap: unset !important;
     flex: unset !important;
   }
-  #productGrid > div:first-child:not(.prod-card) {
-    grid-column: 1 / -1 !important;
-  }
-
   /* -- MID PARALLAX BANNER -- */
   #midParallax { min-height: 320px !important; }
   #midParallax .parallax-fg { padding: 2.5rem 1.25rem !important; }
@@ -666,7 +677,6 @@ video.slide-bg { transform:none!important; transition:none!important; }
 
   /* -- TOAST � above sticky bar -- */
   #toast { bottom: calc(64px + 14px) !important; font-size: .74rem !important; }
-
   /* -- CART DRAWER -- */
   #cartDrawer { width: 100vw !important; }
 }
@@ -965,10 +975,10 @@ a .nansai-icon,
 .gallery-eyebrow span:last-child,.founder-premium-eyebrow span:last-child{display:none!important}
 .gallery-eyebrow span:first-child,.founder-premium-eyebrow span:first-child{width:26px!important;height:2px!important;background:#c9a84c!important;border-radius:2px}
 /* the marked word, like muams */
-.gallery-title em,.founder-premium-title em,#why-section h2 em,#blog-section h2 em{font-style:normal!important;color:inherit!important;background:linear-gradient(transparent 62%,rgba(201,168,76,.42) 62%);padding:0 .08em}
+.gallery-title em,.founder-premium-title em,#why-section h2 em,#blog-section h2 em{font-style:normal!important;color:inherit!important;background:linear-gradient(transparent 62%,rgba(74,140,92,.28) 62%);padding:0 .08em}
 .gallery-title,.founder-premium-title{letter-spacing:-.01em}
 /* calmer section rhythm */
-#products{padding:4.5rem 0 4.5rem!important}
+#products{padding:4.5rem 0 4.5rem!important;scroll-margin-top:124px}
 #sr-prod-hdr .nx-title{font-size:clamp(2.3rem,5vw,3.5rem)}
 @media(max-width:700px){#products{padding:3rem 0!important}#filterTabs .filter-bar{flex-wrap:nowrap!important;overflow-x:auto!important;justify-content:flex-start!important;scrollbar-width:none;padding-bottom:4px}#filterTabs .fpill{flex:none}}
 </style>
@@ -987,10 +997,11 @@ a .nansai-icon,
 #products{background:#fff!important;background-image:none!important}
 .om-row{margin-bottom:3.2rem}
 .om-row-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+#productGrid > div:first-child:not(.prod-card){grid-column:1 / -1}
 .om-kicker{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6b7a6f;margin:0 0 4px}
 .om-row-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:#0f2218;margin:0;line-height:1.1}
 .om-row-sub{font-size:.88rem;color:#6b7a6f;margin:6px 0 0}
-.om-viewall{background:none;border:0;color:#2d5a3d;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;padding:6px 0;border-bottom:2px solid #c9a84c}
+.om-viewall{background:none;border:0;color:#2d5a3d;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;min-height:44px;padding:8px 0;border-bottom:2px solid #c9a84c}
 .om-rail{display:flex;gap:18px;overflow-x:auto;overflow-y:visible;padding:4px 2px 14px;scrollbar-width:none;flex:1;scroll-snap-type:x proximity}
 .om-rail::-webkit-scrollbar{display:none}
 .om-card{flex:0 0 232px;width:232px;background:#fff;border:1px solid rgba(15,34,24,.08);border-radius:18px;display:flex;flex-direction:column;cursor:pointer;position:relative;scroll-snap-align:start;transition:box-shadow .3s,transform .3s;overflow:hidden;animation:none!important}
@@ -1042,7 +1053,7 @@ a .nansai-icon,
 .om-card:hover .om-img .prod-img{transform:scale(1.04)}
 .om-card .om-tag{position:absolute;top:10px;left:10px;z-index:2;background:#2d5a3d;color:#fff;font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px}
 .om-card .om-tag.om-new{background:#c9a84c;color:#0f2218}
-.om-card .om-wish{position:absolute;top:10px;right:10px;z-index:3;width:32px;height:32px;border-radius:50%;border:0;background:#f0f0f0;display:grid;place-items:center;cursor:pointer;box-shadow:none;transition:background .2s,transform .2s}
+.om-card .om-wish{position:absolute;top:10px;right:10px;z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:#f0f0f0;display:grid;place-items:center;cursor:pointer;box-shadow:none;transition:background .2s,transform .2s}
 .om-card .om-wish:hover{background:#e6ece7;transform:scale(1.08)}
 .om-card .om-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
 .om-card .om-name{font-size:15px;font-weight:700;line-height:1.35;color:#0f2218;text-decoration:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
@@ -1064,8 +1075,31 @@ a .nansai-icon,
   .om-card .om-body{padding:10px;gap:4px}
   .om-card .om-name{font-size:13.5px}
   .om-card .om-price [data-card-price]{font-size:15px}
-  .om-card .om-actions{flex-direction:column;gap:6px}
-  .om-card .om-size,.om-card .om-add{flex:none;width:100%;height:40px}
+  .om-card .om-actions{flex-direction:row;gap:6px}
+  .om-card .om-size{flex:0 0 44%;height:40px;font-size:12.5px;padding:0 20px 0 8px;background-position:right 6px center}
+  .om-card .om-add{flex:1;height:40px;font-size:13.5px}
+}
+@media(max-width:768px){
+  /* Keep homepage product rows fully visible as a two-column mobile grid. */
+  #productSections .om-rail{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+    width:100%;
+    overflow:visible!important;
+    padding:4px 0 12px;
+    scroll-snap-type:none;
+  }
+  #productSections .om-card{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0;
+    flex:none!important;
+  }
+  #productSections .om-card .om-body{min-width:0;padding:10px 8px}
+  #productSections .om-card .om-size{padding-left:8px;padding-right:24px;font-size:12px}
+  #productGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #productGrid .om-card{width:100%!important;max-width:none!important;min-width:0}
 }
 
 /* hand mill */
@@ -1129,7 +1163,7 @@ a .nansai-icon,
 <!-- ---------------------------------------
      NAVBAR
 --------------------------------------- -->
-<script src="js/site-shell.js?v=20261124" data-part="header"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header"></script>
 
 <!-- Mobile Drawer -->
 
@@ -1168,10 +1202,10 @@ a .nansai-icon,
         <video class="slide-bg" id="slide0-video" autoplay muted playsinline poster="https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/slide%20video.mp4/ik-thumbnail.jpg" src="https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/slide%20video.mp4?updatedAt=1781177427392" style="width:100%;height:100%;object-fit:cover;"></video>
         <div class="slide-overlay"></div><div class="slide-accent"></div>
         <div class="slide-content">
-          <p class="eyebrow"><span></span>With Nansai</p>
-          <h2 class="slide-title">Experience the Root of <em>Nature</em></h2>
-          <p class="slide-desc">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
-          <button class="slide-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products →</button>
+          <p class="eyebrow" id="homeHeroEyebrow"><span></span>With Nansai</p>
+          <h2 class="slide-title" id="homeHeroTitle">Experience the Root of <em id="homeHeroEmphasis">Nature</em></h2>
+          <p class="slide-desc" id="homeHeroDescription">Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.</p>
+          <button class="slide-cta" id="homeHeroCta" data-href="#products" onclick="goHomeHeroCta()">Explore Products →</button>
         </div>
         <button aria-label="Sound on or off" id="slide0-sound-btn" onclick="toggleSlide0Sound()" style="position:absolute;bottom:4.5rem;left:1rem;z-index:20;width:2rem;height:2rem;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(5,12,6,.55);backdrop-filter:blur(6px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;" title="Toggle sound">
           <!-- muted icon (default) -->
@@ -1247,14 +1281,6 @@ a .nansai-icon,
 
   </div>
 </section>
-<div class="trust-strip" role="list" aria-label="Shopping with Nansei Organics">
-  <div class="trust-inner">
-    <div role="listitem"><b data-free-above>Free delivery above ₹999</b><span>Across India, from our farm</span></div>
-    <div role="listitem"><b>7-day replacement</b><span>For damaged or wrong items</span></div>
-    <div role="listitem"><b>Packed at the farm</b><span>Achankulam, near Srivilliputhur</span></div>
-    <div role="listitem"><b>UPI, cards &amp; COD</b><span>Secure payments by Razorpay</span></div>
-  </div>
-</div>
 <style>
 .trust-strip{background:#0f2218;border-top:1px solid rgba(201,168,76,.28);color:#f7f3ec}
 .trust-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
@@ -1266,11 +1292,11 @@ a .nansai-icon,
 @media(max-width:860px){.trust-strip{display:none}}
 @media(max-width:860px){.trust-inner{grid-template-columns:repeat(2,1fr)}.trust-inner>div:nth-child(3){border-left:0}.trust-inner>div{padding:14px 16px;border-top:1px solid rgba(247,243,236,.07)}}
 </style>
-<section class="om-browse" aria-labelledby="omBrowseTitle">
+<section class="om-browse" id="homeCategorySection" aria-labelledby="omBrowseTitle">
   <div class="om-wrap">
     <div class="nx-head"><div><p class="nx-eyebrow">Browse</p><h2 class="nx-title" id="omBrowseTitle">Shop by <span>category</span></h2></div>
-      <div class="nx-head-side"><a class="nx-link" href="#products">All products &rarr;</a></div></div>
-    <div class="om-cat-grid"><a class="om-cat-tile" href="#shop-rice" onclick="return NanseiShell.goCat('rice')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602&tr=w-300" alt="" loading="lazy"/></span><b>Heritage Rice</b><small>7 varieties</small></a><a class="om-cat-tile" href="#shop-flowers" onclick="return NanseiShell.goCat('flowers')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png?tr=w-300" alt="" loading="lazy"/></span><b>Dried Flowers</b><small>Sun-dried at the farm</small></a><a class="om-cat-tile" href="#shop-flour" onclick="return NanseiShell.goCat('flour')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png?tr=w-300" alt="" loading="lazy"/></span><b>Flours & Mixes</b><small>Stone-ground</small></a><a class="om-cat-tile" href="#shop-beverages" onclick="return NanseiShell.goCat('beverages')"><span class="om-cat-img"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop" alt="" loading="lazy"/></span><b>Drinks</b><small>Rose milk, sherbet</small></a><a class="om-cat-tile" href="#shop-other" onclick="return NanseiShell.goCat('other')"><span class="om-cat-img"><img src="https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png?tr=w-300" alt="" loading="lazy"/></span><b>Fig Powder & More</b><small>From our trees</small></a></div>
+      <div class="nx-head-side"><a class="nx-link" href="collection.html?category=all">All products &rarr;</a></div></div>
+    <div class="om-cat-grid"><a class="om-cat-tile" href="collection.html?category=rice"><span class="om-cat-img"><img src="images/product%20images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png" alt="" loading="lazy"/></span><b>Heritage Rice</b><small>7 varieties</small></a><a class="om-cat-tile" href="collection.html?category=flowers"><span class="om-cat-img"><img src="images/product%20images/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png" alt="" loading="lazy"/></span><b>Dried Flowers</b><small>Sun-dried at the farm</small></a><a class="om-cat-tile" href="collection.html?category=flour"><span class="om-cat-img"><img src="images/product%20images/Powder%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png" alt="" loading="lazy"/></span><b>Flours & Mixes</b><small>Stone-ground</small></a><a class="om-cat-tile" href="collection.html?category=beverages"><span class="om-cat-img"></span><b>Drinks</b><small>Rose milk, sherbet</small></a><a class="om-cat-tile" href="collection.html?category=other"><span class="om-cat-img"><img src="images/product%20images/Powder%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png" alt="" loading="lazy"/></span><b>Fig Powder & More</b><small>From our trees</small></a></div>
   </div>
 </section>
 <style>
@@ -2306,7 +2332,7 @@ function millResetIdx(card) {
         <li><b>03</b><div><h3>Packed at the farm</h3><p>Milled rice is cleaned, packed and sent from Achankulam.</p></div></li>
       </ol>
       <div class="hm-acts">
-        <a class="nx-btn" href="#shop-rice" onclick="return NanseiShell.goCat('rice')">Shop heritage rice</a>
+        <a class="nx-btn" href="collection.html?category=rice">Shop heritage rice</a>
         <button type="button" class="nx-btn-outline" onclick="openVideoModal('https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/WhatsApp%20Video%202026-06-11%20at%209.47.12%20AM.mp4?updatedAt=1781171400022')">Watch a clip from the farm</button>
       </div>
     </div>
@@ -2328,7 +2354,6 @@ function millResetIdx(card) {
     <div class="nx-head">
       <div><p class="nx-eyebrow">Life at the farm</p><h2 class="nx-title" id="gmTitle">Moments from <span>our farm</span></h2>
       <p class="nx-lead">Photos from Achankulam, near Srivilliputhur: the paddy, the nursery, the flowers we dry and the mills we use.</p></div>
-      <div class="nx-head-side"><a class="nx-link" href="video-reels.html">Watch farm reels &rarr;</a></div>
     </div>
     <div class="gm-grid"><button type="button" class="gm-tile gm-1" onclick="openLightbox(this)" aria-label="Open photo: The paddy fields at Achankulam"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.49.35%20AM.jpeg?tr=w-900" alt="The paddy fields at Achankulam" loading="lazy" data-caption="The paddy fields at Achankulam"/><span class="gm-cap"><small>Fields</small>The paddy fields at Achankulam</span></button><button type="button" class="gm-tile gm-2" onclick="openLightbox(this)" aria-label="Open photo: Ducklings working the paddy water"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%2010.14.20%20AM.jpeg?tr=w-900" alt="Ducklings working the paddy water" loading="lazy" data-caption="Ducklings working the paddy water"/><span class="gm-cap"><small>Farm life</small>Ducklings working the paddy water</span></button><button type="button" class="gm-tile gm-3" onclick="openLightbox(this)" aria-label="Open photo: Butterfly pea flowers drying"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.51%20AM.jpeg?tr=w-900" alt="Butterfly pea flowers drying" loading="lazy" data-caption="Butterfly pea flowers drying"/><span class="gm-cap"><small>Dried flowers</small>Butterfly pea flowers drying</span></button><button type="button" class="gm-tile gm-4" onclick="openLightbox(this)" aria-label="Open photo: Seedlings ready to transplant"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.46%20AM.jpeg?tr=w-900" alt="Seedlings ready to transplant" loading="lazy" data-caption="Seedlings ready to transplant"/><span class="gm-cap"><small>Nursery</small>Seedlings ready to transplant</span></button><button type="button" class="gm-tile gm-5" onclick="openLightbox(this)" aria-label="Open photo: Our rice, unpolished"><img src="https://ik.imagekit.io/ueorokkbc/images/WhatsApp%20Image%202026-06-11%20at%209.37.50%20AM.jpeg?tr=w-900" alt="Our rice, unpolished" loading="lazy" data-caption="Our rice, unpolished"/><span class="gm-cap"><small>Harvest</small>Our rice, unpolished</span></button><button type="button" class="gm-tile gm-6" onclick="openLightbox(this)" aria-label="Open photo: Paddy nursery beds"><img src="https://ik.imagekit.io/ueorokkbc/images/field.jpeg?tr=w-900" alt="Paddy nursery beds" loading="lazy" data-caption="Paddy nursery beds"/><span class="gm-cap"><small>Nursery</small>Paddy nursery beds</span></button><button type="button" class="gm-tile gm-7" onclick="openLightbox(this)" aria-label="Open photo: The wooden thirugai mills"><img src="https://ik.imagekit.io/ueorokkbc/images/thirugai.jpeg?tr=w-900" alt="The wooden thirugai mills" loading="lazy" data-caption="The wooden thirugai mills"/><span class="gm-cap"><small>Milling</small>The wooden thirugai mills</span></button></div>
   </div>
@@ -2541,9 +2566,7 @@ function millResetIdx(card) {
 <!-- ---------------------------------------
      FOOTER
 --------------------------------------- -->
-<!-- farm reels slide in from the side once the visitor scrolls (js/farm-reels.js) -->
-<div data-farm-reels="float" data-after="700" data-mobile-bottom="84"></div>
-<script src="js/site-shell.js?v=20261124" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
 
 <!-- ---------------------------------------
      JAVASCRIPT
@@ -2588,9 +2611,35 @@ function applyStoreFacts(st){
   }
   if(c.whatsapp)document.querySelectorAll('[data-wa]').forEach(el=>el.href='https://wa.me/'+String(c.whatsapp).replace(/\D/g,''));
 }
+/* "Moments from our farm": photos set in the admin replace the built-in ones */
+let galKey='';
+function applyGallery(list){
+  const grid=document.querySelector('#gallery .gm-grid'); if(!grid||!Array.isArray(list)||!list.length)return;
+  const ok=list.filter(g=>g&&g.image); if(!ok.length)return;
+  const key=JSON.stringify(ok); if(key===galKey)return; galKey=key;
+  const escH=v=>String(v==null?"":v).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
+  const src=u=>(window.NanseiCatalog?NanseiCatalog.media(u):u);
+  grid.innerHTML=ok.map((g,i)=>{const cap=escH(g.caption||''),url=escH(ikThumb(src(g.image),900));return `<button type="button" class="gm-tile gm-${(i%7)+1}" onclick="openLightbox(this)" aria-label="Open photo${cap?': '+cap:''}"><img src="${url}" alt="${cap}" loading="lazy" data-caption="${cap}"/>${cap||g.tag?`<span class="gm-cap">${g.tag?`<small>${escH(g.tag)}</small>`:''}${cap}</span>`:''}</button>`;}).join('');
+}
+function applyHomepageSettings(st){
+  if(!st)return;
+  applyGallery(st.gallery);
+  const visible=(id,key)=>{const el=document.getElementById(id);if(el&&st[key]!==undefined)el.style.display=st[key]?'':'none';};
+  visible('heroSection','showHero');visible('homeCategorySection','showCategories');visible('products','showProducts');visible('blog-section','showBlog');visible('faq','showFaq');
+  const eyebrow=document.getElementById('homeHeroEyebrow'),title=document.getElementById('homeHeroTitle'),description=document.getElementById('homeHeroDescription'),cta=document.getElementById('homeHeroCta');
+  if(eyebrow&&st.heroEyebrow){const text=[...eyebrow.childNodes].find(n=>n.nodeType===Node.TEXT_NODE);if(text)text.textContent=st.heroEyebrow;}
+  if(title&&st.heroTitle){const emphasis=document.getElementById('homeHeroEmphasis');const text=[...title.childNodes].find(n=>n.nodeType===Node.TEXT_NODE);if(text)text.textContent=st.heroTitle+' ';if(emphasis&&st.heroEmphasis)emphasis.textContent=st.heroEmphasis;}
+  if(description&&st.heroDescription)description.textContent=st.heroDescription;
+  if(cta){if(st.heroCtaText)cta.textContent=st.heroCtaText;cta.dataset.href=st.heroCtaHref||'#products';}
+  const slide=document.getElementById('slide-0'),video=document.getElementById('slide0-video');
+  if(slide&&st.heroMediaUrl){const url=String(st.heroMediaUrl);if(st.heroMediaType==='image'){if(video)video.style.display='none';slide.style.backgroundImage='linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),url("'+url.replace(/["\\]/g,'')+'")';slide.style.backgroundSize='cover';slide.style.backgroundPosition='center';}else if(video){slide.style.backgroundImage='';video.style.display='';if(video.getAttribute('src')!==url){video.src=url;video.load();}}}
+}
+function goHomeHeroCta(){const href=document.getElementById('homeHeroCta')?.dataset.href||'#products';if(href.charAt(0)==='#'){document.querySelector(href)?.scrollIntoView({behavior:'smooth'});return;}window.location.href=href;}
 if(window.NANSEI_SETTINGS){ applyAnnouncements(window.NANSEI_SETTINGS); applyStoreFacts(window.NANSEI_SETTINGS); }
 document.addEventListener('nansei:settings',e=>applyStoreFacts(e.detail));
 document.addEventListener('nansei:settings',e=>applyAnnouncements(e.detail));
+if(window.NANSEI_SETTINGS?.homepage)applyHomepageSettings(window.NANSEI_SETTINGS.homepage);
+document.addEventListener('nansei:settings',e=>applyHomepageSettings(e.detail?.homepage));
 
 /* ---- COPY COUPON ---- */
 document.querySelectorAll('[data-code]').forEach(el=>{
@@ -2613,22 +2662,22 @@ function subNewsletter(e){
 
 /* ---- PRODUCTS DATA ---- */
 const products=[
-  {id:1, name:"Karunguruvai Rice",                 category:"rice",     price:180,oldPrice:220,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png?updatedAt=1776255900602"},
-  {id:2, name:"Karuppu Kavuni Rice",               category:"rice",     price:220,oldPrice:270,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png?updatedAt=1776255900741"},
-  {id:3, name:"Arubatham Kuruvai Rice",            category:"rice",     price:160,oldPrice:200,rating: 0,reviews: 0, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png"},
-  {id:4, name:"Poongar Rice",                      category:"rice",     price:200,oldPrice:250,rating: 0,reviews: 0,badge:"sale",section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png?updatedAt=1776255900674"},
-  {id:5, name:"Mappillai Samba Rice",              category:"rice",     price:210,oldPrice:260,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png"},
-  {id:6, name:"Iluppai Poo Samba Rice",            category:"rice",     price:195,oldPrice:240,rating: 0,reviews: 0, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png?updatedAt=1776255900667"},
-  {id:7, name:"Vellai Kavuni Rice",                category:"rice",     price:190,oldPrice:235,rating: 0,reviews: 0, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png?updatedAt=1776255898240"},
-  {id:8, name:"Paneer Rose",                       category:"flowers",  price:150,oldPrice:190,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png"},
-  {id:9, name:"Hibiscus Flower",                   category:"flowers",  price:120,oldPrice:155,rating: 0,reviews: 0,badge:"sale",section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png"},
-  {id:10,name:"Aavaram Flower",                    category:"flowers",  price:110,oldPrice:145,rating: 0,reviews: 0, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png"},
-  {id:11,name:"Sangupoo",                          category:"flowers",  price:180,oldPrice:220,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png"},
+  {id:1, name:"Karunguruvai Rice",                 category:"rice",     price:180,oldPrice:220,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"images/product%20images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png"},
+  {id:2, name:"Karuppu Kavuni Rice",               category:"rice",     price:220,oldPrice:270,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"images/product%20images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png"},
+  {id:3, name:"Arubatham Kuruvai Rice",            category:"rice",     price:160,oldPrice:200,rating: 0,reviews: 0, badge:"new", section:"new",       image:"images/product%20images/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png"},
+  {id:4, name:"Poongar Rice",                      category:"rice",     price:200,oldPrice:250,rating: 0,reviews: 0,badge:"sale",section:"bestseller",image:"images/product%20images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png"},
+  {id:5, name:"Mappillai Samba Rice",              category:"rice",     price:210,oldPrice:260,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"images/product%20images/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png"},
+  {id:6, name:"Iluppai Poo Samba Rice",            category:"rice",     price:195,oldPrice:240,rating: 0,reviews: 0, badge:"new", section:"new",       image:"images/product%20images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png"},
+  {id:7, name:"Vellai Kavuni Rice",                category:"rice",     price:190,oldPrice:235,rating: 0,reviews: 0, badge:"new", section:"new",       image:"images/product%20images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png"},
+  {id:8, name:"Paneer Rose",                       category:"flowers",  price:150,oldPrice:190,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"images/product%20images/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png"},
+  {id:9, name:"Hibiscus Flower",                   category:"flowers",  price:120,oldPrice:155,rating: 0,reviews: 0,badge:"sale",section:"bestseller",image:"images/product%20images/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png"},
+  {id:10,name:"Aavaram Flower",                    category:"flowers",  price:110,oldPrice:145,rating: 0,reviews: 0, badge:"new", section:"new",       image:"images/product%20images/Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png"},
+  {id:11,name:"Sangupoo",                          category:"flowers",  price:180,oldPrice:220,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"images/product%20images/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png"},
   {id:12,name:"Organic Rose Milk",                 category:"beverages",price:140,oldPrice:175,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&auto=format&fit=crop"},
   {id:13,name:"Hibiscus Sherbet",                  category:"beverages",price:130,oldPrice:165,rating: 0,reviews: 0,badge:"sale",section:"bestseller",image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"},
   {id:14,name:"Hand-pounded Rice Idiyappam Flour", category:"flour",    price:160,oldPrice:200,rating: 0,reviews: 0,badge:"hot", section:"bestseller",image:"https://images.unsplash.com/photo-1603046891744-5d7f1f4b79fa?w=500&auto=format&fit=crop"},
-  {id:15,name:"Black Urad Dal Health Mix Powder",  category:"flour",    price:175,oldPrice:215,rating: 0,reviews: 0, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png"},
-  {id:16,name:"Natural Fig Powder",                category:"other",    price:200,oldPrice:250,rating: 0,reviews: 0, badge:"new", section:"new",       image:"https://ik.imagekit.io/bq9dscs4g/agro%20store/Power%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png"},
+  {id:15,name:"Black Urad Dal Health Mix Powder",  category:"flour",    price:175,oldPrice:215,rating: 0,reviews: 0, badge:"new", section:"new",       image:"images/product%20images/Powder%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png"},
+  {id:16,name:"Natural Fig Powder",                category:"other",    price:200,oldPrice:250,rating: 0,reviews: 0, badge:"new", section:"new",       image:"images/product%20images/Powder%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png"},
 ];
 
 let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]');
@@ -2672,52 +2721,88 @@ const floatClasses=['prod-float-1','prod-float-2','prod-float-3','prod-float-4',
 function cardDefaultQty(cfg){ const one=cfg.unit==='ml'?1000:1; return cfg.options.includes(one)?one:cfg.options[0]; }
 function cardPriceFor(p,v,unit){ return unit==='ml'?Math.round(p.price*(v/1000)):Math.round(p.price*v); }
 function cardOldFor(p,v,unit){ return unit==='ml'?Math.round(p.oldPrice*(v/1000)):Math.round(p.oldPrice*v); }
+const escH=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ids: the built-in products use numbers, products added in the admin use their database id */
+const jsId=id=>typeof id==='number'?id:"'"+String(id).replace(/[^a-zA-Z0-9]/g,'')+"'";
+const findProd=id=>products.find(x=>String(x.id)===String(id));
+const money=n=>'₹ '+Number(n||0).toFixed(2);
+const liveSizes=p=>(p&&p.sizes||[]).filter(z=>z.active!==false);
+function cardSize(p,val){return liveSizes(p).find(z=>String(z.sku||z.label)===String(val))||null;}
 function prodCardHTML(p,i){
   const d=disc(p);
+  const productImage=p.image&&!/images\.unsplash\.com/i.test(String(p.image))?`<img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy" class="prod-img" width="400" height="400"/>`:'';
   const isW=wishlist.includes(p.id);
-  const cfg=getQtyCfg(p.category);
-  const q=cardDefaultQty(cfg);
-  const opts=cfg.options.map(v=>`<option value="${v}"${v===q?' selected':''}>${fmtQty(v,cfg.unit)}</option>`).join('');
-  const price=cardPriceFor(p,q,cfg.unit), old=cardOldFor(p,q,cfg.unit);
+  const zs=liveSizes(p);
+  let opts,price,old,soldOut=false;
+  if(zs.length){
+    const dz=(window.NanseiCatalog&&NanseiCatalog.defaultSize({sizes:zs}))||zs[0];
+    opts=zs.map(z=>`<option value="${escH(z.sku||z.label)}"${z===dz?' selected':''}${z.stock===0?' disabled':''}>${escH(z.label)}${z.stock===0?' (sold out)':''}</option>`).join('');
+    price=dz.price; old=dz.mrp||0; soldOut=zs.every(z=>z.stock===0);
+  }else{
+    const cfg=getQtyCfg(p.category);
+    const q=cardDefaultQty(cfg);
+    opts=cfg.options.map(v=>`<option value="${v}"${v===q?' selected':''}>${fmtQty(v,cfg.unit)}</option>`).join('');
+    price=cardPriceFor(p,q,cfg.unit); old=cardOldFor(p,q,cfg.unit);
+  }
   return `<div class="prod-card om-card" onclick="if(!event.defaultPrevented)window.location.href='product.html?id=${p.id}'">
     <a class="om-img prod-img-wrap" href="product.html?id=${p.id}" onclick="event.stopPropagation()">
       ${p.badge==='new'?'<span class="om-tag om-new">New</span>':(d>0?`<span class="om-tag">${d}% off</span>`:'')}
-      <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy" class="prod-img" width="400" height="400"/>
+      ${productImage}
     </a>
-    <button type="button" class="om-wish${isW?' on':''}" aria-pressed="${isW}" aria-label="Add ${p.name} to wishlist" onclick="toggleWish(${p.id},this);event.preventDefault();event.stopPropagation()">
+    <button type="button" class="om-wish${isW?' on':''}" aria-pressed="${isW}" aria-label="Add ${p.name} to wishlist" onclick="toggleWish(${jsId(p.id)},this);event.preventDefault();event.stopPropagation()">
       <svg viewBox="0 0 24 24" width="17" height="17" fill="${isW?'#b83232':'none'}" stroke="${isW?'#b83232':'#0f2218'}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.5 15 3.5 9.2A4.7 4.7 0 0 1 12 6.6a4.7 4.7 0 0 1 8.5 2.6c0 5.8-8.5 11.3-8.5 11.3z"/></svg>
     </button>
     <div class="om-body prod-info">
       <a class="om-name" href="product.html?id=${p.id}" onclick="event.stopPropagation()">${p.name}</a>
       <div class="om-rating">${Number(p.reviews||p.numReviews||0)>0?stars(p.rating)+'<span class="rating-text">'+ratingText(p)+'</span>':''}</div>
-      <div class="om-price"><span data-card-price>₹ ${price}.00</span>${old>price?`<s data-card-old>₹ ${old}.00</s>`:'<s data-card-old></s>'}</div>
+      <div class="om-price"><span data-card-price>${money(price)}</span>${old>price?`<s data-card-old>${money(old)}</s>`:'<s data-card-old></s>'}</div>
       <div class="om-actions prod-btn-area" id="cardbtn-area-${p.id}" onclick="event.preventDefault();event.stopPropagation()">
-        <select class="om-size" aria-label="Choose size for ${p.name}" onchange="omSize(${p.id},this)">${opts}</select>
-        <button type="button" class="om-add" id="cartbtn-${p.id}" onclick="omAdd(${p.id},this)">Add</button>
+        <select class="om-size" aria-label="Choose size for ${escH(p.name)}" onchange="omSize(${jsId(p.id)},this)"${soldOut?' disabled':''}>${opts}</select>
+        <button type="button" class="om-add" id="cartbtn-${p.id}" onclick="omAdd(${jsId(p.id)},this)"${soldOut?' disabled':''}>${soldOut?'Sold out':'Add'}</button>
       </div>
     </div>
   </div>`;
 }
 function omSize(id,sel){
-  const p=products.find(x=>x.id===id); if(!p)return;
-  const cfg=getQtyCfg(p.category), v=parseFloat(sel.value);
-  cardState[id]={qty:v,unit:cfg.unit};
+  const p=findProd(id); if(!p)return;
+  let price,old;
+  const z=cardSize(p,sel.value);
+  if(z){price=z.price;old=z.mrp||0;}
+  else{
+    const cfg=getQtyCfg(p.category), v=parseFloat(sel.value);
+    cardState[id]={qty:v,unit:cfg.unit};
+    price=cardPriceFor(p,v,cfg.unit); old=cardOldFor(p,v,cfg.unit);
+  }
   const card=sel.closest('.prod-card'); if(!card)return;
-  const price=cardPriceFor(p,v,cfg.unit), old=cardOldFor(p,v,cfg.unit);
   const pe=card.querySelector('[data-card-price]'), oe=card.querySelector('[data-card-old]');
-  if(pe) pe.textContent='₹ '+price+'.00';
-  if(oe) oe.textContent=old>price?'₹ '+old+'.00':'';
+  if(pe) pe.textContent=money(price);
+  if(oe) oe.textContent=old>price?money(old):'';
 }
 function omAdd(id,btn){
-  const p=products.find(x=>x.id===id); if(!p)return;
+  const p=findProd(id); if(!p)return;
   const sel=btn.parentElement.querySelector('.om-size');
   if(sel) omSize(id,sel);
+  const z=sel&&cardSize(p,sel.value);
+  if(z){
+    if(z.stock===0){showToast(p.name+' '+z.label+' is sold out');return;}
+    const ex=cart.find(i=>String(i.id)===String(p.id)&&(i.sku?i.sku===z.sku:i.qtyLabel===z.label));
+    if(ex){
+      if(z.stock!=null&&(ex.qty||1)>=z.stock){showToast('Only '+z.stock+' of '+z.label+' left');return;}
+      ex.qty=(ex.qty||1)+1; ex.price=z.price; ex.selectedPrice=z.price; ex.sku=z.sku;
+    }else cart.push({id:p.id,name:p.name,price:z.price,basePrice:p.price,image:p.image&&!/images\.unsplash\.com/i.test(String(p.image))?p.image:'',qty:1,qtyVal:z.amount||1,qtyLabel:z.label,unit:z.unit||'',sku:z.sku,selectedQuantity:z.label,selectedUnit:z.unit||'',selectedPrice:z.price});
+    saveCart();
+    showToast(p.name+' '+z.label+' added to cart');
+    if(typeof animateCartIcon==='function') animateCartIcon();
+    btn.classList.add('done'); btn.textContent='Added';
+    clearTimeout(btn._t); btn._t=setTimeout(()=>{btn.classList.remove('done');btn.textContent='Add';},1500);
+    return;
+  }
   const cfg=getQtyCfg(p.category);
   const {qty,unit}=cardState[id]||{qty:cardDefaultQty(cfg),unit:cfg.unit};
   const totalPrice=cardPriceFor(p,qty,unit);
   const label=fmtQty(qty,unit);
   const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
-  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit,selectedQuantity:label,selectedUnit:unit,selectedPrice:totalPrice});
+  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image&&!/images\.unsplash\.com/i.test(String(p.image))?p.image:'',qty:1,qtyVal:qty,qtyLabel:label,unit,selectedQuantity:label,selectedUnit:unit,selectedPrice:totalPrice});
   saveCart();
   showToast(p.name+' '+label+' added to cart');
   if(typeof animateCartIcon==='function') animateCartIcon();
@@ -2877,7 +2962,7 @@ function confirmAddToCart(id,triggerBtn){
   const totalPrice=unit==='ml'?Math.round(p.price*(qty/1000)):Math.round(p.price*qty);
   const label=fmtQty(qty,unit);
   const ex=cart.find(i=>i.id===id&&i.qtyLabel===label);
-  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image,qty:1,qtyVal:qty,qtyLabel:label,unit,selectedQuantity:label,selectedUnit:unit,selectedPrice:totalPrice});
+  if(ex){ex.qty+=1;}else cart.push({id,name:p.name,price:totalPrice,basePrice:p.price,image:p.image&&!/images\.unsplash\.com/i.test(String(p.image))?p.image:'',qty:1,qtyVal:qty,qtyLabel:label,unit,selectedQuantity:label,selectedUnit:unit,selectedPrice:totalPrice});
   saveCart();
   showToast(`[[icon:shopping-cart]] ${p.name} ${fmtQty(qty,unit)} added!`);
   const confirmBtn=triggerBtn||null;
@@ -2913,7 +2998,7 @@ function addDirectToCart(id, btn) {
   var totalPrice = unit === 'ml' ? Math.round(p.price * (qtyVal / 1000)) : Math.round(p.price * qtyVal);
   var label = fmtQty(qtyVal, unit);
   var ex = cart.find(function(i){ return i.id === id && i.qtyLabel === label; });
-  if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image, qty:1, qtyVal:qtyVal, qtyLabel:label, unit:unit, selectedQuantity:label, selectedUnit:unit, selectedPrice:totalPrice}); }
+  if (ex) { ex.qty += 1; } else { cart.push({id:id, name:p.name, price:totalPrice, image:p.image&&!/images\.unsplash\.com/i.test(String(p.image))?p.image:'', qty:1, qtyVal:qtyVal, qtyLabel:label, unit:unit, selectedQuantity:label, selectedUnit:unit, selectedPrice:totalPrice}); }
   saveCart();
   showToast(p.name + ' (' + label + ') added to cart!');
   if (btn) {
@@ -2949,7 +3034,6 @@ function deskCatClick(el,cat){
   document.querySelectorAll('.fpill').forEach(i=>i.classList.remove('active'));
   el.classList.add('active');
   filterProds(cat);
-  document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function filterProds(cat){
   if(cat==='all'){renderSections();return;}
@@ -2976,7 +3060,7 @@ function renderSearchSuggestions(input,matches){
   if(!matches.length){ box.classList.remove('show'); box.innerHTML=''; return; }
   box.innerHTML=matches.slice(0,6).map(p=>`
     <button type="button" class="suggestion-item" data-product-id="${p.id}">
-      <img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy">
+      ${p.image&&!/images\.unsplash\.com/i.test(String(p.image))?`<img src="${ikThumb(p.image,400)}" alt="${p.name}" loading="lazy">`:''}
       <span style="min-width:0;">
         <span class="suggestion-name">${p.name}</span>
         <span class="suggestion-meta">${p.category}</span>
@@ -3174,36 +3258,58 @@ syncCounters();
 setTimeout(initScrollBtns, 100);
 
 /* ---- LOAD PRODUCTS FROM API ---- */
-(function(){
-  const base = window.API_BASE || 'http://localhost:5000/api';
-  fetch(base + '/products?limit=100')
-    .then(r => r.json())
-    .then(data => {
-      if (!data.success || !data.products?.length) return;
-      // Map API products to the same shape as static products
-      const apiProds = data.products.map(p => ({
-        id:       p._id,
-        name:     p.name,
-        category: p.category,
-        price:    p.price,
-        oldPrice: p.oldPrice || Math.round(p.price * 1.25),
-        rating:   Number(p.numReviews || 0) > 0 ? Number(p.rating || 0) : 0,
-        reviews:  p.numReviews || 0,
-        badge:    p.badge || 'new',
-        section:  p.section || 'category',
-        image:    p.images?.[0]?.url || p.image || '',
-        tagline:  p.tagline || '',
-        desc:     p.description || '',
-      }));
-      // Replace static products array with API data
-      products.length = 0;
-      apiProds.forEach(p => products.push(p));
-      renderSections();
-      syncCounters();
-      setTimeout(initScrollBtns, 100);
-    })
-    .catch(() => { /* silently keep static data on error */ });
-})();
+const LOCAL_PRODUCT_IMAGES = {
+  "karunguruvai rice": "images/product%20images/Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png",
+  "karuppu kavuni (black kavuni rice)": "images/product%20images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png",
+  "arubatham kuruvai rice": "images/product%20images/Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png",
+  "poongar rice": "images/product%20images/Rice%20category/Poongar%20Rice/Poongar%20Rice.png",
+  "mappillai samba (mani samba) rice": "images/product%20images/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png",
+  "iluppai poo samba rice": "images/product%20images/Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png",
+  "vellai kavuni (white kavuni rice)": "images/product%20images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png",
+  "paneer rose (fragrant rose)": "images/product%20images/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png",
+  "hibiscus flower": "images/product%20images/Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png",
+  "aavaram flower": "images/product%20images/Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png",
+  "butterfly pea flower (sangu poo)": "images/product%20images/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png",
+  "black urad dal health mix powder": "images/product%20images/Powder%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png",
+  "country fig powder": "images/product%20images/Powder%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png",
+  "karuppu kavuni rice": "images/product%20images/Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png",
+  "mappillai samba rice": "images/product%20images/Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png",
+  "paneer rose": "images/product%20images/Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png",
+  "butterfly pea flower": "images/product%20images/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png",
+  "sangupoo": "images/product%20images/Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png",
+  "natural fig powder": "images/product%20images/Powder%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png",
+  "vellai kavuni rice": "images/product%20images/Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png"
+};
+/* the admin's catalogue (js/catalog.js): real pack sizes, prices, stock and photos.
+   Built-in products stay until the server answers; after that the server's list is what the shop sells. */
+const CAT_KEY={'Rice Varieties':'rice','Dried Flowers':'flowers','Beverages':'beverages','Flour Varieties':'flour','Other Products':'other'};
+function useCatalog(C){
+  const list=(C&&C.products)||[];
+  const next=[];
+  list.forEach(cp=>{
+    const zs=(cp.sizes||[]).filter(z=>z.active!==false); if(!zs.length)return;
+    const base=products.find(p=>String(p.id)===String(cp.id))||{};
+    const z=(C.defaultSize&&C.defaultSize({sizes:zs}))||zs[0];
+    next.push(Object.assign({},base,{
+      id:base.id!=null?base.id:cp.id, name:cp.name||base.name, category:CAT_KEY[cp.category]||cp.category||base.category||'other',
+      image:cp.image||LOCAL_PRODUCT_IMAGES[String(cp.name||'').trim().toLowerCase()]||base.image||'', sizes:zs,
+      price:z.price, oldPrice:z.mrp||z.price, rating:cp.rating!=null?cp.rating:(base.rating||0), reviews:cp.reviews!=null?cp.reviews:(base.reviews||0),
+      section:base.section||'', badge:base.badge||'', desc:cp.description||base.desc||''
+    }));
+  });
+  if(!next.length)return;
+  if(C.source!=='live') products.forEach(p=>{ if(!next.some(n=>String(n.id)===String(p.id))) next.push(p); });
+  products.splice(0,products.length,...next);
+  rerenderProducts();
+}
+function rerenderProducts(){
+  const wrap=document.getElementById('productSections'), grid=document.getElementById('productGrid');
+  if(grid&&grid.style.display==='grid'){ const a=document.querySelector('.fpill.active'); filterProds(a&&a.dataset.cat?a.dataset.cat:'all'); }
+  else if(wrap) renderSections();
+  syncCounters();
+  setTimeout(initScrollBtns, 100);
+}
+if(window.NanseiCatalog) NanseiCatalog.onUpdate(useCatalog);
 
 /* ---- AUTO-SEARCH FROM URL PARAM ---- */
 (function(){
@@ -3552,5 +3658,6 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBlogModa
   <div id="cartFooter" style="display:none;padding:1rem 1.25rem;border-top:1px solid rgba(26,58,42,.1);"></div>
 </div>
 
+<div data-farm-reels="float" data-after="hero" data-mobile-bottom="104"></div>
 </body>
 </html>

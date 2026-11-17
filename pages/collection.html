@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shop all products | Nansei Organics</title>
+<meta name="description" content="Heritage rice, sun-dried flowers, flours and drinks from the Nansei Organics farm in Achankulam, Tamil Nadu."/>
+<link rel="icon" href="nansei_org_logo.svg"/>
+<script>
+  window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:') ? 'http://localhost:5000/api' : '/api';
+  window.ikThumb = function (u, w) { if (!u || u.indexOf('ik.imagekit.io') < 0 || /[?&]tr=/.test(u)) return u || ''; return u + (u.indexOf('?') < 0 ? '?' : '&') + 'tr=w-' + w; };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/nansei.css?v=20261117-mobile-touch"/>
+<style>
+/* Collection page, laid out like Organic Mandya's /collections pages; cards come from css/nansei.css (.om-card) */
+body{margin:0;background:#fff;color:#1a2416}
+.cl{max-width:1320px;margin:0 auto;padding:22px 24px 80px}
+.cl-crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.85rem;color:#6b7a6f;margin:0 0 14px}
+.cl-crumb a{color:#6b7a6f;text-decoration:none}
+.cl-crumb a:hover{color:#0f2218;text-decoration:underline}
+.cl-crumb span[aria-hidden]{color:#b9c2bb}
+.cl-title{font-size:clamp(1.9rem,3.6vw,2.7rem);font-weight:700;color:#0f2218;line-height:1.12;margin:0 0 14px;letter-spacing:-.01em}
+.cl-intro{max-width:980px;color:#5b6a5f;font-size:.95rem;line-height:1.75}
+.cl-intro p{margin:0 0 10px}
+.cl-more{display:none;align-items:center;min-height:44px;border:0;background:none;padding:8px 0;color:#2d5a3d;font-weight:700;font-size:.9rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cl-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:34px;margin-top:30px;align-items:start}
+.cl-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 16px;margin-bottom:20px;border-bottom:1px solid #e5e7eb}
+.cl-count{font-size:.92rem;color:#5b6a5f}
+.cl-count b{color:#0f2218}
+.cl-sort{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:600;color:#1a2416}
+.cl-sort select{height:42px;border:1px solid #e5e7eb;border-radius:12px;padding:0 34px 0 12px;font:600 .9rem 'Quicksand',sans-serif;color:#1a2416;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230f2218' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;-webkit-appearance:none;cursor:pointer}
+.cl-filterbtn{display:none;align-items:center;gap:8px;height:42px;padding:0 16px;border:1.5px solid #0f2218;border-radius:12px;background:#fff;color:#0f2218;font:700 .9rem 'Quicksand',sans-serif;cursor:pointer}
+.cl-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.cl-grid .om-card{width:auto;flex:none}
+.cl-empty{grid-column:1/-1;text-align:center;padding:60px 20px;border:1px dashed #d7ddd8;border-radius:16px;color:#5b6a5f}
+.cl-empty a{color:#2d5a3d;font-weight:700}
+.cl-side{position:sticky;top:150px;border:1px solid #e5e7eb;border-radius:16px;padding:20px}
+.cl-side h2{font-size:1.25rem;font-weight:700;color:#0f2218;margin:0 0 12px}
+.cl-cats{list-style:none;margin:0;padding:0}
+.cl-cats a{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin:0 -12px;border-radius:10px;color:#1a2416;text-decoration:none;font-weight:600;font-size:.95rem}
+.cl-cats a:hover{background:#eef3ee}
+.cl-cats a[aria-current=page]{background:#eef3ee;color:#0f2218;font-weight:700;box-shadow:inset 3px 0 0 #2d5a3d}
+.cl-cats small{color:#6b7a6f;font-weight:600;font-size:.8rem}
+.cl-side-note{margin-top:18px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:.82rem;color:#5b6a5f;line-height:1.6}
+.cl-side-note a{color:#2d5a3d;font-weight:700}
+.cl-skel{border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
+.cl-skel i{display:block;aspect-ratio:1;background:linear-gradient(90deg,#f2f4f1,#fafbf9,#f2f4f1);background-size:200% 100%;animation:clsk 1.2s infinite}
+.cl-skel b{display:block;height:14px;margin:14px;border-radius:6px;background:#f2f4f1}
+@keyframes clsk{to{background-position:-200% 0}}
+/* phone: filter and sort in a bottom sheet */
+.cl-sheet{position:fixed;inset:0;z-index:1500;background:rgba(15,34,24,.45);display:none}
+.cl-sheet.open{display:block}
+.cl-sheet-panel{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));max-height:85vh;overflow-y:auto;animation:clup .25s ease}
+@keyframes clup{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.cl-sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.cl-sheet-head h2{font-size:1.2rem;margin:0;color:#0f2218}
+.cl-sheet-x{width:40px;height:40px;border-radius:50%;border:0;background:#eef3ee;font-size:1.4rem;color:#0f2218;cursor:pointer}
+.cl-sheet h3{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:#6b7a6f;margin:16px 0 8px}
+.cl-sheet .cl-cats a{margin:0;padding:12px}
+.cl-sorts{display:grid;gap:6px}
+.cl-sorts label{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid #e5e7eb;border-radius:12px;font-weight:600;cursor:pointer}
+.cl-sorts input{accent-color:#0f2218;width:18px;height:18px}
+.cl-sheet-done{width:100%;height:48px;margin-top:16px;border:0;border-radius:12px;background:#0f2218;color:#fff;font:700 1rem 'Quicksand',sans-serif;cursor:pointer}
+@media(max-width:1100px){.cl-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){
+  .cl{padding:14px 14px 60px}
+  .cl-layout{grid-template-columns:1fr;margin-top:18px}
+  .cl-side{display:none}
+  .cl-intro{font-size:.9rem}
+  .cl-intro:not(.open) p:not(:first-child){display:none}
+  .cl-intro:not(.open) p:first-child{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .cl-more{display:inline-flex}
+  .cl-bar{position:sticky;top:var(--nsh-h,64px);z-index:5;background:#fff;padding:10px 0;margin-bottom:12px}
+  .cl-sort{display:none}
+  .cl-filterbtn{display:inline-flex}
+  .cl-grid{grid-template-columns:1fr 1fr;gap:12px}
+}
+</style>
+</head>
+<body>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header"></script>
+
+<main class="cl">
+  <nav class="cl-crumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="collection.html?category=all">Collections</a><span aria-hidden="true">/</span><span id="clCrumb">All products</span></nav>
+  <h1 class="cl-title" id="clTitle">All products</h1>
+  <div class="cl-intro" id="clIntro"></div>
+  <button type="button" class="cl-more" id="clMore" aria-expanded="false" aria-controls="clIntro">Read more</button>
+
+  <div class="cl-layout">
+    <section aria-label="Products">
+      <div class="cl-bar">
+        <p class="cl-count" id="clCount">Loading products…</p>
+        <label class="cl-sort">Sort by:
+          <select id="clSort" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="az">Alphabetically, A-Z</option>
+            <option value="za">Alphabetically, Z-A</option>
+            <option value="low">Price, low to high</option>
+            <option value="high">Price, high to low</option>
+          </select>
+        </label>
+        <button type="button" class="cl-filterbtn" id="clFilterBtn" aria-haspopup="dialog" aria-controls="clSheet">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filter and sort
+        </button>
+      </div>
+      <div class="cl-grid" id="clGrid" aria-live="polite">
+        <div class="cl-skel"><i></i><b></b></div><div class="cl-skel"><i></i><b></b></div><div class="cl-skel"><i></i><b></b></div><div class="cl-skel"><i></i><b></b></div>
+      </div>
+    </section>
+
+    <aside class="cl-side" aria-label="Categories">
+      <h2>Category</h2>
+      <ul class="cl-cats" id="clCats"></ul>
+      <p class="cl-side-note">Everything is grown or made at our farm in Achankulam and packed there. Questions about a product? <a id="clWa" href="https://wa.me/916382142578" target="_blank" rel="noopener">Ask us on WhatsApp</a>.</p>
+    </aside>
+  </div>
+</main>
+
+<div class="cl-sheet" id="clSheet" role="dialog" aria-modal="true" aria-label="Filter and sort">
+  <div class="cl-sheet-panel">
+    <div class="cl-sheet-head"><h2>Filter and sort</h2><button type="button" class="cl-sheet-x" id="clSheetX" aria-label="Close">&times;</button></div>
+    <h3>Category</h3>
+    <ul class="cl-cats" id="clCatsM"></ul>
+    <h3>Sort by</h3>
+    <div class="cl-sorts" id="clSortsM"></div>
+    <button type="button" class="cl-sheet-done" id="clSheetDone">Show products</button>
+  </div>
+</div>
+
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
+<script src="js/catalog.js?v=20261117-media"></script>
+<script>
+(function () {
+  'use strict';
+  var CATS = [
+    { id: 'rice', name: 'Heritage Rice', match: ['rice varieties', 'rice'],
+      title: 'Heritage Rice: Karunguruvai, Kavuni, Samba & More',
+      intro: ['Traditional Tamil Nadu rice varieties grown on our farm in Achankulam, near Srivilliputhur, and milled on a wooden thirugai so the grain stays unpolished.',
+              'Pick a 500 g pack to try a variety, or a larger pack for everyday meals. Every product page has cooking notes: how long to soak, how much water and what each rice is traditionally used for.'] },
+    { id: 'flowers', name: 'Dried Flowers', match: ['dried flowers', 'flowers'],
+      title: 'Dried Flowers: Hibiscus, Rose, Avarampoo & Sangu Poo',
+      intro: ['Flowers grown at the farm and dried in the shade for herbal teas, sherbets and traditional recipes.',
+              'Steep a few flowers in hot water for a tea, or use them in rose milk and hibiscus sherbet. Store them in an airtight jar away from sunlight.'] },
+    { id: 'flour', name: 'Flours & Mixes', match: ['flour varieties', 'flour', 'flours'],
+      title: 'Flours & Mixes: Idiyappam Flour & Health Mix',
+      intro: ['Rice flour for idiyappam and a black urad dal health mix, made in small batches from what we grow.',
+              'Each pack lists how to cook with it on its product page.'] },
+    { id: 'beverages', name: 'Drinks', match: ['beverages', 'drinks'],
+      title: 'Drinks: Rose Milk & Hibiscus Sherbet',
+      intro: ['Drinks made with the rose and hibiscus we grow and dry at the farm.',
+              'Mix with chilled milk or water as described on each product page.'] },
+    { id: 'other', name: 'Fig Powder & More', match: ['other products', 'other'],
+      title: 'Fig Powder & More',
+      intro: ['Natural fig powder from the country fig trees on our farm, and other small-batch pantry products.'] }
+  ];
+  var ALL = { id: 'all', name: 'All products', title: 'All Products',
+    intro: ['Heritage rice, sun-dried flowers, flours and drinks, grown and packed at our farm in Achankulam, Tamil Nadu.',
+            'Choose a category on the right, or sort the list to find what you need.'] };
+
+  /* photos shipped with the site (page-relative so they work locally and on the live site) */
+  var IMG = 'images/product%20images/';
+  var LOCAL = {
+    'karunguruvai rice': 'Rice%20category/Karunguruvai%20Rice/Karunguruvai%20Rice.png',
+    'karuppu kavuni rice': 'Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png',
+    'karuppu kavuni (black kavuni rice)': 'Rice%20category/Karuppu%20Kavuni%20Rice/Karuppu%20Kavuni%20Rice.png',
+    'arubatham kuruvai rice': 'Rice%20category/Arubatham%20Kuruvai%20Rice/Arubatham%20Kuruvai%20Rice.png',
+    'poongar rice': 'Rice%20category/Poongar%20Rice/Poongar%20Rice.png',
+    'mappillai samba rice': 'Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png',
+    'mappillai samba (mani samba) rice': 'Rice%20category/MAPPILLAI%20SAMBA%20RICE/MAPPILLAI%20SAMBA%20RICE.png',
+    'iluppai poo samba rice': 'Rice%20category/Iluppai%20Poo%20Samba%20White%20Rice/Iluppai%20Poo%20Samba%20White%20Rice.png',
+    'vellai kavuni rice': 'Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png',
+    'vellai kavuni (white kavuni rice)': 'Rice%20category/White%20Kavuni%20Rice/White%20Kavuni%20Rice.png',
+    'paneer rose': 'Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png',
+    'paneer rose (fragrant rose)': 'Flower%20category/DRIED%20Panner%20Rose/DRIED%20Panneer%20Rose.png',
+    'hibiscus flower': 'Flower%20category/DRIED%20HIBISCUS/DRIED%20HIBISCUS.png',
+    'aavaram flower': 'Flower%20category/Dried%20Avarampoo/DRIED%20Avarampoo.png',
+    'butterfly pea flower': 'Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png',
+    'butterfly pea flower (sangu poo)': 'Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png',
+    'sangupoo': 'Flower%20category/DRIED%20SANGUPOO/Dried%20SANGUPOO.png',
+    'black urad dal health mix powder': 'Powder%20category/black%20urad%20dal%20health%20mix%20powder/black%20urad%20dal%20health%20mix%20powder.png',
+    'country fig powder': 'Powder%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png',
+    'natural fig powder': 'Powder%20category/NATURAL%20FIG%20POWDER/NATURAL%20FIG%20POWDER.png'
+  };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var money = function (n) { return '₹ ' + Number(n || 0).toFixed(2); };
+  var params = new URLSearchParams(location.search);
+  var selected = params.get('category') || 'all';
+  var current = CATS.filter(function (c) { return c.id === selected; })[0] || ALL;
+  var products = [];
+  var sortBy = params.get('sort') || 'featured';
+
+  /* ---------- page heading ---------- */
+  $('clTitle').textContent = current.title;
+  $('clCrumb').textContent = current.name;
+  document.title = (current.id === 'all' ? 'Shop all products' : current.name) + ' | Nansei Organics';
+  $('clIntro').innerHTML = current.intro.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('');
+  if (current.intro.length < 2 && current.intro[0].length < 160) $('clMore').style.visibility = 'hidden';
+  $('clMore').addEventListener('click', function () {
+    var open = $('clIntro').classList.toggle('open');
+    this.textContent = open ? 'Read less' : 'Read more';
+    this.setAttribute('aria-expanded', String(open));
+  });
+  $('clSort').value = sortBy;
+
+  /* ---------- helpers ---------- */
+  function catOf(p) {
+    var raw = String(p.category || '').toLowerCase();
+    var hit = CATS.filter(function (c) { return c.match.some(function (m) { return raw === m || raw.indexOf(m) >= 0; }); })[0];
+    return hit ? hit.id : 'other';
+  }
+  function imageOf(p) {
+    var local = LOCAL[String(p.name || '').trim().toLowerCase()];
+    if (local) return IMG + local;
+    var first = (p.images || []).map(function (i) { return typeof i === 'string' ? i : (i && i.url) || ''; })[0] || p.image || '';
+    if (/images\.unsplash\.com/i.test(String(first))) return '';
+    return String(first).replace(/^\/pages\//, '');
+  }
+  function sizesOf(p) { return (p.sizes || []).filter(function (s) { return s.active !== false; }); }
+  function defSize(p) { return window.NanseiCatalog && NanseiCatalog.defaultSize ? NanseiCatalog.defaultSize(p) : (sizesOf(p).filter(function (s) { return s.amount === 1000; })[0] || sizesOf(p)[0] || null); }
+  function priceOf(p) { var s = defSize(p); return Number(s ? s.price : p.price) || 0; }
+  function soldOut(p) { var s = sizesOf(p); return s.length > 0 && s.every(function (z) { return z.stock === 0; }); }
+  function wished(id) { try { return JSON.parse(localStorage.getItem('wishlist') || '[]').some(function (x) { return String(x) === String(id); }); } catch (e) { return false; } }
+
+  /* ---------- categories (sidebar + phone sheet) ---------- */
+  function catLinks() {
+    var counts = { all: products.length };
+    products.forEach(function (p) { var c = catOf(p); counts[c] = (counts[c] || 0) + 1; });
+    return [ALL].concat(CATS).map(function (c) {
+      return '<li><a href="collection.html?category=' + c.id + '"' + (c.id === current.id ? ' aria-current="page"' : '') + '>' + esc(c.name) +
+        '<small>' + (products.length ? (counts[c.id] || 0) : '') + '</small></a></li>';
+    }).join('');
+  }
+
+  /* ---------- product card (same as the home page: css/nansei.css .om-card) ---------- */
+  function card(p) {
+    var size = defSize(p), price = Number(size ? size.price : p.price) || 0, mrp = Number(size ? size.mrp : p.oldPrice) || price;
+    var off = mrp > price ? Math.round((1 - price / mrp) * 100) : 0;
+    var out = soldOut(p), isW = wished(p.id), image = imageOf(p);
+    var opts = sizesOf(p).map(function (s, i) {
+      return '<option value="' + i + '"' + (s === size ? ' selected' : '') + (s.stock === 0 ? ' disabled' : '') + '>' + esc(s.label || (s.amount + ' ' + s.unit)) + (s.stock === 0 ? ' (sold out)' : '') + '</option>';
+    }).join('');
+    var href = 'product.html?id=' + encodeURIComponent(p.id);
+    return '<div class="om-card" data-id="' + esc(p.id) + '">' +
+      '<a class="om-img prod-img-wrap" href="' + href + '">' +
+        (out ? '<span class="om-tag" style="background:#6b7a6f">Sold out</span>' : p.badge === 'new' ? '<span class="om-tag om-new">New</span>' : off > 0 ? '<span class="om-tag">' + off + '% off</span>' : '') +
+        (image ? '<img class="prod-img" src="' + esc(window.ikThumb(image, 400)) + '" alt="' + esc(p.name) + '" loading="lazy" width="400" height="400"/>' : '') +
+      '</a>' +
+      '<button type="button" class="om-wish" data-wish="' + esc(p.id) + '" aria-pressed="' + isW + '" aria-label="Add ' + esc(p.name) + ' to wishlist">' +
+        '<svg viewBox="0 0 24 24" width="17" height="17" fill="' + (isW ? '#b83232' : 'none') + '" stroke="' + (isW ? '#b83232' : '#0f2218') + '" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.5 15 3.5 9.2A4.7 4.7 0 0 1 12 6.6a4.7 4.7 0 0 1 8.5 2.6c0 5.8-8.5 11.3-8.5 11.3z"/></svg>' +
+      '</button>' +
+      '<div class="om-body">' +
+        '<a class="om-name" href="' + href + '">' + esc(p.name) + '</a>' +
+        '<div class="om-price"><span data-card-price>' + money(price) + '</span><s data-card-old>' + (mrp > price ? money(mrp) : '') + '</s></div>' +
+        '<div class="om-actions">' +
+          (opts ? '<select class="om-size" aria-label="Choose size for ' + esc(p.name) + '">' + opts + '</select>' : '') +
+          '<button type="button" class="om-add" data-add="' + esc(p.id) + '"' + (out ? ' disabled style="background:#c7cdc8;cursor:not-allowed"' : '') + '>' + (out ? 'Sold out' : 'Add') + '</button>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  function render() {
+    var list = products.filter(function (p) { return current.id === 'all' || catOf(p) === current.id; });
+    if (sortBy === 'az') list.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    if (sortBy === 'za') list.sort(function (a, b) { return b.name.localeCompare(a.name); });
+    if (sortBy === 'low') list.sort(function (a, b) { return priceOf(a) - priceOf(b); });
+    if (sortBy === 'high') list.sort(function (a, b) { return priceOf(b) - priceOf(a); });
+    $('clCount').innerHTML = list.length ? 'Showing all <b>' + list.length + '</b> ' + (list.length === 1 ? 'product' : 'products') : 'No products here yet';
+    $('clGrid').innerHTML = list.length ? list.map(card).join('') :
+      '<div class="cl-empty">Nothing in this category right now. <a href="collection.html?category=all">See all products</a></div>';
+    $('clCats').innerHTML = catLinks();
+    $('clCatsM').innerHTML = catLinks();
+  }
+
+  /* ---------- sort (desktop select + phone sheet) ---------- */
+  var SORTS = [['featured', 'Featured'], ['az', 'Alphabetically, A-Z'], ['za', 'Alphabetically, Z-A'], ['low', 'Price, low to high'], ['high', 'Price, high to low']];
+  $('clSortsM').innerHTML = SORTS.map(function (s) { return '<label><input type="radio" name="clSortM" value="' + s[0] + '"' + (s[0] === sortBy ? ' checked' : '') + '/>' + s[1] + '</label>'; }).join('');
+  function setSort(v) {
+    sortBy = v; $('clSort').value = v;
+    var r = document.querySelector('input[name=clSortM][value="' + v + '"]'); if (r) r.checked = true;
+    var q = new URLSearchParams(location.search); if (v === 'featured') q.delete('sort'); else q.set('sort', v);
+    history.replaceState(null, '', 'collection.html?' + q.toString());
+    render();
+  }
+  $('clSort').addEventListener('change', function () { setSort(this.value); });
+  $('clSortsM').addEventListener('change', function (e) { if (e.target.name === 'clSortM') setSort(e.target.value); });
+
+  /* ---------- phone sheet ---------- */
+  function sheet(open) { $('clSheet').classList.toggle('open', open); document.body.style.overflow = open ? 'hidden' : ''; if (open) $('clSheetX').focus(); }
+  $('clFilterBtn').addEventListener('click', function () { sheet(true); });
+  $('clSheetX').addEventListener('click', function () { sheet(false); });
+  $('clSheetDone').addEventListener('click', function () { sheet(false); });
+  $('clSheet').addEventListener('click', function (e) { if (e.target === this) sheet(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') sheet(false); });
+
+  /* ---------- size, wishlist and add to cart ---------- */
+  function byId(id) { return products.filter(function (x) { return String(x.id) === String(id); })[0]; }
+  $('clGrid').addEventListener('change', function (e) {
+    if (!e.target.matches('.om-size')) return;
+    var c = e.target.closest('.om-card'), p = byId(c.dataset.id); if (!p) return;
+    var s = sizesOf(p)[Number(e.target.value)]; if (!s) return;
+    c.querySelector('[data-card-price]').textContent = money(s.price);
+    c.querySelector('[data-card-old]').textContent = s.mrp > s.price ? money(s.mrp) : '';
+  });
+  $('clGrid').addEventListener('click', function (e) {
+    var w = e.target.closest('[data-wish]');
+    if (w) {
+      var id = w.dataset.wish, list = [];
+      try { list = JSON.parse(localStorage.getItem('wishlist') || '[]'); } catch (er) {}
+      var i = list.findIndex(function (x) { return String(x) === String(id); }), on = i < 0;
+      if (on) list.push(id); else list.splice(i, 1);
+      localStorage.setItem('wishlist', JSON.stringify(list));
+      w.setAttribute('aria-pressed', String(on));
+      var svg = w.querySelector('svg'); svg.setAttribute('fill', on ? '#b83232' : 'none'); svg.setAttribute('stroke', on ? '#b83232' : '#0f2218');
+      toast(on ? 'Saved to your wishlist' : 'Removed from your wishlist');
+      return;
+    }
+    var b = e.target.closest('[data-add]'); if (!b || b.disabled) return;
+    var p = byId(b.dataset.add); if (!p) return;
+    var sel = b.parentElement.querySelector('.om-size');
+    var s = sel ? sizesOf(p)[Number(sel.value)] : defSize(p);
+    var label = (s && s.label) || '1 pack', price = Number(s ? s.price : p.price) || 0;
+    var item = { id: p.id, name: p.name, price: price, basePrice: Number(p.price || price), image: imageOf(p), qty: 1, qtyVal: (s && s.amount) || 1, qtyLabel: label, unit: (s && s.unit) || '', sku: s && s.sku, selectedQuantity: label, selectedUnit: (s && s.unit) || '', selectedPrice: price };
+    var cart = []; try { cart = JSON.parse(localStorage.getItem('cart') || '[]'); } catch (er) {}
+    var ex = cart.filter(function (x) { return String(x.id) === String(item.id) && x.qtyLabel === label; })[0];
+    if (ex) ex.qty = (ex.qty || 1) + 1; else cart.push(item);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    if (window.NanseiShell) NanseiShell.updateCounts();
+    b.classList.add('done'); b.textContent = 'Added';
+    clearTimeout(b._t); b._t = setTimeout(function () { b.classList.remove('done'); b.textContent = 'Add'; }, 1500);
+    toast(p.name + ' (' + label + ') added to cart');
+  });
+  var tEl;
+  function toast(msg) {
+    if (!tEl) { tEl = document.createElement('div'); tEl.setAttribute('role', 'status'); tEl.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#0f2218;color:#fff;padding:11px 18px;border-radius:30px;font:600 .9rem Quicksand,sans-serif;z-index:3000;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;text-align:center'; document.body.appendChild(tEl); }
+    tEl.textContent = msg; tEl.style.opacity = '1'; clearTimeout(tEl._t); tEl._t = setTimeout(function () { tEl.style.opacity = '0'; }, 2000);
+  }
+
+  /* WhatsApp number from the admin's store settings */
+  document.addEventListener('nansei:settings', function (e) { var w = e.detail && e.detail.contact && e.detail.contact.whatsapp; if (w) $('clWa').href = 'https://wa.me/' + String(w).replace(/\D/g, ''); });
+
+  /* ---------- products from the shared catalogue ---------- */
+  function use() { products = ((window.NanseiCatalog && NanseiCatalog.products) || []).filter(function (p) { return p.active !== false; }); render(); }
+  if (window.NanseiCatalog) { NanseiCatalog.onUpdate(use); NanseiCatalog.ready.then(use); }
+  else fetch('data/catalog.json').then(function (r) { return r.json(); }).then(function (d) {
+    products = d.map(function (p) { return { id: p.legacyId, name: p.name, category: p.category, images: p.images, sizes: p.sizes, badge: p.badge, price: (p.sizes && p.sizes[0] && p.sizes[0].price) || 0 }; });
+    render();
+  }).catch(function () { $('clGrid').innerHTML = '<div class="cl-empty">We could not load the products. Please refresh the page.</div>'; });
+})();
+</script>
+</body>
+</html>

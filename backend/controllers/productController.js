@@ -111,17 +111,30 @@ function summarise(update) {
   update.stock = tracked.length ? tracked.reduce((n, z) => n + z.stock, 0) : (update.stock != null ? update.stock : 0);
   return update;
 }
+/** photo links the shop can show: https://…, photos uploaded to /api/media/…, or the site's own images/… files */
+function cleanImages(raw) {
+  if (raw === undefined) return undefined;
+  if (!Array.isArray(raw)) throw Object.assign(new Error('Photos must be a list'), { status: 400 });
+  const ok = u => /^https:\/\/[^\s"'<>]+$/i.test(u) || /^\/api\/media\/[a-f0-9]{24}$/i.test(u) || /^(\.\/)?images\/[^"'<>]+$/i.test(u);
+  return raw.slice(0, 12).map(i => ({ url: txt(i && (i.url || i), 600).replace(/^\/?pages\/images\//i, 'images/'), alt: txt(i && i.alt, 200) })).filter(i => {
+    if (!i.url) return false;
+    if (!ok(i.url)) throw Object.assign(new Error('This photo link cannot be used: ' + i.url.slice(0, 80)), { status: 400 });
+    return true;
+  });
+}
 const EXTRA = ['hsn', 'gstRate', 'countryOfOrigin', 'packedBy', 'lowStockAt', 'shelfLife', 'howToUse', 'metaTitle', 'metaDescription'];
 
 // @route   POST /api/products
 exports.createProduct = async (req, res, next) => {
   try {
-    const { name, description, price, oldPrice, stock, category, images, badge, section, tags, isFeatured, isActive, sku, unit, weight, tagline } = req.body;
+    const { name, description, price, oldPrice, stock, category, badge, section, tags, isFeatured, isActive, sku, unit, weight, tagline } = req.body;
+    let imgs;
+    try { imgs = cleanImages(req.body.images); } catch (e) { return res.status(e.status || 400).json({ success: false, message: e.message }); }
     let sizes;
     try { sizes = cleanSizes(req.body.sizes, req.body.legacyId); } catch (e) { return res.status(e.status || 400).json({ success: false, message: e.message }); }
     const extra = {}; EXTRA.forEach(k => { if (req.body[k] !== undefined) extra[k] = req.body[k]; });
     if (req.body.legacyId != null && req.body.legacyId !== '') extra.legacyId = Number(req.body.legacyId);
-    const doc = summarise({ name, description, price, oldPrice, stock, category, images, badge, section, tags, isFeatured, isActive, sku, unit: unit || 'pack', weight: weight || 1, tagline, sizes, ...extra });
+    const doc = summarise({ name, description, price, oldPrice, stock, category, images: imgs || [], badge, section, tags, isFeatured, isActive, sku, unit: unit || 'pack', weight: weight || 1, tagline, sizes, ...extra });
     Object.keys(doc).forEach(k => doc[k] === undefined && delete doc[k]);
     const product = await Product.create({ ...doc, name, tagline });
     bustCache('/api/products');
@@ -137,6 +150,7 @@ exports.updateProduct = async (req, res, next) => {
   try {
     const { name, description, price, oldPrice, stock, category, images, badge, section, tags, isFeatured, isActive, sku, unit, weight, tagline } = req.body;
     const updates = { name, description, price, oldPrice, stock, category, images, badge, section, tags, isFeatured, isActive, sku, unit, weight, tagline };
+    try { updates.images = cleanImages(req.body.images); } catch (e) { return res.status(e.status || 400).json({ success: false, message: e.message }); }
     try { updates.sizes = cleanSizes(req.body.sizes, req.body.legacyId); } catch (e) { return res.status(e.status || 400).json({ success: false, message: e.message }); }
     EXTRA.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
     if (oldPrice === '' || oldPrice === null) updates.oldPrice = undefined;   // the old price can be cleared

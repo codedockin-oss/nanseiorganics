@@ -13,6 +13,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET every post, drafts included (admin only) — must stay above /:id
+router.get('/admin/all', protect, authorize('admin'), async (req, res) => {
+  try {
+    const items = await Blog.find().sort('-createdAt').lean();
+    res.json({ success: true, data: items });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // GET single blog (public)
 router.get('/:id', async (req, res) => {
   try {

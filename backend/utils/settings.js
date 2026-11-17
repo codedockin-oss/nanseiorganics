@@ -21,7 +21,29 @@ function defaults() {
       dispatchNote: '',
     },
     announcement: { enabled: true, items: [] },
+    homepage: {
+      heroEyebrow: 'With Nansai',
+      heroTitle: 'Experience the Root of',
+      heroEmphasis: 'Nature',
+      heroDescription: 'Pure, farm-direct organic products from Tamil Nadu — grown in living soil, harvested for healthy lives.',
+      heroCtaText: 'Explore Products →',
+      heroCtaHref: '#products',
+      heroMediaType: 'video',
+      heroMediaUrl: 'https://ik.imagekit.io/bq9dscs4g/agro%20store/videos/slide%20video.mp4?updatedAt=1781177427392',
+      showHero: true,
+      showCategories: true,
+      showProducts: true,
+      showBlog: true,
+      showFaq: true,
+      showReels: true,
+      gallery: [],        // empty = the photos built into the page
+      reels: [],          // empty = the reels built into the page
+    },
     social: { instagram: '', facebook: '', youtube: '' },
+    footer: {
+      about: 'Heritage rice, sun-dried flowers and stone-ground flours, grown and packed on our own farm in Tamil Nadu.',
+      showMap: true,
+    },
   };
 }
 
@@ -83,7 +105,9 @@ function publicSettings(s) {
       grievanceName: s.legal.grievanceName, grievanceEmail: s.legal.grievanceEmail, grievancePhone: s.legal.grievancePhone },
     shipping: { ...pricingFrom(s), dispatchNote: s.shipping.dispatchNote },
     announcement: s.announcement.enabled ? s.announcement.items : [],
+    homepage: s.homepage,
     social: s.social,
+    footer: s.footer,
   };
 }
 

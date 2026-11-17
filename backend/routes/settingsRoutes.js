@@ -16,11 +16,29 @@ const url = v => {
   if (s && !/^https:\/\//i.test(s)) throw new Error('Links must start with https://');
   return s;
 };
+const storefrontHref = (v, max, label) => {
+  const s = text(v, max);
+  if (s && !(/^(https:\/\/|#[a-z0-9_-]+$)/i.test(s) || /^[a-z0-9][a-z0-9_./?=&%#-]*$/i.test(s))) throw new Error(label + ' must be a safe site path or https:// link');
+  return s;
+};
 
 /** Only these fields can be saved, each cleaned and checked. */
+/** an https:// link, a photo uploaded to /api/media/…, or one of the site's own files (images/…, videos/…) */
+function mediaLink(v, what) {
+  const u = text(v, 600);
+  if (!u) return '';
+  if (/^https:\/\/[^\s"'<>]+$/i.test(u) || /^\/api\/media\/[a-f0-9]{24}$/i.test(u) || /^(\.\/)?(images|videos)\/[^"'<>]+$/i.test(u)) return u;
+  throw new Error(what + ' must be an https:// link or an uploaded photo');
+}
+/** undefined = leave as is; otherwise a cleaned list without empty rows */
+function listOf(v, max, map, keep) {
+  if (v === undefined) return undefined;
+  if (!Array.isArray(v)) return [];
+  return v.slice(0, max).map(x => map(x || {})).filter(keep);
+}
 function cleanSettings(b) {
   b = b || {};
-  const c = b.contact || {}, l = b.legal || {}, sh = b.shipping || {}, an = b.announcement || {}, so = b.social || {};
+  const c = b.contact || {}, l = b.legal || {}, sh = b.shipping || {}, an = b.announcement || {}, so = b.social || {}, home = b.homepage || {}, footer = b.footer || {};
   const email = text(c.email, 120).toLowerCase();
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Please enter a valid email address');
   const gstin = text(l.gstin, 15).toUpperCase();
@@ -32,6 +50,9 @@ function cleanSettings(b) {
   const items = Array.isArray(an.items) ? an.items.slice(0, 8).map(i => ({
     text: text(i && i.text, 140), code: text(i && i.code, 30).toUpperCase(), link: text(i && i.link, 300),
   })).filter(i => i.text) : [];
+  const heroMediaType = ['image', 'video'].includes(home.heroMediaType) ? home.heroMediaType : undefined;
+  const heroMediaUrl = text(home.heroMediaUrl, 500);
+  if (heroMediaUrl && !/^https:\/\//i.test(heroMediaUrl) && !/^(?!\/\/)[a-z0-9][a-z0-9_./?=&%#-]*$/i.test(heroMediaUrl)) throw new Error('Hero media must be an https:// URL or a relative asset path');
   return {
     storeName: text(b.storeName, 80),
     contact: { phone: text(c.phone, 20), whatsapp: text(c.whatsapp, 20).replace(/\D/g, ''), email, address: text(c.address, 300) },
@@ -44,7 +65,22 @@ function cleanSettings(b) {
       dispatchNote: text(sh.dispatchNote, 160),
     },
     announcement: { enabled: an.enabled === undefined ? true : !!an.enabled, items },
+    homepage: {
+      heroEyebrow: text(home.heroEyebrow, 80), heroTitle: text(home.heroTitle, 120), heroEmphasis: text(home.heroEmphasis, 60),
+      heroDescription: text(home.heroDescription, 300), heroCtaText: text(home.heroCtaText, 50),
+      heroCtaHref: storefrontHref(home.heroCtaHref, 300, 'Hero button link'),
+      heroMediaType, heroMediaUrl,
+      showHero: home.showHero === undefined ? undefined : !!home.showHero,
+      showCategories: home.showCategories === undefined ? undefined : !!home.showCategories,
+      showProducts: home.showProducts === undefined ? undefined : !!home.showProducts,
+      showBlog: home.showBlog === undefined ? undefined : !!home.showBlog,
+      showFaq: home.showFaq === undefined ? undefined : !!home.showFaq,
+      showReels: home.showReels === undefined ? undefined : !!home.showReels,
+      gallery: listOf(home.gallery, 24, g => ({ image: mediaLink(g.image, 'Gallery photo'), caption: text(g.caption, 120), tag: text(g.tag, 40) }), g => g.image),
+      reels: listOf(home.reels, 20, r => ({ video: mediaLink(r.video, 'Reel video'), title: text(r.title, 120), tag: text(r.tag, 40), productId: text(r.productId, 40).replace(/[^a-zA-Z0-9]/g, '') }), r => r.video),
+    },
     social: { instagram: url(so.instagram), facebook: url(so.facebook), youtube: url(so.youtube) },
+    footer: { about: text(footer.about, 500), showMap: footer.showMap === undefined ? undefined : !!footer.showMap },
   };
 }
 

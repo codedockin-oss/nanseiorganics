@@ -77,6 +77,7 @@
       '.nsh-search input,.nsh-msearch input{width:100%!important;height:46px!important;padding:0 50px 0 20px!important;border:1.5px solid rgba(15,34,24,.14)!important;border-radius:30px!important;background:#f7f8f6!important;font:500 .92rem ' + F + '!important;color:var(--nsh-ink)!important;outline:none;transition:border-color .2s,background .2s}',
       '.nsh-search input:focus,.nsh-msearch input:focus{background:#fff!important;border-color:var(--nsh-mid)!important}',
       '.nsh-sbtn{position:absolute!important;right:5px;top:50%;transform:translateY(-50%);width:36px!important;height:36px!important;border-radius:50%!important;background:var(--nsh-forest)!important;color:#fff!important;display:grid!important;place-items:center;cursor:pointer}',
+      '.nsh-r .nsh-sbtn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important}',
       '.nsh-sbtn:hover{background:var(--nsh-mid)!important}',
       '.nsh-head .search-suggestions,.nsh-msearch .search-suggestions{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border:1px solid rgba(15,34,24,.12);border-radius:16px;box-shadow:0 18px 40px rgba(15,34,24,.16);overflow:hidden;z-index:1200}',
       '.nsh-head .search-suggestions.show,.nsh-msearch .search-suggestions.show{display:block}',
@@ -84,11 +85,13 @@
       '.nsh-track:hover{background:var(--nsh-mid)!important;color:#fff!important}',
       '.nsh-acts{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0}',
       '.nsh-act{position:relative;display:flex!important;flex-direction:column;align-items:center;gap:3px;min-width:58px;padding:6px 6px!important;border-radius:12px!important;color:var(--nsh-ink)!important;text-decoration:none;cursor:pointer;font-size:.74rem!important;font-weight:600!important}',
+      '.nsh-r .nsh-act{min-height:44px!important;justify-content:center}',
       '.nsh-act:hover{background:var(--nsh-tile)!important;color:var(--nsh-forest)!important}',
       '.nsh-act .nsh-lbl{text-align:center!important;max-width:84px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}',
       '.nsh-badge{position:absolute!important;top:2px;right:12px;min-width:17px;height:17px;padding:0 4px!important;border-radius:20px!important;background:var(--nsh-gold)!important;color:var(--nsh-forest)!important;font-size:.64rem!important;font-weight:800!important;display:flex;align-items:center;justify-content:center;border:2px solid #fff!important}',
       '.nsh-admin{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%!important;background:var(--nsh-forest)!important;color:var(--nsh-gold-lt)!important;border:1px solid var(--nsh-gold)!important;font-weight:800!important;font-size:.66rem!important;text-decoration:none;flex-shrink:0}',
       '.nsh-ham{display:none!important;width:42px;height:42px;border-radius:12px!important;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:5px}',
+      '.nsh-r .nsh-ham{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important}',
       '.nsh-ham span{display:block;width:20px;height:2px;background:var(--nsh-forest)!important;border-radius:2px!important;transition:transform .25s,opacity .25s}',
       '.nsh-ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}.nsh-ham.open span:nth-child(2){opacity:0}.nsh-ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}',
       /* category row */
@@ -139,6 +142,7 @@
       '.nsh-fpromise b{display:block;color:#fff;font-size:.95rem}',
       '.nsh-fpromise span{font-size:.8rem}',
       '.nsh-fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:36px;padding-top:48px;padding-bottom:40px}',
+      '.nsh-fmap{padding:0 24px 36px}.nsh-fmap .nsh-mapbox{max-width:1272px;margin:0 auto;overflow:hidden;border:1px solid rgba(243,239,230,.15);border-radius:14px}.nsh-fmap iframe{display:block;width:100%;height:250px;border:0;filter:saturate(.8)}.nsh-fmap a{display:inline-flex;align-items:center;gap:8px;margin:10px auto 0;max-width:1272px;font-size:.86rem}',
       '.nsh-flogo{height:62px;filter:brightness(0) invert(1);margin-bottom:14px}',
       '.nsh-fabout{font-size:.9rem;line-height:1.7;max-width:320px}',
       '.nsh-foot h3{color:#fff!important;font-size:1.02rem!important;font-weight:700!important;margin:0 0 16px!important}',
@@ -150,13 +154,22 @@
       '.nsh-fbottom .nsh-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:18px;padding-bottom:18px;font-size:.8rem}',
       '.nsh-fbottom nav{display:flex;flex-wrap:wrap;gap:18px}',
       '@media(max-width:1000px){.nsh-fgrid{grid-template-columns:1fr 1fr}.nsh-fpromise .nsh-in{grid-template-columns:1fr 1fr}}',
-      '@media(max-width:600px){.nsh-fgrid{grid-template-columns:1fr 1fr;gap:26px;padding-top:36px}.nsh-fgrid>div:first-child{grid-column:1/-1}.nsh-fpromise .nsh-in{gap:14px}.nsh-fpromise b{font-size:.86rem}.nsh-fpromise span{font-size:.74rem}.nsh-fpromise i{width:36px;height:36px}}'
+      '@media(max-width:600px){.nsh-fgrid{grid-template-columns:1fr 1fr;gap:26px;padding-top:36px}.nsh-fgrid>div:first-child{grid-column:1/-1}.nsh-fpromise .nsh-in{gap:14px}.nsh-fpromise b{font-size:.86rem}.nsh-fpromise span{font-size:.74rem}.nsh-fpromise i{width:36px;height:36px}.nsh-fmap{padding:0 14px 28px}.nsh-fmap iframe{height:210px}}'
     ].join('\n');
 
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     function readJSON(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
     function cur(page) { return PAGE === page ? ' aria-current="page"' : ''; }
-    function catHref(c) { return ON_HOME ? '#shop-' + c : 'index.html#shop-' + c; }
+    function catHref(c) { return 'collection.html?category=' + encodeURIComponent(c); }
+    /* Older shared links use index.html#shop-rice; send them to the collection page. */
+    function shopHashToCollection() {
+      if (!/^#shop-/.test(location.hash)) return;
+      var hashCategory = location.hash.slice(6);
+      if (hashCategory === 'all' || CATS.some(function (category) { return category[0] === hashCategory; })) location.replace(catHref(hashCategory));
+    }
+    shopHashToCollection();
+    /* also when an old #shop-… link is clicked on a page that is already open */
+    window.addEventListener('hashchange', shopHashToCollection);
 
     var Shell = window.NanseiShell = {
       injectStyle: function () {
@@ -205,7 +218,6 @@
           '<nav class="nsh-cats" aria-label="Categories"><ul class="nsh-in">' +
           CATS.map(function (c) { return '<li><a href="' + catHref(c[0]) + '" onclick="return NanseiShell.goCat(\'' + c[0] + '\')">' + c[1] + '</a></li>'; }).join('') +
           '<li class="nsh-sep" aria-hidden="true"></li>' +
-          '<li><a href="video-reels.html"' + cur('video-reels.html') + '>Farm reels</a></li>' +
           '<li><a href="' + (ON_HOME ? '#gallery' : 'index.html#gallery') + '">Our farm</a></li>' +
           '<li><a href="blog.html"' + cur('blog.html') + '>Blogs</a></li>' +
           '<li><a href="news.html"' + cur('news.html') + '>News</a></li>' +
@@ -229,7 +241,6 @@
           '<a href="track-order.html"' + cur('track-order.html') + '>' + ICON.truck + 'Track order</a>' +
           '<a href="wishlist.html"' + cur('wishlist.html') + '>' + ICON.heart + 'Wishlist</a>' +
           '<h3>From the farm</h3>' +
-          '<a href="video-reels.html"' + cur('video-reels.html') + '>' + ICON.play + 'Farm reels</a>' +
           '<a href="' + (ON_HOME ? '#gallery' : 'index.html#gallery') + '" onclick="NanseiShell.closeDrawer()">' + ICON.leaf + 'Our farm</a>' +
           '<a href="blog.html"' + cur('blog.html') + '>' + ICON.book + 'Journal</a>' +
           '<a href="news.html"' + cur('news.html') + '>' + ICON.book + 'News</a>' +
@@ -242,8 +253,6 @@
           h += '<nav class="nsh-bar nsh-r" id="nshBar" aria-label="Quick links">' +
             '<a href="index.html"' + cur('index.html') + '><span class="nsh-iw">' + ICON.home + '</span>Home</a>' +
             '<a href="#" onclick="NanseiShell.toggleDrawer(true);return false;"><span class="nsh-iw">' + ICON.grid + '</span>Categories</a>' +
-            '<a href="video-reels.html"' + cur('video-reels.html') + '><span class="nsh-iw">' + ICON.play + '</span>Reels</a>' +
-            '<a href="' + FARM_MAP + '" target="_blank" rel="noopener"><span class="nsh-iw">' + ICON.map + '</span>Map</a>' +
             '<a href="blog.html"' + cur('blog.html') + '><span class="nsh-iw">' + ICON.book + '</span>Blogs</a>' +
             '<a href="#" onclick="NanseiShell.openCart();return false;"><span class="nsh-iw">' + ICON.cart + '<span class="nsh-bbadge" id="mobBarCartCount">0</span></span>Cart</a>' +
             '</nav>';
@@ -263,8 +272,8 @@
           '</div></div>' +
           '<div class="nsh-in nsh-fgrid">' +
           '<div>' +
-          '<img class="nsh-flogo" loading="lazy" decoding="async" src="nansei_org_logo.svg" alt="Nansei Organics"/>' +
-          '<p class="nsh-fabout">Heritage rice, sun-dried flowers and stone-ground flours, grown and packed on our own farm in Tamil Nadu.</p>' +
+          '<img class="nsh-flogo" id="nshFooterLogo" loading="lazy" decoding="async" src="nansei_org_logo.svg" alt="Nansei Organics"/>' +
+          '<p class="nsh-fabout" id="nshFooterAbout">Heritage rice, sun-dried flowers and stone-ground flours, grown and packed on our own farm in Tamil Nadu.</p>' +
           '<div class="nsh-fpay"><span>UPI</span><span>CARDS</span><span>NET BANKING</span><span>COD</span></div>' +
           '</div>' +
           '<div><h3>Shop</h3><ul>' +
@@ -279,14 +288,17 @@
           '</ul></div>' +
           '<div><h3>Contact</h3><ul id="nshContact">' +
           '<li><a id="nshWhatsapp" href="https://wa.me/916382142578" target="_blank" rel="noopener">WhatsApp us</a></li>' +
+          '<li><a id="nshPhone" href="tel:+916382142578">+91 63821 42578</a></li>' +
+          '<li><a id="nshEmail" href="mailto:athanyanis@gmail.com">athanyanis@gmail.com</a></li>' +
           '<li><span id="nshAddress">Achankulam, Tamil Nadu, India</span></li>' +
           '<li id="nshFssai" style="display:none"></li>' +
           '<li id="nshSocial" style="display:none"></li>' +
-          '<li><a href="video-reels.html">Farm reels</a> &middot; <a href="blog.html">Journal</a> &middot; <a href="news.html">News</a></li>' +
+          '<li><a href="blog.html">Journal</a> &middot; <a href="news.html">News</a></li>' +
           '</ul></div>' +
           '</div>' +
+          '<div class="nsh-fmap" id="nshFooterMap"><div class="nsh-mapbox"><iframe id="nshMap" title="Map to Nansei Organics farm" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=' + encodeURIComponent('Nansei Organics, Achankulam, near Srivilliputhur, Tamil Nadu, India') + '&output=embed"></iframe></div><div class="nsh-in"><a id="nshMapLink" href="' + FARM_MAP + '" target="_blank" rel="noopener">' + ICON.map + ' Open farm location in Google Maps</a></div></div>' +
           '<div class="nsh-fbottom"><div class="nsh-in">' +
-          '<span>&copy; ' + new Date().getFullYear() + ' Nansei Organics. All rights reserved.</span>' +
+          '<span>&copy; ' + new Date().getFullYear() + ' <span id="nshFooterStoreName">Nansei Organics</span>. All rights reserved.</span>' +
           '<nav aria-label="Legal"><a href="privacy-policy.html">Privacy</a><a href="terms-and-conditions.html">Terms</a><a href="refund-policy.html">Refunds</a></nav>' +
           '</div></div>' +
           '</footer>';
@@ -335,13 +347,11 @@
           });
         }
       },
-      /* category links: filter in place on the home page, otherwise go there */
+      /* Category links open the collection view for the selected category. */
       goCat: function (cat) {
         Shell.toggleCats(false);
-        if (!ON_HOME) return true;
-        var pill = document.querySelector('#filterTabs .fpill[data-cat="' + cat + '"]');
-        if (pill && typeof window.deskCatClick === 'function') { window.deskCatClick(pill, cat); history.replaceState(null, '', '#shop-' + cat); return false; }
-        return true;
+        window.location.href = catHref(cat);
+        return false;
       },
       toggleCats: function (force) {
         var m = document.getElementById('nshCatMenu'), b = document.getElementById('nshCatBtn');
@@ -379,9 +389,26 @@
       applySettings: function (st) {
         if (!st) return;
         var c = st.contact || {}, set = function (id, fn) { var el = document.getElementById(id); if (el) fn(el); };
+        var ft = st.footer || {};
+        if (st.storeName) {
+          set('nshFooterStoreName', function (el) { el.textContent = st.storeName; });
+          set('nshFooterLogo', function (el) { el.alt = st.storeName; });
+        }
+        if (ft.about) set('nshFooterAbout', function (el) { el.textContent = ft.about; });
+        set('nshFooterMap', function (el) { el.style.display = ft.showMap === false ? 'none' : ''; });
+        set('nshMap', function (el) { el.title = 'Map to ' + (st.storeName || 'the farm'); });
+        set('nshMapLink', function (el) { el.textContent = 'Open ' + (st.storeName || 'farm') + ' location in Google Maps'; });
         var wa = c.whatsapp ? 'https://wa.me/' + String(c.whatsapp).replace(/\D/g, '') : '';
         if (wa) ['nshWhatsapp', 'nshTopWa', 'nshDrawerWa'].forEach(function (id) { set(id, function (el) { el.href = wa; }); });
-        if (c.address) set('nshAddress', function (el) { el.textContent = c.address; });
+        if (c.address) {
+          set('nshAddress', function (el) { el.textContent = c.address; });
+          var q = encodeURIComponent((st.storeName || 'Nansei Organics') + ', ' + c.address);
+          set('nshMap', function (el) { el.src = 'https://www.google.com/maps?q=' + q + '&output=embed'; });
+          set('nshMapLink', function (el) { el.href = 'https://www.google.com/maps/search/?api=1&query=' + q; });
+          document.querySelectorAll('a[href="' + FARM_MAP + '"]').forEach(function (el) { el.href = 'https://www.google.com/maps/search/?api=1&query=' + q; });
+        }
+        if (c.phone) set('nshPhone', function (el) { el.href = 'tel:' + String(c.phone).replace(/[^+\d]/g, ''); el.textContent = c.phone; });
+        if (c.email) set('nshEmail', function (el) { el.href = 'mailto:' + c.email; el.textContent = c.email; });
         var sh = st.shipping || {};
         if (sh.freeShippingAbove > 0) set('nshFreeAbove', function (el) { el.textContent = 'On orders above ₹' + Number(sh.freeShippingAbove).toLocaleString('en-IN'); });
         var ann = st.announcement || {};
@@ -442,10 +469,6 @@
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { Shell.closeDrawer(); Shell.toggleCats(false); } });
     window.addEventListener('scroll', function () { var h = document.getElementById('siteHeader'); if (h) h.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-    /* index.html#shop-rice etc. opens that category on the home page */
-    if (ON_HOME && /^#shop-/.test(location.hash)) {
-      window.addEventListener('load', function () { setTimeout(function () { Shell.goCat(location.hash.slice(6)); }, 300); });
-    }
     /* the home page has its own toggleMobDrawer; give every other page the same name */
     if (typeof window.toggleMobDrawer !== 'function') window.toggleMobDrawer = function () { Shell.toggleDrawer(); };
   }

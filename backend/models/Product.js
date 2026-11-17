@@ -31,7 +31,8 @@ const productSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    public_id: String
+    public_id: String,
+    alt: { type: String, trim: true, maxlength: 200 }
   }],
   stock: {
     type: Number,

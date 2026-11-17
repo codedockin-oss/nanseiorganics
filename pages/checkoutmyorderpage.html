@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="js/config.js?v=20261113"></script>
 <script src="js/api.js?v=20261113"></script>
+<script src="js/catalog.js?v=20261117-media"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Razorpay Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -557,7 +558,7 @@ body{background:#f7f3ec}
 .ck-done-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
 .ck-done-actions .ck-btn{width:100%}
 </style>
-<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
+<link rel="stylesheet" href="css/nansei.css?v=20261117-mobile-touch"/>
 </head>
 <body>
 
@@ -580,7 +581,7 @@ body{background:#f7f3ec}
 </div></div>
 
 <!-- ------------------ NAVBAR ------------------ -->
-<script src="js/site-shell.js?v=20261124" data-part="header" data-bottom-bar="off"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header" data-bottom-bar="off"></script>
 
 
 
@@ -939,7 +940,7 @@ body{background:#f7f3ec}
 </div>
 
 <!-- FOOTER -->
-<script src="js/site-shell.js?v=20261124" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
 
 <div id="toast"></div>
 
@@ -1643,7 +1644,7 @@ function _orderAddress(addr) {
   return { fullName: addr?.name || 'Customer', phone, addressLine1: line1, city, state: state || 'Tamil Nadu', pincode, country: 'India' };
 }
 function _orderItems() {
-  return cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price }));
+  return cart.map(c => ({ product: c.id, name: c.name || 'Product', image: c.image, quantity: c.qty, selectedQuantity: c.selectedQuantity || c.qtyLabel || String(c.qty), selectedUnit: c.selectedUnit || c.unit || '', selectedPrice: c.selectedPrice ?? c.price, price: c.price, sku: c.sku || undefined }));
 }
 function _resetPayBtn() {
   const btn = document.getElementById('btnPayNow');
@@ -2248,11 +2249,24 @@ function renderCartStep() {
       '</div>';
   }).join('');
 }
+/* pack-size lines follow the admin's catalogue: current price, and no more than are in stock */
+function ckSizeOf(item) {
+  const C = window.NanseiCatalog; if (!C || !item || !item.sku) return null;
+  const p = C.get(item.id); return (p && p.sizes && p.sizes.find(z => z.sku === item.sku)) || null;
+}
 function cartQty(i, d) {
   if (!cart[i]) return;
-  cart[i].qty = Math.max(1, (Number(cart[i].qty) || 1) + d);
+  let n = Math.max(1, (Number(cart[i].qty) || 1) + d);
+  const z = ckSizeOf(cart[i]);
+  if (z && z.stock != null && n > z.stock) { n = Math.max(1, z.stock); if (typeof showToast === 'function') showToast('Only ' + z.stock + ' of ' + z.label + ' left'); }
+  cart[i].qty = n;
   _saveLC(cart); renderCartStep(); updateSummary();
 }
+if (window.NanseiCatalog) NanseiCatalog.onUpdate(() => {
+  let changed = false;
+  cart.forEach(it => { const z = ckSizeOf(it); if (z && z.price !== it.price) { it.price = z.price; it.selectedPrice = z.price; it.oldPrice = z.mrp > z.price ? z.mrp : undefined; changed = true; } });
+  if (changed) { _saveLC(cart); renderCartStep(); updateSummary(); }
+});
 
 function updateSummary() {
   const t = calcTotal();

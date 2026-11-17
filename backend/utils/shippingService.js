@@ -69,8 +69,11 @@ async function applyTracking({ Order, order, payload, notify }) {
   const r = shiprocket.buildTrackingUpdate(order, payload);
   if (r.changed || !order.lastTrackingSync) await Order.findByIdAndUpdate(order._id, r.update);
   if (notify) {
-    if (r.becameDelivered) await notify(order, 'delivered');
-    else if (r.becameShipped) await notify(order, 'shipped');
+    // the email should show the courier and tracking number this update just brought in
+    const latest = Object.assign({}, order.toObject ? order.toObject() : order, r.update);
+    if (r.becameDelivered) await notify(latest, 'delivered');
+    else if (r.becameOutForDelivery) await notify(latest, 'out_for_delivery');
+    else if (r.becameShipped) await notify(latest, 'shipped');
   }
   return r;
 }
@@ -107,9 +110,22 @@ async function cancelForOrder(order) {
 
 /** Customer-facing shape of an order's tracking, for GET /api/shipping/track/:id */
 function publicTracking(order) {
+  // where the parcel is, in the five steps the tracking page draws
+  const s = order.orderStatus;
+  let stage = order.shipmentStage || '';
+  if (s === 'Delivered') stage = 'delivered';
+  else if (s === 'Cancelled' || s === 'Refunded') stage = 'cancelled';
+  else if (!stage) stage = s === 'Shipped' ? 'shipped' : s === 'Packed' ? 'packed' : s === 'Processing' ? 'confirmed' : 'placed';
   return {
     orderNumber: order.orderNumber || String(order._id),
     status: order.orderStatus,
+    stage,
+    label: order.shipmentLabel || '',
+    placedAt: order.createdAt || null,
+    paymentMethod: order.paymentMethod || '',
+    total: order.totalPrice,
+    items: (order.items || []).map(i => ({ name: i.name, quantity: i.quantity, size: i.selectedQuantity || '' })),
+    city: (order.shippingAddress && order.shippingAddress.city) || '',
     shipmentStatus: order.shipmentStatus || '',
     courier: order.courierService || '',
     awb: order.trackingNumber || '',

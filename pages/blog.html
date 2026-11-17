@@ -404,7 +404,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
   gap:1rem;margin-top:1.8rem;position:relative;z-index:10;
 }
 .ac-arrow{
-  width:2.2rem;height:2.2rem;
+  width:44px;height:44px;
   border:1px solid rgba(255,255,255,.25);
   background:rgba(255,255,255,.08);backdrop-filter:blur(6px);
   color:#fff;cursor:pointer;border-radius:50%;
@@ -415,12 +415,10 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
 .ac-arrow:hover{background:var(--gold-dk);border-color:var(--gold-dk);transform:scale(1.1);}
 .ac-arrow svg{width:14px;height:14px;}
 .ac-dots{display:flex;align-items:center;gap:.45rem;}
-.ac-dot{
-  width:.38rem;height:.38rem;border-radius:50%;
-  background:rgba(255,255,255,.25);border:none;cursor:pointer;padding:0;
-  transition:background .3s,transform .3s;
-}
-.ac-dot.active{background:var(--gold);transform:scale(1.4);}
+.ac-dot{position:relative;display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:50%;background:transparent;border:none;cursor:pointer;padding:0}
+.ac-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s,transform .3s}
+.ac-dot.active{background:transparent}
+.ac-dot.active::before{background:var(--gold);transform:scale(1.4)}
 @media(max-width:768px){
   .article-carousel-section{padding:2rem 0 1.8rem;}
   .carousel-heading{margin-bottom:1.4rem;}
@@ -435,7 +433,7 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;}
   .ac-meta{font-size:.55rem;}
   .ac-read-btn{font-size:.58rem;margin-top:.4rem;}
   .carousel-controls{margin-top:1.2rem;gap:.7rem;}
-  .ac-arrow{width:2rem;height:2rem;}
+  .ac-arrow{width:44px;height:44px;}
   .ac-arrow svg{width:12px;height:12px;}
 }
 @media(max-width:400px){
@@ -976,7 +974,7 @@ a .nansai-icon,
 }
 </style>
 
-<link rel="stylesheet" href="css/nansei.css?v=20261119"/>
+<link rel="stylesheet" href="css/nansei.css?v=20261117-mobile-touch"/>
 </head>
 <body>
 
@@ -986,7 +984,7 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      NAVBAR
 ═══════════════════════════════════════ -->
-<script src="js/site-shell.js?v=20261124" data-part="header"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header"></script>
 
 <!-- Mobile Drawer -->
 
@@ -1043,7 +1041,7 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════ -->
-<script src="js/site-shell.js?v=20261124" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
 
 <!-- MOBILE STICKY BOTTOM BAR -->
 

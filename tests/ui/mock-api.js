@@ -26,6 +26,14 @@ const trackEvents = [
   { at: '2026-07-27T08:05:00Z', status: 'IN TRANSIT', activity: 'Departed from hub', location: 'Trichy' },
 ];
 
+// the same customer-facing shape the real backend returns (backend/utils/shippingService.publicTracking)
+const { publicTracking } = require('../../backend/utils/shippingService');
+const mockTracking = o => publicTracking(Object.assign({}, o, {
+  shipmentLabel: o.trackingNumber && o.orderStatus === 'Shipped' ? 'Out for delivery' : '',
+  shipmentStage: o.trackingNumber && o.orderStatus === 'Shipped' ? 'out' : '',
+  trackingEvents: o.trackingNumber ? trackEvents.concat(o.orderStatus === 'Shipped' ? [{ at: '2026-07-28T07:30:00Z', status: 'OUT FOR DELIVERY', activity: 'Out for delivery', location: 'Thanjavur' }] : []) : [],
+}));
+
 function staticResponse(url) {
   const p = url.split('?')[0].replace(/^\/api/, '');
   if (p === '/auth/me') return { success: true, user, data: user };
@@ -151,11 +159,10 @@ http.createServer(async (req, res) => {
     const o = sampleOrders.find(x => x.orderNumber === num || x._id === num);
     const ph = String(b.phone || '').replace(/\D/g, '').slice(-10);
     if (!o || o.shippingAddress.phone.replace(/\D/g, '').slice(-10) !== ph) { res.writeHead(404, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ success: false, message: 'We could not find that order. Please check the order number and mobile number.' })); }
-    payload = { success: true, data: { orderNumber: o.orderNumber, status: o.orderStatus, shipmentStatus: o.shipmentStatus || '', courier: o.courierService || '', awb: o.trackingNumber || '', trackingUrl: o.trackingUrl || '', estimatedDelivery: o.estimatedDelivery || null, events: o.trackingNumber ? trackEvents.slice().reverse() : [] } };
+    payload = { success: true, data: mockTracking(o) };
   } else if (/^\/shipping\/track\/[^/]+$/.test(path)) {
     const o = sampleOrders.find(x => x._id === path.split('/').pop() || x.orderNumber === path.split('/').pop());
-    payload = o ? { success: true, data: { orderNumber: o.orderNumber, status: o.orderStatus, shipmentStatus: o.shipmentStatus || '', courier: o.courierService || '', awb: o.trackingNumber || '', trackingUrl: o.trackingUrl || '', estimatedDelivery: o.estimatedDelivery || null,
-      events: o.trackingNumber ? trackEvents.slice().reverse() : [] } } : { success: false, message: 'Order not found' };
+    payload = o ? { success: true, data: mockTracking(o) } : { success: false, message: 'Order not found' };
   } else if (/^\/orders\/[^/]+\/cancel$/.test(path) && req.method === 'PUT') {
     const o = sampleOrders.find(x => x._id === path.split('/')[2]);
     if (!o) payload = { success: false, message: 'Order not found' };

@@ -1,4 +1,4 @@
-# Nansai Organics — Deployment Guide
+# Nansei Organics — Deployment Guide
 
 ## Project Structure
 ```
@@ -169,6 +169,29 @@ yourself in the Shiprocket panel (tracking still updates automatically). The adm
 Check the logic any time (no database or Shiprocket account needed): `cd backend && npm test`.
 
 ---
+
+## Step 8 — Email (Resend), payments (Razorpay) and order tracking
+
+**Resend (all customer and admin emails)**
+1. resend.com → Domains → add `nanseiorg.in` and add the DNS records it shows at your domain registrar. Wait until it says Verified.
+2. resend.com → API Keys → create a key with "Sending access".
+3. On Render set `RESEND_API_KEY` to that key and `EMAIL_FROM` to `Nansei Organics <orders@nanseiorg.in>` (any address on the verified domain). Optional: `EMAIL_REPLY_TO` = the inbox where customer replies should go.
+4. Until the domain is verified, Resend only delivers to your own email address.
+
+Emails sent: order confirmation (customer + `ADMIN_EMAIL`), shipped, out for delivery, delivered, password reset. Each has an idempotency key, so a retry never sends the same email twice.
+
+**Razorpay webhook (no lost paid orders)**
+1. Razorpay Dashboard → Account & Settings → Webhooks → Add new webhook.
+2. URL: `https://nanseiorganics.onrender.com/api/orders/razorpay/webhook`. Events: `payment.captured` and `order.paid`. Choose a secret.
+3. On Render set `RAZORPAY_WEBHOOK_SECRET` to the same secret.
+4. When checkout opens Razorpay the server prices the cart and keeps it for 3 days. If the customer pays and then closes the page, the webhook still creates the order, empties their cart, emails them and books the courier. The browser and the webhook can never create two orders for one payment.
+
+**Shiprocket tracking webhook**
+1. Shiprocket → Settings → API → Webhooks → add `https://nanseiorganics.onrender.com/api/shipping/webhook`, turn it on, and enter a security token.
+2. On Render set `SHIPROCKET_WEBHOOK_TOKEN` to that token (Shiprocket sends it as `x-api-key`).
+3. Shiprocket does not allow the words shiprocket, kartrocket, sr or kr in the URL; the URL above is fine.
+
+**Tracking page**: `track-order.html`. Customers enter their order number + the mobile number on the order, or an AWB number (opens the courier's page). Signed-in customers arrive from My Orders with the order already open. Every shipping email links here.
 
 ## Local Development
 

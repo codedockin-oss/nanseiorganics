@@ -116,6 +116,8 @@ const orderSchema = new mongoose.Schema({
   shiprocketShipmentId: String,
   trackingUrl: String,
   shipmentStatus: String,            // courier's own wording, e.g. "IN TRANSIT"
+  shipmentLabel: String,             // the same in plain words for the customer, e.g. "Out for delivery"
+  shipmentStage: String,             // packed | shipped | out | delivered | attempt | rto | problem | cancelled
   shippingError: String,             // last automatic-shipping failure (cleared on success)
   lastTrackingSync: Date,
   trackingEvents: [{
