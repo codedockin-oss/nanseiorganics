@@ -13,7 +13,7 @@
 <script src="js/auth.js?v=20261113"></script>
 <script src="js/api.js?v=20261113"></script>
 <script src="js/cart.js?v=20261113"></script>
-<script src="js/catalog.js?v=20261117-media"></script>
+<script src="js/catalog.js?v=20261118"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
@@ -1163,7 +1163,7 @@ a .nansai-icon,
 <!-- ---------------------------------------
      NAVBAR
 --------------------------------------- -->
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="header"></script>
 
 <!-- Mobile Drawer -->
 
@@ -2536,7 +2536,7 @@ function millResetIdx(card) {
       <details><summary>Where do you ship from, and where do you deliver?</summary><p>Every order is packed at our farm in Achankulam, near Srivilliputhur in Tamil Nadu, and sent by courier to addresses across India. Delivery is free on orders above <span data-free-above-amt>₹999</span>.</p></details>
       <details><summary>How do I track my order?</summary><p>Sign in and open <a href="account.html">My Orders</a>. Once your parcel is dispatched you will see the courier, the AWB number and a tracking link there.</p></details>
       <details><summary>What if something arrives damaged or wrong?</summary><p>Tell us within 7 days of delivery with your order number and a few photos or a short video of the product and packaging. We reply within 1–2 working days and send a replacement or refund. The full terms are on the <a href="refund-policy.html">refund policy</a> page.</p></details>
-      <details><summary>How can I pay?</summary><p>UPI, debit and credit cards and net banking through Razorpay, or cash on delivery. Online refunds go back to the original payment method within 5–7 working days.</p></details>
+      <details><summary>How can I pay?</summary><p>UPI, debit and credit cards, net banking and wallets through Razorpay. We take online payment only, so your order is confirmed the moment you pay. Refunds go back to the original payment method within 5–7 working days.</p></details>
       <details><summary>Can I cancel an order?</summary><p>Yes, until it is dispatched. Open <a href="account.html">My Orders</a> and choose “Cancel order”, or message us with the order number.</p></details>
     </div>
   </div>
@@ -2566,7 +2566,7 @@ function millResetIdx(card) {
 <!-- ---------------------------------------
      FOOTER
 --------------------------------------- -->
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="footer"></script>
 
 <!-- ---------------------------------------
      JAVASCRIPT
@@ -2582,7 +2582,7 @@ if(cs) cs.innerHTML+=cs.innerHTML;
 (function(){
   const mobTrack=document.getElementById('mobMarqueeTrack');
   if(!mobTrack)return;
-  const items=['First order 10% off · NANSAI10','•','Free delivery above ₹999','•','Buy 2 flowers, get 1 free · HEALTH3','•','Packed at our farm in Achankulam','•','Cash on delivery available','•'];
+  const items=['First order 10% off · NANSAI10','•','Free delivery above ₹999','•','Buy 2 flowers, get 1 free · HEALTH3','•','Packed at our farm in Achankulam','•','Secure payment by UPI and cards','•'];
   const html=items.map(t=>t==='•'?'<span style="color:rgba(201,168,76,.6);">&bull;</span>':'<span>'+t+'</span>').join('');
   mobTrack.innerHTML=html+html;
 })();
@@ -2632,7 +2632,7 @@ function applyHomepageSettings(st){
   if(description&&st.heroDescription)description.textContent=st.heroDescription;
   if(cta){if(st.heroCtaText)cta.textContent=st.heroCtaText;cta.dataset.href=st.heroCtaHref||'#products';}
   const slide=document.getElementById('slide-0'),video=document.getElementById('slide0-video');
-  if(slide&&st.heroMediaUrl){const url=String(st.heroMediaUrl);if(st.heroMediaType==='image'){if(video)video.style.display='none';slide.style.backgroundImage='linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),url("'+url.replace(/["\\]/g,'')+'")';slide.style.backgroundSize='cover';slide.style.backgroundPosition='center';}else if(video){slide.style.backgroundImage='';video.style.display='';if(video.getAttribute('src')!==url){video.src=url;video.load();}}}
+  if(slide&&st.heroMediaUrl){let url=String(st.heroMediaUrl);if(/^api\/media\/[a-f0-9]{24}$/i.test(url))url=window.NanseiCatalog?NanseiCatalog.media('/'+url):'/'+url;if(st.heroMediaType==='image'){if(video)video.style.display='none';slide.style.backgroundImage='linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),url("'+url.replace(/["\\]/g,'')+'")';slide.style.backgroundSize='cover';slide.style.backgroundPosition='center';}else if(video){slide.style.backgroundImage='';video.style.display='';if(video.getAttribute('src')!==url){video.src=url;video.load();}}}
 }
 function goHomeHeroCta(){const href=document.getElementById('homeHeroCta')?.dataset.href||'#products';if(href.charAt(0)==='#'){document.querySelector(href)?.scrollIntoView({behavior:'smooth'});return;}window.location.href=href;}
 if(window.NANSEI_SETTINGS){ applyAnnouncements(window.NANSEI_SETTINGS); applyStoreFacts(window.NANSEI_SETTINGS); }
@@ -3294,7 +3294,8 @@ function useCatalog(C){
       id:base.id!=null?base.id:cp.id, name:cp.name||base.name, category:CAT_KEY[cp.category]||cp.category||base.category||'other',
       image:cp.image||LOCAL_PRODUCT_IMAGES[String(cp.name||'').trim().toLowerCase()]||base.image||'', sizes:zs,
       price:z.price, oldPrice:z.mrp||z.price, rating:cp.rating!=null?cp.rating:(base.rating||0), reviews:cp.reviews!=null?cp.reviews:(base.reviews||0),
-      section:base.section||'', badge:base.badge||'', desc:cp.description||base.desc||''
+      // the admin's choice (Home page row / card label) once the live catalogue answers
+      section:C.source==='live'&&cp.section?(cp.section==='category'?'':cp.section):(base.section||''), badge:C.source==='live'&&cp.badge?cp.badge:(base.badge||''), desc:cp.description||base.desc||''
     }));
   });
   if(!next.length)return;

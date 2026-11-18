@@ -984,7 +984,7 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      NAVBAR
 ═══════════════════════════════════════ -->
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="header"></script>
 
 <!-- Mobile Drawer -->
 
@@ -1041,7 +1041,7 @@ a .nansai-icon,
 <!-- ═══════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════ -->
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="footer"></script>
 
 <!-- MOBILE STICKY BOTTOM BAR -->
 
@@ -1725,9 +1725,9 @@ window.addEventListener('popstate', () => {
     (d.data || []).forEach(b => {
       if (BLOGS.some(x => String(x.id) === String(b._id))) return;
       BLOGS.unshift({
-        id: String(b._id), productId: null, category: b.category || 'recipes', tags: [], product: null,
+        id: String(b._id), productId: null, category: b.category || 'recipes', tags: b.tags || [], product: null,
         title: b.title, excerpt: b.excerpt || '', author: b.author || 'Nansai Farm Team',
-        date: new Date(b.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        date: new Date(b.publishedAt || b.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
         read: b.readTime || '4 min', image: b.image || '', content: b.content || ''
       });
     });
@@ -1741,7 +1741,11 @@ window.addEventListener('popstate', () => {
   /* comfortable reading in the article view */
   #modalContent.modal-content{font-size:17px;line-height:1.7;color:#2b3a30;max-width:66ch}
   #modalContent.modal-content p{margin-bottom:1.05rem}
-  #modalContent.modal-content h4{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;color:#0f2218;margin:1.6rem 0 .5rem}
+  #modalContent.modal-content img{max-width:100%;height:auto;border-radius:12px;margin:1rem 0}
+  #modalContent.modal-content a{color:#2d5a3d;text-decoration:underline}
+  #modalContent.modal-content ol{padding-left:1.3rem;list-style:decimal}
+  #modalContent.modal-content ul{padding-left:1.3rem;list-style:disc}
+  #modalContent.modal-content h3,#modalContent.modal-content h4{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;color:#0f2218;margin:1.6rem 0 .5rem}
   #modalContent.modal-content ul li,#modalContent.modal-content ol li{font-size:1rem;color:#2b3a30;margin-bottom:.35rem}
   .blog-card-meta span,.blog-card p{font-size:.86rem}
 </style>

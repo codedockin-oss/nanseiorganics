@@ -37,7 +37,7 @@
       sizes: (p.sizes || []).filter(function (z) { return z.active !== false; }).map(function (z) {
         return { sku: z.sku, label: z.label, amount: z.amount, unit: z.unit, price: z.price, mrp: z.mrp, stock: z.stock == null ? null : z.stock, active: true };
       }),
-      active: p.isActive !== false,
+      active: p.isActive !== false, section: p.section || '', badge: p.badge || '', featured: !!p.isFeatured,
       rating: Number(p.numReviews || 0) > 0 ? Number(p.rating || 0) : 0, reviews: p.numReviews || 0,
     };
   }

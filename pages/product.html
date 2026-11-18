@@ -3884,9 +3884,9 @@ body{background:#fff!important}
   </div>
 
   <!-- ---- NAVBAR ---- -->
-  <script src="js/catalog.js?v=20261117-media"></script>
+  <script src="js/catalog.js?v=20261118"></script>
   <script src="js/product-copy.js?v=20261113"></script>
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header" data-bottom-bar="off"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="header" data-bottom-bar="off"></script>
 
   <!-- ---- BREADCRUMB ---- -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-1.5 text-xs flex-wrap"
@@ -4062,7 +4062,7 @@ body{background:#fff!important}
         <ul class="pd-trust" aria-label="Buying from Nansei Organics">
           <li><b id="pdTrustShip">Free delivery</b><span id="pdTrustShipSub">above ₹999</span></li>
           <li><b>Packed at the farm</b><span>Achankulam, Tamil Nadu</span></li>
-          <li><b>Secure payment</b><span id="pdTrustPay">UPI, cards &amp; COD</span></li>
+          <li><b>Secure payment</b><span id="pdTrustPay">UPI, cards &amp; net banking</span></li>
         </ul>
 
         <form class="pd-pin" onsubmit="pdCheckPin(event)" novalidate>
@@ -5048,7 +5048,7 @@ body{background:#fff!important}
   <!-- ---------------------------------------
      FOOTER
 --------------------------------------- -->
-  <script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
+  <script src="js/site-shell.js?v=20261118b" data-part="footer"></script>
 
 
   <!-- ---------------- JS ---------------- -->
@@ -6554,7 +6554,7 @@ body{background:#fff!important}
         const po = d && d[0] && d[0].Status === 'Success' && d[0].PostOffice && d[0].PostOffice[0];
         if (!po) { msg.textContent = 'We could not find this pincode. Please check it.'; msg.classList.add('bad'); return; }
         const st = window.NANSEI_SETTINGS || {}, sh = st.shipping || {};
-        msg.textContent = 'We deliver to ' + po.District + ', ' + po.State + ' by courier' + (sh.codEnabled === false ? '.' : '. Cash on delivery is available.');
+        msg.textContent = 'We deliver to ' + po.District + ', ' + po.State + ' by courier.';
       } catch (err) {
         msg.textContent = 'We ship across India. Could not look up this pincode right now.';
       }

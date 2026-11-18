@@ -22,7 +22,9 @@ router.post('/add', protect, async (req, res) => {
     }
 
     const Product = require('../models/Product');
-    const product = await Product.findById(productId);
+    // the storefront uses its shop number (legacyId) for older products and the database id for new ones
+    const product = /^[a-f0-9]{24}$/i.test(String(productId)) ? await Product.findById(productId)
+      : /^\d+$/.test(String(productId)) ? await Product.findOne({ legacyId: Number(productId) }) : null;
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
     if (product.stock < 1) return res.status(400).json({ success: false, message: 'Product is out of stock' });
     const packageLabel = String(selectedQuantity || `${product.weight}${product.unit}`).trim();
@@ -33,12 +35,12 @@ router.post('/add', protect, async (req, res) => {
     }
 
     let cart = await Cart.findOne({ user: req.user.id });
-    const cartItem = { product: productId, quantity: qty, selectedQuantity: packageLabel, selectedUnit: unit, selectedPrice: unitPrice, price: unitPrice };
+    const cartItem = { product: product._id, quantity: qty, selectedQuantity: packageLabel, selectedUnit: unit, selectedPrice: unitPrice, price: unitPrice };
     if (!cart) {
       cart = await Cart.create({ user: req.user.id, items: [cartItem] });
     } else {
       const itemIndex = cart.items.findIndex(item =>
-        item.product.toString() === productId && item.selectedQuantity === packageLabel
+        item.product.toString() === product._id.toString() && item.selectedQuantity === packageLabel
       );
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity += qty;

@@ -86,7 +86,7 @@ module.exports = function createMediaRouter(deps = {}) {
       const url = urlOf(req.params.id);
       const usedBy = await Product.find({ 'images.url': url }).select('name').lean();
       const st = await Setting.findOne({ key: 'store' }).lean();
-      const inHome = st && JSON.stringify(st.homepage || {}).includes(url);
+      const inHome = st && JSON.stringify(st.homepage || {}).includes('media/' + req.params.id);
       if ((usedBy.length || inHome) && req.query.force !== '1') {
         const where = usedBy.map(p => p.name).concat(inHome ? ['the homepage'] : []);
         return res.status(409).json({ success: false, message: 'This photo is still used by: ' + where.join(', ') + '. Remove it there first.', usedBy: where });

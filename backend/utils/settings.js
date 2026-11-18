@@ -91,8 +91,8 @@ function pricingFrom(s) {
     gstRate: 0.05,
     freeShippingAbove: Number(sh.freeShippingAbove) || 0,
     shippingFee: Number(sh.shippingFee) || 0,
-    codEnabled: sh.codEnabled !== false,
-    codFee: Number(sh.codFee) || 0,
+    codEnabled: false,   // online payment only (Razorpay)
+    codFee: 0,
   };
 }
 

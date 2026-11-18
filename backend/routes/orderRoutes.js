@@ -393,6 +393,8 @@ router.get('/my-orders', protect, async (req, res) => {
 /** POST /api/orders — place a Cash on Delivery order (online payments are saved by /razorpay/verify after the payment is confirmed) */
 router.post('/', protect, async (req, res) => {
   try {
+    // the shop takes online payment only (Razorpay); orders are saved by /razorpay/verify and the webhook
+    if (String((req.body && req.body.paymentMethod) || '').toUpperCase() === 'COD') return res.status(400).json({ success: false, message: 'Cash on delivery is not offered. Please pay online with UPI, card or net banking.' });
     const doc = await buildOrder(req.body, guardContext(codOnly(req.body && req.body.paymentMethod)));
     await takeStock(doc.items, { strict: true });
     let order;

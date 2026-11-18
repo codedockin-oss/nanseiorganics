@@ -268,13 +268,13 @@
           P(ICON.leaf, 'Grown on our farm', 'Achankulam, near Srivilliputhur') +
           P(ICON.truck, 'Free delivery', '<span id="nshFreeAbove">On orders above ₹999</span>') +
           P(ICON.box, '7-day replacement', 'For damaged or wrong items') +
-          P(ICON.cart, 'Secure payment', 'UPI, cards, net banking, COD') +
+          P(ICON.cart, 'Secure payment', 'UPI, cards and net banking') +
           '</div></div>' +
           '<div class="nsh-in nsh-fgrid">' +
           '<div>' +
           '<img class="nsh-flogo" id="nshFooterLogo" loading="lazy" decoding="async" src="nansei_org_logo.svg" alt="Nansei Organics"/>' +
           '<p class="nsh-fabout" id="nshFooterAbout">Heritage rice, sun-dried flowers and stone-ground flours, grown and packed on our own farm in Tamil Nadu.</p>' +
-          '<div class="nsh-fpay"><span>UPI</span><span>CARDS</span><span>NET BANKING</span><span>COD</span></div>' +
+          '<div class="nsh-fpay"><span>UPI</span><span>CARDS</span><span>NET BANKING</span><span>WALLETS</span></div>' +
           '</div>' +
           '<div><h3>Shop</h3><ul>' +
           CATS.map(function (c) { return '<li><a href="' + catHref(c[0]) + '" onclick="return NanseiShell.goCat(\'' + c[0] + '\')">' + c[1] + '</a></li>'; }).join('') +
@@ -411,7 +411,8 @@
         if (c.email) set('nshEmail', function (el) { el.href = 'mailto:' + c.email; el.textContent = c.email; });
         var sh = st.shipping || {};
         if (sh.freeShippingAbove > 0) set('nshFreeAbove', function (el) { el.textContent = 'On orders above ₹' + Number(sh.freeShippingAbove).toLocaleString('en-IN'); });
-        var ann = st.announcement || {};
+        // the public settings send the lines as a list (empty when the admin switched the bar off); older copies sent { enabled, items }
+        var ann = Array.isArray(st.announcement) ? { items: st.announcement } : (st.announcement || {});
         var items = (ann.items || []).filter(function (i) { return i && i.text; });
         if (ann.enabled === false) set('nshAnn', function (el) { el.style.visibility = 'hidden'; });
         else if (items.length) set('nshAnn', function (el) {

@@ -52,3 +52,9 @@ test('admin input is cleaned and checked', () => {
   assert.throws(() => cleanSettings({ shipping: { shippingFee: -5 } }), /between 0/);
   assert.throws(() => cleanSettings({ social: { instagram: 'javascript:alert(1)' } }), /https/);
 });
+
+test('the shop takes online payment only: cash on delivery stays off whatever was saved', () => {
+  const r = pricingFrom(merge(defaults(), { shipping: { codEnabled: true, codFee: 30 } }));
+  assert.equal(r.codEnabled, false);
+  assert.equal(r.codFee, 0);
+});

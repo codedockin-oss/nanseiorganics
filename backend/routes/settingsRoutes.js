@@ -115,5 +115,36 @@ router.put('/', protect, admin, async (req, res) => {
   }
 });
 
+// GET /api/settings/status — admin: which outside services are set up on the server (never the keys themselves)
+router.get('/status', protect, admin, (req, res) => {
+  const env = process.env, has = k => !!String(env[k] || '').trim();
+  const keyId = String(env.RAZORPAY_KEY_ID || '');
+  const sendEmail = require('../utils/sendEmail');
+  const from = String(env.EMAIL_FROM || '');
+  res.json({ success: true, data: {
+    payments: { razorpay: has('RAZORPAY_KEY_ID') && has('RAZORPAY_KEY_SECRET'), mode: /^rzp_live_/.test(keyId) ? 'live' : /^rzp_test_/.test(keyId) ? 'test' : '', webhook: has('RAZORPAY_WEBHOOK_SECRET') },
+    email: { configured: sendEmail.isConfigured(), provider: has('RESEND_API_KEY') ? 'Resend' : (has('EMAIL_USER') ? 'SMTP' : ''), from: (from.match(/<([^>]+)>/) || [0, from])[1] || '', adminCopy: has('ADMIN_EMAIL') },
+    shipping: { shiprocket: has('SHIPROCKET_EMAIL') && has('SHIPROCKET_PASSWORD'), autoShip: has('SHIPROCKET_EMAIL') && String(env.SHIPROCKET_AUTO_SHIP || 'true').toLowerCase() !== 'false', webhook: has('SHIPROCKET_WEBHOOK_TOKEN'), pickup: env.SHIPROCKET_PICKUP_LOCATION || 'Primary' },
+    google: { signIn: has('GOOGLE_CLIENT_ID') },
+    webhooks: { razorpay: '/api/orders/razorpay/webhook', shiprocket: '/api/shipping/webhook' },
+  } });
+});
+
+// POST /api/settings/test-email — admin: send a short test email to the signed-in admin
+router.post('/test-email', protect, admin, async (req, res) => {
+  try {
+    const sendEmail = require('../utils/sendEmail');
+    if (!sendEmail.isConfigured()) return res.status(400).json({ success: false, message: 'Email is not set up on the server yet (RESEND_API_KEY).' });
+    const to = req.user && req.user.email;
+    if (!to) return res.status(400).json({ success: false, message: 'Your account has no email address.' });
+    const out = await sendEmail({ email: to, subject: 'Test email from your Nansei Organics admin', html: '<p>This is a test from the store admin panel. If you can read it, order emails will reach your customers.</p>' });
+    if (out && out.skipped) return res.status(400).json({ success: false, message: 'The email was not sent: ' + out.skipped });
+    res.json({ success: true, message: 'Test email sent to ' + to });
+  } catch (e) {
+    console.error('[Settings] test email failed:', e.message);
+    res.status(502).json({ success: false, message: 'The email service refused it: ' + String(e.message || '').slice(0, 160) });
+  }
+});
+
 module.exports = router;
 module.exports.cleanSettings = cleanSettings;

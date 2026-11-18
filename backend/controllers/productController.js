@@ -80,6 +80,14 @@ exports.getProduct = async (req, res, next) => {
 
 // ---- pack sizes: each has its own code, price, MRP and stock ----
 const txt = (v, max) => String(v == null ? '' : v).replace(/<[^>]*>/g, '').trim().slice(0, max);
+/** grams, millilitres or pieces in a pack, read from its name: "1 kg" -> 1000, "500 ml" -> 500, "1 L" -> 1000, "50 pcs" -> 50 */
+function amountOf(label) {
+  const m = String(label || '').toLowerCase().replace(',', '.').match(/(\d+(?:\.\d+)?)\s*(kg|g|gm|grams?|l|ltr|litres?|liters?|ml|pcs?|pieces?|nos?)\b/);
+  if (!m) return undefined;
+  const n = Number(m[1]), u = m[2];
+  if (u === 'kg' || /^(l|ltr|lit)/.test(u)) return Math.round(n * 1000);
+  return Math.round(n);
+}
 function cleanSizes(raw, legacyId) {
   if (raw === undefined) return undefined;
   if (!Array.isArray(raw)) throw Object.assign(new Error('Sizes must be a list'), { status: 400 });
@@ -97,7 +105,7 @@ function cleanSizes(raw, legacyId) {
     if (seen.has(sku)) throw Object.assign(new Error(`Two sizes share the code ${sku}`), { status: 400 });
     seen.add(sku);
     const unit = ['g', 'ml', 'piece'].includes(z && z.unit) ? z.unit : (/ml|\bl\b/i.test(label) ? 'ml' : /pc|piece/i.test(label) ? 'piece' : 'g');
-    return { sku, label, amount: Number(z && z.amount) || undefined, unit, price, mrp, stock: Number.isFinite(stock) ? stock : null, active: !(z && z.active === false) };
+    return { sku, label, amount: Number(z && z.amount) || amountOf(label), unit, price, mrp, stock: Number.isFinite(stock) ? stock : null, active: !(z && z.active === false) };
   });
 }
 /** headline price / MRP / stock follow the sizes, so lists and old pages stay right */

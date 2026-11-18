@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;600;700;900&family=Roboto:wght@500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="js/config.js?v=20261113"></script>
 <script src="js/api.js?v=20261113"></script>
-<script src="js/catalog.js?v=20261117-media"></script>
+<script src="js/catalog.js?v=20261118"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Razorpay Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -581,7 +581,7 @@ body{background:#f7f3ec}
 </div></div>
 
 <!-- ------------------ NAVBAR ------------------ -->
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="header" data-bottom-bar="off"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="header" data-bottom-bar="off"></script>
 
 
 
@@ -683,11 +683,7 @@ body{background:#f7f3ec}
           <div class="ck-pay-list" role="radiogroup" aria-label="Payment method">
             <label class="ck-pay" id="gwRazorpay">
               <input type="radio" name="ckPay" value="razorpay" checked onchange="selectGateway('razorpay')"/>
-              <span><b>Pay online</b><small>UPI, cards, net banking or wallets, in the Razorpay window</small></span>
-            </label>
-            <label class="ck-pay" id="gwCod">
-              <input type="radio" name="ckPay" value="cod" onchange="selectGateway('cod')"/>
-              <span><b>Cash on delivery</b><small>Pay by cash or UPI when the parcel arrives</small></span>
+              <span><b>Pay online with Razorpay</b><small>UPI, debit or credit card, net banking or wallets. Your order is confirmed as soon as the payment goes through.</small></span>
             </label>
           </div>
         </section>
@@ -940,7 +936,7 @@ body{background:#f7f3ec}
 </div>
 
 <!-- FOOTER -->
-<script src="js/site-shell.js?v=20261117-mobile-touch" data-part="footer"></script>
+<script src="js/site-shell.js?v=20261118b" data-part="footer"></script>
 
 <div id="toast"></div>
 
@@ -1548,8 +1544,8 @@ async function initiateRazorpay() {
 
   if (selectedGateway === 'payu') {
     setTimeout(() => {
-      if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-      showToast('PayU is not available right now. Please pay with Razorpay or choose Cash on Delivery.');
+      if (btn) { btn.disabled = false; _resetPayBtn(); }
+      showToast('PayU is not available right now. Please pay with Razorpay.');
     }, 800);
     return;
   }
@@ -1571,8 +1567,8 @@ async function initiateRazorpay() {
     _rzpKeyId = rzpData.data.keyId || _rzpKeyId;
   } catch(e) {
     console.error('Razorpay order creation failed:', e.message);
-    if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    showToast(e.userMessage ? '&#9888; ' + e.userMessage : '&#10060; Could not start the payment. Please check your connection and try again, or choose Cash on Delivery.');
+    if (btn) { btn.disabled = false; _resetPayBtn(); }
+    showToast(e.userMessage ? '&#9888; ' + e.userMessage : '&#10060; Could not start the payment. Please check your connection and try again.');
     return;
   }
 
@@ -1602,7 +1598,7 @@ async function initiateRazorpay() {
       ondismiss: function () {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          _resetPayBtn();
         }
       showToast('Payment cancelled. Try again when ready.');
       }
@@ -1616,15 +1612,15 @@ async function initiateRazorpay() {
   try {
     const rzp = new Razorpay(options);
     rzp.on('payment.failed', function (response) {
-      if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
+      if (btn) { btn.disabled = false; _resetPayBtn(); }
       showToast('&#10060; Payment failed: ' + (response.error?.description || 'Please try again.'));
     });
     rzp.open();
   } catch (err) {
     // Razorpay not loaded or invalid key — show processing simulation
     console.warn('Razorpay load error:', err);
-    if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
-    showToast('&#9888; The payment window could not open. Please try again, or choose Cash on Delivery.');
+    if (btn) { btn.disabled = false; _resetPayBtn(); }
+    showToast('&#9888; The payment window could not open. Please try again.');
   }
 }
 
@@ -1651,7 +1647,7 @@ function _resetPayBtn() {
   if (!btn) return;
   const { total } = calcTotal();
   btn.disabled = false;
-  btn.innerHTML = `<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(255,255,255,.9)"/></svg> <span>Pay Now  &#8377;${total.toLocaleString()}</span> <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  _resetPayBtn();
 }
 
 function _razorpayOrderPayload() {
@@ -2325,7 +2321,7 @@ function updatePayButtons() {
 function _resetPayBtn() { updatePayButtons(); }
 
 function selectGateway(id) {
-  selectedGateway = id === 'cod' ? 'cod' : 'razorpay';
+  selectedGateway = 'razorpay';   // online payment only
   selectedPay = selectedGateway;
   document.querySelectorAll('input[name="ckPay"]').forEach(r => { r.checked = r.value === selectedGateway; });
   updateSummary();
